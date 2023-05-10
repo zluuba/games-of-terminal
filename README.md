@@ -1,8 +1,8 @@
-## Minesweeper
+## Terminal Games
 
-Cli games: Minesweeper, Chess, Tic-tac-toe and Snake.
+Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess.
 
-After all try to create same but with GUI (Python + PyTorch + Pygame (training AI)).
+[//]: # (After all try to create same but with GUI &#40;Python + PyTorch + Pygame &#40;training AI&#41;&#41;.)
 
 
 ### Following features:
