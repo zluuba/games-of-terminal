@@ -1,81 +1,45 @@
+from common import CURSES_DIRECTIONS, OPPOSITE_DIRECTIONS, MESSAGES
+from score import print_score, print_best_score, save_best_score
+from food import create_food
 from curses import textpad
 import curses
-import random
-import os
+import time
 
 
-CURSES_DIRECTIONS = [
-    curses.KEY_RIGHT, curses.KEY_LEFT,
-    curses.KEY_UP, curses.KEY_DOWN,
-]
-
-OPPOSITE_DIRECTIONS = {
-    curses.KEY_RIGHT: curses.KEY_LEFT, curses.KEY_LEFT: curses.KEY_RIGHT,
-    curses.KEY_UP: curses.KEY_DOWN, curses.KEY_DOWN: curses.KEY_UP,
-}
-
-MESSAGES = {
-    'game_over': 'GAME OVER',
-    'score_text': 'Score: ',
-    'best_score': 'Best score: ',
-    'new_best_score': 'New best score!',
-}
-
-
-def create_food(snake, box):
-    while True:
-        food = [
-            random.randint(box[0][0] + 1, box[1][0] - 1),
-            random.randint(box[0][1] + 1, box[1][1] - 1)
-        ]
-
-        if food not in snake:
-            return food
-
-
-def print_score(stdscr, score):
-    _, sw = stdscr.getmaxyx()
-    score_text = MESSAGES['score_text'] + str(score)
-    stdscr.addstr(1, sw // 2 - len(score_text) // 2, score_text)
-
-
-def print_best_score(stdscr):
-    _, sw = stdscr.getmaxyx()
-    filename = 'best_score.txt'
-    directory = os.getcwd()
-    file_path = os.path.join(directory, filename)
-    best_score = open(file_path, 'r').read()
-    best_score_text = MESSAGES['best_score'] + str(best_score)
-    stdscr.addstr(1, sw - len(best_score_text) - 3, best_score_text)
-
-
-def save_best_score(score):
-    filename = 'best_score.txt'
-    directory = os.getcwd()
-    file_path = os.path.join(directory, filename)
-    best_score = open(file_path, 'r').read()
-    if score > int(best_score):
-        open(file_path, 'w').write(str(score))
-        return True
-    return False
+GAMES = 0
+SNAKE_SKIN = '#'
+FOOD_SKIN = '*'
 
 
 def engine(stdscr):
+    """
+    rebuild this function on class
+    """
+
     curses.curs_set(0)
+
+    # get current screen height and width, create rectangle
+    sh, sw = stdscr.getmaxyx()
+    box = [[3, 3], [sh - 3, sw - 3]]
+    textpad.rectangle(stdscr, *box[0], *box[1])
+
+    while True:
+        global GAMES
+        if GAMES > 0:
+            break
+
+        message = MESSAGES['start_text']
+        stdscr.addstr(sh // 2, sw // 2 - len(message) // 2, message)
+
+        if stdscr.getch():
+            spaces = ' ' * len(message)
+            stdscr.addstr(sh // 2, sw // 2 - len(message) // 2, spaces)
+            break
 
     # for not waiting for user
     # change this to "press any key to start"
     stdscr.nodelay(1)
     stdscr.timeout(150)
-
-    # sh, sm - screen height, screen width
-    # getmaxyx - get current screen height and width
-    sh, sw = stdscr.getmaxyx()
-
-    box = [[3, 3], [sh - 3, sw - 3]]
-
-    # create rectangle
-    textpad.rectangle(stdscr, *box[0], *box[1])
 
     # define snake
     snake = [[sh // 2, sw // 2 + 1], [sh // 2, sw // 2], [sh // 2, sw // 2 - 1]]
@@ -83,13 +47,11 @@ def engine(stdscr):
 
     # draw snake
     for x, y in snake:
-        stdscr.addstr(x, y, '#')
+        stdscr.addstr(x, y, SNAKE_SKIN)
 
-    # add food on screen
     food = create_food(snake, box)
-    stdscr.addstr(food[0], food[1], '*')
+    stdscr.addstr(food[0], food[1], FOOD_SKIN)
 
-    # print scores
     score = 0
     print_score(stdscr, score)
     print_best_score(stdscr)
@@ -116,11 +78,11 @@ def engine(stdscr):
 
         if new_head:
             snake.insert(0, new_head)
-        stdscr.addstr(new_head[0], new_head[1], '#')
+        stdscr.addstr(new_head[0], new_head[1], SNAKE_SKIN)
 
         if snake[0] == food:
             food = create_food(snake, box)
-            stdscr.addstr(food[0], food[1], '*')
+            stdscr.addstr(food[0], food[1], FOOD_SKIN)
 
             score += 1
             print_score(stdscr, score)
@@ -135,16 +97,29 @@ def engine(stdscr):
         if (snake[0][0] in [box[0][0], box[1][0]]) or \
                 (snake[0][1] in [box[0][1], box[1][1]]) or \
                 (snake[0] in snake[1:]):
+            curses.flash()
+
             is_best_score = save_best_score(score)
             if is_best_score:
                 message = MESSAGES['new_best_score']
-                stdscr.addstr(sh // 2 + 1, sw // 2 - len(message) // 2, message)
+                stdscr.addstr(sh // 3, sw // 2 - len(message) // 2, message)
 
             message = MESSAGES['game_over']
             stdscr.addstr(sh // 2, sw // 2 - len(message) // 2, message)
             stdscr.nodelay(0)
-            stdscr.getch()
-            break
+            stdscr.refresh()
+
+            time.sleep(1)
+            message = MESSAGES['play_again']
+            stdscr.addstr(sh // 2 + 2, sw // 2 - len(message) // 2, message, curses.A_BLINK)
+
+            curses.flushinp()
+            key = stdscr.getch()
+            if key == ord(' '):
+                GAMES += 1
+                stdscr.clear()
+                curses.wrapper(engine)
+            return
 
         stdscr.refresh()
 
