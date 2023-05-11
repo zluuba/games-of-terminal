@@ -1,2 +1,5 @@
 # PyCharm, MacOS files
 .idea/
+
+# local files
+best_score.txt
