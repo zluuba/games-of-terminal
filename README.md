@@ -10,7 +10,7 @@ Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess.
    - ~~create engine~~
    - ~~add best score~~
    - add customizing: snake body, food, etc
-   - add endlessness (after death ask show 'press Enter to continue')
+   - ~~add endlessness (after death ask show 'press Enter to continue')~~
    - add sounds
    - add obstacles (rocks, bushes, etc)
    - add modes:
