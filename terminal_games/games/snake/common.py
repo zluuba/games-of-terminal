@@ -7,8 +7,10 @@ CURSES_DIRECTIONS = [
 ]
 
 OPPOSITE_DIRECTIONS = {
-    curses.KEY_RIGHT: curses.KEY_LEFT, curses.KEY_LEFT: curses.KEY_RIGHT,
-    curses.KEY_UP: curses.KEY_DOWN, curses.KEY_DOWN: curses.KEY_UP,
+    curses.KEY_RIGHT: curses.KEY_LEFT,
+    curses.KEY_LEFT: curses.KEY_RIGHT,
+    curses.KEY_UP: curses.KEY_DOWN,
+    curses.KEY_DOWN: curses.KEY_UP,
 }
 
 MESSAGES = {
@@ -19,3 +21,7 @@ MESSAGES = {
     'start_text': 'Press any key to start',
     'play_again': 'Press Space to play again',
 }
+
+SNAKE_SKIN = 'O'
+FOOD_SKIN = '×'
+SKINS = ['#', 'O', '×', '¤', '■', '█', '≡', '©']

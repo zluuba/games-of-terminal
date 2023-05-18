@@ -1,17 +1,14 @@
-from common import MESSAGES
+from terminal_games.games.snake.common import MESSAGES
 import os
 
 
-def print_score(stdscr, score):
+def show_score(stdscr, score):
     _, sw = stdscr.getmaxyx()
     score_text = MESSAGES['score_text'] + str(score)
     stdscr.addstr(1, sw // 2 - len(score_text) // 2, score_text)
 
 
-def print_best_score(stdscr):
-    """
-    - add storage for files like this and put best score on it
-    """
+def show_best_score(stdscr):
     _, sw = stdscr.getmaxyx()
     filename = 'best_score.txt'
     directory = os.getcwd()
