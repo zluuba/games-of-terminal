@@ -5,7 +5,7 @@ description = "Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess"
 license = "Proprietary"
 authors = ["Luybov Nikitina <zluyba.nikitina@gmail.com>"]
 readme = "README.md"
-packages = [{include = "games"}]
+packages = [{include = "terminal_games"}]
 classifiers = [
     "Environment :: Console",
     "Natural Language :: English",
@@ -13,11 +13,14 @@ classifiers = [
     "Topic :: Games/Entertainment"
 ]
 
-#[tool.poetry.scripts]
-#snake = "games.scripts.snake-game:main"
+[tool.poetry.scripts]
+snake-game = "terminal_games.scripts.snake_game:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
