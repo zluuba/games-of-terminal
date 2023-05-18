@@ -16,6 +16,7 @@ Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess.
    - add modes:
         - with obstacles
         - without obstacles
+   - add achievements
 2. Tic-tac-toe:
    - create engine
    - win streak
