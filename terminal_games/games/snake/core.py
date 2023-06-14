@@ -92,7 +92,7 @@ class SnakeGame(GameEngine):
         curses.curs_set(0)
 
         self.set_colors()
-        self.set_game_area(3, 3, 3, 4)
+        self.set_game_area(3, 3, 2, 3)
         self.greet()
 
         self.canvas.nodelay(1)
@@ -167,7 +167,7 @@ class SnakeGame(GameEngine):
                 self.canvas.addstr(
                     self.screen_height // 2,
                     (self.screen_width // 2 - len(message) // 2),
-                    message, curses.color_pair(1)
+                    message, curses.color_pair(1),
                 )
                 self.canvas.nodelay(0)
                 self.canvas.refresh()
@@ -189,3 +189,8 @@ class SnakeGame(GameEngine):
                 return False
 
             self.canvas.refresh()
+
+
+def start_snake_game():
+    game = curses.wrapper(SnakeGame)
+    game.start_new_game()
