@@ -4,17 +4,12 @@ import time
 import sys
 
 
-# TODO: choose goodbye_words depending on the number of victories (session):
-#       if player have more defeats, show 'Goodbye, loser!', 'He-he, nice.'
-#       if player have more wins, show 'Oh, man, that was incredible!', 'Huh.'
-
-menu = ['Snake', 'Minesweeper', 'Tic Tac Toe', 'Chess', 'Unsolicited advice']
+menu = ['Snake', 'Tic Tac Toe', 'Minesweeper', 'Tetris', 'Unsolicited advice']
 goodbye_words = [
-    'I already miss you.. ˙◠˙', 'Where are you going? ˙◠˙',
-    'Don\'t leave me alone! ˙◠˙', 'Bye.', 'Have a great day!',
-    'He-he, nice.', 'Ok, just go.', 'Finally.', 'We had a great time!',
+    'Already miss you.', 'Where are you going?',
+    'Don\'t you go. ˙◠˙', 'Bye.', 'Have a great day!',
+    'Nice.', 'Finally.', 'We had a great time!',
     'Shall we do it again?', 'Don\'t forget to rest.', 'Huh.',
-    'Oh, man, that was incredible!', 'Goodbye, loser!',
 ]
 
 
@@ -27,7 +22,7 @@ def show_menu(stdscr, selected_row_ind):
         y = h // 2 - len(menu) // 2 + ind
 
         if ind == selected_row_ind:
-            stdscr.addstr(y, x, item, curses.A_REVERSE)
+            stdscr.addstr(y, x, item, curses.A_STANDOUT)
         else:
             stdscr.addstr(y, x, item)
 
@@ -57,7 +52,7 @@ def main(stdscr):
             goodbye_message = random.choice(goodbye_words)
             stdscr.addstr(y, x - len(goodbye_message) // 2, goodbye_message)
             stdscr.refresh()
-            time.sleep(1.3)
+            time.sleep(1.5)
             sys.exit(0)
 
         if key == curses.KEY_UP and menu_current_row_ind > 0:
