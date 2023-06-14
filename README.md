@@ -23,7 +23,7 @@ Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess.
 3. Minesweeper:
    - create engine
    - win streak / lose streak
-4. Chess:
+4. Tetris:
    - create engine
 
 <br>
