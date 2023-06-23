@@ -1,5 +1,6 @@
 # PyCharm, MacOS files
 .idea/
+.DS_Store
 
 # local files
 dist/
