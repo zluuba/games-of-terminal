@@ -14,8 +14,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-snake-game = "terminal_games.scripts.snake_game:main"
-ttt-game = "terminal_games.scripts.tictactoe_game:main"
+term-games = "terminal_games.scripts.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
