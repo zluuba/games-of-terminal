@@ -1,77 +1,75 @@
+from terminal_games.scripts.tictactoe_game import start_tictactoe_game
+from terminal_games.scripts.snake_game import start_snake_game
+from terminal_games.games.constants import *
+
 import curses
 import random
 import time
 import sys
 
 
-menu = ['Snake', 'Tic Tac Toe', 'Minesweeper', 'Tetris', 'Unsolicited advice']
-goodbye_words = [
-    'Already miss you.', 'Where are you going?',
-    'Don\'t you go. ˙◠˙', 'Bye.', 'Have a great day!',
-    'Nice.', 'Finally.', 'We had a great time!',
-    'Shall we do it again?', 'Don\'t forget to rest.', 'Huh.',
-]
+class Menu:
+    def __init__(self, canvas):
+        self.canvas = canvas
 
-
-def show_menu(stdscr, selected_row_ind):
-    stdscr.clear()
-    h, w = stdscr.getmaxyx()
-
-    for ind, item in enumerate(menu):
-        x = w // 2 - len(item) // 2
-        y = h // 2 - len(menu) // 2 + ind
-
-        if ind == selected_row_ind:
-            stdscr.addstr(y, x, item, curses.A_STANDOUT)
-        else:
-            stdscr.addstr(y, x, item)
-
-    stdscr.refresh()
-
-
-def main(stdscr):
-    curses.curs_set(0)
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-
-    h, w = stdscr.getmaxyx()
-    x = w // 2
-    y = h // 2
-
-    # set background
-    stdscr.bkgd(' ', curses.color_pair(1))
-
-    menu_current_row_ind = 0
-    show_menu(stdscr, menu_current_row_ind)
-
-    while True:
-        key = stdscr.getch()
+    def show_menu(self, stdscr, selected_row_ind):
         stdscr.clear()
+        h, w = stdscr.getmaxyx()
 
-        # 27 - Esc button
-        if key == 27:
-            goodbye_message = random.choice(goodbye_words)
-            stdscr.addstr(y, x - len(goodbye_message) // 2, goodbye_message)
-            stdscr.refresh()
-            time.sleep(1.5)
-            sys.exit(0)
+        for ind, item in enumerate(MENU):
+            x = w // 2 - len(item) // 2
+            y = h // 2 - len(MENU) // 2 + ind
 
-        if key == curses.KEY_UP and menu_current_row_ind > 0:
-            menu_current_row_ind -= 1
-        elif key == curses.KEY_DOWN and menu_current_row_ind < len(menu) - 1:
-            menu_current_row_ind += 1
-        elif key in (curses.KEY_ENTER, 10, 13):
-            stdscr.addstr(
-                y, x - len(menu[menu_current_row_ind]) // 2,
-                menu[menu_current_row_ind]
-            )
-            stdscr.refresh()
-            stdscr.getch()
-
-        show_menu(stdscr, menu_current_row_ind)
+            if ind == selected_row_ind:
+                stdscr.addstr(y, x, item, curses.A_STANDOUT)
+            else:
+                stdscr.addstr(y, x, item)
 
         stdscr.refresh()
 
-    # stdscr.addstr(y, x, text, curses.color_pair(1) | curses.A_REVERSE)
+    def main(self):
+        curses.curs_set(0)
+        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
+        h, w = self.canvas.getmaxyx()
+        x = w // 2
+        y = h // 2
 
-curses.wrapper(main)
+        # set background
+        self.canvas.bkgd(' ', curses.color_pair(1))
+
+        menu_current_row_ind = 0
+        self.show_menu(self.canvas, menu_current_row_ind)
+
+        while True:
+            key = self.canvas.getch()
+            self.canvas.clear()
+
+            # 27 - Esc button
+            if key == 27:
+                goodbye_message = random.choice(GOODBYE_WORDS)
+                self.canvas.addstr(y, x - len(goodbye_message) // 2, goodbye_message)
+                self.canvas.refresh()
+                time.sleep(1.5)
+                sys.exit(0)
+
+            if key == curses.KEY_UP and menu_current_row_ind > 0:
+                menu_current_row_ind -= 1
+            elif key == curses.KEY_DOWN and menu_current_row_ind < len(MENU) - 1:
+                menu_current_row_ind += 1
+            elif key in (curses.KEY_ENTER, 10, 13):
+                if menu_current_row_ind == 0:
+                    start_snake_game(self.canvas)
+                elif menu_current_row_ind == 1:
+                    start_tictactoe_game(self.canvas)
+                else:
+                    self.canvas.addstr(
+                        y, x - len(MENU[menu_current_row_ind]) // 2,
+                        MENU[menu_current_row_ind]
+                    )
+                    self.canvas.refresh()
+                    self.canvas.getch()
+
+            self.show_menu(self.canvas, menu_current_row_ind)
+
+            self.canvas.refresh()
