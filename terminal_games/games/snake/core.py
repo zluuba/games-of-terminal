@@ -191,6 +191,6 @@ class SnakeGame(GameEngine):
             self.canvas.refresh()
 
 
-def start_snake_game():
-    game = curses.wrapper(SnakeGame)
+def start_snake_game(canvas):
+    game = SnakeGame(canvas)
     game.start_new_game()
