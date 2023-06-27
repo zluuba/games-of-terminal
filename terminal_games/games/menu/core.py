@@ -1,6 +1,6 @@
 from terminal_games.scripts.tictactoe_game import start_tictactoe_game
 from terminal_games.scripts.snake_game import start_snake_game
-from terminal_games.games.constants import *
+from terminal_games.games.menu.constants import *
 
 import curses
 import random
