@@ -31,6 +31,7 @@ class GameEngine:
     def set_colors():
         curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
 
 class SnakeGame(GameEngine):
@@ -92,6 +93,7 @@ class SnakeGame(GameEngine):
         curses.curs_set(0)
 
         self.set_colors()
+        self.canvas.bkgd(' ', curses.color_pair(3))
         self.set_game_area(3, 3, 2, 3)
         self.greet()
 
