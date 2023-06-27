@@ -1,4 +1,4 @@
-from terminal_games.games.menu import Menu
+from terminal_games.games.menu.core import Menu
 import curses
 
 
