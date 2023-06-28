@@ -1,5 +1,12 @@
 from terminal_games.games.snake.common import MESSAGES
 import os
+import dotenv
+
+dotenv.load_dotenv()
+
+FILENAME = '.env'
+CURRENT_DIR = os.getcwd()
+FILE_PATH = os.path.join(CURRENT_DIR, FILENAME)
 
 
 def show_score(stdscr, score):
@@ -8,24 +15,25 @@ def show_score(stdscr, score):
     stdscr.addstr(1, sw // 2 - len(score_text) // 2, score_text)
 
 
+def get_best_score():
+    if not os.path.exists(FILE_PATH):
+        open(FILE_PATH, 'a').close()
+        dotenv.set_key(FILE_PATH, 'SNAKE_BEST_SCORE', '0')
+
+    best_score = dotenv.get_key(FILE_PATH, 'SNAKE_BEST_SCORE')
+    return best_score
+
+
 def show_best_score(stdscr):
     _, sw = stdscr.getmaxyx()
-    filename = 'best_score.txt'
-    directory = os.getcwd()
-    file_path = os.path.join(directory, filename)
-    if not os.path.exists(file_path):
-        open(file_path, 'a').write('0')
-    best_score = open(file_path, 'r').read()
+    best_score = get_best_score()
     best_score_text = MESSAGES['best_score'] + str(best_score)
     stdscr.addstr(1, sw - len(best_score_text) - 3, best_score_text)
 
 
 def save_best_score(score):
-    filename = 'best_score.txt'
-    directory = os.getcwd()
-    file_path = os.path.join(directory, filename)
-    best_score = open(file_path, 'r').read()
+    best_score = get_best_score()
     if score > int(best_score):
-        open(file_path, 'w').write(str(score))
+        dotenv.set_key(FILE_PATH, 'SNAKE_BEST_SCORE', str(score))
         return True
     return False
