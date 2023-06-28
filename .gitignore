@@ -4,4 +4,4 @@
 
 # local files
 dist/
-*.txt
+.env
