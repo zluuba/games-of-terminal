@@ -18,6 +18,7 @@ term-games = "terminal_games.scripts.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+board = "^1.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"
