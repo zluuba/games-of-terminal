@@ -60,7 +60,7 @@ class Menu:
             elif key in (curses.KEY_ENTER, 10, 13):
                 if menu_current_row_ind == 0:
                     start_snake_game(self.canvas)
-                elif menu_current_row_ind == 1:
+                elif menu_current_row_ind == 2:
                     start_tictactoe_game(self.canvas)
                 else:
                     self.canvas.addstr(
