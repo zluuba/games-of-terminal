@@ -81,8 +81,8 @@ class SnakeGame(GameEngine):
 
     def score_init(self):
         self.score = 0
-        show_score(self.canvas, self.score)
-        show_best_score(self.canvas)
+        show_score(self.canvas, self.score, self.screen_width)
+        show_best_score(self.canvas, self.screen_width)
 
     def start_new_game(self):
         """
@@ -144,7 +144,7 @@ class SnakeGame(GameEngine):
                 )
 
                 self.score += 1
-                show_score(self.canvas, self.score)
+                show_score(self.canvas, self.score, self.screen_width)
 
             else:
                 self.canvas.addstr(self.snake[-1][0], self.snake[-1][1], ' ')
@@ -157,7 +157,7 @@ class SnakeGame(GameEngine):
 
                 is_best_score = save_best_score(self.score)
                 if is_best_score:
-                    show_best_score(self.canvas)
+                    show_best_score(self.canvas, self.screen_width)
                     message = self.messages['new_best_score']
                     self.canvas.addstr(
                         2, (self.screen_width - len(message) - 3),

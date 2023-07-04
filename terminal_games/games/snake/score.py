@@ -9,10 +9,10 @@ CURRENT_DIR = os.getcwd()
 FILE_PATH = os.path.join(CURRENT_DIR, FILENAME)
 
 
-def show_score(stdscr, score):
-    _, sw = stdscr.getmaxyx()
+def show_score(canvas, score, width):
     score_text = MESSAGES['score_text'] + str(score)
-    stdscr.addstr(1, sw // 2 - len(score_text) // 2, score_text)
+    y, x = 1, width // 2 - len(score_text) // 2
+    canvas.addstr(y, x, score_text)
 
 
 def get_best_score():
@@ -24,11 +24,11 @@ def get_best_score():
     return best_score
 
 
-def show_best_score(stdscr):
-    _, sw = stdscr.getmaxyx()
+def show_best_score(canvas, width):
     best_score = get_best_score()
     best_score_text = MESSAGES['best_score'] + str(best_score)
-    stdscr.addstr(1, sw - len(best_score_text) - 3, best_score_text)
+    y, x = 1, width - len(best_score_text) - 3
+    canvas.addstr(y, x, best_score_text)
 
 
 def save_best_score(score):
