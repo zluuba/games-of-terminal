@@ -145,9 +145,10 @@ class TicTacToeGame:
     def _check_game_status(self):
         self._set_game_status()
 
-        if self.game_status == 3:
-            return
+        if self.game_status != 3:
+            self._finish_game()
 
+    def _finish_game(self):
         text = GAME_STATUSES[self.game_status]
 
         curses.flash()
