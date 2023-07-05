@@ -5,8 +5,8 @@ Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 
 ### Following features:
 1. New games:
-   1. Tic-tac-toe:
-      - create engine
+   1. ~~Tic-tac-toe:~~
+      - ~~create engine~~
    2. Minesweeper:
       - create engine
    3. Tetris:
