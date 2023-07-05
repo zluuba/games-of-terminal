@@ -4,6 +4,9 @@ import sys
 import time
 
 
+# TODO: add double win (two winning combinations in one game)
+
+
 DIRECTIONS = {
     curses.KEY_RIGHT: (0, 1), curses.KEY_LEFT: (0, -1),
     curses.KEY_UP: (-1, 0), curses.KEY_DOWN: (1, 0),
@@ -33,8 +36,8 @@ class TicTacToeGame:
         self.height, self.width = self.canvas.getmaxyx()
         self._setup_game_window()
 
-        self.position = 1
-        self.coords = (0, 0)
+        self.position = 5
+        self.coords = (1, 1)
 
         self.moves = []
         self.user_moves = []
@@ -50,42 +53,24 @@ class TicTacToeGame:
     def _setup_game_window(self):
         self.window = curses.newwin(self.height - 2, self.width - 2, 1, 1)
         self.window.nodelay(True)
-        self.window.keypad(1)
+        self.window.keypad(True)
         self.window.border()
 
     def _draw_game_field(self):
-        one = self.window.subwin(5, 10, 2, 2)
-        one.border()
+        self.fields = {}
 
-        two = self.window.subwin(5, 10, 2, 12)
-        two.border()
+        lines, cols = 5, 10
+        begin_ys = (2, 6, 10)
+        begin_xs = (2, 11, 20)
+        curr_box_num = 1
 
-        three = self.window.subwin(5, 10, 2, 22)
-        three.border()
+        for begin_y in begin_ys:
+            for begin_x in begin_xs:
+                box = self.window.subwin(lines, cols, begin_y, begin_x)
+                box.border()
+                self.fields[curr_box_num] = box
 
-        four = self.window.subwin(5, 10, 7, 2)
-        four.border()
-
-        five = self.window.subwin(5, 10, 7, 12)
-        five.border()
-
-        six = self.window.subwin(5, 10, 7, 22)
-        six.border()
-
-        seven = self.window.subwin(5, 10, 12, 2)
-        seven.border()
-
-        eight = self.window.subwin(5, 10, 12, 12)
-        eight.border()
-
-        nine = self.window.subwin(5, 10, 12, 22)
-        nine.border()
-
-        self.fields = {
-            1: one, 2: two, 3: three,
-            4: four, 5: five, 6: six,
-            7: seven, 8: eight, 9: nine
-        }
+                curr_box_num += 1
 
     def start_new_game(self):
         curses.curs_set(0)
@@ -118,11 +103,7 @@ class TicTacToeGame:
             field.addstr(2, 3, 'user', curses.color_pair(1))
             field.refresh()
 
-            is_game = self._check_game_status()
-            if is_game is True:
-                self.start_new_game()
-            elif is_game is False:
-                self._end_the_game()
+            self._check_game_status()
             return True
         return False
 
@@ -132,6 +113,7 @@ class TicTacToeGame:
         while chosen_field is None:
             move = random.randint(1, 9)
             if move not in self.moves:
+                move = self._get_best_move(move)
                 self.moves.append(move)
                 self.computer_moves.append(move)
                 chosen_field = move
@@ -142,19 +124,23 @@ class TicTacToeGame:
 
         self._check_game_status()
 
-    def _check_user_to_win(self):
-        for comb in WINNING_COMBINATIONS:
-            is_win = all(map(lambda num: num in self.user_moves, comb))
-            if is_win:
-                return True
-        return False
+    def _get_best_move(self, curr_move):
+        for x, y, z in WINNING_COMBINATIONS:
+            if x in self.computer_moves and y in self.computer_moves and z not in self.moves:
+                return z
+            if x in self.computer_moves and z in self.computer_moves and y not in self.moves:
+                return y
+            if y in self.computer_moves and z in self.computer_moves and x not in self.moves:
+                return x
 
-    def _check_computer_to_win(self):
-        for comb in WINNING_COMBINATIONS:
-            is_win = all(map(lambda num: num in self.computer_moves, comb))
-            if is_win:
-                return True
-        return False
+            if x in self.user_moves and y in self.user_moves and z not in self.moves:
+                return z
+            if x in self.user_moves and z in self.user_moves and y not in self.moves:
+                return y
+            if y in self.user_moves and z in self.user_moves and x not in self.moves:
+                return x
+
+        return curr_move
 
     def _check_game_status(self):
         self._set_game_status()
@@ -169,12 +155,15 @@ class TicTacToeGame:
         self.window.refresh()
 
         time.sleep(2)
-
-        self._end_the_game()
-
-    def _end_the_game(self):
-        # curses.endwin()
         sys.exit(0)
+
+    def _check_to_win(self, player):
+        player_moves = self.user_moves if player == 'user' else self.computer_moves
+        for winning_moves in WINNING_COMBINATIONS:
+            is_win = all(map(lambda move: move in player_moves, winning_moves))
+            if is_win:
+                return True
+        return False
 
     def _set_game_status(self):
         """
@@ -185,9 +174,9 @@ class TicTacToeGame:
             3 - game is not over
         """
 
-        if self._check_user_to_win():
+        if self._check_to_win('user'):
             self.game_status = 0
-        elif self._check_computer_to_win():
+        elif self._check_to_win('comp'):
             self.game_status = 1
         elif len(self.moves) == 9:
             self.game_status = 2
@@ -203,15 +192,15 @@ class TicTacToeGame:
         if (0 <= new_row < rows) and (0 <= new_col < cols):
             self.coords = (new_row, new_col)
             self.position = FIELD[new_row][new_col]
-            self._reset_fields()
-            self._update_field()
+            self._reset_fields_color()
+            self._update_field_color()
 
-    def _reset_fields(self):
+    def _reset_fields_color(self):
         for pos, field in self.fields.items():
             field.bkgd(' ', curses.color_pair(1))
             field.refresh()
 
-    def _update_field(self):
+    def _update_field_color(self):
         window = self.fields[self.position]
         window.bkgd(' ', curses.color_pair(2))
         window.refresh()
