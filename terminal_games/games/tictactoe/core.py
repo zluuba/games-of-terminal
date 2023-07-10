@@ -4,7 +4,8 @@ import sys
 import time
 
 
-# TODO: add double win (two winning combinations in one game)
+# TODO: add double win (two winning combinations in one game);
+#       highlighting of winning combinations (green for user, red for computer);
 
 
 DIRECTIONS = {
