@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "terminal-games"
 version = "0.1.0"
-description = "Games for terminal: Snake, Tic-tac-toe, Minesweeper and Chess"
+description = "Games for terminal: Snake, Tic-tac-toe, Minesweeper and Tetris"
 license = "Proprietary"
 authors = ["Luybov Nikitina <zluyba.nikitina@gmail.com>"]
 readme = "README.md"
