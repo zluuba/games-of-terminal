@@ -45,4 +45,6 @@ Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 
 <br>
 
-**by [zluuba](https://www.freecodecamp.org/zluuba)**
+##
+
+**by [zluuba](https://github.com/zluuba)**
