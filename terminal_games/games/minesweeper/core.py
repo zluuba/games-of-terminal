@@ -1,47 +1,27 @@
+from terminal_games.games.engine import GameEngine
+from terminal_games.games.minesweeper.constants import *
+
 import curses
-import random
+# import random
 
 import time
 import sys
 
 
-DIRECTIONS = {
-    curses.KEY_RIGHT: (0, 1), curses.KEY_LEFT: (0, -1),
-    curses.KEY_UP: (-1, 0), curses.KEY_DOWN: (1, 0),
-}
-FIELD = [[1, 2, 3, 4, 5],
-         [6, 7, 8, 9, 10],
-         [11, 12, 13, 14, 15],
-         [16, 17, 18, 19, 20],
-         [21, 22, 23, 24, 25]]
-
-
-class MinesweeperGame:
-    def __init__(self, canvas):
-        self.canvas = canvas
-        self._setup()
-
+class MinesweeperGame(GameEngine):
     def _setup(self):
-        self._init_colors()
-        self.height, self.width = self.canvas.getmaxyx()
-        self._setup_game_window()
-
-        self.canvas.bkgd(' ', curses.color_pair(1))
         self.field_size = 5
-
-        self.position = 1
         self.coords = (0, 0)
+        self.position = 1
 
-    def _init_colors(self):
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)
+        super()._setup()
 
-    def _setup_game_window(self):
-        self.window = curses.newwin(self.height - 2, self.width - 2, 1, 1)
-        self.window.nodelay(True)
-        self.window.keypad(True)
-        self.window.border()
+    def _draw_game_box(self):
+        begin_y, begin_x = 1, 1
+        end_y, end_x = 12, 22
+
+        game_box = self.window.subwin(end_y, end_x, begin_y, begin_x)
+        game_box.border()
 
     def _draw_game_field(self):
         self.fields = {}
@@ -54,7 +34,7 @@ class MinesweeperGame:
             for _ in range(self.field_size):
                 box = self.window.subwin(lines, cols, curr_y, curr_x)
                 self.fields[curr_box_num] = box
-                box.border()
+                box.bkgd(curses.color_pair(4))
 
                 curr_box_num += 1
                 curr_x += cols
@@ -65,11 +45,14 @@ class MinesweeperGame:
     def start_new_game(self):
         curses.curs_set(0)
 
+        self._draw_game_box()
         self._draw_game_field()
-        self._update_field_color()
+
+        self._update_field_color(curses.color_pair(2))
 
         while True:
             key = self.window.getch()
+            self._wait()
 
             if key in DIRECTIONS:
                 self._slide_field(*DIRECTIONS[key])
@@ -85,19 +68,15 @@ class MinesweeperGame:
         new_col = c + col
 
         if (0 <= new_row < rows) and (0 <= new_col < cols):
+            self._update_field_color(curses.color_pair(4))
+
             self.coords = (new_row, new_col)
             self.position = FIELD[new_row][new_col]
-            self._reset_fields_color()
-            self._update_field_color()
+            self._update_field_color(curses.color_pair(2))
 
-    def _reset_fields_color(self):
-        for pos, field in self.fields.items():
-            field.bkgd(' ', curses.color_pair(1))
-            field.refresh()
-
-    def _update_field_color(self):
-        window = self.fields[self.position]
-        window.bkgd(' ', curses.color_pair(2))
-        window.refresh()
+    def _update_field_color(self, color):
+        field = self.fields[self.position]
+        field.bkgd(' ', color)
+        field.refresh()
 
 
