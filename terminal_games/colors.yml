@@ -1,0 +1,293 @@
+1: red
+2: green
+3: yellow
+4: blue
+5: magenta
+6: light blue
+7: light grey
+8: medium grey
+9: scarlet (bright red)
+
+10: bright green
+11: bright yellow
+12: bright blue
+13: bright magenta
+14: bright light blue
+15: bright light grey (almost white)
+
+16: black
+17: deep blue
+18: deep blue (brighter - v.1)
+19: deep blue (brighter - v.2)
+20: deep blue (brighter - v.3)
+21: deep blue (brighter - v.4)
+
+22: deep green
+23: aqua
+24: aqua light blue
+25: medium blue
+26: medium blue (brighter - v.1)
+27: medium blue (brighter - v.2)
+
+28: medium green
+29: more green than blue
+30: more blue than green
+31: aqua light blue
+32: medium blue
+33: medium blue (brighter - v.1)
+
+34: bright green
+35: more green than blue, but brighter
+36: more blue than green, but brighter
+37: aqua
+38: aqua light blue
+39: medium blue
+
+40: bright green
+41: dull green
+42: dull green + blue
+43: aqua
+44: aqua light blue
+45: medium blue
+
+46: very bright green
+47: bright green
+48: bright green with little blue
+49: bright aqua
+50: bright aqua light blue
+51: bright medium blue
+
+52: deep red
+53: deep magenta
+54: deep purple
+55: pure purple
+56: purple and little blue
+57: purple and blue
+
+58: deep yellow
+59: good grey
+60: grey + light purple
+61: light purple
+62: pastel purple
+63: bright pastel purple
+
+64: yellow + green
+65: pastel green
+66: pastel blue + green
+67: pastel blue
+68: pastel deep blue
+69: bright pastel blue
+
+70: light bright green
+71: pastel green + blue
+72: pastel green
+73: pastel aqua
+74: pastel blue
+75: pastel deep blue
+
+76: bright green
+77: bright pastel green
+78: bright pastel green + blue
+79: bright pastel aqua
+80: bright pastel blue
+81: bright pastel deep blue
+
+82: very bright green
+83: very bright pastel green
+84: very bright pastel green + blue
+85: very bright pastel aqua
+86: very bright pastel blue
+87: very bright pastel deep blue
+
+88: medium red
+89: medium magenta
+90: medium magenta + little purple
+91: medium purple + little blue
+92: medium purple
+93: medium deep purple
+
+94: deep yellow (light brown)
+95: pastel brown + red
+96: pastel deep purple
+97: pastel purple
+98: soft purple
+99: purple
+
+100: dirty yellow
+101: yellow + grey
+102: grey + little yellow
+103: soft pastel purple
+104: pastel purple
+105: light purple
+
+106: green + little yellow
+107: light green + little yellow
+108: light pastel green
+109: light pastel aqua
+110: light pastel blue
+111: strong pastel blue
+
+112: very bright light green
+113: very bright light pastel green
+114: very bright light pastel green + little blue
+115: very bright light pastel aqua
+116: very bright light pastel blue
+117: very bright light blue
+
+118: very bright green
+119: very bright pastel green
+120: very bright pastel green + little blue
+121: very bright pastel aqua
+122: very bright pastel blue
+123: very bright light blue
+
+124: peaceful red
+125: peaceful magenta
+126: peaceful magenta + little purple
+127: peaceful purple + little magenta
+128: peaceful purple
+129: peaceful strong purple
+
+130: dark orange
+131: dirty pastel pink
+132: pastel pink
+133: light purple + pink
+134: light purple
+135: bright light purple
+
+136: dirty yellow (sandy)
+137: dirty light peach
+138: dirty peach
+139: dirty light magenta
+140: very light purple
+141: light purple
+
+142: dirty yellow + green
+143: pastel yellow
+144: very light pastel yellow
+145: light grey
+146: light pastel purple
+147: strong pastel purple
+
+148: bright lettuce color (green)
+149: light lettuce color (green)
+150: lettuce color (green)
+151: light pastel lettuce color (green)
+152: pastel dirty aqua
+153: pastel dirty blue
+
+154: very bright green
+155: very bright green + little blue
+156: very bright green + blue
+157: very bright green + more blue
+158: very bright aqua
+159: very bright blue
+
+160: strong red
+161: strong red + magenta
+162: strong magenta
+163: strong magenta + purple
+164: strong purple + magenta
+165: strong purple
+
+166: deep orange
+167: deep orange + little pink
+168: deep pink
+169: pink + magenta
+170: magenta
+171: magenta + purple
+
+172: orange
+173: orange peach
+174: peach
+175: pink + little magenta
+176: magenta
+177: purple
+
+178: deep yellow (sandy)
+179: pastel deep yellow
+180: pastel light peach
+181: pastel pink
+182: pastel pink + purple
+183: pastel purple
+
+184: yellow + green
+185: pastel yellow + green
+186: dull pastel yellow + green
+187: very dull pastel yellow + green (almost grey)
+188: very light grey
+189: very light purple
+
+190: very bright yellow + green
+191: very bright pastel yellow + green
+192: very bright dull pastel yellow + green
+193: very bright dull pastel yellow + green (lighter)
+194: very bright very dull pastel yellow + green
+195: very bright light blue
+
+196: very bright red
+197: very bright red + little magenta
+198: very bright pink
+199: very bright strong pink
+200: very bright strong light pink
+201: very bright strong light magenta
+
+202: bright orange
+203: bright pink + orange
+204: bright pink
+205: bright pink + magenta
+206: bright magenta
+207: bright magenta + purple
+
+208: bright light orange
+209: bright light pastel orange
+210: bright light pink + little orange
+211: bright light pink
+212: bright light pink + magenta
+213: bright light magenta
+
+214: very bright light pastel orange
+215: very bright light pastel orange
+216: very bright light pastel orange + pink
+217: very bright light pastel pink
+218: very bright light pastel pink + magenta
+219: very bright light magenta
+
+220: very bright yellow
+221: very bright pastel yellow
+222: very bright pastel light yellow + pink
+223: very bright pastel pink + orange
+224: very bright pastel pink
+225: very bright pastel magenta
+
+226: very bright light yellow
+227: very bright pastel light yellow
+228: very bright pastel light yellow (lighter)
+229: very bright pastel light yellow (almost white)
+230: very bright pastel white + little yellow
+231: very bright pastel while + little grey
+
+232: light black (dark grey)
+233: light black (dark grey) brighter v.1
+234: light black (dark grey) brighter v.2
+235: dark grey
+236: dark grey brighter v.1
+237: dark grey brighter v.2
+238: medium grey
+239: medium grey brighter v.1
+240: medium grey brighter v.2
+241: medium grey brighter v.3
+242: grey
+243: grey brighter v.1
+244: grey brighter v.2
+245: light grey
+246: light grey brighter v.1
+247: light grey brighter v.2
+248: very light grey
+249: very light grey brighter v.1
+250: very light grey brighter v.2
+251: grey + white
+252: grey + white brighter v.1
+253: grey + white brighter v.2
+254: grey + white brighter v.3
+255: grey + white brighter v.4
