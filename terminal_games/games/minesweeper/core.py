@@ -12,11 +12,14 @@ class MinesweeperGame(GameEngine):
     def _setup(self):
         super()._setup()
 
-        self.field_size = 5
-        self.position = 1
+        self.cell_width = 4
+        self.cell_height = 2
+        self.position = 0
         self.coords = (0, 0)
         self.bombs = []
         self.openCells = []
+
+        self._draw_game_field()
 
         self._set_bombs()
         self._setup_side_menu()
@@ -28,37 +31,37 @@ class MinesweeperGame(GameEngine):
             self.side_menu_box.addstr(y, x, tip)
             y += 1
 
-    def _draw_box(self):
-        begin_y, begin_x = 2, 2
-        end_y, end_x = 17, 32
-
-        game_box = self.window.subwin(end_y, end_x, begin_y, begin_x)
-        game_box.border()
+    def _get_game_box_size(self):
+        height, width, *_ = self.sizes['game_box'].values()
+        return width, height
 
     def _draw_game_field(self):
+        width, height = self._get_game_box_size()
+
+        begin_y, begin_x = curr_y, curr_x = 2, 1
+
+        self.lines = height // self.cell_height
+        self.cols = width // self.cell_width
+
         self.fields = {}
+        curr_box_num = 0
 
-        curr_box_num = 1
-        lines, cols = 3, 6
-        begin_y, begin_x = curr_y, curr_x = 3, 3
-
-        for _ in range(self.field_size):
-            for _ in range(self.field_size):
-                box = self.window.subwin(lines, cols, curr_y, curr_x)
+        for _ in range(self.lines - 1):
+            for _ in range(self.cols - 1):
+                box = self.game_box.subwin(self.cell_height, self.cell_width, curr_y, curr_x)
                 self.fields[curr_box_num] = box
                 box.bkgd(curses.color_pair(4))
 
                 curr_box_num += 1
-                curr_x += cols
+                curr_x += self.cell_width
 
-            curr_y += lines
+            curr_y += self.cell_height
             curr_x = begin_x
 
     def start_new_game(self):
         curses.curs_set(0)
 
-        self._draw_box()
-        self._draw_game_field()
+        # self._draw_game_field()
         self._update_field_color(curses.color_pair(5))
 
         while True:
@@ -75,16 +78,19 @@ class MinesweeperGame(GameEngine):
                 sys.exit(0)
 
     def _slide_field(self, r, c):
-        cols = rows = self.field_size
+        cols, rows = self.cols, self.lines
+
+        self.game_field = [[j + i for j in range(rows + 1)] for i in range(0, (cols * (rows + 1)), (rows + 1))]
+
         row, col = self.coords
         new_row = r + row
         new_col = c + col
 
-        if (0 <= new_row < rows) and (0 <= new_col < cols):
+        if (0 <= new_row < rows - 1) and (0 <= new_col < cols - 1):
             self._update_field_color(curses.color_pair(4))
 
             self.coords = (new_row, new_col)
-            self.position = FIELD[new_row][new_col]
+            self.position = self.game_field[new_row][new_col]
             self._update_field_color(curses.color_pair(5))
 
     def _update_field_color(self, color):
@@ -93,7 +99,8 @@ class MinesweeperGame(GameEngine):
         field.refresh()
 
     def _set_bombs(self):
-        num_of_bombs = self.field_size ** 2 // 3
+        self.field_size = self.cols * self.lines
+        num_of_bombs = self.field_size // 3
 
         while num_of_bombs > 0:
             bomb_field = random.randint(1, self.field_size ** 2)
