@@ -1,20 +1,13 @@
-from terminal_games.games.snake.common import MESSAGES
 import os
 import dotenv
-# from pathlib import Path
+from pathlib import Path
+from terminal_games.games.snake.common import MESSAGES
 
 
 dotenv.load_dotenv()
 
 FILENAME = '.env'
-BASE_DIR = os.getcwd()
-
-# TODO: redo score saving
-#       it's save in Python installing packages folder
-#       or try not to use 'python3 -m pip install'
-
-# FILENAME = 'term_games_scores.txt'
-# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).parents[2]
 
 FILE_PATH = os.path.join(BASE_DIR, FILENAME)
 
