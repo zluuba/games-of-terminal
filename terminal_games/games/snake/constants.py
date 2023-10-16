@@ -8,6 +8,15 @@ DIRECTIONS = {
     curses.KEY_DOWN: curses.KEY_UP,
 }
 
+KEYS = {
+    'up_arrow': curses.KEY_UP,
+    'down_arrow': curses.KEY_DOWN,
+    'left_arrow': curses.KEY_LEFT,
+    'right_arrow': curses.KEY_RIGHT,
+    'space_btn': ord(' '),
+    'esc_btn': 27,
+}
+
 MESSAGES = {
     'game_over': 'GAME OVER',
     'score_text': 'Score: ',
