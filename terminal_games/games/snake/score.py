@@ -16,6 +16,7 @@ def show_score(canvas, score, width):
     score_text = MESSAGES['score_text'] + str(score)
     y, x = 1, width // 2 - len(score_text) // 2
     canvas.addstr(y, x, score_text)
+    canvas.refresh()
 
 
 def get_best_score():
@@ -30,8 +31,9 @@ def get_best_score():
 def show_best_score(canvas, width):
     best_score = get_best_score()
     best_score_text = MESSAGES['best_score'] + str(best_score)
-    y, x = 1, width - len(best_score_text) - 3
+    y, x = 2, width // 2 - len(best_score_text) // 2
     canvas.addstr(y, x, best_score_text)
+    canvas.refresh()
 
 
 def save_best_score(score):
