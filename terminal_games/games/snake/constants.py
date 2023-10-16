@@ -1,12 +1,7 @@
 import curses
 
 
-CURSES_DIRECTIONS = [
-    curses.KEY_RIGHT, curses.KEY_LEFT,
-    curses.KEY_UP, curses.KEY_DOWN,
-]
-
-OPPOSITE_DIRECTIONS = {
+DIRECTIONS = {
     curses.KEY_RIGHT: curses.KEY_LEFT,
     curses.KEY_LEFT: curses.KEY_RIGHT,
     curses.KEY_UP: curses.KEY_DOWN,
