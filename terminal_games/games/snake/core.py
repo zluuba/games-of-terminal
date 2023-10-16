@@ -1,30 +1,20 @@
-from terminal_games.games.snake.common import (
-    CURSES_DIRECTIONS, OPPOSITE_DIRECTIONS,
-    MESSAGES, SNAKE_SKIN, FOOD_SKIN, SKINS,
-)
+from terminal_games.games.snake.constants import *
+from terminal_games.games.snake.food import create_food
 from terminal_games.games.snake.score import (
     show_score, show_best_score, save_best_score
 )
-from terminal_games.games.snake.food import create_food
 
 from curses import textpad
 
 import curses
 import time
-import sys
 
 
 class GameEngine:
-    messages = MESSAGES
-    directions = CURSES_DIRECTIONS
-    opposite_directions = OPPOSITE_DIRECTIONS
-    default_snake_skin = SNAKE_SKIN
-    default_food_skin = FOOD_SKIN
-    all_skins = SKINS
-
     def set_game_area(self, top, bottom, left, right):
         self.box = [[top, bottom],
                     [self.screen_height - left, self.screen_width - right]]
+        # get rid of textpad lib, rebuild it with curses
         textpad.rectangle(self.canvas, *self.box[0], *self.box[1])
 
     @staticmethod
@@ -46,25 +36,6 @@ class SnakeGame(GameEngine):
         self.score = 0
         self.games_count = 0
 
-    def greet(self):
-        if self.games_count > 0:
-            return
-
-        message = self.messages['start_text']
-        self.canvas.addstr(
-            self.screen_height // 2,
-            self.screen_width // 2 - len(message) // 2,
-            message
-        )
-
-        if self.canvas.getch():
-            spaces = ' ' * len(message)
-            self.canvas.addstr(
-                self.screen_height // 2,
-                self.screen_width // 2 - len(message) // 2,
-                spaces
-            )
-
     def set_snake(self):
         self.snake = [
             [self.screen_height // 2, self.screen_width // 2 + 1],
@@ -85,17 +56,11 @@ class SnakeGame(GameEngine):
         show_best_score(self.canvas, self.screen_width)
 
     def start_new_game(self):
-        """
-        Add creating/reading .env file.
-        Store into it best score, fav skins, etc
-        """
-
         curses.curs_set(0)
 
         self.set_colors()
         self.canvas.bkgd(' ', curses.color_pair(3))
         self.set_game_area(3, 3, 2, 3)
-        self.greet()
 
         self.canvas.nodelay(1)
         self.canvas.timeout(150)
@@ -106,16 +71,19 @@ class SnakeGame(GameEngine):
 
         while self.engine():
             self.start_new_game()
-
-        sys.exit(0)
+        return
 
     def engine(self):
         direction = curses.KEY_RIGHT
 
         while True:
             key = self.canvas.getch()
-            if key in CURSES_DIRECTIONS:
-                if direction == OPPOSITE_DIRECTIONS[key]:
+            if key == 27:
+                time.sleep(1)
+                curses.endwin()
+                return
+            if key in DIRECTIONS.keys():
+                if direction == DIRECTIONS[key]:
                     continue
                 direction = key
 
@@ -134,13 +102,13 @@ class SnakeGame(GameEngine):
             if new_head:
                 self.snake.insert(0, new_head)
             self.canvas.addstr(
-                new_head[0], new_head[1], self.default_snake_skin
+                new_head[0], new_head[1], SNAKE_SKIN
             )
 
             if self.snake[0] == self.food:
                 self.food = create_food(self.snake, self.box)
                 self.canvas.addstr(
-                    self.food[0], self.food[1], self.default_food_skin
+                    self.food[0], self.food[1], FOOD_SKIN
                 )
 
                 self.score += 1
@@ -158,14 +126,14 @@ class SnakeGame(GameEngine):
                 is_best_score = save_best_score(self.score)
                 if is_best_score:
                     show_best_score(self.canvas, self.screen_width)
-                    message = self.messages['new_best_score']
+                    message = MESSAGES['new_best_score']
                     self.canvas.addstr(
                         2, (self.screen_width - len(message) - 3),
                         message, curses.color_pair(2)
                     )
                     self.canvas.refresh()
 
-                message = self.messages['game_over']
+                message = MESSAGES['game_over']
                 self.canvas.addstr(
                     self.screen_height // 2,
                     (self.screen_width // 2 - len(message) // 2),
@@ -175,7 +143,7 @@ class SnakeGame(GameEngine):
                 self.canvas.refresh()
 
                 time.sleep(1)
-                message = self.messages['play_again']
+                message = MESSAGES['play_again']
                 self.canvas.addstr(
                     self.screen_height // 2 + 2,
                     self.screen_width // 2 - len(message) // 2,
@@ -191,8 +159,3 @@ class SnakeGame(GameEngine):
                 return False
 
             self.canvas.refresh()
-
-
-def start_snake_game(canvas):
-    game = SnakeGame(canvas)
-    game.start_new_game()
