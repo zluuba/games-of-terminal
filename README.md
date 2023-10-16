@@ -1,49 +1,68 @@
-## Terminal Games
+# Term Games
+
+*add CodeClimate badges here*
 
 Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 
 
-### Following features:
-1. New games:
-   1. ~~Tic-tac-toe:~~
-      - ~~create engine~~
-   2. Minesweeper:
-      - create engine
-   3. Tetris:
-      - create engine
-2. Detailed menu:
-   1. Add title
-   2. Add side menu 
-   3. Canvas: if it's too little, show "window size is too small"
-3. Add more features to the games:
-   1. Snake:
-      - return to the menu
-      - side menu
-      - customizing: snake body, food, etc
-      - modes:
-        - default
-        - with obstacles (rocks, bushes, etc)
-      - achievements
-      - description - how to play
-   2. Tic-tac-toe:
-      - return to the menu
-      - side menu
-      - multy-game (few fields)
-      - game with friend (local: wasd & arrows)
-      - achievements
-      - description - how to play
-   3. Minesweeper:
-      - return to the menu
-      - side menu
-      - levels (easy | normal | hard)
-      - description - how to play
-   4. Tetris:
-      - return to the menu
-      - side menu
-      - customizing: colors of shapes
-      - description - how to play
+## Requirements
 
-<br>
+- [python](https://www.python.org/), version 3.9 or higher
+- [poetry](https://python-poetry.org/docs/#installation), version 1.2.0 or higher
+
+
+## Installation
+
+Open terminal window.
+Clone this repo or download it with pip:
+```ch
+git clone https://github.com/zluuba/task-manager.git
+```
+```ch
+pip install --user git+https://github.com/zluuba/task-manager.git
+```
+
+Go to the downloaded dir and install dependencies:
+```ch
+cd task-manager
+make install
+```
+
+Install games:
+```ch
+make build
+make package-install
+```
+
+
+## Usage
+
+Start the games with next command:
+```ch
+term-games
+```
+
+You will see the menu. <br/>
+Use ↓ and ↑ arrows for navigation. Use **Enter** to start the game.
+
+Keys for game control:
+```ch
+P - pause/unpause
+H - show the rules and hints
+S - open/close side menu
+F - feedback form
+
+Esc - exit
+```
+
+
+## Following features
+- [ ] Sea Battle game
+- [ ] Animated menu
+- [ ] minimum win size requirements ("too little window for games" handle)
+
+## Demos
+
 
 ##
 
