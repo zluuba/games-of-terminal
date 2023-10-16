@@ -1,30 +1,8 @@
+from terminal_games.games.tictactoe.constants import *
+
 import curses
 import random
-import sys
 import time
-
-
-# TODO: add double win (two winning combinations in one game);
-#       highlighting of winning combinations (green for user, red for computer);
-
-
-DIRECTIONS = {
-    curses.KEY_RIGHT: (0, 1), curses.KEY_LEFT: (0, -1),
-    curses.KEY_UP: (-1, 0), curses.KEY_DOWN: (1, 0),
-}
-FIELD = [[1, 2, 3],
-         [4, 5, 6],
-         [7, 8, 9]]
-
-WINNING_COMBINATIONS = ((1, 2, 3), (4, 5, 6), (7, 8, 9),
-                        (1, 4, 7), (2, 5, 8), (3, 6, 9),
-                        (1, 5, 9), (3, 5, 7))
-
-GAME_STATUSES = {
-    0: 'User win!',
-    1: 'Computer win!',
-    2: 'Tie!',
-}
 
 
 class TicTacToeGame:
@@ -88,13 +66,14 @@ class TicTacToeGame:
                 self._slide_field(*DIRECTIONS[key])
             elif key == 10:
                 is_move_taken = self._user_move()
-                if is_move_taken:
+                if is_move_taken and self.game_status == 3:
                     time.sleep(1)
                     self._computer_move()
-            elif key == 27:
+
+            if key == 27 or self.game_status != 3:
                 time.sleep(1)
                 curses.endwin()
-                sys.exit(0)
+                return
 
     def _user_move(self):
         if self.position not in self.moves:
@@ -155,9 +134,6 @@ class TicTacToeGame:
         curses.flash()
         self.window.addstr(self.height // 2, self.width // 2, text, curses.color_pair(3))
         self.window.refresh()
-
-        time.sleep(2)
-        sys.exit(0)
 
     def _check_to_win(self, player):
         player_moves = self.user_moves if player == 'user' else self.computer_moves
