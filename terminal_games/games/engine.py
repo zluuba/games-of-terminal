@@ -1,13 +1,6 @@
 import curses
 
-
-LOGO = [
-    '######  #####  #####   ##   ##',
-    '  ##    ##     ##  ##  ### ###',
-    '  ##    ####   ####    ## # ##',
-    '  ##    ##     ## ##   ##   ##',
-    '  ##    #####  ##  ##  ##   ##',
-]
+from terminal_games.games.constants import *
 
 
 class GameEngine:
@@ -25,6 +18,9 @@ class GameEngine:
         curses.init_pair(6, 1, 132)                                     # pink
         curses.init_pair(7, 1, 134)                                     # light purple
 
+        curses.init_pair(8, curses.COLOR_RED, curses.COLOR_BLACK)       # red text
+        curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_BLACK)     # green text
+
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
         self.canvas.bkgd(' ', curses.color_pair(1))
@@ -38,8 +34,13 @@ class GameEngine:
 
     def _setup_boxes(self):
         self.game_box = self._draw_box(self.sizes['game_box'])
+        self.game_box_height, self.game_box_width = self.game_box.getmaxyx()
+
         self.side_menu_box = self._draw_box(self.sizes['side_menu_box'])
+        self.side_menu_box_height, self.side_menu_box_width = self.side_menu_box.getmaxyx()
+
         self.logo_box = self._draw_box(self.sizes['logo_box'])
+        self.logo_box_height, self.logo_box_width = self.logo_box.getmaxyx()
 
     def _draw_box(self, sizes):
         box = self.window.subwin(*sizes.values())
