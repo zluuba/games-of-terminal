@@ -1,19 +1,14 @@
 from terminal_games.games.tictactoe.constants import *
+from terminal_games.games.engine import GameEngine
 
 import curses
 import random
 import time
 
 
-class TicTacToeGame:
-    def __init__(self, canvas):
-        self.canvas = canvas
-        self._setup()
-
+class TicTacToeGame(GameEngine):
     def _setup(self):
-        self._init_colors()
-        self.height, self.width = self.canvas.getmaxyx()
-        self._setup_game_window()
+        super()._setup()
 
         self.position = 5
         self.coords = (1, 1)
@@ -22,30 +17,23 @@ class TicTacToeGame:
         self.user_moves = []
         self.computer_moves = []
 
-        self.game_status = 3
-
-    def _init_colors(self):
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-
-    def _setup_game_window(self):
-        self.window = curses.newwin(self.height - 2, self.width - 2, 1, 1)
-        self.window.nodelay(True)
-        self.window.keypad(True)
-        self.window.border()
+        self.game_status = 'game_is_on'
 
     def _draw_game_field(self):
         self.fields = {}
 
-        lines, cols = 5, 10
-        begin_ys = (2, 6, 10)
-        begin_xs = (2, 11, 20)
         curr_box_num = 1
+        lines, cols = 5, 10
+
+        middle_y = (self.game_box_height // 2) - (lines // 2)
+        middle_x = (self.game_box_width // 2) - (cols // 2)
+
+        begin_ys = (middle_y - 4, middle_y, middle_y + 4)
+        begin_xs = (middle_x - 9, middle_x, middle_x + 9)
 
         for begin_y in begin_ys:
             for begin_x in begin_xs:
-                box = self.window.subwin(lines, cols, begin_y, begin_x)
+                box = self.game_box.subwin(lines, cols, begin_y, begin_x)
                 box.border()
                 self.fields[curr_box_num] = box
 
@@ -55,35 +43,60 @@ class TicTacToeGame:
         curses.curs_set(0)
 
         self._draw_game_field()
-
-        curr_field = self.fields[self.position]
-        curr_field.bkgd(' ', curses.color_pair(2))
+        self._fill_field(self.fields[self.position], curses.color_pair(2))
 
         while True:
             key = self.window.getch()
 
-            if key in DIRECTIONS:
-                self._slide_field(*DIRECTIONS[key])
-            elif key == 10:
-                is_move_taken = self._user_move()
-                if is_move_taken and self.game_status == 3:
-                    time.sleep(1)
-                    self._computer_move()
-
-            if key == 27 or self.game_status != 3:
-                time.sleep(1)
+            if key == KEYS['esc_btn']:
                 curses.endwin()
                 return
+
+            if key in DIRECTIONS:
+                self._slide_field(*DIRECTIONS[key])
+            elif key == KEYS['enter_btn']:
+                is_move_taken = self._user_move()
+                if is_move_taken and self.game_status == 'game_is_on':
+                    time.sleep(0.5)
+                    self._computer_move()
+
+            if self.game_status != 'game_is_on':
+                curses.flash()
+
+                self._draw_game_over_message()
+                time.sleep(1)
+
+                is_start_game_over_again = self._ask_user_for_restart()
+                if is_start_game_over_again:
+                    self.__init__(self.canvas)
+                    self.start_new_game()
+                return
+
+    def _ask_user_for_restart(self):
+        message = MESSAGES['play_again']
+        self.side_menu_box.addstr(
+            self.side_menu_box_height // 2 + 2,
+            self.side_menu_box_width // 2 - len(message) // 2,
+            message, curses.A_BLINK + curses.color_pair(1),
+        )
+
+        self.side_menu_box.refresh()
+
+        curses.flushinp()
+        self._wait()
+        key = self.window.getch()
+
+        if key == KEYS['space_btn']:
+            self.game_box.erase()
+            return True
+        return False
 
     def _user_move(self):
         if self.position not in self.moves:
             self.moves.append(self.position)
             self.user_moves.append(self.position)
-            field = self.fields[self.position]
-            field.addstr(2, 3, 'user', curses.color_pair(1))
-            field.refresh()
-
-            self._check_game_status()
+            self._fill_field(self.fields[self.position], curses.color_pair(12))
+            self._set_game_status()
             return True
         return False
 
@@ -98,11 +111,8 @@ class TicTacToeGame:
                 self.computer_moves.append(move)
                 chosen_field = move
 
-        field = self.fields[chosen_field]
-        field.addstr(2, 3, 'comp', curses.color_pair(1))
-        field.refresh()
-
-        self._check_game_status()
+        self._fill_field(self.fields[chosen_field], curses.color_pair(13))
+        self._set_game_status()
 
     def _get_best_move(self, curr_move):
         for x, y, z in WINNING_COMBINATIONS:
@@ -113,6 +123,7 @@ class TicTacToeGame:
             if y in self.computer_moves and z in self.computer_moves and x not in self.moves:
                 return x
 
+        for x, y, z in WINNING_COMBINATIONS:
             if x in self.user_moves and y in self.user_moves and z not in self.moves:
                 return z
             if x in self.user_moves and z in self.user_moves and y not in self.moves:
@@ -121,19 +132,6 @@ class TicTacToeGame:
                 return x
 
         return curr_move
-
-    def _check_game_status(self):
-        self._set_game_status()
-
-        if self.game_status != 3:
-            self._finish_game()
-
-    def _finish_game(self):
-        text = GAME_STATUSES[self.game_status]
-
-        curses.flash()
-        self.window.addstr(self.height // 2, self.width // 2, text, curses.color_pair(3))
-        self.window.refresh()
 
     def _check_to_win(self, player):
         player_moves = self.user_moves if player == 'user' else self.computer_moves
@@ -144,22 +142,14 @@ class TicTacToeGame:
         return False
 
     def _set_game_status(self):
-        """
-        Game statuses:
-            0 - user win,
-            1 - computer win,
-            2 - tie,
-            3 - game is not over
-        """
-
         if self._check_to_win('user'):
-            self.game_status = 0
-        elif self._check_to_win('comp'):
-            self.game_status = 1
+            self.game_status = 'user_win'
+        elif self._check_to_win('computer'):
+            self.game_status = 'computer_win'
         elif len(self.moves) == 9:
-            self.game_status = 2
+            self.game_status = 'tie'
         else:
-            self.game_status = 3
+            self.game_status = 'game_is_on'
 
     def _slide_field(self, r, c):
         cols, rows = 3, 3
@@ -169,16 +159,28 @@ class TicTacToeGame:
 
         if (0 <= new_row < rows) and (0 <= new_col < cols):
             self.coords = (new_row, new_col)
+            self._reset_field_color(self.position)
+
             self.position = FIELD[new_row][new_col]
-            self._reset_fields_color()
-            self._update_field_color()
+            self._fill_field(self.fields[self.position], curses.color_pair(2))
 
-    def _reset_fields_color(self):
-        for pos, field in self.fields.items():
-            field.bkgd(' ', curses.color_pair(1))
-            field.refresh()
+    @staticmethod
+    def _fill_field(field, color):
+        h, w = field.getmaxyx()
 
-    def _update_field_color(self):
-        window = self.fields[self.position]
-        window.bkgd(' ', curses.color_pair(2))
-        window.refresh()
+        for y in range(1, h - 1):
+            for x in range(1, w - 1):
+                field.addstr(y, x, ' ', color)
+
+        field.refresh()
+
+    def _reset_field_color(self, position):
+        if position in self.user_moves:
+            color = curses.color_pair(12)
+        elif position in self.computer_moves:
+            color = curses.color_pair(13)
+        else:
+            color = curses.color_pair(1)
+
+        field = self.fields[self.position]
+        self._fill_field(field, color)
