@@ -66,7 +66,6 @@ class SnakeGame(GameEngine):
             key = self.window.getch()
 
             if key == KEYS['esc_btn']:
-                time.sleep(1)
                 curses.endwin()
                 return
             elif key in DIRECTIONS.keys():
