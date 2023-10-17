@@ -76,7 +76,7 @@ class SnakeGame(GameEngine):
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 curses.flash()
 
-                self._stop_the_game_and_show_game_over_msg()
+                self._draw_game_over_message()
                 self._save_best_score()
                 time.sleep(1)
 
@@ -133,16 +133,6 @@ class SnakeGame(GameEngine):
             )
             self.side_menu_box.refresh()
 
-    def _stop_the_game_and_show_game_over_msg(self):
-        message = MESSAGES['game_over']
-        self.game_box.addstr(
-            self.game_box_height // 2,
-            self.game_box_width // 2 - len(message) // 2,
-            message, curses.color_pair(8),
-        )
-        self.game_box.nodelay(0)
-        self.game_box.refresh()
-
     def _ask_user_for_restart(self):
         message = MESSAGES['play_again']
         self.game_box.addstr(
@@ -157,7 +147,6 @@ class SnakeGame(GameEngine):
         key = self.window.getch()
 
         if key == KEYS['space_btn']:
-            self.game_box.clear()
-            self.game_box.border()
+            self.game_box.erase()
             return True
         return False
