@@ -10,16 +10,21 @@ class GameEngine:
 
     @staticmethod
     def _init_colors():
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)     # black
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)     # green
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)       # red
+        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)     # white text, black bg
+        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)     # white text, green bg
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)       # white text, red bg
         curses.init_pair(4, 1, 236)                                     # dark grey
         curses.init_pair(5, 1, 245)                                     # light grey
         curses.init_pair(6, 1, 132)                                     # pink
         curses.init_pair(7, 1, 134)                                     # light purple
 
-        curses.init_pair(8, curses.COLOR_RED, curses.COLOR_BLACK)       # red text
-        curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_BLACK)     # green text
+        curses.init_pair(8, curses.COLOR_RED, curses.COLOR_BLACK)       # red text, black bg
+        curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_BLACK)     # green text, black bg
+        curses.init_pair(10, curses.COLOR_YELLOW, curses.COLOR_BLACK)   # yellow text, black bg
+
+        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_RED)      # black text, red bg
+        curses.init_pair(12, curses.COLOR_BLACK, 168)                   # black text, deep pink bg
+        curses.init_pair(13, curses.COLOR_BLACK, 153)                   # black text, pastel dirty blue bg
 
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -92,3 +97,24 @@ class GameEngine:
                 'begin_x': 0,
             },
         }
+
+    def _draw_game_over_message(self, y=1, x=1):
+        message = MESSAGES['game_over']
+
+        for offset in range(3):
+            self.game_box.addstr(
+                y + offset,
+                x,
+                ' ' * (self.game_box_width - 2),
+                curses.color_pair(11),
+            )
+
+        self.game_box.addstr(
+            y + 1,
+            (self.game_box_width // 2) - len(message) // 2,
+            message,
+            curses.color_pair(11),
+        )
+
+        self.game_box.nodelay(True)
+        self.game_box.refresh()
