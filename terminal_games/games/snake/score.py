@@ -19,6 +19,14 @@ def show_score(canvas, score, width):
     canvas.refresh()
 
 
+def show_best_score(canvas, width):
+    best_score = get_best_score()
+    best_score_text = MESSAGES['best_score'] + str(best_score)
+    y, x = 2, width // 2 - len(best_score_text) // 2
+    canvas.addstr(y, x, best_score_text)
+    canvas.refresh()
+
+
 def get_best_score():
     if not os.path.exists(FILE_PATH):
         open(FILE_PATH, 'a').close()
@@ -26,14 +34,6 @@ def get_best_score():
 
     best_score = dotenv.get_key(FILE_PATH, 'SNAKE_BEST_SCORE')
     return best_score
-
-
-def show_best_score(canvas, width):
-    best_score = get_best_score()
-    best_score_text = MESSAGES['best_score'] + str(best_score)
-    y, x = 2, width // 2 - len(best_score_text) // 2
-    canvas.addstr(y, x, best_score_text)
-    canvas.refresh()
 
 
 def save_best_score(score):
