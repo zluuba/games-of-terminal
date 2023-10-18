@@ -1,4 +1,5 @@
 from terminal_games.games.menu.constants import *
+from terminal_games.games.constants import KEYS
 
 import curses
 import random
@@ -44,14 +45,13 @@ class Menu:
             key = self.canvas.getch()
             self.canvas.clear()
 
-            # 27 - Esc button
-            if key == 27:
+            if key == KEYS['escape']:
                 self._exit()
-            elif key == curses.KEY_UP and self.curr_row > 1:
+            elif key == KEYS['up_arrow'] and self.curr_row > 1:
                 self.curr_row -= 1
-            elif key == curses.KEY_DOWN and self.curr_row < self.menu_length:
+            elif key == KEYS['down_arrow'] and self.curr_row < self.menu_length:
                 self.curr_row += 1
-            elif key in (curses.KEY_ENTER, 10, 13):
+            elif key in KEYS['enter']:
                 self.game.start_new_game()
 
             self._change_the_game()

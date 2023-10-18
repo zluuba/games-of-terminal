@@ -1,7 +1,8 @@
-import os
-import dotenv
+from terminal_games.games.constants import MESSAGES
+
 from pathlib import Path
-from terminal_games.games.snake.constants import MESSAGES
+import dotenv
+import os
 
 
 dotenv.load_dotenv()

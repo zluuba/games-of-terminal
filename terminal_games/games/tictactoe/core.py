@@ -1,3 +1,4 @@
+from terminal_games.games.constants import KEYS, MESSAGES
 from terminal_games.games.tictactoe.constants import *
 from terminal_games.games.engine import GameEngine
 
@@ -48,13 +49,13 @@ class TicTacToeGame(GameEngine):
         while True:
             key = self.window.getch()
 
-            if key == KEYS['esc_btn']:
+            if key == KEYS['escape']:
                 curses.endwin()
                 return
 
             if key in DIRECTIONS:
                 self._slide_field(*DIRECTIONS[key])
-            elif key == KEYS['enter_btn']:
+            elif key in KEYS['enter']:
                 is_move_taken = self._user_move()
                 if is_move_taken and self.game_status == 'game_is_on':
                     time.sleep(0.5)
@@ -86,7 +87,7 @@ class TicTacToeGame(GameEngine):
         self._wait()
         key = self.window.getch()
 
-        if key == KEYS['space_btn']:
+        if key == KEYS['space']:
             self.game_box.erase()
             return True
         return False

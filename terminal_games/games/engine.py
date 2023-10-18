@@ -1,6 +1,5 @@
+from terminal_games.games.constants import LOGO, MESSAGES
 import curses
-
-from terminal_games.games.constants import *
 
 
 class GameEngine:

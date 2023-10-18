@@ -1,8 +1,10 @@
+from terminal_games.games.constants import KEYS, MESSAGES
+from terminal_games.games.engine import GameEngine
+
 from terminal_games.games.snake.constants import *
 from terminal_games.games.snake.score import (
     show_score, show_best_score, save_best_score
 )
-from terminal_games.games.engine import GameEngine
 
 from random import randint
 import curses
@@ -65,7 +67,7 @@ class SnakeGame(GameEngine):
         while True:
             key = self.window.getch()
 
-            if key == KEYS['esc_btn']:
+            if key == KEYS['escape']:
                 curses.endwin()
                 return
             elif key in DIRECTIONS.keys():
@@ -146,7 +148,7 @@ class SnakeGame(GameEngine):
         self._wait()
         key = self.window.getch()
 
-        if key == KEYS['space_btn']:
+        if key == KEYS['space']:
             self.game_box.erase()
             return True
         return False
