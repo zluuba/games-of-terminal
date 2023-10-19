@@ -9,6 +9,6 @@ RULES = (
 )
 
 DIRECTIONS = {
-    curses.KEY_RIGHT: (0, 1), curses.KEY_LEFT: (0, -1),
-    curses.KEY_UP: (-1, 0), curses.KEY_DOWN: (1, 0),
+    curses.KEY_RIGHT: (0, 7), curses.KEY_LEFT: (0, -7),
+    curses.KEY_UP: (-3, 0), curses.KEY_DOWN: (3, 0),
 }

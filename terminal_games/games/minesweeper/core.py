@@ -127,13 +127,12 @@ class MinesweeperGame(GameEngine):
                 '*',
                 curses.color_pair(11),
             )
-        else:
-            if cell.bombs_around > 0:
-                cell.field_box.addstr(
-                    center_x, center_y,
-                    str(cell.bombs_around),
-                    curses.color_pair(10),
-                )
+        elif cell.bombs_around > 0:
+            cell.field_box.addstr(
+                center_x, center_y,
+                str(cell.bombs_around),
+                curses.color_pair(10),
+            )
 
         cell.field_box.refresh()
 
