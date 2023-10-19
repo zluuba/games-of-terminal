@@ -21,7 +21,6 @@ class MinesweeperGame(GameEngine):
         super()._setup()
 
         self.cells = dict()
-        self.coordinates = (2, 2)
 
     def start_new_game(self):
         curses.curs_set(0)
@@ -63,6 +62,8 @@ class MinesweeperGame(GameEngine):
         y += self.sizes['game_box']['begin_y']
         x += self.sizes['game_box']['begin_x']
 
+        self.coordinates = (y, x)
+
         for _ in range(lines):
             for _ in range(cols):
                 field_box = self.game_box.subwin(cell_height, cell_width, y, x)
@@ -74,14 +75,15 @@ class MinesweeperGame(GameEngine):
             y += cell_height
             x = begin_x
 
-    def _slide_field(self, r, c):
+    def _slide_field(self, y_offset, x_offset):
         y, x = self.coordinates
 
-        new_y = y + r
-        new_x = x + c
+        new_y = y + y_offset
+        new_x = x + x_offset
 
-        for field_coordinates in self.cells.keys():
-            if field_coordinates == (new_y, new_x):
+        for cell_coordinates in self.cells.keys():
+            if cell_coordinates == (new_y, new_x):
+                # unselect current cell
                 self._update_field_color(curses.color_pair(4))
 
                 self.coordinates = (new_y, new_x)
@@ -89,8 +91,8 @@ class MinesweeperGame(GameEngine):
                 return
 
     def _plant_bombs(self):
-        cells_count = len(self.cells.keys())
-        bombs_count = cells_count // 5
+        number_of_sells = len(self.cells.keys())
+        bombs_count = number_of_sells // 5
 
         while bombs_count != 0:
             cell = choice(list(self.cells.values()))
@@ -100,9 +102,9 @@ class MinesweeperGame(GameEngine):
                 bombs_count -= 1
 
     def _set_bombs_around_counter(self):
-        offset = ((-3, -7), (-3, 0), (-3, 7),
-                  (3, -7), (3, 0), (3, 7),
-                  (0, -7), (0, 7))
+        offsets = ((-3, -7), (-3, 0), (-3, 7),
+                   (3, -7), (3, 0), (3, 7),
+                   (0, -7), (0, 7))
 
         for coordinates, cell in self.cells.items():
             if cell.is_bomb:
@@ -111,8 +113,8 @@ class MinesweeperGame(GameEngine):
             y, x = coordinates
             bombs = 0
 
-            for near_y, near_x in offset:
-                near_cell_coordinates = (y + near_y, x + near_x)
+            for y_offset, x_offset in offsets:
+                near_cell_coordinates = (y + y_offset, x + x_offset)
 
                 if near_cell_coordinates in self.cells:
                     bombs += 1 if self.cells[near_cell_coordinates].is_bomb else 0
