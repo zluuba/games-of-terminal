@@ -48,13 +48,15 @@ class TicTacToeGame(GameEngine):
 
         while True:
             key = self.window.getch()
+            self._wait()
 
             if key == KEYS['escape']:
                 curses.endwin()
                 return
 
             if key in DIRECTIONS:
-                self._slide_field(*DIRECTIONS[key])
+                offset = DIRECTIONS[key]
+                self._slide_field(*offset)
             elif key in KEYS['enter']:
                 is_move_taken = self._user_move()
                 if is_move_taken and self.game_status == 'game_is_on':
