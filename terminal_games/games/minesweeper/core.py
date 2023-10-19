@@ -28,6 +28,7 @@ class MinesweeperGame(GameEngine):
 
         self._draw_game_field()
         self._plant_bombs()
+        self._set_bombs_around_counter()
         self._update_field_color(curses.color_pair(5))
 
         while True:
@@ -97,6 +98,26 @@ class MinesweeperGame(GameEngine):
             if not cell.is_bomb:
                 cell.is_bomb = True
                 bombs_count -= 1
+
+    def _set_bombs_around_counter(self):
+        offset = ((-3, -7), (-3, 0), (-3, 7),
+                  (3, -7), (3, 0), (3, 7),
+                  (0, -7), (0, 7))
+
+        for coordinates, cell in self.cells.items():
+            if cell.is_bomb:
+                continue
+
+            y, x = coordinates
+            bombs = 0
+
+            for near_y, near_x in offset:
+                near_cell_coordinates = (y + near_y, x + near_x)
+
+                if near_cell_coordinates in self.cells:
+                    bombs += 1 if self.cells[near_cell_coordinates].is_bomb else 0
+
+            cell.bombs_around = bombs
 
     def _update_current_field_color(self):
         cell = self.cells[self.coordinates]
