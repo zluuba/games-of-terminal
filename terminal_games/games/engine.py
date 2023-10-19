@@ -1,4 +1,4 @@
-from terminal_games.games.constants import LOGO, MESSAGES
+from terminal_games.games.constants import LOGO, MESSAGES, KEYS
 import curses
 
 
@@ -6,6 +6,10 @@ class GameEngine:
     def __init__(self, canvas):
         self.canvas = canvas
         self._setup()
+
+        self.state = {
+            'pause': False,
+        }
 
     @staticmethod
     def _init_colors():
@@ -69,33 +73,29 @@ class GameEngine:
     def _wait(self):
         self.window.timeout(-1)
 
-    def _setup_sizes(self):
-        self.sizes = {
-            'game_box': {
-                'lines': self.height - 2,
-                'cols': self.width - 34,
-                'begin_y': 1,
-                'begin_x': 0,
-            },
-            'side_menu_box': {
-                'lines': self.height - 8,
-                'cols': 34,
-                'begin_y': 7,
-                'begin_x': self.width - 34,
-            },
-            'logo_box': {
-                'lines': 7,
-                'cols': 34,
-                'begin_y': 1,
-                'begin_x': self.width - 34,
-            },
-            'window_box': {
-                'lines': self.height,
-                'cols': self.width,
-                'begin_y': 0,
-                'begin_x': 0,
-            },
-        }
+    def _pause(self):
+        self.state['pause'] = not self.state['pause']
+        self._wait()
+
+        if self.state['pause']:
+            self._show_pause_message()
+            key = self.window.getch()
+
+            while key != KEYS['pause']:
+                self._wait()
+                key = self.window.getch()
+
+        self.window.timeout(150)
+        return
+
+    def _show_pause_message(self):
+        message = ' PAUSE '
+
+        middle_x = self.game_box_width // 2 + self.sizes['game_box']['begin_x']
+        middle_y = self.game_box_height // 2 + self.sizes['game_box']['begin_y']
+
+        self.game_box.addstr(middle_y, middle_x - (len(message) // 2), message, curses.color_pair(10))
+        self.game_box.refresh()
 
     def _draw_game_over_message(self, y=1, x=1):
         message = MESSAGES['game_over']
@@ -117,3 +117,31 @@ class GameEngine:
 
         self.game_box.nodelay(True)
         self.game_box.refresh()
+
+    def _setup_sizes(self):
+            self.sizes = {
+                'game_box': {
+                    'lines': self.height - 2,
+                    'cols': self.width - 34,
+                    'begin_y': 1,
+                    'begin_x': 0,
+                },
+                'side_menu_box': {
+                    'lines': self.height - 8,
+                    'cols': 34,
+                    'begin_y': 7,
+                    'begin_x': self.width - 34,
+                },
+                'logo_box': {
+                    'lines': 7,
+                    'cols': 34,
+                    'begin_y': 1,
+                    'begin_x': self.width - 34,
+                },
+                'window_box': {
+                    'lines': self.height,
+                    'cols': self.width,
+                    'begin_y': 0,
+                    'begin_x': 0,
+                },
+            }
