@@ -1,123 +1,158 @@
 from terminal_games.games.engine import GameEngine
+from terminal_games.games.constants import KEYS
 from terminal_games.games.minesweeper.constants import *
 
 import curses
-import random
-
+from random import choice
 import time
-import sys
+
+
+class Cell:
+    def __init__(self, field_box):
+        self.field_box = field_box
+
+        self.is_open = False
+        self.is_bomb = False
+        self.bombs_around = 0
 
 
 class MinesweeperGame(GameEngine):
     def _setup(self):
         super()._setup()
 
-        self.cell_width = 4
-        self.cell_height = 2
-        self.position = 0
-        self.coords = (0, 0)
-        self.bombs = []
-        self.openCells = []
-
-        self._draw_game_field()
-
-        self._set_bombs()
-        self._setup_side_menu()
-
-    def _setup_side_menu(self):
-        y, x = 1, 1
-
-        for tip in SIDE_MENU_TIPS:
-            self.side_menu_box.addstr(y, x, tip)
-            y += 1
-
-    def _get_game_box_size(self):
-        height, width, *_ = self.sizes['game_box'].values()
-        return width, height
-
-    def _draw_game_field(self):
-        width, height = self._get_game_box_size()
-
-        begin_y, begin_x = curr_y, curr_x = 2, 1
-
-        self.lines = height // self.cell_height
-        self.cols = width // self.cell_width
-
-        self.fields = {}
-        curr_box_num = 0
-
-        for _ in range(self.lines - 1):
-            for _ in range(self.cols - 1):
-                box = self.game_box.subwin(self.cell_height, self.cell_width, curr_y, curr_x)
-                self.fields[curr_box_num] = box
-                box.bkgd(curses.color_pair(4))
-
-                curr_box_num += 1
-                curr_x += self.cell_width
-
-            curr_y += self.cell_height
-            curr_x = begin_x
+        self.cells = dict()
+        self.coordinates = (2, 2)
 
     def start_new_game(self):
         curses.curs_set(0)
 
-        # self._draw_game_field()
+        self._draw_game_field()
+        self._plant_bombs()
         self._update_field_color(curses.color_pair(5))
 
         while True:
             key = self.window.getch()
             self._wait()
 
-            if key in DIRECTIONS:
-                self._slide_field(*DIRECTIONS[key])
-            elif key in (curses.KEY_ENTER, 10, 13):
-                self._show_field()
-            elif key == 27:
-                time.sleep(1)
+            if key == KEYS['escape']:
                 curses.endwin()
-                sys.exit(0)
+                return
+
+            if key in DIRECTIONS:
+                offset = DIRECTIONS[key]
+                self._slide_field(*offset)
+            elif key in KEYS['enter']:
+                current_cell = self.cells[self.coordinates]
+                self._show_cell(current_cell)
+                # self._open_all_cells()
+                # self._show_all_cells()
+                # self._update_current_field_color()
+                pass
+
+    def _draw_game_field(self):
+        cell_height = 3
+        cell_width = 7
+
+        lines = (self.game_box_height - 2) // cell_height
+        cols = (self.game_box_width - 2) // cell_width
+
+        y = (self.game_box_height - (lines * cell_height)) // 2
+        x = begin_x = (self.game_box_width - (cols * cell_width)) // 2
+
+        y += self.sizes['game_box']['begin_y']
+        x += self.sizes['game_box']['begin_x']
+
+        for _ in range(lines):
+            for _ in range(cols):
+                field_box = self.game_box.subwin(cell_height, cell_width, y, x)
+                field_box.bkgd(curses.color_pair(4))
+                self.cells[(y, x)] = Cell(field_box)
+
+                x += cell_width
+
+            y += cell_height
+            x = begin_x
 
     def _slide_field(self, r, c):
-        cols, rows = self.cols, self.lines
+        y, x = self.coordinates
 
-        self.game_field = [[j + i for j in range(rows + 1)] for i in range(0, (cols * (rows + 1)), (rows + 1))]
+        new_y = y + r
+        new_x = x + c
 
-        row, col = self.coords
-        new_row = r + row
-        new_col = c + col
+        for field_coordinates in self.cells.keys():
+            if field_coordinates == (new_y, new_x):
+                self._update_field_color(curses.color_pair(4))
 
-        if (0 <= new_row < rows - 1) and (0 <= new_col < cols - 1):
-            self._update_field_color(curses.color_pair(4))
+                self.coordinates = (new_y, new_x)
+                self._update_current_field_color()
+                return
 
-            self.coords = (new_row, new_col)
-            self.position = self.game_field[new_row][new_col]
-            self._update_field_color(curses.color_pair(5))
+    def _plant_bombs(self):
+        cells_count = len(self.cells.keys())
+        bombs_count = cells_count // 5
+
+        while bombs_count != 0:
+            cell = choice(list(self.cells.values()))
+
+            if not cell.is_bomb:
+                cell.is_bomb = True
+                bombs_count -= 1
+
+    def _update_current_field_color(self):
+        cell = self.cells[self.coordinates]
+        cell.field_box.bkgd(' ', curses.color_pair(5))
+        cell.field_box.refresh()
 
     def _update_field_color(self, color):
-        field = self.fields[self.position]
-        field.bkgd(' ', color)
-        field.refresh()
+        cell = self.cells[self.coordinates]
 
-    def _set_bombs(self):
-        self.field_size = self.cols * self.lines
-        num_of_bombs = self.field_size // 3
-
-        while num_of_bombs > 0:
-            bomb_field = random.randint(1, self.field_size ** 2)
-
-            if bomb_field not in self.bombs:
-                self.bombs.append(bomb_field)
-                num_of_bombs -= 1
-
-    def _show_field(self):
-        field = self.fields[self.position]
-
-        if self.position in self.openCells:
-            return
-        elif self.position in self.bombs:
-            field.addstr('*', curses.color_pair(3))
+        if cell.is_open:
+            self._show_cell(cell)
         else:
-            field.addstr('-', curses.color_pair(2))
+            cell.field_box.bkgd(' ', color)
+            cell.field_box.refresh()
 
-        field.refresh()
-        self.openCells.append(self.position)
+    @staticmethod
+    def _show_cell(cell):
+        cell.is_open = True
+
+        center_y = 3
+        center_x = 1
+
+        cell.field_box.bkgd(' ', curses.color_pair(1))
+
+        if cell.is_bomb:
+            cell.field_box.addstr(
+                center_x, center_y,
+                '*',
+                curses.color_pair(11),
+            )
+        else:
+            if cell.bombs_around > 0:
+                cell.field_box.addstr(
+                    center_x, center_y,
+                    str(cell.bombs_around),
+                    curses.color_pair(10),
+                )
+
+        cell.field_box.refresh()
+
+    def _show_all_cells(self):
+        for coords, cell in self.cells.items():
+            self._show_cell(cell)
+
+    def _open_all_cells(self):
+        for cell in self.cells.values():
+            cell.is_open = True
+
+    # def _check_window_resize(self):
+    #     self.resize = curses.is_term_resized(self.height, self.width)
+    #
+    #     if self.resize is True:
+    #         curses.flash()
+    #         self.canvas.clear()
+    #         y, x = self.canvas.getmaxyx()
+    #         curses.resizeterm(y, x)
+    #         self.height, self.width = y, x
+    #         self.canvas.refresh()
+    #         self._setup()
