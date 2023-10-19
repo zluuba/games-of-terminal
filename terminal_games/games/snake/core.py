@@ -70,8 +70,11 @@ class SnakeGame(GameEngine):
             if key == KEYS['escape']:
                 curses.endwin()
                 return
+            # elif key == KEYS['p']:
+                # self._pause()
+                # continue
             elif key in DIRECTIONS.keys():
-                self.direction = key
+                self._change_direction(key)
 
             self._move_snake()
 
@@ -82,14 +85,19 @@ class SnakeGame(GameEngine):
                 self._save_best_score()
                 time.sleep(1)
 
-                is_start_game_over_again = self._ask_user_for_restart()
-                if is_start_game_over_again:
+                if self._is_restart():
                     self.__init__(self.canvas)
                     self.start_new_game()
                 return
 
             self.game_box.refresh()
             self.window.refresh()
+
+    def _change_direction(self, chosen_direction):
+        opposite_direction = DIRECTIONS[self.direction]
+
+        if chosen_direction != opposite_direction:
+            self.direction = chosen_direction
 
     def _is_snake_eat_itself(self):
         return self.snake[0] in self.snake[1:]
@@ -135,7 +143,7 @@ class SnakeGame(GameEngine):
             )
             self.side_menu_box.refresh()
 
-    def _ask_user_for_restart(self):
+    def _is_restart(self):
         message = MESSAGES['play_again']
         self.game_box.addstr(
             self.game_box_height // 2 + 2,
