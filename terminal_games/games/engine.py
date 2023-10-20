@@ -7,6 +7,7 @@ class GameEngine:
         self.canvas = canvas
         self._setup()
 
+        self.game_status = 'game_is_on'
         self.state = {
             'pause': False,
         }
@@ -28,6 +29,12 @@ class GameEngine:
         curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_RED)      # black text, red bg
         curses.init_pair(12, curses.COLOR_BLACK, 168)                   # black text, deep pink bg
         curses.init_pair(13, curses.COLOR_BLACK, 153)                   # black text, pastel dirty blue bg
+
+        curses.init_pair(14, curses.COLOR_WHITE, 111)                   # white text, pastel blue bg | 67, 110-111
+        curses.init_pair(15, curses.COLOR_WHITE, 75)                    # white text, light blue bg  | 6, 68, 75
+        curses.init_pair(16, curses.COLOR_WHITE, 68)                    # white text, medium blue bg | 45
+        curses.init_pair(17, curses.COLOR_WHITE, 17)                    # white text, deep blue bg   | 17
+        curses.init_pair(18, curses.COLOR_WHITE, 54)                    # white text, deep purple bg |
 
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -72,6 +79,9 @@ class GameEngine:
 
     def _wait(self):
         self.window.timeout(-1)
+
+    def _hide_cursor(self):
+        curses.curs_set(0)
 
     def _pause(self):
         self.state['pause'] = not self.state['pause']
