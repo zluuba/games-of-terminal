@@ -26,6 +26,7 @@ KEYS = {
     'down_arrow': curses.KEY_DOWN,
     'left_arrow': curses.KEY_LEFT,
     'right_arrow': curses.KEY_RIGHT,
+    'q': ord('q'),
     'pause': ord('p'),
 }
 
