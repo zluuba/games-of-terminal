@@ -1,19 +1,11 @@
 from terminal_games.games.engine import GameEngine
-from terminal_games.games.constants import KEYS
+from terminal_games.games.constants import KEYS, MESSAGES
 from terminal_games.games.minesweeper.constants import *
+from terminal_games.games.minesweeper.common import Cell
 
 import curses
 from random import choice
 import time
-
-
-class Cell:
-    def __init__(self, field_box):
-        self.field_box = field_box
-
-        self.is_open = False
-        self.is_bomb = False
-        self.bombs_around = 0
 
 
 class MinesweeperGame(GameEngine):
@@ -23,12 +15,12 @@ class MinesweeperGame(GameEngine):
         self.cells = dict()
 
     def start_new_game(self):
-        curses.curs_set(0)
-
+        self._hide_cursor()
         self._draw_game_field()
-        self._plant_bombs()
-        self._set_bombs_around_counter()
-        self._update_field_color(curses.color_pair(5))
+        self._set_game_field()
+
+        current_cell = self.cells[self.current_coordinates]
+        current_cell.select()
 
         while True:
             key = self.window.getch()
@@ -41,13 +33,53 @@ class MinesweeperGame(GameEngine):
             if key in DIRECTIONS:
                 offset = DIRECTIONS[key]
                 self._slide_field(*offset)
+            elif key == KEYS['q']:
+                self._plant_flag()
             elif key in KEYS['enter']:
-                current_cell = self.cells[self.coordinates]
+                current_cell = self.cells[self.current_coordinates]
                 self._show_cell(current_cell)
-                # self._open_all_cells()
-                # self._show_all_cells()
-                # self._update_current_field_color()
-                pass
+
+            if self._is_all_cells_open():
+                if self._is_no_unnecessary_flags():
+                    self.game_status = 'game_over'
+                    self._show_user_win()
+                else:
+                    self._show_user_have_unnecessary_flags()
+
+            if self.game_status != 'game_is_on':
+                curses.flash()
+
+                self._draw_game_over_message()
+                time.sleep(1)
+
+                if self._is_restart():
+                    self.__init__(self.canvas)
+                    self.start_new_game()
+                return
+
+    def _is_restart(self):
+        message = MESSAGES['play_again']
+        self.side_menu_box.addstr(
+            self.side_menu_box_height // 2 + 2,
+            self.side_menu_box_width // 2 - len(message) // 2,
+            message, curses.A_BLINK + curses.color_pair(1),
+        )
+
+        self.side_menu_box.refresh()
+
+        curses.flushinp()
+        self._wait()
+        key = self.window.getch()
+
+        if key == KEYS['space']:
+            self.game_box.erase()
+            return True
+        return False
+
+    def _set_game_field(self):
+        self._plant_bombs()
+        self._set_bombs_around_counter()
+        self._open_first_empty_cell()
 
     def _draw_game_field(self):
         cell_height = 3
@@ -62,13 +94,13 @@ class MinesweeperGame(GameEngine):
         y += self.sizes['game_box']['begin_y']
         x += self.sizes['game_box']['begin_x']
 
-        self.coordinates = (y, x)
+        self.current_coordinates = (y, x)
 
         for _ in range(lines):
             for _ in range(cols):
                 field_box = self.game_box.subwin(cell_height, cell_width, y, x)
                 field_box.bkgd(curses.color_pair(4))
-                self.cells[(y, x)] = Cell(field_box)
+                self.cells[(y, x)] = Cell(field_box, (y, x))
 
                 x += cell_width
 
@@ -76,7 +108,7 @@ class MinesweeperGame(GameEngine):
             x = begin_x
 
     def _slide_field(self, y_offset, x_offset):
-        y, x = self.coordinates
+        y, x = self.current_coordinates
 
         new_y = y + y_offset
         new_x = x + x_offset
@@ -84,10 +116,12 @@ class MinesweeperGame(GameEngine):
         for cell_coordinates in self.cells.keys():
             if cell_coordinates == (new_y, new_x):
                 # unselect current cell
-                self._update_field_color(curses.color_pair(4))
+                previous_cell = self.cells[self.current_coordinates]
+                previous_cell.unselect()
 
-                self.coordinates = (new_y, new_x)
-                self._update_current_field_color()
+                self.current_coordinates = (new_y, new_x)
+                current_cell = self.cells[self.current_coordinates]
+                current_cell.select()
                 return
 
     def _plant_bombs(self):
@@ -97,75 +131,147 @@ class MinesweeperGame(GameEngine):
         while bombs_count != 0:
             cell = choice(list(self.cells.values()))
 
-            if not cell.is_bomb:
-                cell.is_bomb = True
+            if not cell.is_bomb():
+                cell.set_bomb()
                 bombs_count -= 1
 
     def _set_bombs_around_counter(self):
-        offsets = ((-3, -7), (-3, 0), (-3, 7),
-                   (3, -7), (3, 0), (3, 7),
-                   (0, -7), (0, 7))
-
         for coordinates, cell in self.cells.items():
-            if cell.is_bomb:
+            if cell.is_bomb():
                 continue
 
             y, x = coordinates
             bombs = 0
 
-            for y_offset, x_offset in offsets:
+            for y_offset, x_offset in CELL_OFFSETS:
                 near_cell_coordinates = (y + y_offset, x + x_offset)
 
                 if near_cell_coordinates in self.cells:
-                    bombs += 1 if self.cells[near_cell_coordinates].is_bomb else 0
+                    bombs += 1 if self.cells[near_cell_coordinates].is_bomb() else 0
 
-            cell.bombs_around = bombs
+            cell.set_bombs_around_number(bombs)
+            cell.set_background_color()
 
-    def _update_current_field_color(self):
-        cell = self.cells[self.coordinates]
-        cell.field_box.bkgd(' ', curses.color_pair(5))
-        cell.field_box.refresh()
+    def _open_first_empty_cell(self):
+        empty_cells = self._get_empty_cells()
 
-    def _update_field_color(self, color):
-        cell = self.cells[self.coordinates]
-
-        if cell.is_open:
-            self._show_cell(cell)
+        if empty_cells:
+            first_empty_cell = choice(empty_cells)
         else:
-            cell.field_box.bkgd(' ', color)
-            cell.field_box.refresh()
+            first_empty_cell = choice(self.cells)
+
+        first_empty_cell.open_cell()
+        first_empty_cell.set_background_color()
+
+    def _get_empty_cells(self):
+        empty_cells = []
+
+        for cell in self.cells.values():
+            if self._is_cell_is_empty(cell):
+                empty_cells.append(cell)
+
+        return empty_cells
 
     @staticmethod
-    def _show_cell(cell):
-        cell.is_open = True
+    def _is_cell_is_empty(cell):
+        return not cell.is_bomb() and not cell.bombs_around()
+
+    def _show_cell(self, cell):
+        # TODO: rebuild this (using Cell class),
+        #  add forced unselect of a cell after 'enter' pressing
+
+        cell.open_cell()
+        cell.show_cell()
 
         center_y = 3
         center_x = 1
 
         cell.field_box.bkgd(' ', curses.color_pair(1))
 
-        if cell.is_bomb:
-            cell.field_box.addstr(
-                center_x, center_y,
-                '*',
-                curses.color_pair(11),
-            )
-        elif cell.bombs_around > 0:
-            cell.field_box.addstr(
-                center_x, center_y,
-                str(cell.bombs_around),
-                curses.color_pair(10),
-            )
+        if cell.have_flag():
+            msg = 'bomb?'
+            cell.field_box.bkgd(' ', curses.color_pair(18))
+            cell.field_box.addstr(center_x, center_y - (len(msg) // 2), msg, curses.color_pair(18))
+        elif cell.is_bomb():
+            cell.field_box.bkgd(' ', curses.color_pair(11))
+            cell.field_box.addstr(center_x, center_y, '*', curses.color_pair(11))
+            self.game_status = 'game_over'
+        else:
+            num_of_bombs = cell.bombs_around()
+            bg_color = cell.get_background_color()
+            cell.field_box.bkgd(' ', bg_color)
+
+            if num_of_bombs:
+                cell.field_box.addstr(center_x, center_y, str(num_of_bombs), bg_color)
 
         cell.field_box.refresh()
 
-    def _show_all_cells(self):
-        for coords, cell in self.cells.items():
-            self._show_cell(cell)
-
-    def _open_all_cells(self):
+    def _is_all_cells_open(self):
         for cell in self.cells.values():
-            cell.is_open = True
+            if not cell.is_open():
+                return False
+        return True
+
+    def _is_no_unnecessary_flags(self):
+        for cell in self.cells.values():
+            if cell.have_flag() and not cell.is_bomb():
+                return False
+        return True
+
+    def _plant_flag(self):
+        cell = self.cells[self.current_coordinates]
+
+        if cell.have_flag():
+            cell.close_cell()
+            cell.remove_flag()
+
+            cell.field_box.erase()
+            cell.field_box.bkgd(' ', curses.color_pair(5))
+            cell.field_box.refresh()
+            return
+
+        cell.set_flag()
+        self._show_cell(cell)
+
+    def _show_user_win(self):
+        self.side_menu_box.addstr(5, 1, 'You WIN!', curses.color_pair(9))
+        self.side_menu_box.refresh()
+
+    def _show_user_have_unnecessary_flags(self):
+        self.side_menu_box.addstr(5, 1, 'The number of flags and bombs should match.', curses.color_pair(9))
+        self.side_menu_box.refresh()
+
+    # def _show_all_cells(self):
+    #     for coords, cell in self.cells.items():
+    #         self._show_cell(cell)
+
+    # def _open_all_cells(self):
+    #     for cell in self.cells.values():
+    #         cell.open_cell()
+
+    # def _open_near_empty_cells(self, cell):
+    #     if cell.is_bomb:
+    #         return
+    #     if cell.bombs_around:
+    #         cell.is_open = True
+    #         cell.is_showed = True
+    #         return
+    #
+    #     offsets = ((0, 7), (0, -7), (-3, 0), (3, 0))
+    #     y, x = cell.coordinates
+    #
+    #     for offset_y, offset_x in offsets:
+    #         near_cell_coordinates = (y + offset_y, x + offset_x)
+    #
+    #         if near_cell_coordinates in self.cells:
+    #             near_cell = self.cells[near_cell_coordinates]
+    #
+    #             if self._is_cell_is_empty(near_cell) and not near_cell.is_open:
+    #                 near_cell.is_open = True
+    #                 near_cell.is_showed = True
+    #                 cell.field_box.bkgd(' ', curses.color_pair(14))
+    #                 cell.field_box.refresh()
+    #                 self._open_near_empty_cells(near_cell)
 
     # def _check_window_resize(self):
     #     self.resize = curses.is_term_resized(self.height, self.width)
