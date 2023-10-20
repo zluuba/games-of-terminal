@@ -128,6 +128,25 @@ class GameEngine:
         self.game_box.nodelay(True)
         self.game_box.refresh()
 
+    def _is_restart(self):
+        message = MESSAGES['play_again']
+        self.side_menu_box.addstr(
+            self.side_menu_box_height // 2 + 2,
+            self.side_menu_box_width // 2 - len(message) // 2,
+            message, curses.A_BLINK + curses.color_pair(1),
+        )
+
+        self.side_menu_box.refresh()
+
+        curses.flushinp()
+        self._wait()
+        key = self.window.getch()
+
+        if key == KEYS['space']:
+            self.game_box.erase()
+            return True
+        return False
+
     def _setup_sizes(self):
             self.sizes = {
                 'game_box': {

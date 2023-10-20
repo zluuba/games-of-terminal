@@ -1,4 +1,4 @@
-from terminal_games.games.constants import KEYS, MESSAGES
+from terminal_games.games.constants import KEYS
 from terminal_games.games.tictactoe.constants import *
 from terminal_games.games.engine import GameEngine
 
@@ -69,30 +69,10 @@ class TicTacToeGame(GameEngine):
                 self._draw_game_over_message()
                 time.sleep(1)
 
-                is_start_game_over_again = self._ask_user_for_restart()
-                if is_start_game_over_again:
+                if self._is_restart():
                     self.__init__(self.canvas)
                     self.start_new_game()
                 return
-
-    def _ask_user_for_restart(self):
-        message = MESSAGES['play_again']
-        self.side_menu_box.addstr(
-            self.side_menu_box_height // 2 + 2,
-            self.side_menu_box_width // 2 - len(message) // 2,
-            message, curses.A_BLINK + curses.color_pair(1),
-        )
-
-        self.side_menu_box.refresh()
-
-        curses.flushinp()
-        self._wait()
-        key = self.window.getch()
-
-        if key == KEYS['space']:
-            self.game_box.erase()
-            return True
-        return False
 
     def _user_move(self):
         if self.position not in self.moves:

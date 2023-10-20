@@ -142,21 +142,3 @@ class SnakeGame(GameEngine):
                 message, curses.color_pair(2)
             )
             self.side_menu_box.refresh()
-
-    def _is_restart(self):
-        message = MESSAGES['play_again']
-        self.game_box.addstr(
-            self.game_box_height // 2 + 2,
-            self.game_box_width // 2 - len(message) // 2,
-            message, curses.A_BLINK
-        )
-        self.game_box.refresh()
-
-        curses.flushinp()
-        self._wait()
-        key = self.window.getch()
-
-        if key == KEYS['space']:
-            self.game_box.erase()
-            return True
-        return False

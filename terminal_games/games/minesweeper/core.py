@@ -1,5 +1,5 @@
 from terminal_games.games.engine import GameEngine
-from terminal_games.games.constants import KEYS, MESSAGES
+from terminal_games.games.constants import KEYS
 from terminal_games.games.minesweeper.constants import *
 from terminal_games.games.minesweeper.common import Cell
 
@@ -56,25 +56,6 @@ class MinesweeperGame(GameEngine):
                     self.__init__(self.canvas)
                     self.start_new_game()
                 return
-
-    def _is_restart(self):
-        message = MESSAGES['play_again']
-        self.side_menu_box.addstr(
-            self.side_menu_box_height // 2 + 2,
-            self.side_menu_box_width // 2 - len(message) // 2,
-            message, curses.A_BLINK + curses.color_pair(1),
-        )
-
-        self.side_menu_box.refresh()
-
-        curses.flushinp()
-        self._wait()
-        key = self.window.getch()
-
-        if key == KEYS['space']:
-            self.game_box.erase()
-            return True
-        return False
 
     def _set_game_field(self):
         self._plant_bombs()
