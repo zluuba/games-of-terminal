@@ -1,7 +1,5 @@
 # Term Games
 
-***add CodeClimate badges here***
-
 Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 
 
@@ -50,18 +48,23 @@ Keys for game control:
 P - pause/unpause
 H - show the rules and hints
 S - open/close side menu
-E - showing where the file with all save settings is located
-F - feedback form
+(?) E - showing where the file with all save settings is located
+F - feedback form/link
 
 Esc - exit
 ```
 
 
 ## Following features
-- [ ] Add Tetris game
-- [ ] Add Sea Battle game
-- [ ] Animate the menu
-- [ ] Add minimum win size requirements ("too little window for games" handle)
+
+#### New Games:
+- [ ] Tetris game
+- [ ] Sea Battle game
+- [ ] Pong Game
+
+#### Interface features:
+- [ ] Menu animations
+- [ ] Minimum window size requirements ("too little window for games" handle)
 
 ## Demos
 
