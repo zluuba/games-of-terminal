@@ -18,14 +18,14 @@ class Cell:
         self.colors = {
             0: curses.color_pair(14),           # 0 bombs
             1: curses.color_pair(15),           # 1 bomb
-            2: curses.color_pair(15),           # 2 bombs
-            3: curses.color_pair(16),           # 3 bombs
-            4: curses.color_pair(17),           # 4 bombs or more
+            2: curses.color_pair(16),           # 2 bombs
+            3: curses.color_pair(17),           # 3 bombs
+            4: curses.color_pair(18),           # 4 bombs or more
 
-            'bomb': curses.color_pair(4),       # bomb color
+            'bomb': curses.color_pair(3),       # bomb color
             'closed': curses.color_pair(4),     # default field color
             'cursor': curses.color_pair(5),     # selected cell
-            'flag': curses.color_pair(18),      # cell with flag
+            'flag': curses.color_pair(19),      # cell with flag
         }
 
     def is_open(self):
@@ -59,6 +59,7 @@ class Cell:
         self.state['settings'].append('flag')
 
     def remove_flag(self):
+        self.field_box.erase()
         self.state['settings'].remove('flag')
 
     def is_cursor_here(self):
@@ -82,12 +83,15 @@ class Cell:
     def get_background_color(self):
         return self.state['background_color']
 
+    # def _is_user_step_on_bomb(self):
+    #     return self.is_open() and self.is_bomb()
+
     def set_background_color(self):
-        if self.is_cursor_here():
+        if self.is_cursor_here() and not self.is_showed():
             color = self.colors['cursor']
-        elif self.have_flag():
+        elif self.have_flag() and not self.is_open():
             color = self.colors['flag']
-        elif self.is_bomb():
+        elif self.is_bomb() and self.is_open():
             color = self.colors['bomb']
         elif not self.is_open():
             color = self.colors['closed']
@@ -103,4 +107,23 @@ class Cell:
     def _update_cell_color(self):
         color = self.get_background_color()
         self.field_box.bkgd(' ', color)
+        self.field_box.refresh()
+
+    def show_cell_text(self):
+        center_y = 3
+        center_x = 1
+
+        if self.have_flag():
+            message = 'bomb?'
+            self.field_box.addstr(center_x, center_y - (len(message) // 2), message, curses.color_pair(18))
+        elif self.is_bomb() and self.is_open():
+            message = 'boom!'
+            self.field_box.addstr(center_x, center_y - (len(message) // 2), message, curses.color_pair(11))
+        elif self.is_open():
+            num_of_bombs = self.bombs_around()
+
+            if num_of_bombs:
+                self.field_box.addstr(center_x, center_y, str(num_of_bombs), self.get_background_color())
+
+        self.set_background_color()
         self.field_box.refresh()
