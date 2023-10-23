@@ -34,7 +34,7 @@ class MinesweeperGame(GameEngine):
                 offset = DIRECTIONS[key]
                 self._slide_field(*offset)
             elif key == KEYS['q']:
-                self._plant_flag()
+                self._switch_flag()
             elif key in KEYS['enter']:
                 current_cell = self.cells[self.current_coordinates]
                 self._show_cell(current_cell)
@@ -106,11 +106,12 @@ class MinesweeperGame(GameEngine):
                 return
 
     def _plant_bombs(self):
-        number_of_sells = len(self.cells.keys())
+        all_cells = list(self.cells.values())
+        number_of_sells = len(all_cells)
         bombs_count = number_of_sells // 5
 
         while bombs_count != 0:
-            cell = choice(list(self.cells.values()))
+            cell = choice(all_cells)
 
             if not cell.is_bomb():
                 cell.set_bomb()
@@ -128,7 +129,8 @@ class MinesweeperGame(GameEngine):
                 near_cell_coordinates = (y + y_offset, x + x_offset)
 
                 if near_cell_coordinates in self.cells:
-                    bombs += 1 if self.cells[near_cell_coordinates].is_bomb() else 0
+                    near_cell = self.cells[near_cell_coordinates]
+                    bombs += 1 if near_cell.is_bomb() else 0
 
             cell.set_bombs_around_number(bombs)
             cell.set_background_color()
@@ -158,38 +160,22 @@ class MinesweeperGame(GameEngine):
         return not cell.is_bomb() and not cell.bombs_around()
 
     def _show_cell(self, cell):
-        # TODO: rebuild this (using Cell class),
-        #  add forced unselect of a cell after 'enter' pressing
+        if cell.have_flag():
+            return
+        if not cell.is_open():
+            # for first cell open we need to show cell color, not selected cell color
+            cell.show_cell()
+        if cell.is_bomb():
+            cell.show_cell()
+            self.game_status = 'game_over'
 
         cell.open_cell()
-        cell.show_cell()
-
-        center_y = 3
-        center_x = 1
-
-        cell.field_box.bkgd(' ', curses.color_pair(1))
-
-        if cell.have_flag():
-            msg = 'bomb?'
-            cell.field_box.bkgd(' ', curses.color_pair(18))
-            cell.field_box.addstr(center_x, center_y - (len(msg) // 2), msg, curses.color_pair(18))
-        elif cell.is_bomb():
-            cell.field_box.bkgd(' ', curses.color_pair(11))
-            cell.field_box.addstr(center_x, center_y, '*', curses.color_pair(11))
-            self.game_status = 'game_over'
-        else:
-            num_of_bombs = cell.bombs_around()
-            bg_color = cell.get_background_color()
-            cell.field_box.bkgd(' ', bg_color)
-
-            if num_of_bombs:
-                cell.field_box.addstr(center_x, center_y, str(num_of_bombs), bg_color)
-
-        cell.field_box.refresh()
+        cell.show_cell_text()
+        cell.hide_cell()
 
     def _is_all_cells_open(self):
         for cell in self.cells.values():
-            if not cell.is_open():
+            if not cell.is_open() and not cell.have_flag():
                 return False
         return True
 
@@ -199,20 +185,17 @@ class MinesweeperGame(GameEngine):
                 return False
         return True
 
-    def _plant_flag(self):
+    def _switch_flag(self):
         cell = self.cells[self.current_coordinates]
 
         if cell.have_flag():
-            cell.close_cell()
             cell.remove_flag()
+        elif not cell.have_flag() and not cell.is_open():
+            cell.set_flag()
 
-            cell.field_box.erase()
-            cell.field_box.bkgd(' ', curses.color_pair(5))
-            cell.field_box.refresh()
-            return
-
-        cell.set_flag()
-        self._show_cell(cell)
+        cell.show_cell()
+        cell.show_cell_text()
+        cell.hide_cell()
 
     def _show_user_win(self):
         self.side_menu_box.addstr(5, 1, 'You WIN!', curses.color_pair(9))
