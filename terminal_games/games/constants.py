@@ -28,6 +28,10 @@ KEYS = {
     'right_arrow': curses.KEY_RIGHT,
     'q': ord('q'),
     'pause': ord('p'),
+    # 'w': ord('w'),
+    # 's': ord('s'),
+    # 'a': ord('a'),
+    # 'd': ord('d'),
 }
 
 GAME_STATUSES = {

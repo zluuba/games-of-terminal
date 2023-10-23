@@ -30,11 +30,13 @@ class GameEngine:
         curses.init_pair(12, curses.COLOR_BLACK, 168)                   # black text, deep pink bg
         curses.init_pair(13, curses.COLOR_BLACK, 153)                   # black text, pastel dirty blue bg
 
-        curses.init_pair(14, curses.COLOR_WHITE, 111)                   # white text, pastel blue bg | 67, 110-111
-        curses.init_pair(15, curses.COLOR_WHITE, 75)                    # white text, light blue bg  | 6, 68, 75
-        curses.init_pair(16, curses.COLOR_WHITE, 68)                    # white text, medium blue bg | 45
-        curses.init_pair(17, curses.COLOR_WHITE, 17)                    # white text, deep blue bg   | 17
-        curses.init_pair(18, curses.COLOR_WHITE, 54)                    # white text, deep purple bg |
+        # minesweeper cells colors
+        curses.init_pair(14, curses.COLOR_WHITE, 111)                   # white text, pastel blue bg
+        curses.init_pair(15, curses.COLOR_WHITE, 75)                    # white text, light blue bg
+        curses.init_pair(16, curses.COLOR_WHITE, 68)                    # white text, medium blue bg
+        curses.init_pair(17, curses.COLOR_WHITE, 26)                    # white text, dark-medium blue bg
+        curses.init_pair(18, curses.COLOR_WHITE, 17)                    # white text, deep blue bg
+        curses.init_pair(19, curses.COLOR_WHITE, 54)                    # white text, deep purple bg
 
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -80,7 +82,8 @@ class GameEngine:
     def _wait(self):
         self.window.timeout(-1)
 
-    def _hide_cursor(self):
+    @staticmethod
+    def _hide_cursor():
         curses.curs_set(0)
 
     def _pause(self):
@@ -148,29 +151,29 @@ class GameEngine:
         return False
 
     def _setup_sizes(self):
-            self.sizes = {
-                'game_box': {
-                    'lines': self.height - 2,
-                    'cols': self.width - 34,
-                    'begin_y': 1,
-                    'begin_x': 0,
-                },
-                'side_menu_box': {
-                    'lines': self.height - 8,
-                    'cols': 34,
-                    'begin_y': 7,
-                    'begin_x': self.width - 34,
-                },
-                'logo_box': {
-                    'lines': 7,
-                    'cols': 34,
-                    'begin_y': 1,
-                    'begin_x': self.width - 34,
-                },
-                'window_box': {
-                    'lines': self.height,
-                    'cols': self.width,
-                    'begin_y': 0,
-                    'begin_x': 0,
-                },
-            }
+        self.sizes = {
+            'game_box': {
+                'lines': self.height - 2,
+                'cols': self.width - 34,
+                'begin_y': 1,
+                'begin_x': 0,
+            },
+            'side_menu_box': {
+                'lines': self.height - 8,
+                'cols': 34,
+                'begin_y': 7,
+                'begin_x': self.width - 34,
+            },
+            'logo_box': {
+                'lines': 7,
+                'cols': 34,
+                'begin_y': 1,
+                'begin_x': self.width - 34,
+            },
+            'window_box': {
+                'lines': self.height,
+                'cols': self.width,
+                'begin_y': 0,
+                'begin_x': 0,
+            },
+        }
