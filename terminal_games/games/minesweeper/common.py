@@ -86,6 +86,11 @@ class Cell:
     # def _is_user_step_on_bomb(self):
     #     return self.is_open() and self.is_bomb()
 
+    def is_empty(self):
+        return (not self.is_open() and
+                not self.is_showed() and
+                not self.is_bomb())
+
     def set_background_color(self):
         if self.is_cursor_here() and not self.is_showed():
             color = self.colors['cursor']
