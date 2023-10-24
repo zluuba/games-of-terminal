@@ -1,4 +1,4 @@
-from terminal_games.games.constants import LOGO, MESSAGES, KEYS
+from terminal_games.games.constants import MESSAGES, KEYS, LOGO_GOT, APP_NAME
 import curses
 
 
@@ -73,11 +73,12 @@ class GameEngine:
     def _draw_logo(self):
         y, x = 1, 2
 
-        for line in LOGO:
+        for line in LOGO_GOT:
             self.logo_box.addstr(y, x, line)
             y += 1
 
-        self.logo_box.addstr(6, 14, ' GAMES ')
+        begin_x = (self.logo_box_width - len(APP_NAME)) // 2
+        self.logo_box.addstr(6, begin_x, APP_NAME)
 
     def _wait(self):
         self.window.timeout(-1)
@@ -154,21 +155,21 @@ class GameEngine:
         self.sizes = {
             'game_box': {
                 'lines': self.height - 2,
-                'cols': self.width - 34,
+                'cols': self.width - 27,
                 'begin_y': 1,
                 'begin_x': 0,
             },
             'side_menu_box': {
                 'lines': self.height - 8,
-                'cols': 34,
+                'cols': 27,
                 'begin_y': 7,
-                'begin_x': self.width - 34,
+                'begin_x': self.width - 27,
             },
             'logo_box': {
                 'lines': 7,
-                'cols': 34,
+                'cols': 27,
                 'begin_y': 1,
-                'begin_x': self.width - 34,
+                'begin_x': self.width - 27,
             },
             'window_box': {
                 'lines': self.height,
