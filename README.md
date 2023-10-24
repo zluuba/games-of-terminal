@@ -1,6 +1,5 @@
-# Term Games
-
-Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
+# Games Of Terminal
+GOT some games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 
 
 ## Requirements
@@ -14,15 +13,15 @@ Games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
 Open terminal window.
 Clone this repo or download it with pip:
 ```ch
-git clone https://github.com/zluuba/task-manager.git
+git clone https://github.com/zluuba/games-of-terminal.git
 ```
 ```ch
-pip install --user git+https://github.com/zluuba/task-manager.git
+pip install --user git+https://github.com/zluuba/games-of-terminal.git
 ```
 
 Go to the downloaded dir and install dependencies:
 ```ch
-cd task-manager
+cd games-of-terminal
 make install
 ```
 
@@ -37,7 +36,7 @@ make package-install
 
 Start the games with next command:
 ```ch
-term-games
+got
 ```
 
 You will see the menu. <br/>
@@ -58,8 +57,8 @@ Esc - exit
 ## Following features
 
 #### New Games:
-- [ ] Tetris game
 - [ ] Sea Battle game
+- [ ] Tetris game
 - [ ] Pong Game
 
 #### Interface features:
