@@ -152,14 +152,10 @@ class MinesweeperGame(GameEngine):
         empty_cells = []
 
         for cell in self.cells.values():
-            if self._is_cell_is_empty(cell):
+            if not cell.is_bomb() and not cell.bombs_around():
                 empty_cells.append(cell)
 
         return empty_cells
-
-    @staticmethod
-    def _is_cell_is_empty(cell):
-        return not cell.is_bomb() and not cell.bombs_around()
 
     def _show_cell(self, cell):
         if cell.is_empty() and not cell.bombs_around():
