@@ -30,10 +30,10 @@ class GameEngine:
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)     # white text, black bg
         curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)     # white text, green bg
         curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)       # white text, red bg
-        curses.init_pair(4, 1, 236)                                     # dark grey
-        curses.init_pair(5, 1, 245)                                     # light grey
-        curses.init_pair(6, 1, 132)                                     # pink
-        curses.init_pair(7, 1, 134)                                     # light purple
+        curses.init_pair(4, curses.COLOR_WHITE, 236)                    # white text, dark grey bg
+        curses.init_pair(5, curses.COLOR_WHITE, 245)                    # white text, light grey bg
+        curses.init_pair(6, curses.COLOR_WHITE, 132)                    # white text, pink bg
+        curses.init_pair(7, curses.COLOR_WHITE, 134)                    # white text, light purple bg
 
         curses.init_pair(8, curses.COLOR_RED, curses.COLOR_BLACK)       # red text, black bg
         curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_BLACK)     # green text, black bg
