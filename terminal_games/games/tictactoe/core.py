@@ -18,8 +18,6 @@ class TicTacToeGame(GameEngine):
         self.user_moves = []
         self.computer_moves = []
 
-        self.game_status = 'game_is_on'
-
     def _draw_game_field(self):
         self.fields = {}
 
