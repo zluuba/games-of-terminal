@@ -31,11 +31,10 @@ class SnakeGame(GameEngine):
         self.direction = KEYS['right_arrow']
 
         # game box borders
-        gb_sizes = self.sizes['game_box']
-        self.gb_top_border = gb_sizes['begin_y'] - 1
-        self.gb_bottom_border = gb_sizes['lines'] - self.gb_top_border - 1
-        self.gb_left_border = gb_sizes['begin_x']
-        self.gb_right_border = self.sizes['game_box']['cols'] - self.gb_left_border - 1
+        self.gb_top_border = self.game_box_sizes['begin_y'] - 1
+        self.gb_bottom_border = self.game_box_sizes['lines'] - self.gb_top_border - 1
+        self.gb_left_border = self.game_box_sizes['begin_x']
+        self.gb_right_border = self.game_box_sizes['cols'] - self.gb_left_border - 1
 
     def _set_score(self):
         show_score(self.side_menu_box, self.score, self.side_menu_box_width)

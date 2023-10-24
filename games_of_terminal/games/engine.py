@@ -24,6 +24,9 @@ class GameEngine:
 
     @staticmethod
     def _init_colors():
+        # TODO: create variables to change lines
+        #  from 'curses.color_pair(1)' to the 'white_text_red_bg'
+
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)     # white text, black bg
         curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)     # white text, green bg
         curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)       # white text, red bg
@@ -50,6 +53,9 @@ class GameEngine:
 
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
+
+        # set black background
+        # TODO: add ability to change themes - black/white
         self.canvas.bkgd(' ', curses.color_pair(1))
 
         self._init_colors()
@@ -60,13 +66,13 @@ class GameEngine:
         self._draw_logo()
 
     def _setup_boxes(self):
-        self.game_box = self._draw_box(self.sizes['game_box'])
+        self.game_box = self._draw_box(self.game_box_sizes)
         self.game_box_height, self.game_box_width = self.game_box.getmaxyx()
 
-        self.side_menu_box = self._draw_box(self.sizes['side_menu_box'])
+        self.side_menu_box = self._draw_box(self.side_menu_box_sizes)
         self.side_menu_box_height, self.side_menu_box_width = self.side_menu_box.getmaxyx()
 
-        self.logo_box = self._draw_box(self.sizes['logo_box'])
+        self.logo_box = self._draw_box(self.logo_box_sizes)
         self.logo_box_height, self.logo_box_width = self.logo_box.getmaxyx()
 
     def _draw_box(self, sizes):
@@ -75,7 +81,7 @@ class GameEngine:
         return box
 
     def _draw_window(self):
-        sizes = self.sizes['window_box'].values()
+        sizes = self.window_box_sizes.values()
         self.window = curses.newwin(*sizes)
         self.window.nodelay(True)
         self.window.keypad(True)
@@ -115,8 +121,8 @@ class GameEngine:
     def _show_pause_message(self):
         message = ' PAUSE '
 
-        middle_x = self.game_box_width // 2 + self.sizes['game_box']['begin_x']
-        middle_y = self.game_box_height // 2 + self.sizes['game_box']['begin_y']
+        middle_x = self.game_box_width // 2 + self.game_box_sizes['begin_x']
+        middle_y = self.game_box_height // 2 + self.game_box_sizes['begin_y']
 
         self.game_box.addstr(middle_y, middle_x - (len(message) // 2), message, curses.color_pair(10))
         self.game_box.refresh()
@@ -162,29 +168,30 @@ class GameEngine:
         return False
 
     def _setup_sizes(self):
-        self.sizes = {
-            'game_box': {
-                'lines': self.height - 2,
-                'cols': self.width - 27,
-                'begin_y': 1,
-                'begin_x': 0,
-            },
-            'side_menu_box': {
-                'lines': self.height - 8,
-                'cols': 27,
-                'begin_y': 7,
-                'begin_x': self.width - 27,
-            },
-            'logo_box': {
-                'lines': 7,
-                'cols': 27,
-                'begin_y': 1,
-                'begin_x': self.width - 27,
-            },
-            'window_box': {
-                'lines': self.height,
-                'cols': self.width,
-                'begin_y': 0,
-                'begin_x': 0,
-            },
+        self.game_box_sizes = {
+            'lines': self.height - 2,
+            'cols': self.width - 27,
+            'begin_y': 1,
+            'begin_x': 0,
+        }
+
+        self.side_menu_box_sizes = {
+            'lines': self.height - 8,
+            'cols': 27,
+            'begin_y': 7,
+            'begin_x': self.width - 27,
+        }
+
+        self.logo_box_sizes = {
+            'lines': 7,
+            'cols': 27,
+            'begin_y': 1,
+            'begin_x': self.width - 27,
+        }
+
+        self.window_box_sizes = {
+            'lines': self.height,
+            'cols': self.width,
+            'begin_y': 0,
+            'begin_x': 0,
         }
