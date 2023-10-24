@@ -1,4 +1,4 @@
-from terminal_games.games.constants import MESSAGES
+from games_of_terminal.games.constants import MESSAGES
 
 from pathlib import Path
 import dotenv

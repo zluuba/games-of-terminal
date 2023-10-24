@@ -5,7 +5,7 @@ description = "Games for terminal: Snake, Tic-tac-toe, Minesweeper and Tetris"
 license = "Proprietary"
 authors = ["Luybov Nikitina <zluyba.nikitina@gmail.com>"]
 readme = "README.md"
-packages = [{include = "terminal_games"}]
+packages = [{include = "games_of_terminal"}]
 classifiers = [
     "Environment :: Console",
     "Natural Language :: English",
@@ -14,7 +14,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-term-games = "terminal_games.scripts.app:main"
+got = "games_of_terminal.scripts.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"

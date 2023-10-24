@@ -1,5 +1,5 @@
-from terminal_games.games.menu.constants import *
-from terminal_games.games.constants import KEYS
+from games_of_terminal.games.menu.constants import *
+from games_of_terminal.games.constants import KEYS
 
 import curses
 import random

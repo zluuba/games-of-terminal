@@ -1,4 +1,6 @@
-from terminal_games.games.constants import MESSAGES, KEYS, LOGO_GOT, APP_NAME
+from games_of_terminal.games.constants import (
+    MESSAGES, KEYS, LOGO_GOT, APP_NAME
+)
 import curses
 
 

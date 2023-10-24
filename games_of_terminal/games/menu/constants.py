@@ -1,7 +1,7 @@
-from terminal_games.games.snake.core import SnakeGame
-from terminal_games.games.minesweeper.core import MinesweeperGame
-from terminal_games.games.tictactoe.core import TicTacToeGame
-from terminal_games.games.tetris.core import TetrisGame
+from games_of_terminal.games.snake.core import SnakeGame
+from games_of_terminal.games.minesweeper.core import MinesweeperGame
+from games_of_terminal.games.tictactoe.core import TicTacToeGame
+from games_of_terminal.games.tetris.core import TetrisGame
 
 
 GAMES = {

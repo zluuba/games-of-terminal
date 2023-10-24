@@ -11,7 +11,7 @@ class Cell:
             'visibility': 'not_shown',          # shown, not_shown
             'inside': 'empty',                  # empty, bomb
             'bombs_around': 0,                  # <int>
-            'background_color': 0,              # <int>
+            'background_color': 0,              # <int> | <str>
             'settings': [],                     # flag, cursor
         }
 
@@ -34,8 +34,8 @@ class Cell:
     def open_cell(self):
         self.state['status'] = 'open'
 
-    def close_cell(self):
-        self.state['status'] = 'closed'
+    # def close_cell(self):
+    #     self.state['status'] = 'closed'
 
     def is_showed(self):
         return self.state['visibility'] == 'shown'
@@ -88,8 +88,9 @@ class Cell:
 
     def is_empty(self):
         return (not self.is_open() and
-                not self.is_showed() and
-                not self.is_bomb())
+                not self.is_bomb() and
+                not self.have_flag() and
+                not self.is_showed())
 
     def set_background_color(self):
         if self.is_cursor_here() and not self.is_showed():

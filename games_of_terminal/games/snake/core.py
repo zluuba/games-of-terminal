@@ -1,8 +1,8 @@
-from terminal_games.games.constants import KEYS, MESSAGES
-from terminal_games.games.engine import GameEngine
+from games_of_terminal.games.constants import KEYS, MESSAGES
+from games_of_terminal.games.engine import GameEngine
 
-from terminal_games.games.snake.constants import *
-from terminal_games.games.snake.score import (
+from games_of_terminal.games.snake.constants import *
+from games_of_terminal.games.snake.score import (
     show_score, show_best_score, save_best_score
 )
 
