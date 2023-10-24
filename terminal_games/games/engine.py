@@ -7,10 +7,18 @@ class GameEngine:
         self.canvas = canvas
         self._setup()
 
-        self.game_status = 'game_is_on'
         self.state = {
             'pause': False,
+            'game_status': 'game_is_on',
         }
+
+    @property
+    def game_status(self):
+        return self.state['game_status']
+
+    @game_status.setter
+    def game_status(self, status):
+        self.state['game_status'] = status
 
     @staticmethod
     def _init_colors():
