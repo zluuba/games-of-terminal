@@ -127,33 +127,37 @@ class GameEngine:
         self.game_box.addstr(middle_y, middle_x - (len(message) // 2), message, curses.color_pair(10))
         self.game_box.refresh()
 
-    def _draw_game_over_message(self, y=1, x=1):
+    def _draw_game_over_message(self):
+        y, x = self.side_menu_box_height - 2, 1
         message = MESSAGES['game_over']
 
-        for offset in range(3):
-            self.game_box.addstr(
+        for offset in range(0, -3, -1):
+            self.side_menu_box.addstr(
                 y + offset,
                 x,
-                ' ' * (self.game_box_width - 2),
+                ' ' * (self.side_menu_box_width - 2),
                 curses.color_pair(11),
             )
 
-        self.game_box.addstr(
-            y + 1,
-            (self.game_box_width // 2) - len(message) // 2,
+        self.side_menu_box.addstr(
+            y - 1,
+            (self.side_menu_box_width // 2) - len(message) // 2,
             message,
             curses.color_pair(11),
         )
 
-        self.game_box.nodelay(True)
-        self.game_box.refresh()
+        self.side_menu_box.nodelay(True)
+        self.side_menu_box.refresh()
 
     def _is_restart(self):
+        y = self.side_menu_box_height - 5
+
         message = MESSAGES['play_again']
         self.side_menu_box.addstr(
-            self.side_menu_box_height // 2 + 2,
+            y,
             self.side_menu_box_width // 2 - len(message) // 2,
-            message, curses.A_BLINK + curses.color_pair(1),
+            message,
+            curses.A_BLINK + curses.color_pair(1),
         )
 
         self.side_menu_box.refresh()
