@@ -14,8 +14,15 @@ class GameEngine:
             'game_status': 'game_is_on',
         }
 
+        self.statuses = {
+            'user_win': {'message': 'You WIN!', 'color': curses.color_pair(2)},
+            'user_lose': {'message': 'You LOSE', 'color': curses.color_pair(3)},
+            'tie': {'message': 'TIE', 'color': curses.color_pair(6)},
+        }
+
     @property
     def game_status(self):
+        # TODO: rebuild props - create 'is_user_win' func ?
         return self.state['game_status']
 
     @game_status.setter
@@ -55,7 +62,7 @@ class GameEngine:
         self.height, self.width = self.canvas.getmaxyx()
 
         # set black background
-        # TODO: add ability to change themes - black/white
+        # TODO: add ability to change themes - black/white (?)
         self.canvas.bkgd(' ', curses.color_pair(1))
 
         self._init_colors()
@@ -63,7 +70,7 @@ class GameEngine:
 
         self._draw_window()
         self._setup_boxes()
-        self._draw_logo()
+        self._setup_side_menu()
 
     def _setup_boxes(self):
         self.game_box = self._draw_box(self.game_box_sizes)
@@ -74,6 +81,10 @@ class GameEngine:
 
         self.logo_box = self._draw_box(self.logo_box_sizes)
         self.logo_box_height, self.logo_box_width = self.logo_box.getmaxyx()
+
+    def _setup_side_menu(self):
+        # TODO: add tips, rules, hotkeys
+        self._draw_logo()
 
     def _draw_box(self, sizes):
         box = self.window.subwin(*sizes.values())
@@ -87,14 +98,11 @@ class GameEngine:
         self.window.keypad(True)
 
     def _draw_logo(self):
-        y, x = 1, 2
+        for y, line in enumerate(LOGO_GOT, start=1):
+            self._draw_message(y, 2, self.logo_box, line, curses.color_pair(1))
 
-        for line in LOGO_GOT:
-            self.logo_box.addstr(y, x, line)
-            y += 1
-
-        begin_x = (self.logo_box_width - len(APP_NAME)) // 2
-        self.logo_box.addstr(6, begin_x, APP_NAME)
+        y, x = 6, (self.logo_box_width - len(APP_NAME)) // 2
+        self._draw_message(y, x, self.logo_box, APP_NAME, curses.color_pair(1))
 
     def _wait(self):
         self.window.timeout(-1)
@@ -121,55 +129,52 @@ class GameEngine:
     def _show_pause_message(self):
         message = ' PAUSE '
 
-        middle_x = self.game_box_width // 2 + self.game_box_sizes['begin_x']
-        middle_y = self.game_box_height // 2 + self.game_box_sizes['begin_y']
+        x = (self.game_box_width // 2 + self.game_box_sizes['begin_x']) - (len(message) // 2)
+        y = self.game_box_height // 2 + self.game_box_sizes['begin_y']
 
-        self.game_box.addstr(middle_y, middle_x - (len(message) // 2), message, curses.color_pair(10))
-        self.game_box.refresh()
+        self._draw_message(y, x, self.game_box, message, curses.color_pair(10))
 
-    def _draw_game_over_message(self):
+    def _show_who_won(self):
+        message = self.statuses[self.game_status]['message']
+        color = self.statuses[self.game_status]['color']
+
         y, x = self.side_menu_box_height - 2, 1
-        message = MESSAGES['game_over']
+        empty_line = ' ' * (self.side_menu_box_width - 2)
 
         for offset in range(0, -3, -1):
-            self.side_menu_box.addstr(
-                y + offset,
-                x,
-                ' ' * (self.side_menu_box_width - 2),
-                curses.color_pair(11),
-            )
+            new_y = y + offset
+            self._draw_message(new_y, x, self.side_menu_box, empty_line, color)
 
-        self.side_menu_box.addstr(
-            y - 1,
-            (self.side_menu_box_width // 2) - len(message) // 2,
-            message,
-            curses.color_pair(11),
-        )
-
-        self.side_menu_box.nodelay(True)
-        self.side_menu_box.refresh()
+        middle_x = (self.side_menu_box_width // 2) - len(message) // 2
+        self._draw_message(y - 1, middle_x, self.side_menu_box, message, color)
 
     def _is_restart(self):
-        y = self.side_menu_box_height - 5
+        # TODO: add transparent background color func
+        """ Draws a message in the center of the playing field
+        that the user can restart the game,
+        waiting for a response (space bar pressing)
+        """
 
-        message = MESSAGES['play_again']
-        self.side_menu_box.addstr(
-            y,
-            self.side_menu_box_width // 2 - len(message) // 2,
-            message,
-            curses.A_BLINK + curses.color_pair(1),
-        )
+        message = f" {MESSAGES['play_again']} "
 
-        self.side_menu_box.refresh()
+        x = (self.game_box_width // 2) - (len(message) // 2)
+        y = self.game_box_height // 2
 
-        curses.flushinp()
+        self._draw_message(y, x, self.game_box, message, curses.A_BLINK)
+
         self._wait()
+        curses.flushinp()
         key = self.window.getch()
 
         if key == KEYS['space']:
             self.game_box.erase()
             return True
         return False
+
+    @staticmethod
+    def _draw_message(y, x, field, message, color):
+        field.addstr(y, x, message, color)
+        field.refresh()
 
     def _setup_sizes(self):
         self.game_box_sizes = {
