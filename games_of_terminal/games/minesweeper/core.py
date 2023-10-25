@@ -3,8 +3,8 @@ from games_of_terminal.games.constants import KEYS
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.common import Cell
 
-import curses
 from random import choice
+import curses
 import time
 
 

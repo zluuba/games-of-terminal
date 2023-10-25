@@ -1,11 +1,11 @@
 from games_of_terminal.games.constants import MESSAGES
 
+from dotenv import load_dotenv
 from pathlib import Path
-import dotenv
 import os
 
 
-dotenv.load_dotenv()
+load_dotenv()
 
 FILENAME = '.env'
 BASE_DIR = Path(__file__).parents[2]
