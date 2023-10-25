@@ -9,6 +9,10 @@ import sys
 
 class Menu:
     def __init__(self, canvas):
+        # TODO:
+        #  - draw window instead of raw canvas
+        #  - do I need to use GameEngine class there? For initial setup
+
         self.canvas = canvas
         self._setup()
 
@@ -38,7 +42,6 @@ class Menu:
 
     def main(self):
         curses.curs_set(0)
-        self._change_the_game()
         self._show_menu()
 
         while True:
@@ -52,15 +55,12 @@ class Menu:
             elif key == KEYS['down_arrow'] and self.curr_row < self.menu_length:
                 self.curr_row += 1
             elif key in KEYS['enter']:
-                self.game.start_new_game()
+                chosen_game = GAMES[self.curr_row]['game']
+                new_game = chosen_game(self.canvas)
+                new_game.start_new_game()
 
-            self._change_the_game()
             self._show_menu()
             self.canvas.refresh()
-
-    def _change_the_game(self):
-        current_game = GAMES[self.curr_row]['game']
-        self.game = current_game(self.canvas)
 
     def _exit(self):
         goodbye_message = random.choice(GOODBYE_MESSAGES)

@@ -80,7 +80,8 @@ class SnakeGame(GameEngine):
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 curses.flash()
 
-                self._draw_game_over_message()
+                self.game_status = 'user_lose'
+                self._show_who_won()
                 self._save_best_score()
                 time.sleep(1)
 

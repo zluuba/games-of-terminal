@@ -43,15 +43,12 @@ class MinesweeperGame(GameEngine):
 
             if self._is_all_cells_open():
                 if self._is_no_unnecessary_flags():
-                    self.game_status = 'game_over'
-                    self._show_user_win()
-                else:
-                    self._show_user_have_unnecessary_flags()
+                    self.game_status = 'user_win'
 
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._draw_game_over_message()
+                self._show_who_won()
                 time.sleep(1)
 
                 if self._is_restart():
@@ -169,7 +166,7 @@ class MinesweeperGame(GameEngine):
             cell.show_cell()
         if cell.is_bomb():
             cell.show_cell()
-            self.game_status = 'game_over'
+            self.game_status = 'user_lose'
 
         cell.open_cell()
         cell.show_cell_text()
@@ -223,14 +220,6 @@ class MinesweeperGame(GameEngine):
         cell.show_cell()
         cell.show_cell_text()
         cell.hide_cell()
-
-    def _show_user_win(self):
-        self.side_menu_box.addstr(5, 1, 'You WIN!', curses.color_pair(9))
-        self.side_menu_box.refresh()
-
-    def _show_user_have_unnecessary_flags(self):
-        self.side_menu_box.addstr(5, 1, 'The number of flags and bombs should match.', curses.color_pair(9))
-        self.side_menu_box.refresh()
 
     # def _show_all_cells(self):
     #     for coords, cell in self.cells.items():

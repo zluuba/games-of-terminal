@@ -64,7 +64,7 @@ class TicTacToeGame(GameEngine):
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._draw_game_over_message()
+                self._show_who_won()
                 time.sleep(1)
 
                 if self._is_restart():
@@ -126,7 +126,7 @@ class TicTacToeGame(GameEngine):
         if self._check_to_win('user'):
             self.game_status = 'user_win'
         elif self._check_to_win('computer'):
-            self.game_status = 'computer_win'
+            self.game_status = 'user_lose'
         elif len(self.moves) == 9:
             self.game_status = 'tie'
         else:
