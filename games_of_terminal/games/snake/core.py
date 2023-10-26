@@ -81,7 +81,7 @@ class SnakeGame(GameEngine):
                 curses.flash()
 
                 self.game_status = 'user_lose'
-                self._show_who_won()
+                self._show_game_result_message()
                 self._save_best_score()
                 time.sleep(1)
 
@@ -138,6 +138,6 @@ class SnakeGame(GameEngine):
             show_best_score(self.side_menu_box, self.side_menu_box_width)
 
             message = MESSAGES['new_best_score']
-            self._draw_message(3, 1,
-                               self.side_menu_box, message,
-                               self.get_color_by_name('white_text_green_bg'))
+            self.draw_message(3, 1,
+                              self.side_menu_box, message,
+                              self.get_color_by_name('white_text_green_bg'))

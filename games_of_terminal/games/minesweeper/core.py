@@ -1,7 +1,7 @@
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.constants import KEYS
 from games_of_terminal.games.minesweeper.constants import *
-from games_of_terminal.games.minesweeper.common import Cell
+from games_of_terminal.games.minesweeper.cell import Cell
 
 from random import choice
 import curses
@@ -19,7 +19,7 @@ class MinesweeperGame(GameEngine):
         return self.cells[self.current_coordinates]
 
     def start_new_game(self):
-        self._hide_cursor()
+        self.hide_cursor()
         self._draw_game_field()
         self._set_game_field()
 
@@ -27,7 +27,7 @@ class MinesweeperGame(GameEngine):
 
         while True:
             key = self.window.getch()
-            self._wait()
+            self.wait_for_keypress()
 
             if key == KEYS['escape']:
                 curses.endwin()
@@ -48,7 +48,7 @@ class MinesweeperGame(GameEngine):
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._show_who_won()
+                self._show_game_result_message()
                 time.sleep(1)
 
                 if self._is_restart():

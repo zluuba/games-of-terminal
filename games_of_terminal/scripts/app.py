@@ -5,7 +5,7 @@ import curses
 @curses.wrapper
 def main(canvas):
     menu = Menu(canvas)
-    menu.main()
+    menu.run_menu_loop()
 
 
 if __name__ == '__main__':

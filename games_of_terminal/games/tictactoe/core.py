@@ -47,7 +47,7 @@ class TicTacToeGame(GameEngine):
 
         while True:
             key = self.window.getch()
-            self._wait()
+            self.wait_for_keypress()
 
             if key == KEYS['escape']:
                 curses.endwin()
@@ -65,7 +65,7 @@ class TicTacToeGame(GameEngine):
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._show_who_won()
+                self._show_game_result_message()
                 time.sleep(1)
 
                 if self._is_restart():
