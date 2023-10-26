@@ -1,15 +1,15 @@
 import curses
 
 
-LOGO_TERM = [
-    '######  #####  #####   ##   ##',
-    '  ##    ##     ##  ##  ### ###',
-    '  ##    ####   ####    ## # ##',
-    '  ##    ##     ## ##   ##   ##',
-    '  ##    #####  ##  ##  ##   ##',
-]
+# LOGO_TERM = [
+#     '######  #####  #####   ##   ##',
+#     '  ##    ##     ##  ##  ### ###',
+#     '  ##    ####   ####    ## # ##',
+#     '  ##    ##     ## ##   ##   ##',
+#     '  ##    #####  ##  ##  ##   ##',
+# ]
 
-LOGO_GOT = [
+LOGO = [
     ' ####     ####   ######',
     '##       ##  ##    ##  ',
     '##  ###  ##  ##    ##  ',
@@ -45,9 +45,9 @@ KEYS = {
 }
 
 GAME_STATUSES = {
-    'user_win': 'You WIN!',
-    'computer_win': 'You LOSE.',
-    'tie': 'Tie. Meh.',
+    'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},
+    'user_lose': {'text': 'You LOSE', 'color': 'white_text_red_bg'},
+    'tie': {'text': 'TIE', 'color': 'white_text_yellow_bg'},
 }
 
 SIDE_MENU_TIPS = [
