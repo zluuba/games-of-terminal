@@ -26,6 +26,8 @@ class Colors:
             'white_text_dark_medium_blue_bg': 17,
             'white_text_deep_blue_bg': 18,
             'white_text_deep_purple_bg': 19,
+
+            'white_text_yellow_bg': 20,
         }
 
         curses.start_color()
@@ -53,6 +55,8 @@ class Colors:
         curses.init_pair(17, curses.COLOR_WHITE, 26)
         curses.init_pair(18, curses.COLOR_WHITE, 17)
         curses.init_pair(19, curses.COLOR_WHITE, 54)
+
+        curses.init_pair(20, curses.COLOR_WHITE, 136)
 
     def get_color_by_name(self, color_name):
         color_pair = self.color_mapping.get(color_name, 0)
