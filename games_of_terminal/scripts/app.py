@@ -1,4 +1,4 @@
-from games_of_terminal.games.menu.core import Menu
+from games_of_terminal.menu.core import Menu
 import curses
 
 

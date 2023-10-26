@@ -1,4 +1,4 @@
-from games_of_terminal.games.menu.constants import GAMES, GOODBYE_MESSAGES
+from games_of_terminal.menu.constants import GAMES, GOODBYE_MESSAGES
 from games_of_terminal.games.constants import KEYS
 from games_of_terminal.games.app_interface import AppInterfaceManager
 
