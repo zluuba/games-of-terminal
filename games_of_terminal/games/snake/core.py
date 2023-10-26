@@ -136,9 +136,8 @@ class SnakeGame(GameEngine):
 
         if is_best_score:
             show_best_score(self.side_menu_box, self.side_menu_box_width)
+
             message = MESSAGES['new_best_score']
-            self.side_menu_box.addstr(
-                3, (self.side_menu_box_width // 2 - len(message) // 2),
-                message, curses.color_pair(2)
-            )
-            self.side_menu_box.refresh()
+            self._draw_message(3, 1,
+                               self.side_menu_box, message,
+                               self.get_color_by_name('white_text_green_bg'))

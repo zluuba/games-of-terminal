@@ -1,8 +1,12 @@
+from games_of_terminal.games.colors import Colors
+
 import curses
 
 
-class Cell:
+class Cell(Colors):
     def __init__(self, field_box, coordinates):
+        super().__init__()
+
         self.field_box = field_box
         self.coordinates = coordinates
 
@@ -16,16 +20,16 @@ class Cell:
         }
 
         self.colors = {
-            0: curses.color_pair(14),           # 0 bombs
-            1: curses.color_pair(15),           # 1 bomb
-            2: curses.color_pair(16),           # 2 bombs
-            3: curses.color_pair(17),           # 3 bombs
-            4: curses.color_pair(18),           # 4 bombs or more
+            0: self.get_color_by_name('white_text_pastel_blue_bg'),        # 0 bombs
+            1: self.get_color_by_name('white_text_light_blue_bg'),         # 1 bomb
+            2: self.get_color_by_name('white_text_medium_blue_bg'),        # 2 bombs
+            3: self.get_color_by_name('white_text_dark_medium_blue_bg'),   # 3 bombs
+            4: self.get_color_by_name('white_text_deep_blue_bg'),          # 4 bombs or more
 
-            'bomb': curses.color_pair(3),       # bomb color
-            'closed': curses.color_pair(4),     # default field color
-            'cursor': curses.color_pair(5),     # selected cell
-            'flag': curses.color_pair(19),      # cell with flag
+            'bomb': self.get_color_by_name('white_text_red_bg'),           # bomb color
+            'closed': self.get_color_by_name('white_text_dark_grey_bg'),   # default field color
+            'cursor': self.get_color_by_name('white_text_light_grey_bg'),  # selected cell
+            'flag': self.get_color_by_name('white_text_deep_purple_bg'),   # cell with flag
         }
 
     def is_open(self):
@@ -33,9 +37,6 @@ class Cell:
 
     def open_cell(self):
         self.state['status'] = 'open'
-
-    # def close_cell(self):
-    #     self.state['status'] = 'closed'
 
     def is_showed(self):
         return self.state['visibility'] == 'shown'

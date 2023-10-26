@@ -42,7 +42,8 @@ class TicTacToeGame(GameEngine):
         curses.curs_set(0)
 
         self._draw_game_field()
-        self._fill_field(self.fields[self.position], curses.color_pair(2))
+        self._fill_field(self.fields[self.position],
+                         self.get_color_by_name('white_text_green_bg'))
 
         while True:
             key = self.window.getch()
@@ -76,7 +77,8 @@ class TicTacToeGame(GameEngine):
         if self.position not in self.moves:
             self.moves.append(self.position)
             self.user_moves.append(self.position)
-            self._fill_field(self.fields[self.position], curses.color_pair(12))
+            self._fill_field(self.fields[self.position],
+                             self.get_color_by_name('black_text_deep_pink_bg'))
             self._set_game_status()
             return True
         return False
@@ -92,7 +94,8 @@ class TicTacToeGame(GameEngine):
                 self.computer_moves.append(move)
                 chosen_field = move
 
-        self._fill_field(self.fields[chosen_field], curses.color_pair(13))
+        self._fill_field(self.fields[chosen_field],
+                         self.get_color_by_name('black_text_pastel_dirty_blue_bg'))
         self._set_game_status()
 
     def _get_best_move(self, curr_move):
@@ -143,7 +146,8 @@ class TicTacToeGame(GameEngine):
             self._reset_field_color(self.position)
 
             self.position = FIELD[new_row][new_col]
-            self._fill_field(self.fields[self.position], curses.color_pair(2))
+            self._fill_field(self.fields[self.position],
+                             self.get_color_by_name('white_text_green_bg'))
 
     @staticmethod
     def _fill_field(field, color):
@@ -157,11 +161,11 @@ class TicTacToeGame(GameEngine):
 
     def _reset_field_color(self, position):
         if position in self.user_moves:
-            color = curses.color_pair(12)
+            color = self.get_color_by_name('black_text_deep_pink_bg')
         elif position in self.computer_moves:
-            color = curses.color_pair(13)
+            color = self.get_color_by_name('black_text_pastel_dirty_blue_bg')
         else:
-            color = curses.color_pair(1)
+            color = self.get_color_by_name('white_text_black_bg')
 
         field = self.fields[self.position]
         self._fill_field(field, color)
