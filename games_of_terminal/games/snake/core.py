@@ -1,4 +1,4 @@
-from games_of_terminal.games.constants import KEYS, MESSAGES
+from games_of_terminal.constants import KEYS, MESSAGES
 from games_of_terminal.games.engine import GameEngine
 
 from games_of_terminal.games.snake.constants import *

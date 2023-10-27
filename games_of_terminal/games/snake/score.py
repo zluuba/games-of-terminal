@@ -1,11 +1,11 @@
-from games_of_terminal.games.constants import MESSAGES
+from games_of_terminal.constants import MESSAGES
 
-from dotenv import load_dotenv
 from pathlib import Path
+import dotenv
 import os
 
 
-load_dotenv()
+dotenv.load_dotenv()
 
 FILENAME = '.env'
 BASE_DIR = Path(__file__).parents[2]
@@ -15,7 +15,7 @@ FILE_PATH = os.path.join(BASE_DIR, FILENAME)
 
 def show_score(canvas, score, width):
     score_text = MESSAGES['score_text'] + str(score)
-    y, x = 1, width // 2 - len(score_text) // 2
+    y, x = 1, 1
     canvas.addstr(y, x, score_text)
     canvas.refresh()
 
@@ -23,7 +23,7 @@ def show_score(canvas, score, width):
 def show_best_score(canvas, width):
     best_score = get_best_score()
     best_score_text = MESSAGES['best_score'] + str(best_score)
-    y, x = 2, width // 2 - len(best_score_text) // 2
+    y, x = 2, 1
     canvas.addstr(y, x, best_score_text)
     canvas.refresh()
 

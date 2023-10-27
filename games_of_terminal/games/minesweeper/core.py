@@ -1,5 +1,5 @@
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.games.constants import KEYS
+from games_of_terminal.constants import KEYS
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 

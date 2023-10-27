@@ -1,6 +1,6 @@
+from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.constants import KEYS
 from games_of_terminal.menu.constants import GAMES, GOODBYE_MESSAGES
-from games_of_terminal.games.constants import KEYS
-from games_of_terminal.games.app_interface import AppInterfaceManager
 
 from random import choice
 import curses
@@ -8,7 +8,7 @@ import time
 import sys
 
 
-class Menu(AppInterfaceManager):
+class Menu(InterfaceManager):
     def _setup(self):
         super()._setup()
 
@@ -30,7 +30,7 @@ class Menu(AppInterfaceManager):
                 self.current_row += 1 if self.current_row < self.menu_length - 1 else 0
             elif key in KEYS['enter']:
                 chosen_game = GAMES[self.current_row]['game']
-                new_game = chosen_game(self.window)
+                new_game = chosen_game(self.canvas)
                 new_game.start_new_game()
 
             self._show_menu()

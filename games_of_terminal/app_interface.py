@@ -1,11 +1,11 @@
-from games_of_terminal.games.colors import Colors
-from games_of_terminal.games.constants import (
+from games_of_terminal.colors import Colors
+from games_of_terminal.constants import (
     LOGO, APP_NAME,
 )
 import curses
 
 
-class AppInterfaceManager(Colors):
+class InterfaceManager(Colors):
     def __init__(self, canvas):
         super().__init__()
 

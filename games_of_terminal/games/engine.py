@@ -1,11 +1,11 @@
-from games_of_terminal.games.app_interface import AppInterfaceManager
-from games_of_terminal.games.constants import (
+from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES,
 )
 import curses
 
 
-class GameEngine(AppInterfaceManager):
+class GameEngine(InterfaceManager):
     def __init__(self, canvas):
         super().__init__(canvas)
         self._setup_side_menu()

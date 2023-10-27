@@ -1,4 +1,4 @@
-from games_of_terminal.games.colors import Colors
+from games_of_terminal.colors import Colors
 
 import curses
 
