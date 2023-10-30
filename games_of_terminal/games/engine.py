@@ -8,7 +8,6 @@ import curses
 class GameEngine(InterfaceManager):
     def __init__(self, canvas):
         super().__init__(canvas)
-        self._setup_side_menu()
 
         self.state = {
             'pause': False,
