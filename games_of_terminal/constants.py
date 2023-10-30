@@ -1,13 +1,7 @@
 import curses
 
 
-# LOGO_TERM = [
-#     '######  #####  #####   ##   ##',
-#     '  ##    ##     ##  ##  ### ###',
-#     '  ##    ####   ####    ## # ##',
-#     '  ##    ##     ## ##   ##   ##',
-#     '  ##    #####  ##  ##  ##   ##',
-# ]
+APP_NAME = 'Games Of Terminal'
 
 LOGO = [
     ' ####     ####   ######',
@@ -16,8 +10,6 @@ LOGO = [
     '##   ##  ##  ##    ##  ',
     ' #####    ####     ##  ',
 ]
-
-APP_NAME = 'Games Of Terminal'
 
 MESSAGES = {
     'game_over': 'GAME OVER',
@@ -50,10 +42,11 @@ GAME_STATUSES = {
     'tie': {'text': 'TIE', 'color': 'white_text_yellow_bg'},
 }
 
-SIDE_MENU_TIPS = [
-    'Rules     - r',
-    'Move      - ← ↓ ↑ →',
-    'Quit      - q',
-    'Pause     - p',
-    'Hide tips - h',
-]
+SIDE_MENU_TIPS = {
+    'Move': '← ↓ ↑ → (wasd)',
+    'Pause': 'p',
+    'Restart': 'r',
+    'Tips/rules': 't',
+    'Quit': 'q',
+    'Hide menu': 'm',
+}
