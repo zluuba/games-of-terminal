@@ -1,5 +1,5 @@
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.constants import KEYS
+from games_of_terminal.constants import KEYS, SIDE_MENU_TIPS
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
@@ -13,16 +13,14 @@ class MinesweeperGame(GameEngine):
         super()._setup()
 
         self.cells = dict()
+        self.flags = 0
 
     @property
     def current_cell(self):
         return self.cells[self.current_coordinates]
 
     def start_new_game(self):
-        self.hide_cursor()
-        self._draw_game_field()
-        self._set_game_field()
-
+        self._setup_game_field()
         self.current_cell.select()
 
         while True:
@@ -41,6 +39,8 @@ class MinesweeperGame(GameEngine):
             elif key in KEYS['enter']:
                 self._show_cell(self.current_cell)
 
+            self._draw_game_tips()
+
             if self._is_all_cells_open():
                 if self._is_no_unnecessary_flags():
                     self.game_status = 'user_win'
@@ -56,10 +56,22 @@ class MinesweeperGame(GameEngine):
                     self.start_new_game()
                 return
 
-    def _set_game_field(self):
+    def _setup_game_field(self):
+        self.hide_cursor()
+        self._draw_game_field()
         self._plant_bombs()
         self._set_bombs_around_counter()
         self._open_first_empty_cell()
+        self._setup_side_menu()
+
+        # draw game state tips
+        self._draw_game_tips()
+
+    def _draw_game_tips(self):
+        y, x = 3 + len(SIDE_MENU_TIPS), 2
+        game_tips = {'flags': self.flags}
+
+        self.draw_side_menu_tips(y, x, game_tips)
 
     def _draw_game_field(self):
         lines = (self.game_box_height - GAME_FIELD_OFFSET_XY) // CELL_HEIGHT
@@ -108,6 +120,7 @@ class MinesweeperGame(GameEngine):
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
         bombs_count = number_of_sells // 5
+        self.flags = bombs_count
 
         while bombs_count != 0:
             cell = choice(all_cells)
@@ -213,8 +226,10 @@ class MinesweeperGame(GameEngine):
         cell = self.current_cell
 
         if cell.have_flag():
+            self.flags += 1
             cell.remove_flag()
-        elif not cell.have_flag() and not cell.is_open():
+        elif not cell.have_flag() and not cell.is_open() and self.flags > 0:
+            self.flags -= 1
             cell.set_flag()
 
         cell.show_cell()
