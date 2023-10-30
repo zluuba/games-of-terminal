@@ -37,8 +37,6 @@ class Menu(InterfaceManager):
             self.window.refresh()
 
     def _show_menu(self):
-        item_color = self.get_color_by_name('white_text_black_bg')
-        selected_item_color = item_color + curses.A_STANDOUT
         self.window.clear()
 
         for row, item in enumerate(GAMES.values()):
@@ -47,9 +45,9 @@ class Menu(InterfaceManager):
             y = self.height // 2 - self.menu_length // 2 + row
 
             if row == self.current_row:
-                self.window.addstr(y, x, game_name, selected_item_color)
+                self.window.addstr(y, x, game_name, self.default_color + curses.A_STANDOUT)
             else:
-                self.window.addstr(y, x, game_name, item_color)
+                self.window.addstr(y, x, game_name, self.default_color)
 
         self.window.refresh()
 
@@ -61,9 +59,8 @@ class Menu(InterfaceManager):
 
     def _draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)
-        color = self.get_color_by_name('white_text_black_bg')
 
         begin_y = self.height // 2
         begin_x = (self.width // 2) - len(goodbye_message) // 2
 
-        self.draw_message(begin_y, begin_x, self.window, goodbye_message, color)
+        self.draw_message(begin_y, begin_x, self.window, goodbye_message, self.default_color)
