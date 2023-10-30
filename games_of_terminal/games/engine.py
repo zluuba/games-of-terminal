@@ -1,6 +1,6 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import (
-    MESSAGES, KEYS, GAME_STATUSES,
+    MESSAGES, KEYS, GAME_STATUSES, SIDE_MENU_TIPS,
 )
 import curses
 
@@ -59,6 +59,11 @@ class GameEngine(InterfaceManager):
 
         middle_x = (self.game_status_area.width // 2) - len(message) // 2
         self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
+
+    def draw_game_tips(self, tips):
+        color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
+        y, x = 3 + len(SIDE_MENU_TIPS), 2
+        self.draw_side_menu_tips(y, x, tips, color)
 
     def _is_restart(self):
         # TODO: add transparent background color func

@@ -1,5 +1,5 @@
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.constants import KEYS, SIDE_MENU_TIPS
+from games_of_terminal.constants import KEYS
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
@@ -18,6 +18,10 @@ class MinesweeperGame(GameEngine):
     @property
     def current_cell(self):
         return self.cells[self.current_coordinates]
+
+    @property
+    def tips(self):
+        return {'flags': self.flags}
 
     def start_new_game(self):
         self._setup_game_field()
@@ -39,7 +43,7 @@ class MinesweeperGame(GameEngine):
             elif key in KEYS['enter']:
                 self._show_cell(self.current_cell)
 
-            self._draw_game_tips()
+            self.draw_game_tips(self.tips)
 
             if self._is_all_cells_open():
                 if self._is_no_unnecessary_flags():
@@ -62,16 +66,10 @@ class MinesweeperGame(GameEngine):
         self._plant_bombs()
         self._set_bombs_around_counter()
         self._open_first_empty_cell()
-        self._setup_side_menu()
-
-        self._draw_game_tips()
         self.show_game_status()
 
-    def _draw_game_tips(self):
-        y, x = 3 + len(SIDE_MENU_TIPS), 2
-        game_tips = {'flags': self.flags}
-
-        self.draw_side_menu_tips(y, x, game_tips)
+        self._setup_side_menu()
+        self.draw_game_tips(self.tips)
 
     def _draw_game_field(self):
         lines = (self.game_area.height - GAME_FIELD_OFFSET_XY) // CELL_HEIGHT

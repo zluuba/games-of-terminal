@@ -33,8 +33,8 @@ class InterfaceManager(Colors):
     def _init_subwindows(self):
         self.game_area = Field(self.window, *self.game_box_sizes.values())
         self.side_menu = Field(self.window, *self.side_menu_box_sizes.values())
-        self.tips = Field(self.side_menu.box, *self.tips_box_sizes.values())
-        self.logo = Field(self.side_menu.box, *self.logo_box_sizes.values())
+        self.tips_area = Field(self.side_menu.box, *self.tips_box_sizes.values())
+        self.logo_area = Field(self.side_menu.box, *self.logo_box_sizes.values())
         self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
 
     def _setup_side_menu(self):
@@ -43,20 +43,23 @@ class InterfaceManager(Colors):
 
     def _draw_logo(self):
         for y, line in enumerate(LOGO, start=1):
-            self.draw_message(y, 2, self.logo.box, line, self.default_color)
+            self.draw_message(y, 2, self.logo_area.box, line, self.default_color)
 
-        y, x = 6, (self.logo.width - len(APP_NAME)) // 2
-        self.draw_message(y, x, self.logo.box, APP_NAME, self.default_color)
+        y, x = 6, (self.logo_area.width - len(APP_NAME)) // 2
+        self.draw_message(y, x, self.logo_area.box, APP_NAME, self.default_color)
 
-    def draw_side_menu_tips(self, y=2, x=2, tips=None):
+    def draw_side_menu_tips(self, y=2, x=2, tips=None, color=None):
         if tips is None:
             tips = SIDE_MENU_TIPS
 
+        if color is None:
+            color = self.default_color
+
         for key, description in tips.items():
-            self._clear_line(y, x, self.tips.box, (self.tips.width - (x * 2)))
+            self._clear_line(y, x, self.tips_area.box, (self.tips_area.width - (x * 2)))
 
             message = f'{key} - {description}'
-            self.draw_message(y, x, self.tips.box, message, self.default_color)
+            self.draw_message(y, x, self.tips_area.box, message, color)
             y += 1
 
     def _clear_line(self, y, x, field, width):
