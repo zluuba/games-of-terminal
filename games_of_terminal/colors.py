@@ -58,6 +58,8 @@ class Colors:
 
         curses.init_pair(20, curses.COLOR_WHITE, 136)
 
+        self.default_color = self.get_color_by_name('white_text_black_bg')
+
     def get_color_by_name(self, color_name):
         color_pair = self.color_mapping.get(color_name, 0)
         return curses.color_pair(color_pair)
