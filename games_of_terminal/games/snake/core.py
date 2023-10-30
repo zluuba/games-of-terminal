@@ -21,9 +21,9 @@ class SnakeGame(GameEngine):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
         self.snake = [
-            [self.game_box_height // 2, self.game_box_width // 2 + 1],
-            [self.game_box_height // 2, self.game_box_width // 2],
-            [self.game_box_height // 2, self.game_box_width // 2 - 1]
+            [self.game_area.height // 2, self.game_area.width // 2 + 1],
+            [self.game_area.height // 2, self.game_area.width // 2],
+            [self.game_area.height // 2, self.game_area.width // 2 - 1]
         ]
 
         # initial direction of the snake's movement:
@@ -31,14 +31,14 @@ class SnakeGame(GameEngine):
         self.direction = KEYS['right_arrow']
 
         # game box borders
-        self.gb_top_border = self.game_box_sizes['begin_y'] - 1
-        self.gb_bottom_border = self.game_box_sizes['lines'] - self.gb_top_border - 1
-        self.gb_left_border = self.game_box_sizes['begin_x']
-        self.gb_right_border = self.game_box_sizes['cols'] - self.gb_left_border - 1
+        self.gb_top_border = self.game_area.begin_y - 1
+        self.gb_bottom_border = self.game_area.height - self.gb_top_border - 1
+        self.gb_left_border = self.game_area.begin_x
+        self.gb_right_border = self.game_area.width - self.gb_left_border - 1
 
     def _set_score(self):
-        show_score(self.side_menu_box, self.score, self.side_menu_box_width)
-        show_best_score(self.side_menu_box, self.side_menu_box_width)
+        show_score(self.side_menu.box, self.score, self.side_menu.width)
+        show_best_score(self.side_menu.box, self.side_menu.width)
 
     def _get_food_coords(self):
         food = [randint(self.gb_top_border + 1, self.gb_bottom_border - 1),
@@ -50,7 +50,7 @@ class SnakeGame(GameEngine):
 
     def _put_food_on_the_field(self):
         self.food = self._get_food_coords()
-        self.game_box.addstr(*self.food, FOOD_SKIN)
+        self.game_area.box.addstr(*self.food, FOOD_SKIN)
 
     def _setup_game_field(self):
         self.hide_cursor()
@@ -90,7 +90,7 @@ class SnakeGame(GameEngine):
                     self.start_new_game()
                 return
 
-            self.game_box.refresh()
+            self.game_area.box.refresh()
             self.window.refresh()
 
     def _change_direction(self, chosen_direction):
@@ -119,7 +119,7 @@ class SnakeGame(GameEngine):
             snake_head = [snake_head[0] + 1, snake_head[1]]
 
         self.snake.insert(0, snake_head)
-        self.game_box.addstr(*snake_head, SNAKE_SKIN)
+        self.game_area.box.addstr(*snake_head, SNAKE_SKIN)
 
         if snake_head == self.food:
             self.score += 1
@@ -127,17 +127,17 @@ class SnakeGame(GameEngine):
             self._put_food_on_the_field()
         else:
             snake_tail = self.snake.pop()
-            self.game_box.addstr(*snake_tail, ' ')
+            self.game_area.box.addstr(*snake_tail, ' ')
 
-        self.game_box.refresh()
+        self.game_area.box.refresh()
 
     def _save_best_score(self):
         is_best_score = save_best_score(self.score)
 
         if is_best_score:
-            show_best_score(self.side_menu_box, self.side_menu_box_width)
+            show_best_score(self.side_menu.box, self.side_menu.width)
 
             message = MESSAGES['new_best_score']
             self.draw_message(3, 1,
-                              self.side_menu_box, message,
+                              self.side_menu.box, message,
                               self.get_color_by_name('white_text_green_bg'))

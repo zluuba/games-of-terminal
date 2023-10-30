@@ -41,24 +41,24 @@ class GameEngine(InterfaceManager):
         message = ' PAUSE '
         color = self.get_color_by_name('yellow_text_black_bg')
 
-        x = (self.game_box_width // 2 + self.game_box_sizes['begin_x']) - (len(message) // 2)
-        y = self.game_box_height // 2 + self.game_box_sizes['begin_y']
+        x = (self.game_area.width // 2 + self.game_area.begin_x) - (len(message) // 2)
+        y = self.game_area.height // 2 + self.game_box_sizes['begin_y']
 
-        self.draw_message(y, x, self.game_box, message, color)
+        self.draw_message(y, x, self.game_area.box, message, color)
 
     def show_game_status(self, y=1, x=1):
         message = GAME_STATUSES[self.game_status]['text']
         color_name = GAME_STATUSES[self.game_status]['color']
         color = self.get_color_by_name(color_name)
 
-        empty_line = ' ' * (self.status_box_width - 2)
+        empty_line = ' ' * (self.game_status_area.width - 2)
 
         for offset in range(3):
             new_y = y + offset
-            self.draw_message(new_y, x, self.status_box, empty_line, color)
+            self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
 
-        middle_x = (self.status_box_width // 2) - len(message) // 2
-        self.draw_message(y + 1, middle_x, self.status_box, message, color)
+        middle_x = (self.game_status_area.width // 2) - len(message) // 2
+        self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
 
     def _is_restart(self):
         # TODO: add transparent background color func
@@ -69,16 +69,16 @@ class GameEngine(InterfaceManager):
 
         message = f" {MESSAGES['play_again']} "
 
-        x = (self.game_box_width // 2) - (len(message) // 2)
-        y = self.game_box_height // 2
+        x = (self.game_area.width // 2) - (len(message) // 2)
+        y = self.game_area.height // 2
 
-        self.draw_message(y, x, self.game_box, message, curses.A_BLINK)
+        self.draw_message(y, x, self.game_area.box, message, curses.A_BLINK)
 
         self.wait_for_keypress()
         curses.flushinp()
         key = self.window.getch()
 
         if key == KEYS['space']:
-            self.game_box.erase()
+            self.game_area.box.erase()
             return True
         return False

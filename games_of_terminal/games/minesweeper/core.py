@@ -74,12 +74,12 @@ class MinesweeperGame(GameEngine):
         self.draw_side_menu_tips(y, x, game_tips)
 
     def _draw_game_field(self):
-        lines = (self.game_box_height - GAME_FIELD_OFFSET_XY) // CELL_HEIGHT
-        cols = (self.game_box_width - GAME_FIELD_OFFSET_XY) // CELL_WIDTH
+        lines = (self.game_area.height - GAME_FIELD_OFFSET_XY) // CELL_HEIGHT
+        cols = (self.game_area.width - GAME_FIELD_OFFSET_XY) // CELL_WIDTH
 
         # initial coordinates of the upper left corner (centered)
-        y = (self.game_box_height - (lines * CELL_HEIGHT)) // 2
-        x = begin_x = (self.game_box_width - (cols * CELL_WIDTH)) // 2
+        y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2
+        x = begin_x = (self.game_area.width - (cols * CELL_WIDTH)) // 2
 
         y += self.game_box_sizes['begin_y']
         x += self.game_box_sizes['begin_x']
@@ -97,7 +97,7 @@ class MinesweeperGame(GameEngine):
             x = begin_x
 
     def _create_cell(self, y, x):
-        field_box = self.game_box.subwin(CELL_HEIGHT, CELL_WIDTH, y, x)
+        field_box = self.game_area.box.subwin(CELL_HEIGHT, CELL_WIDTH, y, x)
         cell = Cell(field_box, (y, x))
         cell.set_background_color()
         return cell

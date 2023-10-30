@@ -2,6 +2,7 @@ from games_of_terminal.colors import Colors
 from games_of_terminal.constants import (
     LOGO, APP_NAME, SIDE_MENU_TIPS,
 )
+from games_of_terminal.field import Field
 import curses
 
 
@@ -29,29 +30,12 @@ class InterfaceManager(Colors):
         self.window.nodelay(True)
         self.window.keypad(True)
 
-    @staticmethod
-    def _get_subwindow_with_borders(win, sizes_dict):
-        subwindow_sizes = sizes_dict.values()
-        subwindow = win.subwin(*subwindow_sizes)
-        subwindow.border()
-
-        return subwindow
-
     def _init_subwindows(self):
-        self.game_box = self._get_subwindow_with_borders(self.window, self.game_box_sizes)
-        self.game_box_height, self.game_box_width = self.game_box.getmaxyx()
-
-        self.side_menu_box = self._get_subwindow_with_borders(self.window, self.side_menu_box_sizes)
-        self.side_menu_box_height, self.side_menu_box_width = self.side_menu_box.getmaxyx()
-
-        self.tips_box = self._get_subwindow_with_borders(self.side_menu_box, self.tips_box_sizes)
-        self.tips_box_height, self.tips_box_width = self.tips_box.getmaxyx()
-
-        self.logo_box = self._get_subwindow_with_borders(self.side_menu_box, self.logo_box_sizes)
-        self.logo_box_height, self.logo_box_width = self.logo_box.getmaxyx()
-
-        self.status_box = self._get_subwindow_with_borders(self.side_menu_box, self.status_box_sizes)
-        self.status_box_height, self.status_box_width = self.status_box.getmaxyx()
+        self.game_area = Field(self.window, *self.game_box_sizes.values())
+        self.side_menu = Field(self.window, *self.side_menu_box_sizes.values())
+        self.tips = Field(self.side_menu.box, *self.tips_box_sizes.values())
+        self.logo = Field(self.side_menu.box, *self.logo_box_sizes.values())
+        self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
 
     def _setup_side_menu(self):
         self._draw_logo()
@@ -59,20 +43,20 @@ class InterfaceManager(Colors):
 
     def _draw_logo(self):
         for y, line in enumerate(LOGO, start=1):
-            self.draw_message(y, 2, self.logo_box, line, self.default_color)
+            self.draw_message(y, 2, self.logo.box, line, self.default_color)
 
-        y, x = 6, (self.logo_box_width - len(APP_NAME)) // 2
-        self.draw_message(y, x, self.logo_box, APP_NAME, self.default_color)
+        y, x = 6, (self.logo.width - len(APP_NAME)) // 2
+        self.draw_message(y, x, self.logo.box, APP_NAME, self.default_color)
 
     def draw_side_menu_tips(self, y=2, x=2, tips=None):
         if tips is None:
             tips = SIDE_MENU_TIPS
 
         for key, description in tips.items():
-            self._clear_line(y, x, self.tips_box, (self.tips_box_width - (x * 2)))
+            self._clear_line(y, x, self.tips.box, (self.tips.width - (x * 2)))
 
             message = f'{key} - {description}'
-            self.draw_message(y, x, self.tips_box, message, self.default_color)
+            self.draw_message(y, x, self.tips.box, message, self.default_color)
             y += 1
 
     def _clear_line(self, y, x, field, width):

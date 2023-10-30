@@ -24,15 +24,15 @@ class TicTacToeGame(GameEngine):
         curr_box_num = 1
         lines, cols = 5, 10
 
-        middle_y = (self.game_box_height // 2) - (lines // 2)
-        middle_x = (self.game_box_width // 2) - (cols // 2)
+        middle_y = (self.game_area.height // 2) - (lines // 2)
+        middle_x = (self.game_area.width // 2) - (cols // 2)
 
         begin_ys = (middle_y - 4, middle_y, middle_y + 4)
         begin_xs = (middle_x - 9, middle_x, middle_x + 9)
 
         for begin_y in begin_ys:
             for begin_x in begin_xs:
-                box = self.game_box.subwin(lines, cols, begin_y, begin_x)
+                box = self.game_area.box.subwin(lines, cols, begin_y, begin_x)
                 box.border()
                 self.fields[curr_box_num] = box
 
