@@ -57,13 +57,16 @@ Esc - exit
 ## Following features
 
 #### New Games:
-- [ ] Sea Battle game
-- [ ] Tetris game
-- [ ] Pong Game
+- [ ] Tetris
+- [ ] Sea Battle
+- [ ] Chess
 
 #### Interface features:
 - [ ] Menu animations
 - [ ] Minimum window size requirements ("too little window for games" handle)
+
+#### Global features:
+- [ ] Add global and local settings
 
 ## Demos
 
