@@ -37,6 +37,7 @@ KEYS = {
 }
 
 GAME_STATUSES = {
+    'game_is_on': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
     'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},
     'user_lose': {'text': 'You LOSE', 'color': 'white_text_red_bg'},
     'tie': {'text': 'TIE', 'color': 'white_text_yellow_bg'},
