@@ -2,10 +2,11 @@ from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS
 from games_of_terminal.menu.constants import GAMES, GOODBYE_MESSAGES
 
+from curses import A_STANDOUT as REVERSE_COLORS
+
 from random import choice
-import curses
-import time
-import sys
+from time import sleep
+from sys import exit
 
 
 class Menu(InterfaceManager):
@@ -45,7 +46,7 @@ class Menu(InterfaceManager):
             y = self.height // 2 - self.menu_length // 2 + row
 
             if row == self.current_row:
-                self.window.addstr(y, x, game_name, self.default_color + curses.A_STANDOUT)
+                self.window.addstr(y, x, game_name, self.default_color + REVERSE_COLORS)
             else:
                 self.window.addstr(y, x, game_name, self.default_color)
 
@@ -54,8 +55,8 @@ class Menu(InterfaceManager):
     def _exit(self):
         self.window.clear()
         self._draw_goodbye_message()
-        time.sleep(1)
-        sys.exit(0)
+        sleep(1)
+        exit(0)
 
     def _draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)

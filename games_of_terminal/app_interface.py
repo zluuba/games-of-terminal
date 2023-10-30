@@ -1,9 +1,10 @@
 from games_of_terminal.colors import Colors
+from games_of_terminal.field import Field
 from games_of_terminal.constants import (
     LOGO, APP_NAME, SIDE_MENU_TIPS,
 )
-from games_of_terminal.field import Field
-import curses
+
+from curses import newwin, curs_set
 
 
 class InterfaceManager(Colors):
@@ -26,7 +27,7 @@ class InterfaceManager(Colors):
     def _init_main_window(self):
         window_sizes = self.window_box_sizes.values()
 
-        self.window = curses.newwin(*window_sizes)
+        self.window = newwin(*window_sizes)
         self.window.nodelay(True)
         self.window.keypad(True)
 
@@ -74,7 +75,7 @@ class InterfaceManager(Colors):
 
     @staticmethod
     def hide_cursor():
-        curses.curs_set(0)
+        curs_set(0)
 
     def wait_for_keypress(self):
         self.window.timeout(-1)

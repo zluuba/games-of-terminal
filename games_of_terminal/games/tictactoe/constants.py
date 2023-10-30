@@ -1,9 +1,9 @@
-import curses
+from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 
 DIRECTIONS = {
-    curses.KEY_RIGHT: (0, 1), curses.KEY_LEFT: (0, -1),
-    curses.KEY_UP: (-1, 0), curses.KEY_DOWN: (1, 0),
+    KEY_RIGHT: (0, 1), KEY_LEFT: (0, -1),
+    KEY_UP: (-1, 0), KEY_DOWN: (1, 0),
 }
 
 WINNING_COMBINATIONS = ((1, 2, 3), (4, 5, 6), (7, 8, 9),

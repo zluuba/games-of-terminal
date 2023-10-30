@@ -1,4 +1,4 @@
-import curses
+from curses import KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN
 
 
 RULES = (
@@ -16,8 +16,8 @@ CELL_WIDTH = 7
 GAME_FIELD_OFFSET_XY = 2
 
 DIRECTIONS = {
-    curses.KEY_LEFT: (0, -CELL_WIDTH), curses.KEY_RIGHT: (0, CELL_WIDTH),
-    curses.KEY_UP: (-CELL_HEIGHT, 0), curses.KEY_DOWN: (CELL_HEIGHT, 0),
+    KEY_LEFT: (0, -CELL_WIDTH), KEY_RIGHT: (0, CELL_WIDTH),
+    KEY_UP: (-CELL_HEIGHT, 0), KEY_DOWN: (CELL_HEIGHT, 0),
     ord('a'): (0, -CELL_WIDTH), ord('d'): (0, CELL_WIDTH),
     ord('w'): (-CELL_HEIGHT, 0), ord('s'): (CELL_HEIGHT, 0),
 }

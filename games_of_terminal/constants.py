@@ -1,4 +1,4 @@
-import curses
+from curses import KEY_ENTER, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 
 
 APP_NAME = 'Games Of Terminal'
@@ -23,11 +23,11 @@ MESSAGES = {
 KEYS = {
     'space': ord(' '),
     'escape': 27,
-    'enter': [curses.KEY_ENTER, 10, 13],
-    'up_arrow': curses.KEY_UP,
-    'down_arrow': curses.KEY_DOWN,
-    'left_arrow': curses.KEY_LEFT,
-    'right_arrow': curses.KEY_RIGHT,
+    'enter': [KEY_ENTER, 10, 13],
+    'up_arrow': KEY_UP,
+    'down_arrow': KEY_DOWN,
+    'left_arrow': KEY_LEFT,
+    'right_arrow': KEY_RIGHT,
     'q': ord('q'),
     'pause': ord('p'),
     # 'w': ord('w'),
@@ -45,9 +45,7 @@ GAME_STATUSES = {
 
 SIDE_MENU_TIPS = {
     'Move': '← ↓ ↑ → (wasd)',
-    'Pause': 'p',
     'Restart': 'r',
     'Tips/rules': 't',
     'Quit': 'q',
-    'Hide menu': 'm',
 }

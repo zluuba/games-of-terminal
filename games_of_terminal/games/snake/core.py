@@ -6,9 +6,9 @@ from games_of_terminal.games.snake.score import (
     get_best_score, save_best_score,
 )
 
+from curses import endwin, flash
 from random import randint
-import curses
-import time
+from time import sleep
 
 
 class SnakeGame(GameEngine):
@@ -71,7 +71,7 @@ class SnakeGame(GameEngine):
             key = self.window.getch()
 
             if key == KEYS['escape']:
-                curses.endwin()
+                endwin()
                 return
             elif key in DIRECTIONS.keys():
                 self._change_direction(key)
@@ -84,8 +84,8 @@ class SnakeGame(GameEngine):
                 self.show_game_status()
                 self._save_best_score()
 
-                curses.flash()
-                time.sleep(1)
+                flash()
+                sleep(1)
 
                 if self._is_restart():
                     self.__init__(self.canvas)

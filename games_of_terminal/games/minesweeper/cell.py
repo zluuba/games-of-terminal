@@ -1,7 +1,5 @@
 from games_of_terminal.colors import Colors
 
-import curses
-
 
 class Cell(Colors):
     def __init__(self, field_box, coordinates):
@@ -122,15 +120,20 @@ class Cell(Colors):
 
         if self.have_flag():
             message = 'bomb?'
-            self.field_box.addstr(center_x, center_y - (len(message) // 2), message, curses.color_pair(18))
+            color = self.get_color_by_name('white_text_deep_blue_bg')
+            self.field_box.addstr(center_x, center_y - (len(message) // 2),
+                                  message, color)
         elif self.is_bomb() and self.is_open():
             message = 'boom!'
-            self.field_box.addstr(center_x, center_y - (len(message) // 2), message, curses.color_pair(11))
+            color = self.get_color_by_name('black_text_red_bg')
+            self.field_box.addstr(center_x, center_y - (len(message) // 2),
+                                  message, color)
         elif self.is_open():
             num_of_bombs = self.bombs_around()
 
             if num_of_bombs:
-                self.field_box.addstr(center_x, center_y, str(num_of_bombs), self.get_background_color())
+                color = self.get_background_color()
+                self.field_box.addstr(center_x, center_y, str(num_of_bombs), color)
 
         self.set_background_color()
         self.field_box.refresh()

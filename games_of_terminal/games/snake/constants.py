@@ -1,11 +1,11 @@
-import curses
+from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 
 DIRECTIONS = {
-    curses.KEY_RIGHT: curses.KEY_LEFT,
-    curses.KEY_LEFT: curses.KEY_RIGHT,
-    curses.KEY_UP: curses.KEY_DOWN,
-    curses.KEY_DOWN: curses.KEY_UP,
+    KEY_RIGHT: KEY_LEFT,
+    KEY_LEFT: KEY_RIGHT,
+    KEY_UP: KEY_DOWN,
+    KEY_DOWN: KEY_UP,
 }
 
 SNAKE_SKIN = 'O'

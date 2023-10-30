@@ -2,7 +2,8 @@ from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES, SIDE_MENU_TIPS,
 )
-import curses
+
+from curses import flushinp, A_BLINK as BLINK
 
 
 class GameEngine(InterfaceManager):
@@ -77,10 +78,10 @@ class GameEngine(InterfaceManager):
         x = (self.game_area.width // 2) - (len(message) // 2)
         y = self.game_area.height // 2
 
-        self.draw_message(y, x, self.game_area.box, message, curses.A_BLINK)
+        self.draw_message(y, x, self.game_area.box, message, BLINK)
 
         self.wait_for_keypress()
-        curses.flushinp()
+        flushinp()
         key = self.window.getch()
 
         if key == KEYS['space']:

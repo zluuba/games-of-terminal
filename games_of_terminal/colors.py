@@ -1,4 +1,8 @@
-import curses
+from curses import (
+    start_color, color_pair, init_pair,
+    COLOR_WHITE, COLOR_BLACK, COLOR_GREEN,
+    COLOR_RED, COLOR_YELLOW,
+)
 
 
 class Colors:
@@ -31,37 +35,37 @@ class Colors:
             'strong_pastel_purple_text_black_bg': 21,
         }
 
-        curses.start_color()
+        start_color()
 
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(4, curses.COLOR_WHITE, 236)
-        curses.init_pair(5, curses.COLOR_WHITE, 245)
-        curses.init_pair(6, curses.COLOR_WHITE, 132)
-        curses.init_pair(7, curses.COLOR_WHITE, 134)
+        init_pair(1, COLOR_WHITE, COLOR_BLACK)
+        init_pair(2, COLOR_WHITE, COLOR_GREEN)
+        init_pair(3, COLOR_WHITE, COLOR_RED)
+        init_pair(4, COLOR_WHITE, 236)
+        init_pair(5, COLOR_WHITE, 245)
+        init_pair(6, COLOR_WHITE, 132)
+        init_pair(7, COLOR_WHITE, 134)
 
-        curses.init_pair(8, curses.COLOR_RED, curses.COLOR_BLACK)
-        curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(10, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        init_pair(8, COLOR_RED, COLOR_BLACK)
+        init_pair(9, COLOR_GREEN, COLOR_BLACK)
+        init_pair(10, COLOR_YELLOW, COLOR_BLACK)
 
-        curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_RED)
-        curses.init_pair(12, curses.COLOR_BLACK, 168)
-        curses.init_pair(13, curses.COLOR_BLACK, 153)
+        init_pair(11, COLOR_BLACK, COLOR_RED)
+        init_pair(12, COLOR_BLACK, 168)
+        init_pair(13, COLOR_BLACK, 153)
 
         # minesweeper cell colors
-        curses.init_pair(14, curses.COLOR_WHITE, 111)
-        curses.init_pair(15, curses.COLOR_WHITE, 75)
-        curses.init_pair(16, curses.COLOR_WHITE, 68)
-        curses.init_pair(17, curses.COLOR_WHITE, 26)
-        curses.init_pair(18, curses.COLOR_WHITE, 17)
-        curses.init_pair(19, curses.COLOR_WHITE, 54)
+        init_pair(14, COLOR_WHITE, 111)
+        init_pair(15, COLOR_WHITE, 75)
+        init_pair(16, COLOR_WHITE, 68)
+        init_pair(17, COLOR_WHITE, 26)
+        init_pair(18, COLOR_WHITE, 17)
+        init_pair(19, COLOR_WHITE, 54)
 
-        curses.init_pair(20, curses.COLOR_WHITE, 136)
-        curses.init_pair(21, 147, curses.COLOR_BLACK)
+        init_pair(20, COLOR_WHITE, 136)
+        init_pair(21, 147, COLOR_BLACK)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
 
     def get_color_by_name(self, color_name):
-        color_pair = self.color_mapping.get(color_name, 0)
-        return curses.color_pair(color_pair)
+        color_pair_number = self.color_mapping.get(color_name, 0)
+        return color_pair(color_pair_number)

@@ -3,9 +3,9 @@ from games_of_terminal.constants import KEYS
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
+from curses import endwin, flash
 from random import choice
-import curses
-import time
+from time import sleep
 
 
 class MinesweeperGame(GameEngine):
@@ -32,7 +32,7 @@ class MinesweeperGame(GameEngine):
             self.wait_for_keypress()
 
             if key == KEYS['escape']:
-                curses.endwin()
+                endwin()
                 return
 
             if key in DIRECTIONS:
@@ -50,10 +50,10 @@ class MinesweeperGame(GameEngine):
                     self.game_status = 'user_win'
 
             if self.game_status != 'game_is_on':
-                curses.flash()
+                flash()
 
                 self.show_game_status()
-                time.sleep(1)
+                sleep(1)
 
                 if self._is_restart():
                     self.__init__(self.canvas)

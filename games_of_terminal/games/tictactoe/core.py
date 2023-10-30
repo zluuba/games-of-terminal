@@ -2,9 +2,9 @@ from games_of_terminal.constants import KEYS
 from games_of_terminal.games.tictactoe.constants import *
 from games_of_terminal.games.engine import GameEngine
 
-import curses
-import random
-import time
+from curses import endwin, flash
+from random import randint
+from time import sleep
 
 
 class TicTacToeGame(GameEngine):
@@ -52,7 +52,7 @@ class TicTacToeGame(GameEngine):
             self.wait_for_keypress()
 
             if key == KEYS['escape']:
-                curses.endwin()
+                endwin()
                 return
 
             if key in DIRECTIONS:
@@ -61,14 +61,14 @@ class TicTacToeGame(GameEngine):
             elif key in KEYS['enter']:
                 is_move_taken = self._user_move()
                 if is_move_taken and self.game_status == 'game_is_on':
-                    time.sleep(0.5)
+                    sleep(0.5)
                     self._computer_move()
 
             if self.game_status != 'game_is_on':
-                curses.flash()
+                flash()
 
                 self.show_game_status()
-                time.sleep(1)
+                sleep(1)
 
                 if self._is_restart():
                     self.__init__(self.canvas)
@@ -89,7 +89,7 @@ class TicTacToeGame(GameEngine):
         chosen_field = None
 
         while chosen_field is None:
-            move = random.randint(1, 9)
+            move = randint(1, 9)
             if move not in self.moves:
                 move = self._get_best_move(move)
                 self.moves.append(move)
