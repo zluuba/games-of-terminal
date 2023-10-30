@@ -46,20 +46,19 @@ class GameEngine(InterfaceManager):
 
         self.draw_message(y, x, self.game_box, message, color)
 
-    def _show_game_result_message(self):
+    def show_game_status(self, y=1, x=1):
         message = GAME_STATUSES[self.game_status]['text']
         color_name = GAME_STATUSES[self.game_status]['color']
         color = self.get_color_by_name(color_name)
 
-        y, x = self.side_menu_box_height - 2, 1
-        empty_line = ' ' * (self.side_menu_box_width - 2)
+        empty_line = ' ' * (self.status_box_width - 2)
 
-        for offset in range(0, -3, -1):
+        for offset in range(3):
             new_y = y + offset
-            self.draw_message(new_y, x, self.side_menu_box, empty_line, color)
+            self.draw_message(new_y, x, self.status_box, empty_line, color)
 
-        middle_x = (self.side_menu_box_width // 2) - len(message) // 2
-        self.draw_message(y - 1, middle_x, self.side_menu_box, message, color)
+        middle_x = (self.status_box_width // 2) - len(message) // 2
+        self.draw_message(y + 1, middle_x, self.status_box, message, color)
 
     def _is_restart(self):
         # TODO: add transparent background color func

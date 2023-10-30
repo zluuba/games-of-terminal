@@ -13,36 +13,45 @@ class InterfaceManager(Colors):
         self._setup()
 
     def _setup(self):
-        self.height, self.width = self.canvas.getmaxyx()
-
+        self.hide_cursor()
         self.canvas.bkgd(' ', self.default_color)
 
-        self._set_window_sizes()
-        self._draw_main_window()
-        self._setup_subwindows()
-        self.hide_cursor()
+        self.height, self.width = self.canvas.getmaxyx()
 
-    def _draw_main_window(self):
-        sizes = self.window_box_sizes.values()
-        self.window = curses.newwin(*sizes)
+        self._set_window_sizes()
+        self._init_main_window()
+        self._init_subwindows()
+
+    def _init_main_window(self):
+        window_sizes = self.window_box_sizes.values()
+
+        self.window = curses.newwin(*window_sizes)
         self.window.nodelay(True)
         self.window.keypad(True)
 
-    def _get_subwindow_with_borders(self, sizes_dict):
-        sizes = sizes_dict.values()
-        subwindow = self.window.subwin(*sizes)
+    @staticmethod
+    def _get_subwindow_with_borders(win, sizes_dict):
+        subwindow_sizes = sizes_dict.values()
+        subwindow = win.subwin(*subwindow_sizes)
         subwindow.border()
+
         return subwindow
 
-    def _setup_subwindows(self):
-        self.game_box = self._get_subwindow_with_borders(self.game_box_sizes)
+    def _init_subwindows(self):
+        self.game_box = self._get_subwindow_with_borders(self.window, self.game_box_sizes)
         self.game_box_height, self.game_box_width = self.game_box.getmaxyx()
 
-        self.side_menu_box = self._get_subwindow_with_borders(self.side_menu_box_sizes)
+        self.side_menu_box = self._get_subwindow_with_borders(self.window, self.side_menu_box_sizes)
         self.side_menu_box_height, self.side_menu_box_width = self.side_menu_box.getmaxyx()
 
-        self.logo_box = self._get_subwindow_with_borders(self.logo_box_sizes)
+        self.tips_box = self._get_subwindow_with_borders(self.side_menu_box, self.tips_box_sizes)
+        self.tips_box_height, self.tips_box_width = self.tips_box.getmaxyx()
+
+        self.logo_box = self._get_subwindow_with_borders(self.side_menu_box, self.logo_box_sizes)
         self.logo_box_height, self.logo_box_width = self.logo_box.getmaxyx()
+
+        self.status_box = self._get_subwindow_with_borders(self.side_menu_box, self.status_box_sizes)
+        self.status_box_height, self.status_box_width = self.status_box.getmaxyx()
 
     def _setup_side_menu(self):
         self._draw_logo()
@@ -55,17 +64,21 @@ class InterfaceManager(Colors):
         y, x = 6, (self.logo_box_width - len(APP_NAME)) // 2
         self.draw_message(y, x, self.logo_box, APP_NAME, self.default_color)
 
-    def draw_side_menu_tips(self, y=2, x=2, tips=SIDE_MENU_TIPS):
+    def draw_side_menu_tips(self, y=2, x=2, tips=None):
+        if tips is None:
+            tips = SIDE_MENU_TIPS
+
         for key, description in tips.items():
-            self._clear_line(y, x, self.side_menu_box, (self.side_menu_box_width - (x * 2)))
+            self._clear_line(y, x, self.tips_box, (self.tips_box_width - (x * 2)))
 
             message = f'{key} - {description}'
-            self.draw_message(y, x, self.side_menu_box, message, self.default_color)
+            self.draw_message(y, x, self.tips_box, message, self.default_color)
             y += 1
 
     def _clear_line(self, y, x, field, width):
         empty_line = ' ' * width
         self.draw_message(y, x, field, empty_line, self.default_color)
+        field.refresh()
 
     @staticmethod
     def draw_message(y, x, field, message, color):
@@ -95,9 +108,9 @@ class InterfaceManager(Colors):
         }
 
         self.side_menu_box_sizes = {
-            'lines': self.height - 8,
+            'lines': self.height - 2,
             'cols': 27,
-            'begin_y': 7,
+            'begin_y': 1,
             'begin_x': self.width - 27,
         }
 
@@ -105,5 +118,19 @@ class InterfaceManager(Colors):
             'lines': 7,
             'cols': 27,
             'begin_y': 1,
+            'begin_x': self.width - 27,
+        }
+
+        self.status_box_sizes = {
+            'lines': 5,
+            'cols': 27,
+            'begin_y': self.height - 6,
+            'begin_x': self.width - 27,
+        }
+
+        self.tips_box_sizes = {
+            'lines': self.height - self.logo_box_sizes['lines'] - self.status_box_sizes['lines'],
+            'cols': 27,
+            'begin_y': self.logo_box_sizes['begin_y'] + self.logo_box_sizes['lines'] - 1,
             'begin_x': self.width - 27,
         }

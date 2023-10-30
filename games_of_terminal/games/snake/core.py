@@ -61,6 +61,7 @@ class SnakeGame(GameEngine):
         self._put_food_on_the_field()
 
         self._setup_side_menu()
+        self.show_game_status()
 
     def start_new_game(self):
         self._setup_game_field()
@@ -71,20 +72,17 @@ class SnakeGame(GameEngine):
             if key == KEYS['escape']:
                 curses.endwin()
                 return
-            # elif key == KEYS['p']:
-                # self._pause()
-                # continue
             elif key in DIRECTIONS.keys():
                 self._change_direction(key)
 
             self._move_snake()
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
-                curses.flash()
-
                 self.game_status = 'user_lose'
-                self._show_game_result_message()
+                self.show_game_status()
                 self._save_best_score()
+
+                curses.flash()
                 time.sleep(1)
 
                 if self._is_restart():

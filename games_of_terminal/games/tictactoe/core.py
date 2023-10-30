@@ -43,6 +43,7 @@ class TicTacToeGame(GameEngine):
 
         self._draw_game_field()
         self._setup_side_menu()
+        self.show_game_status()
         self._fill_field(self.fields[self.position],
                          self.get_color_by_name('white_text_green_bg'))
 
@@ -66,7 +67,7 @@ class TicTacToeGame(GameEngine):
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._show_game_result_message()
+                self.show_game_status()
                 time.sleep(1)
 
                 if self._is_restart():

@@ -48,7 +48,7 @@ class MinesweeperGame(GameEngine):
             if self.game_status != 'game_is_on':
                 curses.flash()
 
-                self._show_game_result_message()
+                self.show_game_status()
                 time.sleep(1)
 
                 if self._is_restart():
@@ -64,8 +64,8 @@ class MinesweeperGame(GameEngine):
         self._open_first_empty_cell()
         self._setup_side_menu()
 
-        # draw game state tips
         self._draw_game_tips()
+        self.show_game_status()
 
     def _draw_game_tips(self):
         y, x = 3 + len(SIDE_MENU_TIPS), 2
