@@ -27,7 +27,7 @@ class Cell(Colors):
             4: self.get_color_by_name('white_text_deep_blue_bg'),          # 4 bombs or more
 
             'bomb': self.get_color_by_name('white_text_red_bg'),           # bomb color
-            'closed': self.get_color_by_name('white_text_dark_grey_bg'),   # default field color
+            'closed': self.get_color_by_name('white_text_black_bg'),       # default cell color
             'cursor': self.get_color_by_name('white_text_light_grey_bg'),  # selected cell
             'flag': self.get_color_by_name('white_text_deep_purple_bg'),   # cell with flag
         }
