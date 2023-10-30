@@ -52,16 +52,18 @@ class SnakeGame(GameEngine):
         self.food = self._get_food_coords()
         self.game_box.addstr(*self.food, FOOD_SKIN)
 
-    def _draw_game_field(self):
-        curses.curs_set(0)
+    def _setup_game_field(self):
+        self.hide_cursor()
         self.window.nodelay(1)
         self.window.timeout(150)
 
         self._set_score()
         self._put_food_on_the_field()
 
+        self._setup_side_menu()
+
     def start_new_game(self):
-        self._draw_game_field()
+        self._setup_game_field()
 
         while True:
             key = self.window.getch()
