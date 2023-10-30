@@ -28,6 +28,7 @@ class Colors:
             'white_text_deep_purple_bg': 19,
 
             'white_text_yellow_bg': 20,
+            'strong_pastel_purple_text_black_bg': 21,
         }
 
         curses.start_color()
@@ -57,6 +58,7 @@ class Colors:
         curses.init_pair(19, curses.COLOR_WHITE, 54)
 
         curses.init_pair(20, curses.COLOR_WHITE, 136)
+        curses.init_pair(21, 147, curses.COLOR_BLACK)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
 
