@@ -8,24 +8,10 @@ import os
 dotenv.load_dotenv()
 
 FILENAME = '.env'
+# FILENAME = 'games-of-terminal-settings.yml'
 BASE_DIR = Path(__file__).parents[2]
 
 FILE_PATH = os.path.join(BASE_DIR, FILENAME)
-
-
-def show_score(canvas, score, width):
-    score_text = MESSAGES['score_text'] + str(score)
-    y, x = 1, 1
-    canvas.addstr(y, x, score_text)
-    canvas.refresh()
-
-
-def show_best_score(canvas, width):
-    best_score = get_best_score()
-    best_score_text = MESSAGES['best_score'] + str(best_score)
-    y, x = 2, 1
-    canvas.addstr(y, x, best_score_text)
-    canvas.refresh()
 
 
 def get_best_score():

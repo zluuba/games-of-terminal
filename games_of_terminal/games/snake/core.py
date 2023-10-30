@@ -3,7 +3,7 @@ from games_of_terminal.games.engine import GameEngine
 
 from games_of_terminal.games.snake.constants import *
 from games_of_terminal.games.snake.score import (
-    show_score, show_best_score, save_best_score
+    get_best_score, save_best_score,
 )
 
 from random import randint
@@ -30,19 +30,20 @@ class SnakeGame(GameEngine):
         # by default it crawls to the right
         self.direction = KEYS['right_arrow']
 
-        # game box borders
-        self.gb_top_border = self.game_area.begin_y - 1
-        self.gb_bottom_border = self.game_area.height - self.gb_top_border - 1
-        self.gb_left_border = self.game_area.begin_x
-        self.gb_right_border = self.game_area.width - self.gb_left_border - 1
+    @property
+    def best_score(self):
+        return get_best_score()
 
-    def _set_score(self):
-        show_score(self.side_menu.box, self.score, self.side_menu.width)
-        show_best_score(self.side_menu.box, self.side_menu.width)
+    @property
+    def tips(self):
+        return {
+            'Score': self.score,
+            'Best Score': self.best_score,
+        }
 
     def _get_food_coords(self):
-        food = [randint(self.gb_top_border + 1, self.gb_bottom_border - 1),
-                randint(self.gb_left_border + 1, self.gb_right_border - 1)]
+        food = [randint(self.game_area.top_border + 1, self.game_area.bottom_border - 1),
+                randint(self.game_area.left_border + 1, self.game_area.right_border - 1)]
 
         if food in self.snake:
             return self._get_food_coords()
@@ -57,7 +58,6 @@ class SnakeGame(GameEngine):
         self.window.nodelay(1)
         self.window.timeout(150)
 
-        self._set_score()
         self._put_food_on_the_field()
 
         self._setup_side_menu()
@@ -65,6 +65,7 @@ class SnakeGame(GameEngine):
 
     def start_new_game(self):
         self._setup_game_field()
+        self.draw_game_tips(self.tips)
 
         while True:
             key = self.window.getch()
@@ -76,6 +77,7 @@ class SnakeGame(GameEngine):
                 self._change_direction(key)
 
             self._move_snake()
+            self.draw_game_tips(self.tips)
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 self.game_status = 'user_lose'
@@ -103,8 +105,8 @@ class SnakeGame(GameEngine):
         return self.snake[0] in self.snake[1:]
 
     def _is_snake_touch_the_border(self):
-        return (self.snake[0][0] in [self.gb_top_border, self.gb_bottom_border]) or \
-               (self.snake[0][1] in [self.gb_left_border, self.gb_right_border])
+        return (self.snake[0][0] in [self.game_area.top_border, self.game_area.bottom_border]) or \
+               (self.snake[0][1] in [self.game_area.left_border, self.game_area.right_border])
 
     def _move_snake(self):
         snake_head = self.snake[0]
@@ -123,7 +125,6 @@ class SnakeGame(GameEngine):
 
         if snake_head == self.food:
             self.score += 1
-            self._set_score()
             self._put_food_on_the_field()
         else:
             snake_tail = self.snake.pop()
@@ -135,9 +136,7 @@ class SnakeGame(GameEngine):
         is_best_score = save_best_score(self.score)
 
         if is_best_score:
-            show_best_score(self.side_menu.box, self.side_menu.width)
-
             message = MESSAGES['new_best_score']
-            self.draw_message(3, 1,
-                              self.side_menu.box, message,
+            self.draw_message(9, 2,
+                              self.tips_area.box, message,
                               self.get_color_by_name('white_text_green_bg'))
