@@ -39,9 +39,10 @@ class TicTacToeGame(GameEngine):
                 curr_box_num += 1
 
     def start_new_game(self):
-        curses.curs_set(0)
+        self.hide_cursor()
 
         self._draw_game_field()
+        self._setup_side_menu()
         self._fill_field(self.fields[self.position],
                          self.get_color_by_name('white_text_green_bg'))
 
@@ -160,12 +161,12 @@ class TicTacToeGame(GameEngine):
         field.refresh()
 
     def _reset_field_color(self, position):
+        color = self.default_color
+
         if position in self.user_moves:
             color = self.get_color_by_name('black_text_deep_pink_bg')
         elif position in self.computer_moves:
             color = self.get_color_by_name('black_text_pastel_dirty_blue_bg')
-        else:
-            color = self.get_color_by_name('white_text_black_bg')
 
         field = self.fields[self.position]
         self._fill_field(field, color)
