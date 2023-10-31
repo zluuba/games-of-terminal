@@ -1,5 +1,5 @@
 # Games Of Terminal
-GOT some games for terminal: Snake, Tetris, Minesweeper and Tic-tac-toe.
+GOT some games for terminal: Tetris, 2048, Sea Battle, Minesweeper, Snake and Tic-tac-toe.
 
 
 ## Requirements
@@ -40,15 +40,17 @@ got
 ```
 
 You will see the menu. <br/>
-Use ↓ and ↑ arrows for navigation. Use **Enter** to start the game.
+Use ↓ and ↑ arrows for navigation (or WASD). Use **Enter** to start the game.
 
 Keys for game control:
 ```ch
 P - pause/unpause
-H - show the rules and hints
-S - open/close side menu
-(?) E - showing where the file with all save settings is located
-F - feedback form/link
+R = restart the game
+T - show the rules and tips
+M - open/close side menu
+
+S - showing settings
+F - feedback form/links
 
 Esc - exit
 ```
@@ -57,8 +59,10 @@ Esc - exit
 ## Following features
 
 #### New Games:
+- [ ] 2048
 - [ ] Tetris
 - [ ] Sea Battle
+- [ ] Sudoku
 - [ ] Chess
 
 #### Interface features:
