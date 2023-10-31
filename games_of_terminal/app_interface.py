@@ -66,7 +66,6 @@ class InterfaceManager(Colors):
     def _clear_line(self, y, x, field, width):
         empty_line = ' ' * width
         self.draw_message(y, x, field, empty_line, self.default_color)
-        field.refresh()
 
     @staticmethod
     def draw_message(y, x, field, message, color):

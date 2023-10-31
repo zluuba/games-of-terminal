@@ -79,8 +79,8 @@ class MinesweeperGame(GameEngine):
         y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2
         x = begin_x = (self.game_area.width - (cols * CELL_WIDTH)) // 2
 
-        y += self.game_box_sizes['begin_y']
-        x += self.game_box_sizes['begin_x']
+        y += self.game_area.begin_y
+        x += self.game_area.begin_x
 
         self.current_coordinates = (y, x)
 
