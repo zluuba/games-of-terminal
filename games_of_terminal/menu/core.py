@@ -58,7 +58,7 @@ class Menu(InterfaceManager):
         self._draw_creator_name()
 
     def _draw_creator_name(self):
-        color = self.get_color_by_name('dark_grey_text_black_bg')
+        color = self.get_color_by_name('light_grey_text_black_bg')
         y = self.height - 2
         x = (self.width // 2) - (len(CREATOR_NAME) // 2)
 

@@ -33,6 +33,7 @@ class Colors:
 
             'white_text_yellow_bg': 20,
             'strong_pastel_purple_text_black_bg': 21,
+            'light_grey_text_black_bg': 22,
         }
 
         start_color()
@@ -63,6 +64,7 @@ class Colors:
 
         init_pair(20, COLOR_WHITE, 136)
         init_pair(21, 147, COLOR_BLACK)
+        init_pair(22, 245, COLOR_BLACK)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
 
