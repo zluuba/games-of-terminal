@@ -1,9 +1,12 @@
 from games_of_terminal.constants import KEYS
-from games_of_terminal.games.tictactoe.constants import *
+from games_of_terminal.games.tictactoe.constants import (
+    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS, BEST_MOVE_PATTERNS_BY_OWNERS,
+)
 from games_of_terminal.games.engine import GameEngine
+from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 
 from curses import endwin, flash
-from random import randint
+from random import choice
 from time import sleep
 
 
@@ -11,41 +14,79 @@ class TicTacToeGame(GameEngine):
     def _setup(self):
         super()._setup()
 
-        self.position = 5
-        self.coords = (1, 1)
+        self.cells = {}
+        self.current_coordinates = (0, 0)
+        self.cell_height, self.cell_width = self._get_cell_size()
 
-        self.moves = []
         self.user_moves = []
         self.computer_moves = []
 
+    @property
+    def current_cell(self):
+        return self.cells[self.current_coordinates]
+
+    def _get_cell_size(self):
+        """ Calculate cell sizes depending on the
+        size of the game field.
+        The ratio of cell width to cell height is always 2.5:1.
+        """
+
+        maximum_height = (self.game_area.height - 2) // CELLS_IN_ROW
+        maximum_width = (self.game_area.width - 2) // CELLS_IN_ROW
+
+        estimated_width = int(maximum_height * 2.5)
+        estimated_height = int(maximum_width // 2.5)
+
+        if estimated_width <= maximum_width:
+            return maximum_height, estimated_width
+        elif estimated_height <= maximum_height:
+            return estimated_height, maximum_width
+
+        while (estimated_height > maximum_height) \
+                and (estimated_width > maximum_width):
+            estimated_width -= 1
+            estimated_height = int(estimated_width // 2.5)
+
+        return estimated_height, estimated_width
+
+    def _create_cell(self, y, x, cell_height, cell_width, field_number):
+        field_box = self.game_area.box.subwin(cell_height, cell_width, y, x)
+        cell = TicTacToeCell(field_box, (y, x))
+        cell.field_number = field_number
+        cell.set_background_color()
+        return cell
+
     def _draw_game_field(self):
-        self.fields = {}
+        y = (self.game_area.height - (CELLS_IN_ROW * self.cell_height)) // 2
+        x = begin_x = (self.game_area.width - (CELLS_IN_ROW * self.cell_width)) // 2
 
-        curr_box_num = 1
-        lines, cols = 5, 10
+        y += self.game_area.begin_y
+        x += self.game_area.begin_x
 
-        middle_y = (self.game_area.height // 2) - (lines // 2)
-        middle_x = (self.game_area.width // 2) - (cols // 2)
+        self.current_coordinates = (y, x)
+        field_number = 1
 
-        begin_ys = (middle_y - 4, middle_y, middle_y + 4)
-        begin_xs = (middle_x - 9, middle_x, middle_x + 9)
+        for _ in range(CELLS_IN_ROW):
+            for _ in range(CELLS_IN_ROW):
+                cell = self._create_cell(y, x, self.cell_height, self.cell_width, field_number)
+                self.cells[(y, x)] = cell
 
-        for begin_y in begin_ys:
-            for begin_x in begin_xs:
-                box = self.game_area.box.subwin(lines, cols, begin_y, begin_x)
-                box.border()
-                self.fields[curr_box_num] = box
+                x += self.cell_width
+                field_number += 1
 
-                curr_box_num += 1
+            y += self.cell_height
+            x = begin_x
 
-    def start_new_game(self):
+    def _setup_game_field(self):
         self.hide_cursor()
-
         self._draw_game_field()
+
         self._setup_side_menu()
         self.show_game_status()
-        self._fill_field(self.fields[self.position],
-                         self.get_color_by_name('white_text_green_bg'))
+
+    def start_new_game(self):
+        self._setup_game_field()
+        self.current_cell.select()
 
         while True:
             key = self.window.getch()
@@ -54,14 +95,12 @@ class TicTacToeGame(GameEngine):
             if key == KEYS['escape']:
                 endwin()
                 return
-
-            if key in DIRECTIONS:
-                offset = DIRECTIONS[key]
-                self._slide_field(*offset)
+            elif key in DIRECTIONS:
+                self._slide_field(key)
             elif key in KEYS['enter']:
-                is_move_taken = self._user_move()
-                if is_move_taken and self.game_status == 'game_is_on':
-                    sleep(0.5)
+                if self.current_cell.is_free():
+                    self._user_move()
+                if self.game_status == 'game_is_on':
                     self._computer_move()
 
             if self.game_status != 'game_is_on':
@@ -75,99 +114,77 @@ class TicTacToeGame(GameEngine):
                     self.start_new_game()
                 return
 
+    def _slide_field(self, key):
+        base_y_offset, base_x_offset = DIRECTIONS[key]
+
+        y, x = self.current_coordinates
+
+        y_offset = base_y_offset * self.cell_height
+        x_offset = base_x_offset * self.cell_width
+
+        new_coordinates = (y + y_offset, x + x_offset)
+
+        if new_coordinates in self.cells.keys():
+            self.current_cell.unselect()
+
+            self.current_coordinates = new_coordinates
+            self.current_cell.select()
+
     def _user_move(self):
-        if self.position not in self.moves:
-            self.moves.append(self.position)
-            self.user_moves.append(self.position)
-            self._fill_field(self.fields[self.position],
-                             self.get_color_by_name('black_text_deep_pink_bg'))
+        if self.current_cell.is_free():
+            self.current_cell.owner = 'user'
+            self.user_moves.append(self.current_cell.field_number)
             self._set_game_status()
-            return True
-        return False
 
     def _computer_move(self):
-        chosen_field = None
-
-        while chosen_field is None:
-            move = randint(1, 9)
-            if move not in self.moves:
-                move = self._get_best_move(move)
-                self.moves.append(move)
-                self.computer_moves.append(move)
-                chosen_field = move
-
-        self._fill_field(self.fields[chosen_field],
-                         self.get_color_by_name('black_text_pastel_dirty_blue_bg'))
+        sleep(0.3)
+        cell = self._get_best_move()
+        cell.owner = 'computer'
+        self.computer_moves.append(cell.field_number)
         self._set_game_status()
 
-    def _get_best_move(self, curr_move):
-        for x, y, z in WINNING_COMBINATIONS:
-            if x in self.computer_moves and y in self.computer_moves and z not in self.moves:
-                return z
-            if x in self.computer_moves and z in self.computer_moves and y not in self.moves:
-                return y
-            if y in self.computer_moves and z in self.computer_moves and x not in self.moves:
-                return x
+    def _get_best_move(self):
+        cells_by_number = {cell.field_number: cell for cell in self.cells.values()}
 
-        for x, y, z in WINNING_COMBINATIONS:
-            if x in self.user_moves and y in self.user_moves and z not in self.moves:
-                return z
-            if x in self.user_moves and z in self.user_moves and y not in self.moves:
-                return y
-            if y in self.user_moves and z in self.user_moves and x not in self.moves:
-                return x
+        for best_move_pattern_by_owners in BEST_MOVE_PATTERNS_BY_OWNERS:
+            for pattern in WINNING_PATTERNS:
+                pattern_cells = [cells_by_number[num] for num in pattern]
+                pattern_owners = [cell.owner for cell in pattern_cells]
 
-        return curr_move
+                if sorted(pattern_owners) == sorted(best_move_pattern_by_owners):
+                    best_move = [cell for cell in pattern_cells if cell.is_free()]
+                    return best_move[0]
+
+        random_move = self.get_random_empty_cell()
+        return random_move
+
+    def get_random_empty_cell(self):
+        empty_cells = [cell for cell in self.cells.values() if cell.is_free()]
+        random_cell = choice(empty_cells)
+
+        return random_cell
 
     def _check_to_win(self, player):
         player_moves = self.user_moves if player == 'user' else self.computer_moves
-        for winning_moves in WINNING_COMBINATIONS:
-            is_win = all(map(lambda move: move in player_moves, winning_moves))
+
+        for winning_pattern in WINNING_PATTERNS:
+            is_win = all(map(lambda cell_number: cell_number in player_moves, winning_pattern))
             if is_win:
                 return True
         return False
+
+    def _is_all_cells_occupied(self):
+        for cell in self.cells.values():
+            if cell.is_free():
+                return False
+        return True
 
     def _set_game_status(self):
         if self._check_to_win('user'):
             self.game_status = 'user_win'
         elif self._check_to_win('computer'):
             self.game_status = 'user_lose'
-        elif len(self.moves) == 9:
+        elif self._is_all_cells_occupied():
             self.game_status = 'tie'
         else:
             self.game_status = 'game_is_on'
-
-    def _slide_field(self, r, c):
-        cols, rows = 3, 3
-        row, col = self.coords
-        new_row = r + row
-        new_col = c + col
-
-        if (0 <= new_row < rows) and (0 <= new_col < cols):
-            self.coords = (new_row, new_col)
-            self._reset_field_color(self.position)
-
-            self.position = FIELD[new_row][new_col]
-            self._fill_field(self.fields[self.position],
-                             self.get_color_by_name('white_text_green_bg'))
-
-    @staticmethod
-    def _fill_field(field, color):
-        h, w = field.getmaxyx()
-
-        for y in range(1, h - 1):
-            for x in range(1, w - 1):
-                field.addstr(y, x, ' ', color)
-
-        field.refresh()
-
-    def _reset_field_color(self, position):
-        color = self.default_color
-
-        if position in self.user_moves:
-            color = self.get_color_by_name('black_text_deep_pink_bg')
-        elif position in self.computer_moves:
-            color = self.get_color_by_name('black_text_pastel_dirty_blue_bg')
-
-        field = self.fields[self.position]
-        self._fill_field(field, color)
