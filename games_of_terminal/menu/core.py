@@ -1,6 +1,8 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS
-from games_of_terminal.menu.constants import GAMES, GOODBYE_MESSAGES
+from games_of_terminal.menu.constants import (
+    GAMES, CREATOR_NAME, GOODBYE_MESSAGES
+)
 
 from curses import A_STANDOUT as REVERSE_COLORS
 
@@ -28,7 +30,8 @@ class Menu(InterfaceManager):
             elif key == KEYS['up_arrow']:
                 self.current_row -= 1 if self.current_row > 0 else 0
             elif key == KEYS['down_arrow']:
-                self.current_row += 1 if self.current_row < self.menu_length - 1 else 0
+                is_end_of_menu = self.current_row >= self.menu_length - 1
+                self.current_row += 1 if not is_end_of_menu else 0
             elif key in KEYS['enter']:
                 chosen_game = GAMES[self.current_row]['game']
                 new_game = chosen_game(self.canvas)
@@ -40,17 +43,26 @@ class Menu(InterfaceManager):
     def _show_menu(self):
         self.window.clear()
 
-        for row, item in enumerate(GAMES.values()):
-            game_name = item['name']
-            x = self.width // 2 - len(game_name) // 2
-            y = self.height // 2 - self.menu_length // 2 + row
+        for row, game in enumerate(GAMES.values()):
+            game_name = game['name']
+            x = (self.width // 2) - (len(game_name) // 2)
+            y = (self.height // 2) - (self.menu_length // 2) + row
 
             if row == self.current_row:
-                self.window.addstr(y, x, game_name, self.default_color + REVERSE_COLORS)
+                self.draw_message(y, x, self.window, game_name,
+                                  self.default_color + REVERSE_COLORS)
             else:
-                self.window.addstr(y, x, game_name, self.default_color)
+                self.draw_message(y, x, self.window, game_name,
+                                  self.default_color)
 
-        self.window.refresh()
+        self._draw_creator_name()
+
+    def _draw_creator_name(self):
+        color = self.get_color_by_name('dark_grey_text_black_bg')
+        y = self.height - 2
+        x = (self.width // 2) - (len(CREATOR_NAME) // 2)
+
+        self.draw_message(y, x, self.window, CREATOR_NAME, color)
 
     def _exit(self):
         self.window.clear()
@@ -60,8 +72,8 @@ class Menu(InterfaceManager):
 
     def _draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)
-
         begin_y = self.height // 2
-        begin_x = (self.width // 2) - len(goodbye_message) // 2
+        begin_x = (self.width // 2) - (len(goodbye_message) // 2)
 
-        self.draw_message(begin_y, begin_x, self.window, goodbye_message, self.default_color)
+        self.draw_message(begin_y, begin_x, self.window,
+                          goodbye_message, self.default_color)

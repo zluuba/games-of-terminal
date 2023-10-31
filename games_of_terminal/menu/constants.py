@@ -4,6 +4,8 @@ from games_of_terminal.games.tictactoe.core import TicTacToeGame
 from games_of_terminal.games.tetris.core import TetrisGame
 
 
+CREATOR_NAME = 'by zluuba'
+
 GAMES = {
     0: {'name': 'Snake', 'game': SnakeGame},
     1: {'name': 'Minesweeper', 'game': MinesweeperGame},
