@@ -4,6 +4,9 @@ from curses import (
     COLOR_RED, COLOR_YELLOW,
 )
 
+from random import choice
+from re import match
+
 
 class Colors:
     def __init__(self):
@@ -71,3 +74,11 @@ class Colors:
     def get_color_by_name(self, color_name):
         color_pair_number = self.color_mapping.get(color_name, 0)
         return color_pair(color_pair_number)
+
+    def get_random_colored_background_color(self):
+        colored_bg_names = list(filter(
+            lambda color: match(r".*(?<!black_bg)$", color),
+            list(self.color_mapping)
+        ))
+        random_color_name = choice(colored_bg_names)
+        return self.get_color_by_name(random_color_name)
