@@ -79,6 +79,10 @@ class InterfaceManager(Colors):
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
+    def resize_window(self):
+        self.window.clear()
+        self._setup()
+
     def _set_window_sizes(self):
         begin_x = begin_y = 0
         side_menu_width = len(LOGO[0]) + (DEFAULT_OFFSET * 2)
