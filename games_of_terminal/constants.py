@@ -1,4 +1,7 @@
-from curses import KEY_ENTER, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_EXIT
+from curses import (
+    KEY_ENTER, KEY_UP, KEY_DOWN,
+    KEY_LEFT, KEY_RIGHT, KEY_RESIZE,
+)
 
 
 APP_NAME = 'Games Of Terminal'
@@ -34,6 +37,7 @@ KEYS = {
     'right_arrow': KEY_RIGHT,
     'q': ord('q'),
     'pause': ord('p'),
+    'resize': KEY_RESIZE,
     'w': ord('w'),
     's': ord('s'),
     'a': ord('a'),
