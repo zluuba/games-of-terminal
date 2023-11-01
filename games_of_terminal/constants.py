@@ -1,4 +1,4 @@
-from curses import KEY_ENTER, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
+from curses import KEY_ENTER, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_EXIT
 
 
 APP_NAME = 'Games Of Terminal'
@@ -10,6 +10,10 @@ LOGO = [
     '##   ##  ##  ##    ##  ',
     ' #####    ####     ##  ',
 ]
+
+DEFAULT_Y_OFFSET = 1
+DEFAULT_OFFSET = 2
+STATUS_BOX_SIZE = 3
 
 MESSAGES = {
     'game_over': 'GAME OVER',
@@ -30,10 +34,10 @@ KEYS = {
     'right_arrow': KEY_RIGHT,
     'q': ord('q'),
     'pause': ord('p'),
-    # 'w': ord('w'),
-    # 's': ord('s'),
-    # 'a': ord('a'),
-    # 'd': ord('d'),
+    'w': ord('w'),
+    's': ord('s'),
+    'a': ord('a'),
+    'd': ord('d'),
 }
 
 GAME_STATUSES = {
@@ -47,5 +51,5 @@ SIDE_MENU_TIPS = {
     'Move': '← ↓ ↑ → (wasd)',
     'Restart': 'r',
     'Tips/rules': 't',
-    'Quit': 'q',
+    'Quit': 'esc',
 }

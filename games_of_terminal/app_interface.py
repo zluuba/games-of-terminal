@@ -1,8 +1,9 @@
 from games_of_terminal.colors import Colors
-from games_of_terminal.field import Field
 from games_of_terminal.constants import (
-    LOGO, APP_NAME, SIDE_MENU_TIPS,
+    LOGO, APP_NAME, SIDE_MENU_TIPS, STATUS_BOX_SIZE,
+    DEFAULT_OFFSET, DEFAULT_Y_OFFSET,
 )
+from games_of_terminal.field import Field
 
 from curses import newwin, curs_set
 
@@ -15,9 +16,7 @@ class InterfaceManager(Colors):
         self._setup()
 
     def _setup(self):
-        self.hide_cursor()
         self.canvas.bkgd(' ', self.default_color)
-
         self.height, self.width = self.canvas.getmaxyx()
 
         self._set_window_sizes()
@@ -34,6 +33,7 @@ class InterfaceManager(Colors):
     def _init_subwindows(self):
         self.game_area = Field(self.window, *self.game_box_sizes.values())
         self.side_menu = Field(self.window, *self.side_menu_box_sizes.values())
+
         self.tips_area = Field(self.side_menu.box, *self.tips_box_sizes.values())
         self.logo_area = Field(self.side_menu.box, *self.logo_box_sizes.values())
         self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
@@ -80,44 +80,42 @@ class InterfaceManager(Colors):
         self.window.timeout(-1)
 
     def _set_window_sizes(self):
+        begin_x = begin_y = 0
+        side_menu_width = len(LOGO[0]) + (DEFAULT_OFFSET * 2)
+
         self.window_box_sizes = {
             'lines': self.height,
             'cols': self.width,
-            'begin_y': 0,
-            'begin_x': 0,
+            'begin_y': begin_y,
+            'begin_x': begin_x,
         }
-
         self.game_box_sizes = {
-            'lines': self.height - 2,
-            'cols': self.width - 27,
-            'begin_y': 1,
-            'begin_x': 0,
+            'lines': self.height - DEFAULT_OFFSET,
+            'cols': self.width - side_menu_width,
+            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_x': begin_x,
         }
-
         self.side_menu_box_sizes = {
-            'lines': self.height - 2,
-            'cols': 27,
-            'begin_y': 1,
-            'begin_x': self.width - 27,
+            'lines': self.height - DEFAULT_OFFSET,
+            'cols': side_menu_width,
+            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_x': self.width - side_menu_width,
         }
-
         self.logo_box_sizes = {
-            'lines': 7,
-            'cols': 27,
-            'begin_y': 1,
-            'begin_x': self.width - 27,
+            'lines': len(LOGO) + DEFAULT_OFFSET,
+            'cols': side_menu_width,
+            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_x': self.width - side_menu_width,
         }
-
         self.status_box_sizes = {
-            'lines': 5,
-            'cols': 27,
-            'begin_y': self.height - 6,
-            'begin_x': self.width - 27,
+            'lines': STATUS_BOX_SIZE + DEFAULT_OFFSET,
+            'cols': side_menu_width,
+            'begin_y': self.height - (STATUS_BOX_SIZE + DEFAULT_OFFSET + DEFAULT_Y_OFFSET),
+            'begin_x': self.width - side_menu_width,
         }
-
         self.tips_box_sizes = {
             'lines': self.height - self.logo_box_sizes['lines'] - self.status_box_sizes['lines'],
-            'cols': 27,
+            'cols': side_menu_width,
             'begin_y': self.logo_box_sizes['begin_y'] + self.logo_box_sizes['lines'] - 1,
-            'begin_x': self.width - 27,
+            'begin_x': self.width - side_menu_width,
         }

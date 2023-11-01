@@ -48,16 +48,17 @@ class GameEngine(InterfaceManager):
         self.draw_message(y, x, self.game_area.box, message, color)
 
     def show_game_status(self, y=1, x=1):
-        message = GAME_STATUSES[self.game_status]['text']
         color_name = GAME_STATUSES[self.game_status]['color']
         color = self.get_color_by_name(color_name)
 
         empty_line = ' ' * (self.game_status_area.width - 2)
 
-        for offset in range(3):
+        for offset in range(self.game_status_area.height - 2):
             new_y = y + offset
+            # fill game_status field background, excluding borders
             self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
 
+        message = GAME_STATUSES[self.game_status]['text']
         middle_x = (self.game_status_area.width // 2) - len(message) // 2
         self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
 
