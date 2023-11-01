@@ -95,18 +95,17 @@ class TicTacToeGame(GameEngine):
             if key == KEYS['escape']:
                 endwin()
                 return
-            elif key in DIRECTIONS:
+
+            if key in DIRECTIONS:
                 self._slide_field(key)
             elif key in KEYS['enter']:
                 if self.current_cell.is_free():
                     self._user_move()
-                if self.game_status == 'game_is_on':
                     self._computer_move()
 
             if self.game_status != 'game_is_on':
-                flash()
-
                 self.show_game_status()
+                flash()
                 sleep(1)
 
                 if self._is_restart():
@@ -131,17 +130,17 @@ class TicTacToeGame(GameEngine):
             self.current_cell.select()
 
     def _user_move(self):
-        if self.current_cell.is_free():
-            self.current_cell.owner = 'user'
-            self.user_moves.append(self.current_cell.field_number)
-            self._set_game_status()
+        self.current_cell.owner = 'user'
+        self.user_moves.append(self.current_cell.field_number)
+        self._set_game_status()
 
     def _computer_move(self):
-        sleep(0.3)
-        cell = self._get_best_move()
-        cell.owner = 'computer'
-        self.computer_moves.append(cell.field_number)
-        self._set_game_status()
+        if self.game_status == 'game_is_on':
+            sleep(0.3)
+            cell = self._get_best_move()
+            cell.owner = 'computer'
+            self.computer_moves.append(cell.field_number)
+            self._set_game_status()
 
     def _get_best_move(self):
         cells_by_number = {cell.field_number: cell for cell in self.cells.values()}
