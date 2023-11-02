@@ -6,9 +6,6 @@ class TicTacToeCell(BaseCell):
     def __init__(self, field_box, coordinates):
         super().__init__(field_box, coordinates)
 
-        self.field_box = field_box
-        self.coordinates = coordinates
-
         self.state = {
             'owner': 'free',            # free, user, computer
             'field_number': 0,
