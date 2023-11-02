@@ -98,6 +98,12 @@ DIRECTIONS = {
     KEY_DOWN: 'down',
 }
 
+OFFSETS = {
+    'left': (0, -1),
+    'right': (0, 1),
+    'down': (1, 0),
+}
+
 FLIP_BLOCK = KEY_UP
 DOWN = KEY_DOWN
 
