@@ -110,3 +110,15 @@ DOWN = KEY_DOWN
 # little square size
 CELL_HEIGHT = 1
 CELL_WIDTH = 2
+
+BLOCK_COLORS = {
+    'free': 'white_text_black_bg',
+    'placed_block': 'black_text_pastel_dirty_blue_bg',
+    'I-block': 'white_text_pastel_blue_bg',
+    'J-block': 'white_text_green_bg',
+    'L-block': 'white_text_deep_blue_bg',
+    'O-block': 'white_text_pink_bg',
+    'Z-block': 'white_text_yellow_bg',
+    'T-block': 'black_text_deep_pink_bg',
+    'S-block': 'white_text_light_purple_bg',
+}
