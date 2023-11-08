@@ -1,70 +1,80 @@
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, OFFSETS, CELL_HEIGHT, CELL_WIDTH,
+    BLOCK_COLORS,
 )
+from games_of_terminal.colors import Colors
+from copy import deepcopy
 
 
-class TetrisBlock:
-    def __init__(self, name):
+class TetrisBlock(Colors):
+    def __init__(self, name, game_area):
+        super().__init__()
+
         self.name = name
-        self.blueprint = BLOCKS[name]
+
+        color_name = BLOCK_COLORS[name]
+        self.color = self.get_color_by_name(color_name)
+
+        self.blueprint = deepcopy(BLOCKS[name])
 
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
 
-        self.cells = []
         self.coordinates = None
+        self.game_area = game_area
 
-    def add_cell(self, r, c, cell, owner='free'):
-        self.blueprint[r][c] = cell
-        cell.owner = owner
+    def draw(self, color=None):
+        if color is None:
+            color = self.color
 
-    def show(self):
-        for row in range(self.height):
-            for col in range(self.width):
-                cell = self.blueprint[row][col]
-                cell.colorize()
+        begin_y, begin_x = self.coordinates
 
-    def hide_cell(self, cell):
-        cell.set_free()
-        cell.colorize()
+        for row in range(0, (self.height * CELL_HEIGHT), CELL_HEIGHT):
+            for col in range(0, (self.width * CELL_WIDTH), CELL_WIDTH):
+                y = begin_y + row
+                x = begin_x + col
 
-    def move(self, direction, field_cells):
+                if self.blueprint[row // CELL_HEIGHT][col // CELL_WIDTH]:
+                    self.draw_cell(y, x, color)
+
+    def draw_cell(self, y, x, color):
+        self.game_area.box.addstr(y, x, '  ', color)
+        self.game_area.box.refresh()
+
+    def move(self, direction):
         y_offset, x_offset = OFFSETS[direction]
+        y_offset *= CELL_HEIGHT
+        x_offset *= CELL_WIDTH
 
-        if self._is_out_of_bounds(y_offset, x_offset, field_cells):
+        if self._is_out_of_walls(x_offset):
             return
 
-        for row in range(self.height):
-            for col in range(self.width):
-                cell = self.blueprint[row][col]
+        # hide current block
+        self.draw(self.default_color)
 
-                y, x = cell.coordinates
-                new_y = y + (y_offset * CELL_HEIGHT)
-                new_x = x + (x_offset * CELL_WIDTH)
+        begin_y, begin_x = self.coordinates
 
-                new_cell = field_cells[(new_y, new_x)]
-                self.blueprint[row][col] = new_cell
+        self.coordinates = (begin_y + y_offset, begin_x + x_offset)
+        self.draw()
 
-                if not cell.is_free():
-                    new_cell.owner = self.name
-                    cell.set_free()
-                    cell.colorize()
+    def _is_out_of_walls(self, x_offset):
+        _, begin_x = self.coordinates
+        begin_x += x_offset
+        end_x = begin_x + (self.width * CELL_WIDTH)
 
-        self.show()
+        if begin_x <= self.game_area.left_border:
+            return True
+        if end_x >= self.game_area.right_border:
+            return True
 
-    def _is_out_of_bounds(self, y_offset, x_offset, field_cells):
-        for row in range(self.height):
-            for col in range(self.width):
-                cell = self.blueprint[row][col]
-
-                y, x = cell.coordinates
-                new_y = y + (y_offset * CELL_HEIGHT)
-                new_x = x + (x_offset * CELL_WIDTH)
-
-                if (new_y, new_x) not in field_cells:
-                    return True
         return False
 
     def flip(self):
-        # self.blueprint = list(zip(*self.blueprint[::-1]))
-        pass
+        # hide current block
+        self.draw(self.default_color)
+
+        self.blueprint = list(zip(*self.blueprint[::-1]))
+        self.height = len(self.blueprint)
+        self.width = len(self.blueprint[0])
+
+        self.draw()
