@@ -67,6 +67,7 @@ Esc - exit
 
 #### Interface features:
 - [ ] Menu animations
+- [ ] Ability to hide the side menu
 - [ ] Minimum window size requirements ("too little window for games" handle)
 
 #### Global features:
