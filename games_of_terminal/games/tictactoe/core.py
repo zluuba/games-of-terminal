@@ -21,6 +21,35 @@ class TicTacToeGame(GameEngine):
         self.user_moves = []
         self.computer_moves = []
 
+    def start_new_game(self):
+        self._setup_game_field()
+        self.current_cell.select()
+
+        while True:
+            key = self.window.getch()
+            self.wait_for_keypress()
+
+            if key == KEYS['escape']:
+                endwin()
+                return
+
+            if key in DIRECTIONS:
+                self._slide_field(key)
+            elif key in KEYS['enter']:
+                if self.current_cell.is_free():
+                    self._user_move()
+                    self._computer_move()
+
+            if self.game_status != 'game_is_on':
+                self.show_game_status()
+                flash()
+                sleep(1)
+
+                if self._is_restart():
+                    self.__init__(self.canvas)
+                    self.start_new_game()
+                return
+
     @property
     def current_cell(self):
         return self.cells[self.current_coordinates]
@@ -81,37 +110,8 @@ class TicTacToeGame(GameEngine):
         self.hide_cursor()
         self._draw_game_field()
 
-        self._setup_side_menu()
+        self.setup_side_menu()
         self.show_game_status()
-
-    def start_new_game(self):
-        self._setup_game_field()
-        self.current_cell.select()
-
-        while True:
-            key = self.window.getch()
-            self.wait_for_keypress()
-
-            if key == KEYS['escape']:
-                endwin()
-                return
-
-            if key in DIRECTIONS:
-                self._slide_field(key)
-            elif key in KEYS['enter']:
-                if self.current_cell.is_free():
-                    self._user_move()
-                    self._computer_move()
-
-            if self.game_status != 'game_is_on':
-                self.show_game_status()
-                flash()
-                sleep(1)
-
-                if self._is_restart():
-                    self.__init__(self.canvas)
-                    self.start_new_game()
-                return
 
     def _slide_field(self, key):
         base_y_offset, base_x_offset = DIRECTIONS[key]

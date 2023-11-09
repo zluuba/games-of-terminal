@@ -15,14 +15,6 @@ class MinesweeperGame(GameEngine):
         self.cells = dict()
         self.flags = 0
 
-    @property
-    def current_cell(self):
-        return self.cells[self.current_coordinates]
-
-    @property
-    def tips(self):
-        return {'flags': self.flags}
-
     def start_new_game(self):
         self._setup_game_field()
         self.current_cell.select()
@@ -60,15 +52,24 @@ class MinesweeperGame(GameEngine):
                     self.start_new_game()
                 return
 
+    @property
+    def current_cell(self):
+        return self.cells[self.current_coordinates]
+
+    @property
+    def tips(self):
+        return {'flags': self.flags}
+
     def _setup_game_field(self):
         self.hide_cursor()
+
         self._draw_game_field()
         self._plant_bombs()
         self._set_bombs_around_counter()
         self._open_first_empty_cell()
-        self.show_game_status()
 
-        self._setup_side_menu()
+        self.show_game_status()
+        self.setup_side_menu()
         self.draw_game_tips(self.tips)
 
     def _draw_game_field(self):

@@ -26,42 +26,8 @@ class SnakeGame(GameEngine):
             [self.game_area.height // 2, self.game_area.width // 2 - 1]
         ]
 
-        # initial direction of the snake's movement:
-        # by default it crawls to the right
+        # initial direction of the snake's movement
         self.direction = KEYS['right_arrow']
-
-    @property
-    def best_score(self):
-        return get_best_score()
-
-    @property
-    def tips(self):
-        return {
-            'Score': self.score,
-            'Best Score': self.best_score,
-        }
-
-    def _get_food_coords(self):
-        food = [randint(self.game_area.top_border + 1, self.game_area.bottom_border - 1),
-                randint(self.game_area.left_border + 1, self.game_area.right_border - 1)]
-
-        if food in self.snake:
-            return self._get_food_coords()
-        return food
-
-    def _put_food_on_the_field(self):
-        self.food = self._get_food_coords()
-        self.game_area.box.addstr(*self.food, FOOD_SKIN)
-
-    def _setup_game_field(self):
-        self.hide_cursor()
-        self.window.nodelay(1)
-        self.window.timeout(150)
-
-        self._put_food_on_the_field()
-
-        self._setup_side_menu()
-        self.show_game_status()
 
     def start_new_game(self):
         self._setup_game_field()
@@ -94,6 +60,39 @@ class SnakeGame(GameEngine):
 
             self.game_area.box.refresh()
             self.window.refresh()
+
+    @property
+    def best_score(self):
+        return get_best_score()
+
+    @property
+    def tips(self):
+        return {
+            'Score': self.score,
+            'Best Score': self.best_score,
+        }
+
+    def _get_food_coords(self):
+        food = [randint(self.game_area.top_border + 1, self.game_area.bottom_border - 1),
+                randint(self.game_area.left_border + 1, self.game_area.right_border - 1)]
+
+        if food in self.snake:
+            return self._get_food_coords()
+        return food
+
+    def _put_food_on_the_field(self):
+        self.food = self._get_food_coords()
+        self.game_area.box.addstr(*self.food, FOOD_SKIN)
+
+    def _setup_game_field(self):
+        self.hide_cursor()
+        self.window.nodelay(1)
+        self.window.timeout(150)
+
+        self._put_food_on_the_field()
+
+        self.setup_side_menu()
+        self.show_game_status()
 
     def _change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]

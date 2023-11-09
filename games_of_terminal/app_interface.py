@@ -38,7 +38,7 @@ class InterfaceManager(Colors):
         self.logo_area = Field(self.side_menu.box, *self.logo_box_sizes.values())
         self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
 
-    def _setup_side_menu(self):
+    def setup_side_menu(self):
         self._draw_logo()
         self.draw_side_menu_tips()
 
