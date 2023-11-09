@@ -18,5 +18,3 @@ BEST_MOVE_PATTERNS_BY_OWNERS = (
     ('computer', 'computer', 'free'),
     ('user', 'user', 'free'),
 )
-
-CHECK_WIN_POSITIONS = [0, 4, 8]

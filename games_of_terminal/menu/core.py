@@ -28,7 +28,7 @@ class Menu(InterfaceManager):
             if key == KEYS['escape']:
                 self._exit()
             if key == KEYS['resize']:
-                self.resize_window()
+                self.redraw_window()
 
             if key == KEYS['up_arrow']:
                 self.current_row -= 1 if self.current_row > 0 else 0

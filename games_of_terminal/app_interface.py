@@ -1,6 +1,6 @@
 from games_of_terminal.colors import Colors
 from games_of_terminal.constants import (
-    LOGO, APP_NAME, SIDE_MENU_TIPS, STATUS_BOX_SIZE,
+    LOGO, APP_NAME, SIDE_MENU_TIPS, STATUS_BOX_HEIGHT,
     DEFAULT_OFFSET, DEFAULT_Y_OFFSET,
 )
 from games_of_terminal.field import Field
@@ -79,7 +79,7 @@ class InterfaceManager(Colors):
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
-    def resize_window(self):
+    def redraw_window(self):
         self.window.clear()
         self._setup()
 
@@ -112,9 +112,9 @@ class InterfaceManager(Colors):
             'begin_x': self.width - side_menu_width,
         }
         self.status_box_sizes = {
-            'lines': STATUS_BOX_SIZE + DEFAULT_OFFSET,
+            'lines': STATUS_BOX_HEIGHT + DEFAULT_OFFSET,
             'cols': side_menu_width,
-            'begin_y': self.height - (STATUS_BOX_SIZE + DEFAULT_OFFSET + DEFAULT_Y_OFFSET),
+            'begin_y': self.height - (STATUS_BOX_HEIGHT + DEFAULT_OFFSET + DEFAULT_Y_OFFSET),
             'begin_x': self.width - side_menu_width,
         }
         self.tips_box_sizes = {
