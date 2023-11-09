@@ -1,4 +1,5 @@
-from games_of_terminal.constants import KEYS
+from games_of_terminal.field import Field
+from games_of_terminal.constants import KEYS, DEFAULT_OFFSET
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
@@ -26,8 +27,8 @@ class TetrisGame(GameEngine):
         self.time = time()
 
     def start_new_game(self):
-        self._setup_game_field()
-        self.add_new_block_on_field()
+        self._game_setup()
+        self.add_block_on_field()
 
         self.time = time()
 
@@ -49,26 +50,30 @@ class TetrisGame(GameEngine):
             if self.is_block_on_floor():
                 self.board.land_block(self.block)
                 self.board.draw()
-                self.add_new_block_on_field()
+                self.add_block_on_field()
 
-    def _setup_game_field(self):
+    def _game_setup(self):
         self.hide_cursor()
         self.window.nodelay(1)
 
-        self._setup_side_menu()
+        self.setup_side_menu()
         self.show_game_status()
 
+        self._setup_game_window()
+
+    def _setup_game_window(self):
         self.board = TetrisBoard(self.game_area)
 
-    def add_new_block_on_field(self):
+        # TODO: add next_block_area
+
+    def add_block_on_field(self):
         block_shape_name = choice(list(BLOCKS))
-        self.block = TetrisBlock(block_shape_name, self.game_area)
 
-        y = self.game_area.begin_y + 1
-        x = (self.game_area.width - 2) // 2 - self.block.width // 2
+        y = self.game_area.begin_y
+        x = (self.game_area.width - DEFAULT_OFFSET) // 2
 
-        self.block.coordinates = (y, x)
-        self.block.draw()
+        self.block = TetrisBlock(block_shape_name, y, x, self.board, self.game_area)
+        self.block.draw(self.block.color)
 
     def _block_auto_move(self):
         current_time = time()
@@ -78,7 +83,8 @@ class TetrisGame(GameEngine):
             self.time = current_time
 
     def is_block_on_floor(self):
-        begin_y, begin_x = self.block.coordinates
+        begin_y = self.block.y
+        begin_x = self.block.x
 
         end_y = begin_y + (self.block.height * CELL_HEIGHT)
         end_x = begin_x + (self.block.width * CELL_WIDTH)
@@ -90,10 +96,8 @@ class TetrisGame(GameEngine):
                 blueprint_cell = self.block.blueprint[blueprint_y][blueprint_x]
 
                 if blueprint_cell:
-                    end_y = y + CELL_HEIGHT
-                    end_x = x + CELL_WIDTH
-                    if (end_y, end_x) in self.board.box and self.board.box[(end_y, end_x)] == 'placed_block':
+                    if (y + 1, x) in self.board.box and self.board.box[(y + 1, x)] == 'placed_block':
                         return True
-                    if end_y >= self.game_area.bottom_border:
+                    if y + 1 >= self.game_area.bottom_border:
                         return True
         return False

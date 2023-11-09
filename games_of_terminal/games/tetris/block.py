@@ -7,10 +7,14 @@ from copy import deepcopy
 
 
 class TetrisBlock(Colors):
-    def __init__(self, name, game_area):
+    def __init__(self, name, y, x, board, game_area):
         super().__init__()
 
+        self.y = y
+        self.x = x
         self.name = name
+        self.board = board
+        self.game_area = game_area
 
         color_name = BLOCK_COLORS[name]
         self.color = self.get_color_by_name(color_name)
@@ -20,22 +24,18 @@ class TetrisBlock(Colors):
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
 
-        self.coordinates = None
-        self.game_area = game_area
-
-    def draw(self, color=None):
-        if color is None:
-            color = self.color
-
-        begin_y, begin_x = self.coordinates
-
+    def draw(self, color):
         for row in range(0, (self.height * CELL_HEIGHT), CELL_HEIGHT):
             for col in range(0, (self.width * CELL_WIDTH), CELL_WIDTH):
-                y = begin_y + row
-                x = begin_x + col
+                y = self.y + row
+                x = self.x + col
 
                 if self.blueprint[row // CELL_HEIGHT][col // CELL_WIDTH]:
                     self.draw_cell(y, x, color)
+
+    def hide(self):
+        background_color = self.default_color
+        self.draw(background_color)
 
     def draw_cell(self, y, x, color):
         self.game_area.box.addstr(y, x, '  ', color)
@@ -48,18 +48,17 @@ class TetrisBlock(Colors):
 
         if self._is_out_of_walls(x_offset):
             return
+        if self._is_there_another_blocks(x_offset):
+            return
 
-        # hide current block
-        self.draw(self.default_color)
+        self.hide()
 
-        begin_y, begin_x = self.coordinates
-
-        self.coordinates = (begin_y + y_offset, begin_x + x_offset)
-        self.draw()
+        self.y += y_offset
+        self.x += x_offset
+        self.draw(self.color)
 
     def _is_out_of_walls(self, x_offset):
-        _, begin_x = self.coordinates
-        begin_x += x_offset
+        begin_x = self.x + x_offset
         end_x = begin_x + (self.width * CELL_WIDTH)
 
         if begin_x <= self.game_area.left_border:
@@ -69,12 +68,28 @@ class TetrisBlock(Colors):
 
         return False
 
+    def _is_there_another_blocks(self, x_offset):
+        begin_y = self.y
+        begin_x = self.x + x_offset
+
+        end_y = begin_y + (self.height * CELL_HEIGHT)
+        end_x = begin_x + (self.width * CELL_WIDTH)
+
+        for y in range(begin_y, end_y, CELL_HEIGHT):
+            for x in range(begin_x, end_x, CELL_WIDTH):
+                blueprint_y = (y - begin_y) // CELL_HEIGHT
+                blueprint_x = (x - begin_x) // CELL_WIDTH
+                blueprint_cell = self.blueprint[blueprint_y][blueprint_x]
+
+                if blueprint_cell and self.board.box[(y, x)] != 'free':
+                    return True
+        return False
+
     def flip(self):
-        # hide current block
-        self.draw(self.default_color)
+        self.hide()
 
         self.blueprint = list(zip(*self.blueprint[::-1]))
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
 
-        self.draw()
+        self.draw(self.color)
