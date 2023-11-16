@@ -33,20 +33,20 @@ class TetrisBlock(Colors):
                 if self.blueprint[row // CELL_HEIGHT][col // CELL_WIDTH]:
                     self.draw_cell(y, x, color)
 
-    def hide(self):
-        background_color = self.default_color
-        self.draw(background_color)
-
     def draw_cell(self, y, x, color):
         self.game_area.box.addstr(y, x, '  ', color)
         self.game_area.box.refresh()
+
+    def hide(self):
+        background_color = self.default_color
+        self.draw(background_color)
 
     def move(self, direction):
         y_offset, x_offset = OFFSETS[direction]
         y_offset *= CELL_HEIGHT
         x_offset *= CELL_WIDTH
 
-        if self._is_out_of_walls(x_offset):
+        if self._is_out_of_borders(x_offset=x_offset):
             return
         if self._is_there_another_blocks(x_offset):
             return
@@ -57,16 +57,19 @@ class TetrisBlock(Colors):
         self.x += x_offset
         self.draw(self.color)
 
-    def _is_out_of_walls(self, x_offset):
-        begin_x = self.x + x_offset
-        end_x = begin_x + (self.width * CELL_WIDTH)
+    def flip(self):
+        new_blueprint = list(zip(*self.blueprint[::-1]))
 
-        if begin_x <= self.game_area.left_border:
-            return True
-        if end_x >= self.game_area.right_border:
-            return True
+        if self._is_out_of_borders(blueprint=new_blueprint):
+            return
 
-        return False
+        self.hide()
+
+        self.blueprint = new_blueprint
+        self.height = len(self.blueprint)
+        self.width = len(self.blueprint[0])
+
+        self.draw(self.color)
 
     def _is_there_another_blocks(self, x_offset):
         begin_y = self.y
@@ -85,11 +88,21 @@ class TetrisBlock(Colors):
                     return True
         return False
 
-    def flip(self):
-        self.hide()
+    def _is_out_of_borders(self, x_offset=0, blueprint=None):
+        if blueprint is None:
+            blueprint = self.blueprint
 
-        self.blueprint = list(zip(*self.blueprint[::-1]))
-        self.height = len(self.blueprint)
-        self.width = len(self.blueprint[0])
+        width = len(blueprint[0])
+        height = len(blueprint)
 
-        self.draw(self.color)
+        end_x = self.x + x_offset + (width * CELL_WIDTH)
+        end_y = self.y + (height * CELL_HEIGHT)
+
+        if self.x + x_offset <= self.game_area.left_border:
+            return True
+        if end_x >= self.game_area.right_border:
+            return True
+        if end_y >= self.game_area.bottom_border:
+            return True
+
+        return False
