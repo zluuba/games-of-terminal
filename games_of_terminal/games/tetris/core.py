@@ -1,4 +1,3 @@
-from games_of_terminal.field import Field
 from games_of_terminal.constants import KEYS, DEFAULT_OFFSET
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
@@ -6,11 +5,11 @@ from games_of_terminal.games.tetris.game_board import TetrisBoard
 
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, DIRECTIONS, FLIP_BLOCK,
-    CELL_WIDTH, CELL_HEIGHT,
+    CELL_WIDTH, CELL_HEIGHT, DOWN,
 )
 
 from curses import endwin
-from time import time
+from time import time, sleep
 from random import choice
 
 
@@ -48,9 +47,30 @@ class TetrisGame(GameEngine):
             self._block_auto_move()
 
             if self.is_block_on_floor():
-                self.board.land_block(self.block)
-                self.board.draw()
-                self.add_block_on_field()
+                self.land_current_block()
+
+    def land_current_block(self):
+        """ Give the ability move block if it touches the floor """
+
+        current_time = time()
+
+        while current_time - self.time < self.time_interval:
+            key = self.window.getch()
+
+            if key == FLIP_BLOCK:
+                self.block.flip()
+            elif key == DOWN:
+                break
+            elif key in DIRECTIONS:
+                direction = DIRECTIONS[key]
+                self.block.move(direction)
+
+            current_time = time()
+
+        self.time = current_time
+        self.board.land_block(self.block)
+        self.board.draw()
+        self.add_block_on_field()
 
     def _game_setup(self):
         self.hide_cursor()
