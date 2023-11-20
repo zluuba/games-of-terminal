@@ -105,6 +105,7 @@ OFFSETS = {
 }
 
 FLIP_BLOCK = KEY_UP
+DROP_BLOCK = ord(' ')
 DOWN = KEY_DOWN
 
 # little square size
