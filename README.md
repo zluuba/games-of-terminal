@@ -1,81 +1,116 @@
 # Games Of Terminal
-GOT some games for terminal: Tetris, 2048, Sea Battle, Minesweeper, Snake and Tic-tac-toe.
+GOT some games! <br>
+Games Of Terminal (or GOT) is a console app that brings classic games like Minesweeper, Tetris, Snake, 2048, and TicTacToe to your terminal. 
+With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience in your favourite environment - terminal.
 
 
 ## Requirements
 
-- [python](https://www.python.org/), version 3.9 or higher
-- [poetry](https://python-poetry.org/docs/#installation), version 1.2.0 or higher
+Make sure you have the following installed:
+
+- [Python](https://www.python.org/), version 3.9 or higher. You can download it [here](https://www.python.org/downloads/).
+- [Poetry](https://python-poetry.org/), version 1.2.0 or higher. Install it by following the instructions [here](https://python-poetry.org/docs/#installation).
 
 
 ## Installation
 
-Open terminal window.
-Clone this repo or download it with pip:
-```ch
-git clone https://github.com/zluuba/games-of-terminal.git
-```
-```ch
-pip install --user git+https://github.com/zluuba/games-of-terminal.git
-```
-
-Go to the downloaded dir and install dependencies:
-```ch
-cd games-of-terminal
-make install
-```
-
-Install games:
-```ch
-make build
-make package-install
-```
+1. Open a terminal window.
+2. Clone this repository or download it with pip:
+    ```bash
+    git clone https://github.com/zluuba/games-of-terminal.git
+    ```
+    ```bash
+    pip install --user git+https://github.com/zluuba/games-of-terminal.git
+    ```
+3. Navigate to the downloaded directory and install dependencies:
+    ```bash
+    cd games-of-terminal
+    make install
+    ```
+4. Install Games Of Terminal package:
+    ```bash
+    make build
+    make package-install
+    ```
 
 
 ## Usage
 
-Start the games with next command:
+To start the games, use the following command:
 ```ch
 got
 ```
 
-You will see the menu. <br/>
-Use ↓ and ↑ arrows for navigation (or WASD). Use **Enter** to start the game.
+Upon launching, you'll encounter the menu. <br>
+Navigate through the options using the ↓ and ↑ arrows (or WASD). <br>
+Press Enter to initiate the selected game.
 
-Keys for game control:
+Game Controls:
 ```ch
+Arrows (↓ and ↑) or WASD - control game
+
 P - pause/unpause
-R = restart the game
-T - show the rules and tips
+R - restart
+T - show/hide rules, tips, and settings
 M - open/close side menu
-
-S - showing settings
-F - feedback form/links
-
-Esc - exit
 ```
+To exit any window (menu, game, or settings), press Esc.
 
 
-## Following features
+## For Developers
 
-#### New Games:
-- [ ] 2048
-- [ ] Tetris
-- [ ] Sea Battle
-- [ ] Sudoku
-- [ ] Chess
+In this section, you'll find information about documentation, instructions for integrating your own games 
+into Games Of Terminal (GOT), details on how to contribute to the project, and bug reporting.
 
-#### Interface features:
-- [ ] Menu animations
-- [ ] Ability to hide the side menu
-- [ ] Minimum window size requirements ("too little window for games" handle)
+### Documentation
+To delve into the technical details and explore documentation, head over to [Documentation](link-to-your-documentation).
 
-#### Global features:
-- [ ] Add global and local settings
+### Implementing Your Own Game
+If you enjoy GOT, Python, and would like to create your own game with the GOT interface, 
+be sure to read this detailed [instruction on game implementation](link-to-game-implementing-instruction).
+
+### Contributing
+If you've implemented your own game and would like to share it with others or have ideas to improve this project, 
+I would be thrilled to welcome your contribution. <br>
+For all the details, please visit [this page](link-to-contributing).
+
+### Bug Reporting
+If you encounter any issues, discover a bug while using Games Of Terminal (GOT), 
+or have any ideas to improve, please help me enhance the project by reporting it. 
+Follow these steps:
+
+1. Check the [existing issues](link-to-issues) to see if your bug has already been reported.
+2. If the issue is not listed, create a new issue with the following details:
+   - A descriptive title.
+   - A clear and concise description of the bug.
+   - Steps to reproduce the bug.
+   - Any additional information that might be helpful.
+3. Please be responsive to any follow-up questions or requests for clarification.
+
+I appreciate your help in making GOT better!
+
+
+## Upcoming Features
+
+Here are some features I'm planning to implement in future releases:
+
+### New Games:
+- Sea Battle
+- Sudoku
+- Chess
+
+### Game Features:
+- Sea Battle with other humans using the Internet
+
+Feel free to suggest additional features or share your ideas!
 
 ## Demos
+
+Demonstrations of the GOT interface and how to play the games.
+
+*add GIFs or videos*
 
 
 ##
 
-**by [zluuba](https://github.com/zluuba)**
+**Games Of Terminal | by [zluuba](https://github.com/zluuba)**
