@@ -1,6 +1,6 @@
 # Games Of Terminal
 GOT some games! <br>
-Games Of Terminal (or GOT) is a console app that brings classic games like Minesweeper, Tetris, Snake, 2048, and TicTacToe to your terminal. 
+Games Of Terminal is a console-based gaming platform where classic games like Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
 With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience in your favourite environment - terminal.
 
 
