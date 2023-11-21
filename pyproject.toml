@@ -14,7 +14,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-got = "games_of_terminal.scripts.app:main"
+got-games = "games_of_terminal.scripts.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
