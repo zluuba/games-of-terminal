@@ -1,7 +1,9 @@
 # Games Of Terminal
 GOT some games! <br>
-Games Of Terminal is a console-based gaming platform where classic games like Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
-With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience in your favourite environment - terminal.
+Games Of Terminal (or GOT) is a console-based gaming platform where classic games like 
+Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
+With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience 
+in your favourite environment - terminal.
 
 *add a GIF showcasing the gameplay process.*
 
@@ -16,31 +18,33 @@ Make sure you have the following installed:
 
 ## Installation
 
-1. Open a terminal window.
-2. Clone this repository or download it with pip:
-    ```bash
-    git clone https://github.com/zluuba/games-of-terminal.git
-    ```
-    ```bash
-    pip install --user git+https://github.com/zluuba/games-of-terminal.git
-    ```
-3. Navigate to the downloaded directory and install dependencies:
-    ```bash
-    cd games-of-terminal
-    make install
-    ```
-4. Install Games Of Terminal package:
-    ```bash
-    make build
-    make package-install
-    ```
+Open a terminal window.
+Clone this repository or download it with pip:
+```bash
+git clone https://github.com/zluuba/games-of-terminal.git
+```
+```bash
+pip install --user git+https://github.com/zluuba/games-of-terminal.git
+```
+
+Navigate to the downloaded directory and install dependencies:
+```bash
+cd games-of-terminal
+make install
+```
+
+Install Games Of Terminal package:
+```bash
+make build
+make package-install
+```
 
 
 ## Usage
 
 To start the games, use the following command:
 ```ch
-got
+got-games
 ```
 
 Upon launching, you'll encounter the menu. <br>
@@ -57,6 +61,7 @@ T - show/hide rules, tips, and settings
 M - open/close side menu
 ```
 To exit any window (menu, game, or settings), press Esc.
+See demos [here](https://github.com/zluuba/games-of-terminal#demos).
 
 
 ## For Developers
@@ -65,23 +70,23 @@ In this section, you'll find information about documentation, instructions for i
 into Games Of Terminal (GOT), details on how to contribute to the project, and bug reporting.
 
 ### Documentation
-To delve into the technical details and explore documentation, head over to [Documentation](link-to-your-documentation).
+To delve into the technical details and explore documentation, head over to [Documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/developer-guide.md).
 
 ### Implementing Your Own Game
 If you enjoy GOT, Python, and would like to create your own game with the GOT interface, 
-be sure to read this detailed [instruction on game implementation](link-to-game-implementing-instruction).
+be sure to read this detailed [instruction on game implementation](https://github.com/zluuba/games-of-terminal/tree/main/docs/creating-your-own-game.md).
 
 ### Contributing
 If you've implemented your own game and would like to share it with others or have ideas to improve this project, 
 I would be thrilled to welcome your contribution. <br>
-For all the details, please visit [this page](link-to-contributing).
+For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing.md).
 
 ### Bug Reporting
 If you encounter any issues, discover a bug while using Games Of Terminal (GOT), 
 or have any ideas to improve, please help me enhance the project by reporting it. 
 Follow these steps:
 
-1. Check the [existing issues](link-to-issues) to see if your bug has already been reported.
+1. Check the [existing issues](https://github.com/zluuba/games-of-terminal/issues) to see if your bug has already been reported.
 2. If the issue is not listed, create a new issue with the following details:
    - A descriptive title.
    - A clear and concise description of the bug.
