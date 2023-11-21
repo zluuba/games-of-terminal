@@ -2,9 +2,9 @@
 .idea/
 .DS_Store
 
-# Local files
+# local files
 dist/
 .env
 
-# Upcoming Features (confidential)"
+# upcoming features (confidential)
 list_of_features.txt
