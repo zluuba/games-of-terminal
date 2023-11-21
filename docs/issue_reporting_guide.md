@@ -27,5 +27,5 @@ Follow these steps:
 
 
 ##
-*Thank you for contributing to the improvement of Games Of Terminal, your feedback is valuable and helps make GOT better. 
-Thanks for being part of this project!*
+
+**Your feedback is valuable and helps make GOT better. Thanks for being part of this project! 🚀**

@@ -47,4 +47,6 @@ If you encounter a bug or have a feature request, please [create an issue](https
 following the issue template.  
 
 
-### Thank you for your contribution! 🚀
+##
+
+**Thank you for your contribution! 🚀**
