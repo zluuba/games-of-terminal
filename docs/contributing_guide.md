@@ -30,7 +30,7 @@ Thank you for considering contributing to Games Of Terminal! Your help is greatl
    ```bash
    git push origin your-feature-name
    ```
-8. **Create a Pull Request**: Visit your forked repository on GitHub and click on the "New Pull Request" button. 
+8. **Create a Pull Request**: Visit your forked repository on GitHub and click on the "Compare & pull request" button. 
    Provide a detailed description of your changes and submit the pull request.
 
 

@@ -28,4 +28,5 @@ Follow these steps:
 
 ##
 
-**Your feedback is valuable and helps make GOT better. Thanks for being part of this project! 🚀**
+**Your feedback is valuable and helps make GOT better.  
+Thanks for being part of this project! 🚀**
