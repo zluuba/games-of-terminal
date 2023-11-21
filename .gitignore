@@ -1,10 +1,10 @@
 # PyCharm, MacOS files
-.idea/
 .DS_Store
+.idea/
 
 # local files
-dist/
 .env
+dist/
 
-# upcoming features (confidential)
+# upcoming features file
 list_of_features.txt
