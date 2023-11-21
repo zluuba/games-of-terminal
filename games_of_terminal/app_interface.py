@@ -1,9 +1,9 @@
 from games_of_terminal.colors import Colors
+from games_of_terminal.field import Field
 from games_of_terminal.constants import (
     LOGO, APP_NAME, SIDE_MENU_TIPS, STATUS_BOX_HEIGHT,
     DEFAULT_OFFSET, DEFAULT_Y_OFFSET,
 )
-from games_of_terminal.field import Field
 
 from curses import newwin, curs_set
 
@@ -12,12 +12,12 @@ class InterfaceManager(Colors):
     def __init__(self, canvas):
         super().__init__()
 
+        self.height, self.width = canvas.getmaxyx()
         self.canvas = canvas
         self._setup()
 
     def _setup(self):
         self.canvas.bkgd(' ', self.default_color)
-        self.height, self.width = self.canvas.getmaxyx()
 
         self._set_window_sizes()
         self._init_main_window()
@@ -39,10 +39,17 @@ class InterfaceManager(Colors):
         self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
 
     def setup_side_menu(self):
+        # TODO: rebuild - get tips as argument, draw it in three ways:
+        #                           - all showed
+        #                           - showed just game tips
+        #                           - side_menu not showed
+
         self._draw_logo()
         self.draw_side_menu_tips()
 
     def _draw_logo(self):
+        # TODO: get rid of megic numbers
+
         for y, line in enumerate(LOGO, start=1):
             self.draw_message(y, 2, self.logo_area.box, line, self.default_color)
 
@@ -63,13 +70,14 @@ class InterfaceManager(Colors):
             self.draw_message(y, x, self.tips_area.box, message, color)
             y += 1
 
-    def _clear_line(self, y, x, field, width):
+    def _clear_line(self, begin_y, begin_x, field, width):
         empty_line = ' ' * width
-        self.draw_message(y, x, field, empty_line, self.default_color)
+        self.draw_message(begin_y, begin_x, field,
+                          empty_line, self.default_color)
 
     @staticmethod
-    def draw_message(y, x, field, message, color):
-        field.addstr(y, x, message, color)
+    def draw_message(begin_y, begin_x, field, message, color):
+        field.addstr(begin_y, begin_x, message, color)
         field.refresh()
 
     @staticmethod
@@ -80,6 +88,9 @@ class InterfaceManager(Colors):
         self.window.timeout(-1)
 
     def redraw_window(self):
+        # TODO: add state for window(s) - while redrawing,
+        #  it should show the current game field
+
         self.window.clear()
         self._setup()
 

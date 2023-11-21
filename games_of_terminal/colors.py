@@ -75,7 +75,7 @@ class Colors:
         color_pair_number = self.color_mapping.get(color_name, 0)
         return color_pair(color_pair_number)
 
-    def get_random_colored_background_color(self):
+    def get_random_colored_background(self):
         colored_bg_names = list(filter(
             lambda color: match(r".*(?<!black_bg)$", color),
             list(self.color_mapping)

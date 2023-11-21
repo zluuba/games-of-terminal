@@ -23,25 +23,25 @@ MESSAGES = {
     'score_text': 'Score: ',
     'best_score': 'Best score: ',
     'new_best_score': 'New best score!',
-    'start_text': 'Press any key to start',
+    # 'start_text': 'Press any key to start',
     'play_again': 'Press Space to play again',
 }
 
 KEYS = {
-    'space': ord(' '),
-    'escape': 27,
-    'enter': [KEY_ENTER, 10, 13],
     'up_arrow': KEY_UP,
     'down_arrow': KEY_DOWN,
     'left_arrow': KEY_LEFT,
     'right_arrow': KEY_RIGHT,
-    'q': ord('q'),
-    'pause': ord('p'),
+    'enter': [KEY_ENTER, 10, 13],
     'resize': KEY_RESIZE,
+    'pause': ord('p'),
+    'space': ord(' '),
+    'escape': 27,
     'w': ord('w'),
     's': ord('s'),
     'a': ord('a'),
     'd': ord('d'),
+    'q': ord('q'),
 }
 
 GAME_STATUSES = {
@@ -53,7 +53,8 @@ GAME_STATUSES = {
 
 SIDE_MENU_TIPS = {
     'Move': '← ↓ ↑ → (wasd)',
-    'Restart': 'r',
-    'Tips/rules': 't',
-    'Quit': 'esc',
+    'Restart': 'R',
+    'Tips, Rules': 'T',
+    'Side menu': 'M',
+    'Quit': 'Esc',
 }
