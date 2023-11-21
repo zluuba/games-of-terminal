@@ -11,8 +11,7 @@ GAMES = {
     1: {'name': 'Minesweeper', 'game': MinesweeperGame},
     2: {'name': 'Tic Tac Toe', 'game': TicTacToeGame},
     3: {'name': 'Tetris', 'game': TetrisGame},
-    # 4: {'name': 'Sea Battle', 'game': SeaBattleGame},
-    # 5: {'name': '2048', 'game': TwoThousandFortyEightGame},
+    # 4: {'name': '2048', 'game': TwoThousandFortyEightGame},
 }
 
 GOODBYE_MESSAGES = [
