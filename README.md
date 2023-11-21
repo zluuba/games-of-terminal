@@ -1,5 +1,5 @@
 # Games Of Terminal
-GOT some games! <br>
+GOT some games!  
 Games Of Terminal (or GOT) is a console-based gaming platform where classic games like 
 Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
 With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience 
@@ -47,8 +47,8 @@ To start the games, use the following command:
 got-games
 ```
 
-Upon launching, you'll encounter the menu. <br>
-Navigate through the options using the ↓ and ↑ arrows (or WASD). <br>
+Upon launching, you'll encounter the menu.  
+Navigate through the options using the ↓ and ↑ arrows (or WASD).  
 Press Enter to initiate the selected game.
 
 Game Controls:
@@ -60,8 +60,34 @@ R - restart
 T - show/hide rules, tips, and settings
 M - open/close side menu
 ```
-To exit any window (menu, game, or settings), press Esc.
+To exit any window (menu, game, or settings), press Esc.  
 See demos [here](https://github.com/zluuba/games-of-terminal#demos).
+
+
+## Project Specifics
+
+GOT have some specifics, this is full list of it:
+
+1. **Achievements**: GOT has 30+ achievements, so enjoy trying to [get them all](https://github.com/zluuba/games-of-terminal/tree/main/docs/achievements.md)!
+2. **Customizing**: in every game, you can choose a color scheme that you like or create your own color scheme.
+3. **Auto-resizing**: GOT automatically resizes the window when the user changes the size of the terminal window. Regardless 
+   of whether you are in the menu, settings, or playing the game, the interface can detect terminal resizing and redraw the window.
+4. **Flexibility**: the side block with the logo, menu, and game status area has a fixed width but flexible height. 
+   The game window has fully flexible parameters. In some games, it helps to add more game items (as in Minesweeper:
+   the bigger the terminal window, the more game cells you will get), while in other games, it adjusts the size of the 
+   elements (as in TicTacToe).
+5. **Settings**: you can customize your GOT experience by setting your username, game preferences, viewing your stats, and more.
+6. **Care**: no matter if you overlook your game and simply exit, the game automatically saves your current progress 
+   and asks the next time you want to continue an unfinished game. And, of course, GOT has pause and restart functions.
+7. **Versatility**: no matter whether you have a new MacBook or an old Asus (or a new Asus and an old MacBook), GOT does 
+   not strain the processor, ensuring that you have the ability to play various games. 
+   I tested it on my affordable 2014 Asus, and it works perfectly.
+8. **Testing**: I utilized the curses library to interact with the terminal, and as curses operates at a low level, 
+   simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
+   non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
+   please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md).
+9. **Supporting**: I have a deep affection for this project and take care of it, ensuring continuous support and development. 
+   If you share the same passion and would like to contribute, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing_guide.md).
 
 
 ## For Developers
@@ -69,7 +95,7 @@ See demos [here](https://github.com/zluuba/games-of-terminal#demos).
 In this section, you'll find information about documentation, instructions for integrating your own games 
 into Games Of Terminal (GOT), details on how to contribute to the project, and bug reporting.
 
-### Documentation
+### Project Documentation
 To delve into the technical details and explore documentation, head over to [Documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/developer-guide.md).
 
 ### Implementing Your Own Game
@@ -79,22 +105,14 @@ be sure to read this detailed [instruction on game implementation](https://githu
 ### Contributing
 If you've implemented your own game and would like to share it with others or have ideas to improve this project, 
 I would be thrilled to welcome your contribution. <br>
-For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing.md).
+For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing_guide.md).
 
 ### Bug Reporting
 If you encounter any issues, discover a bug while using Games Of Terminal (GOT), 
 or have any ideas to improve, please help me enhance the project by reporting it. 
-Follow these steps:
-
-1. Check the [existing issues](https://github.com/zluuba/games-of-terminal/issues) to see if your bug has already been reported.
-2. If the issue is not listed, create a new issue with the following details:
-   - A descriptive title.
-   - A clear and concise description of the bug.
-   - Steps to reproduce the bug.
-   - Any additional information that might be helpful.
-3. Please be responsive to any follow-up questions or requests for clarification.
-
-I appreciate your help in making GOT better!
+Follow the steps outlined in the 
+[issue reporting guide](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
+to create an issue.
 
 
 ## Upcoming Features
