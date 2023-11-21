@@ -1,4 +1,7 @@
 # This file contains a list of curses library colors with their corresponding descriptions.
+# P.S. The colors are described based on my own perception and may vary in hue.
+# P.P.S. ¯\_(ツ)_/¯
+
 # Format: number: color description
 # Color count: 255
 
