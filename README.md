@@ -92,7 +92,7 @@ GOT have some specifics, this is full list of it:
 ## For Developers
 
 In this section, you'll find information about documentation, instructions for integrating your own games 
-into Games Of Terminal (GOT), details on how to contribute to the project, and bug reporting.
+into GOT, details on how to contribute to the project, and bug reporting.
 
 ### Project Documentation
 To delve into the technical details and explore documentation, head over to [Documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/developer-guide.md).
@@ -103,11 +103,11 @@ be sure to read this detailed [instruction on game implementation](https://githu
 
 ### Contributing
 If you've implemented your own game and would like to share it with others or have ideas to improve this project, 
-I would be thrilled to welcome your contribution. <br>
+I would be thrilled to welcome your contribution. 
 For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing_guide.md).
 
 ### Bug Reporting
-If you encounter any issues, discover a bug while using Games Of Terminal (GOT), 
+If you encounter any issues, discover a bug while using GOT, 
 or have any ideas to improve, please help me enhance the project by reporting it. 
 Follow the steps outlined in the 
 [issue reporting guide](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
@@ -126,7 +126,8 @@ Here are some features I'm planning to implement in future releases:
 ### Game Features:
 - Sea Battle with other humans using the Internet
 
-Feel free to suggest additional features or share your ideas!
+Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
+or share your ideas!
 
 ## Demos
 
