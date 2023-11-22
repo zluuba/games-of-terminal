@@ -43,7 +43,7 @@ Thank you for considering contributing to Games Of Terminal! Your help is greatl
 
 ## Bug Reports and Feature Requests
 
-If you encounter a bug or have a feature request, please [create an issue](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
+If you encounter a bug or have a feature request, please [create an issue](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
 following the issue template.  
 
 

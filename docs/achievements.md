@@ -71,5 +71,5 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 
 In total, GOT has 39 achievements. 
 If you have a creative idea for an additional achievement, please share it with me by creating an issue following 
-[these instructions](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md).
+[these instructions](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 Your input is greatly appreciated!
