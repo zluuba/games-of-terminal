@@ -84,9 +84,9 @@ GOT have some specifics, this is full list of it:
 8. **Testing**: I utilized the curses library to interact with the terminal, and as curses operates at a low level, 
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
-   please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md).
+   please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 9. **Supporting**: I have a deep affection for this project and take care of it, ensuring continuous support and development. 
-   If you share the same passion and would like to contribute, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing_guide.md).
+   If you share the same passion and would like to contribute, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
 
 
 ## For Developers
@@ -104,13 +104,13 @@ be sure to read this detailed [instruction on game implementation](https://githu
 ### Contributing
 If you've implemented your own game and would like to share it with others or have ideas to improve this project, 
 I would be thrilled to welcome your contribution. 
-For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing_guide.md).
+For all the details, please visit [this page](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
 
 ### Bug Reporting
 If you encounter any issues, discover a bug while using GOT, 
 or have any ideas to improve, please help me enhance the project by reporting it. 
 Follow the steps outlined in the 
-[issue reporting guide](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
+[issue reporting guide](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
 to create an issue.
 
 
@@ -126,7 +126,7 @@ Here are some features I'm planning to implement in future releases:
 ### Game Features:
 - Sea Battle with other humans using the Internet
 
-Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue_reporting_guide.md) 
+Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
 or share your ideas!
 
 ## Demos
