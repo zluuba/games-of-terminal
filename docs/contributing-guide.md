@@ -1,6 +1,7 @@
-# Contributing to Games Of Terminal (GOT)
+# How to Contribute to Games of Terminal
 
-Thank you for considering contributing to Games Of Terminal! Your help is greatly appreciated. Here are some guidelines to follow:
+Thank you for your interest in contributing to GOT. Your help is greatly appreciated.  
+Here are some guidelines to follow:
 
 ## How to Contribute
 
