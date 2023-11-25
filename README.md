@@ -5,7 +5,6 @@ With customization, achievements, and flexibility, GOT offers a diverse and enjo
 in your favourite environment - terminal.
 
 ![icon-1](https://github.com/zluuba/games-of-terminal/assets/87614163/954898e1-c330-4798-82a4-d65558e377a8)
-
 *picture was created by [leonardo.ai](https://leonardo.ai/)*
 
 
@@ -34,7 +33,7 @@ cd games-of-terminal
 make install
 ```
 
-Install Games Of Terminal package:
+Install GOT package:
 ```bash
 make build
 make package-install
@@ -54,7 +53,7 @@ Press Enter to initiate the selected game.
 
 Game Controls:
 ```ch
-Arrows (↓ and ↑) or WASD - control game
+Arrows (↓ and ↑) or WS keys - control game
 
 P - pause/unpause
 R - restart
@@ -65,9 +64,9 @@ To exit any window (menu, game, or settings), press Esc.
 **See demos [here](https://github.com/zluuba/games-of-terminal#demos).**
 
 
-## Project Specifics
+## Project Features
 
-GOT have some specifics, this is full list of it:
+GOT has a lot of features, this is the full list of them:
 
 1. **Achievements**: GOT has 30+ achievements, so enjoy trying to [get them all](https://github.com/zluuba/games-of-terminal/tree/main/docs/achievements.md)!
 2. **Customizing**: in every game, you can choose a color scheme that you like or create your own color scheme.
