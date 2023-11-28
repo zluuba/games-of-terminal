@@ -7,14 +7,13 @@ from copy import deepcopy
 
 
 class TetrisBlock(Colors):
-    def __init__(self, name, y, x, board, game_area):
+    def __init__(self, name, y, x, board):
         super().__init__()
 
         self.y = y
         self.x = x
         self.name = name
         self.board = board
-        self.game_area = game_area
 
         color_name = BLOCK_COLORS[name]
         self.color = self.get_color_by_name(color_name)
@@ -34,8 +33,8 @@ class TetrisBlock(Colors):
                     self.draw_cell(y, x, color)
 
     def draw_cell(self, y, x, color):
-        self.game_area.box.addstr(y, x, ' ' * CELL_WIDTH, color)
-        self.game_area.box.refresh()
+        self.board.game_area.box.addstr(y, x, ' ' * CELL_WIDTH, color)
+        self.board.game_area.box.refresh()
 
     def hide(self):
         background_color = self.default_color
@@ -131,11 +130,11 @@ class TetrisBlock(Colors):
         end_x = self.x + x_offset + (width * CELL_WIDTH)
         end_y = self.y + y_offset + (height * CELL_HEIGHT)
 
-        if self.x + x_offset <= self.game_area.left_border:
+        if self.x + x_offset <= self.board.game_area.left_border:
             return True
-        if end_x >= self.game_area.right_border:
+        if end_x >= self.board.game_area.right_border:
             return True
-        if end_y >= self.game_area.bottom_border:
+        if end_y >= self.board.game_area.bottom_border:
             return True
 
         return False
