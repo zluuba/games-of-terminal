@@ -46,9 +46,9 @@ class TetrisBlock(Colors):
         y_offset *= CELL_HEIGHT
         x_offset *= CELL_WIDTH
 
-        if self._is_out_of_borders(x_offset=x_offset):
+        if self._is_out_of_borders(y_offset=y_offset - 1, x_offset=x_offset):
             return
-        if self._is_there_another_blocks(x_offset=x_offset):
+        if self._is_there_another_blocks(y_offset=y_offset, x_offset=x_offset):
             return
 
         self.hide()
