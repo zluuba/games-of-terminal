@@ -34,7 +34,7 @@ class TetrisBlock(Colors):
                     self.draw_cell(y, x, color)
 
     def draw_cell(self, y, x, color):
-        self.game_area.box.addstr(y, x, '  ', color)
+        self.game_area.box.addstr(y, x, ' ' * CELL_WIDTH, color)
         self.game_area.box.refresh()
 
     def hide(self):
@@ -48,7 +48,7 @@ class TetrisBlock(Colors):
 
         if self._is_out_of_borders(x_offset=x_offset):
             return
-        if self._is_there_another_blocks(x_offset):
+        if self._is_there_another_blocks(x_offset=x_offset):
             return
 
         self.hide()
@@ -71,8 +71,41 @@ class TetrisBlock(Colors):
 
         self.draw(self.color)
 
-    def _is_there_another_blocks(self, x_offset):
-        begin_y = self.y
+    def drop(self):
+        y_offset = 0 * CELL_HEIGHT
+
+        while True:
+            new_y_offset = y_offset + (1 * CELL_HEIGHT)
+
+            if self._is_out_of_borders(y_offset=new_y_offset - 1):
+                break
+            if self._is_there_another_blocks(y_offset=new_y_offset):
+                break
+
+            y_offset = new_y_offset
+
+        self.hide()
+        self.y += y_offset
+        self.draw(self.color)
+
+    def land(self):
+        end_y = self.y + (self.height * CELL_HEIGHT)
+        end_x = self.x + (self.width * CELL_WIDTH)
+
+        for y in range(self.y, end_y, CELL_HEIGHT):
+            for x in range(self.x, end_x, CELL_WIDTH):
+                for x_offset in range(CELL_WIDTH):
+                    new_x = x + x_offset
+
+                    blueprint_y = (y - self.y) // CELL_HEIGHT
+                    blueprint_x = (new_x - self.x) // CELL_WIDTH
+                    blueprint_cell = self.blueprint[blueprint_y][blueprint_x]
+
+                    if blueprint_cell:
+                        self.board.place_block(y, new_x)
+
+    def _is_there_another_blocks(self, x_offset=0, y_offset=0):
+        begin_y = self.y + y_offset
         begin_x = self.x + x_offset
 
         end_y = begin_y + (self.height * CELL_HEIGHT)
@@ -84,11 +117,11 @@ class TetrisBlock(Colors):
                 blueprint_x = (x - begin_x) // CELL_WIDTH
                 blueprint_cell = self.blueprint[blueprint_y][blueprint_x]
 
-                if blueprint_cell and self.board.box[(y, x)] != 'free':
+                if blueprint_cell and not self.board.is_cell_free(y, x):
                     return True
         return False
 
-    def _is_out_of_borders(self, x_offset=0, blueprint=None):
+    def _is_out_of_borders(self, y_offset=0, x_offset=0, blueprint=None):
         if blueprint is None:
             blueprint = self.blueprint
 
@@ -96,7 +129,7 @@ class TetrisBlock(Colors):
         height = len(blueprint)
 
         end_x = self.x + x_offset + (width * CELL_WIDTH)
-        end_y = self.y + (height * CELL_HEIGHT)
+        end_y = self.y + y_offset + (height * CELL_HEIGHT)
 
         if self.x + x_offset <= self.game_area.left_border:
             return True
