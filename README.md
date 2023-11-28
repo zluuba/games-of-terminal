@@ -48,7 +48,7 @@ got-games
 ```
 
 Upon launching, you'll encounter the menu.  
-Navigate through the options using the ↓ and ↑ arrows (or WASD).  
+Navigate through the options using the ↓ and ↑ arrows (or WS keys).  
 Press Enter to initiate the selected game.
 
 Game Controls:
