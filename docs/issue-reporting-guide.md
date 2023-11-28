@@ -1,6 +1,6 @@
 # How To Create an Issue
 
-If you encounter any issues, discover a bug while using Games Of Terminal (GOT), or have any ideas to improve, 
+If you encounter any issues, discover a bug while using GOT, or have any ideas to improve, 
 please help me enhance the project by reporting it.  
 Follow these steps:
 

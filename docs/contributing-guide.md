@@ -5,8 +5,8 @@ Here are some guidelines to follow:
 
 ## How to Contribute
 
-1. **Fork the Repository**: click on the "Fork" button in the top right corner of the repository's page. This will create a copy of the project in your GitHub account.
-
+1. **Fork the Repository**: click on the "Fork" button in the top right corner of the repository's page. 
+   This will create a copy of the project in your GitHub account.
 2. **Clone the Repository**: clone the forked repository to your local machine using the following command:
    ```bash
    git clone https://github.com/zluuba/games-of-terminal.git
