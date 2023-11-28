@@ -1,10 +1,10 @@
 # Games Of Terminal
-Games Of Terminal (or GOT) is a console-based gaming platform where classic games like 
+**Games Of Terminal** (or **GOT**) is a console-based gaming platform where classic games like 
 Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
 With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience 
-in your favourite environment - terminal.
+in your favourite environment - **terminal**.
 
-![icon-1](https://github.com/zluuba/games-of-terminal/assets/87614163/954898e1-c330-4798-82a4-d65558e377a8)
+![got-cover](https://github.com/zluuba/games-of-terminal/assets/87614163/954898e1-c330-4798-82a4-d65558e377a8)
 *picture was created by [leonardo.ai](https://leonardo.ai/)*
 
 
