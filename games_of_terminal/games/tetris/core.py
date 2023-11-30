@@ -58,7 +58,9 @@ class TetrisGame(GameEngine):
 
         self.block.land()
         self.board.draw()
+
         self.block = None
+        self.time = time()
 
     def move_block_before_land(self):
         """ Give the ability move block if it touches the floor """
