@@ -113,7 +113,7 @@ CELL_HEIGHT = 1
 CELL_WIDTH = 2
 
 BLOCK_COLORS = {
-    'free': 'white_text_black_bg',
+    'free': 'white_text_light_black_bg',
     'placed_block': 'black_text_pastel_dirty_blue_bg',
     'I-block': 'white_text_pastel_blue_bg',
     'J-block': 'white_text_green_bg',
