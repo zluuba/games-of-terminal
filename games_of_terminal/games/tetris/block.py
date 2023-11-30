@@ -37,7 +37,7 @@ class TetrisBlock(Colors):
         self.board.game_area.box.refresh()
 
     def hide(self):
-        background_color = self.default_color
+        background_color = self.get_color_by_name(BLOCK_COLORS['free'])
         self.draw(background_color)
 
     def move(self, direction):
