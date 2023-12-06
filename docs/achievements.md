@@ -23,8 +23,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Lucky**: safely defuse 100 bombs in total.
 - **I Have No Girlfriend**: successfully defuse 1,000 bombs.
 - **That's Enough**: attempt to place a flag when there are none left.
-- **Mission Impossible**: defuse 6 bombs around 1 cell.
-- **AGI in Front of Me**: defuse 7 or 8 bombs around 1 cell.
+- **AGI in Front of Me**: defuse 6, 7 or 8 bombs around 1 cell.
 
 
 ## TicTacToe Game
@@ -49,6 +48,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 
 
 ## 2048 Game
+*In development.*
 
 - **Reverse on You**: change the color scheme.
 - **Tile Tactician**: reach the 2048 tile.
@@ -71,7 +71,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 
 ##
 
-In total, GOT has 41 achievements. 
+In total, GOT has 40 achievements. 
 If you have a creative idea for an additional achievement, please share it with me by creating an issue following 
 [these instructions](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 Your input is greatly appreciated!
