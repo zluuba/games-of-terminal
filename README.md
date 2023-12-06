@@ -66,7 +66,7 @@ To exit any window (menu, game, or settings), press Esc.
 
 ## Project Features
 
-GOT has a lot of features, this is the full list of them:
+GOT has many advantages, this is the full list of them:
 
 1. **Achievements**: GOT has 40+ achievements, so you can [get them all](https://github.com/zluuba/games-of-terminal/tree/main/docs/achievements.md). Or you can't? ;)
 2. **Customizing**: in every game, you have the option to choose a color scheme that suits your preferences, 
@@ -91,6 +91,9 @@ GOT has a lot of features, this is the full list of them:
    please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 9. **Supporting**: I have a deep affection for this project and take care of it, ensuring continuous support and development. 
    If you share the same passion, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
+
+
+GOT is Love, GOT is Live.
 
 
 ## For Developers
