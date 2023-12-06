@@ -1,6 +1,6 @@
 # Games Of Terminal
-**Games Of Terminal** (or **GOT**) is a console-based gaming platform where classic games like 
-Minesweeper, Tetris, Snake, 2048, and TicTacToe come to life in your terminal. 
+**Games Of Terminal** (or GOT) is a console-based gaming platform where classic games like 
+Minesweeper, Tetris, Snake, and TicTacToe come to life in your terminal. 
 With customization, achievements, and flexibility, GOT offers a diverse and enjoyable gaming experience 
 in your favourite environment - **terminal**.
 
@@ -68,26 +68,29 @@ To exit any window (menu, game, or settings), press Esc.
 
 GOT has a lot of features, this is the full list of them:
 
-1. **Achievements**: GOT has 30+ achievements, so enjoy trying to [get them all](https://github.com/zluuba/games-of-terminal/tree/main/docs/achievements.md)!
-2. **Customizing**: in every game, you can choose a color scheme that you like or create your own color scheme.
-3. **Auto-resizing**: GOT automatically resizes the window when the user changes the size of the terminal window. Regardless 
-   of whether you are in the menu, settings, or playing the game, the interface can detect terminal resizing and redraw the window.
-4. **Flexibility**: the side block with the logo, menu, and game status area has a fixed width but flexible height. 
+1. **Achievements**: GOT has 40+ achievements, so you can [get them all](https://github.com/zluuba/games-of-terminal/tree/main/docs/achievements.md). Or you can't? ;)
+2. **Customizing**: in every game, you have the option to choose a color scheme that suits your preferences, 
+   create your own custom color scheme, or explore different game modes.
+3. **Settings**: you can view your stats, customize your GOT experience by setting your username (yes, it matters), 
+   adjust game preferences, and warm the author's heart by discovering a secret option.
+4. **Autosave**: no matter if you overlook your game and simply exit, the game automatically saves your current progress 
+   and asks the next time you want to continue an unfinished game. And, of course, GOT has pause and restart functions.
+5. **Adaptability**: GOT adjusts to the user and automatically resizes the window when the user changes the size of the 
+   terminal window. Regardless of whether you are in the menu, settings, or playing the game, 
+   the interface can detect terminal resizing and redraw the window to create a better experience.
+6. **Flexibility**: the side block with the logo, menu, and game status area has a fixed width but flexible height. 
    The game window has fully flexible parameters. In some games, it helps to add more game items (as in Minesweeper:
    the bigger the terminal window, the more game cells you will get), while in other games, it adjusts the size of the 
    elements (as in TicTacToe).
-5. **Settings**: you can customize your GOT experience by setting your username, game preferences, viewing your stats, and more.
-6. **Care**: no matter if you overlook your game and simply exit, the game automatically saves your current progress 
-   and asks the next time you want to continue an unfinished game. And, of course, GOT has pause and restart functions.
-7. **Versatility**: no matter whether you have a new MacBook or an old Asus (or a new Asus and an old MacBook), GOT does 
-   not strain the processor, ensuring that you have the ability to play various games. 
-   I tested it on my affordable 2014 Asus, and it works perfectly.
+7. **Versatility**: whether you have a new MacBook or an old Asus (or a new Asus and an old MacBook), 
+   GOT doesn't strain the processor, ensuring you the ability to play various games. I tested it on my affordable 
+   2014 Asus, and it works perfectly. P.S. Yes, console apps can make the heart of your device stop beating too.
 8. **Testing**: I utilized the curses library to interact with the terminal, and as curses operates at a low level, 
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
    please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 9. **Supporting**: I have a deep affection for this project and take care of it, ensuring continuous support and development. 
-   If you share the same passion and would like to contribute, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
+   If you share the same passion, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
 
 
 ## For Developers
@@ -120,6 +123,7 @@ to create an issue.
 Here are some features I'm planning to implement in future releases:
 
 ### New Games:
+- 2048 Game
 - Sea Battle
 - Sudoku
 - Chess
