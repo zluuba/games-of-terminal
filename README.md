@@ -89,11 +89,8 @@ GOT has many advantages, this is the full list of them:
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
    please [report me about it](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
-9. **Supporting**: I have a deep affection for this project and take care of it, ensuring continuous support and development. 
-   If you share the same passion, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md).
-
-
-GOT is Love, GOT is Live.
+9. **Supporting**: With a deep affection for this project, I am committed to its continuous support and development. 
+   If you share the same passion, you can [help me with that](https://github.com/zluuba/games-of-terminal/tree/main/docs/contributing-guide.md). Thank you, and.. GOT is Love, GOT is Live.
 
 
 ## For Developers
