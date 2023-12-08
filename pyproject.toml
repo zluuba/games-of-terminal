@@ -1,23 +1,23 @@
 [tool.poetry]
 name = "terminal-games"
 version = "0.1.0"
-description = "Games for terminal: Snake, Tic-tac-toe, Minesweeper and Tetris"
-license = "Proprietary"
+description = "Games for terminal: Tetris, Minesweeper, Snake and Tic-tac-toe"
+license = "MIT"
 authors = ["Luybov Nikitina <zluyba.nikitina@gmail.com>"]
 readme = "README.md"
 packages = [{include = "games_of_terminal"}]
 classifiers = [
+    "Topic :: Games/Entertainment",
     "Environment :: Console",
     "Natural Language :: English",
-    "Programming Language :: Python",
-    "Topic :: Games/Entertainment"
+    "Programming Language :: Python"
 ]
 
 [tool.poetry.scripts]
 got-games = "games_of_terminal.scripts.app:main"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 board = "^1.0"
 python-dotenv = "^1.0.0"
 
