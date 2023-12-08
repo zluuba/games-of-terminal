@@ -2,7 +2,6 @@ from games_of_terminal.constants import KEYS, DEFAULT_OFFSET
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
-
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     CELL_WIDTH, CELL_HEIGHT, DOWN,
@@ -29,7 +28,7 @@ class TetrisGame(GameEngine):
         self._game_setup()
 
         while True:
-            self.add_block_on_field()
+            self.create_block()
             key = self.window.getch()
 
             if key == KEYS['escape']:
@@ -38,27 +37,29 @@ class TetrisGame(GameEngine):
 
             if key == FLIP_BLOCK:
                 self.block.flip()
+                self.board.draw_board(self.block)
             elif key == DROP_BLOCK:
                 self.block.drop()
                 self.land_current_block()
+                self.board.draw_board(self.block)
                 continue
             elif key in DIRECTIONS:
                 direction = DIRECTIONS[key]
                 self.block.move(direction)
+                self.board.draw_board(self.block)
 
             self._block_auto_move()
 
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
+                self.board.draw_board(self.block)
 
     def land_current_block(self):
         if not self.is_block_on_floor():
             return
 
-        self.block.land()
-        self.board.draw()
-
+        self.board.land_block(self.block)
         self.block = None
         self.time = time()
 
@@ -77,6 +78,7 @@ class TetrisGame(GameEngine):
             elif key in DIRECTIONS:
                 direction = DIRECTIONS[key]
                 self.block.move(direction)
+                self.board.draw_board(self.block)
 
                 if not self.is_block_on_floor():
                     return
@@ -91,31 +93,30 @@ class TetrisGame(GameEngine):
         self.setup_side_menu()
         self.show_game_status()
 
-        self._setup_game_window()
         self.time = time()
-
-    def _setup_game_window(self):
         self.board = TetrisBoard(self.game_area)
 
-        # TODO: add next_block_area
-
-    def add_block_on_field(self):
+    def create_block(self):
         if self.block:
             return
 
         block_shape_name = choice(list(BLOCKS))
-
-        y = self.board.game_area.begin_y
-        x = (self.board.game_area.width - DEFAULT_OFFSET) // 2
+        y, x = 1, self.board.width // 2
 
         self.block = TetrisBlock(block_shape_name, y, x, self.board)
-        self.block.draw(self.block.color)
+
+        # this line place block in the center of board
+        self.block.x -= (self.block.width * CELL_WIDTH) // 2
+        self.block.x += 1 if self.block.x % 2 == 0 else 0
+
+        self.board.draw_board(self.block)
 
     def _block_auto_move(self):
         current_time = time()
 
         if current_time - self.time >= self.time_interval:
             self.block.move(self.falling_direction)
+            self.board.draw_board(self.block)
             self.time = current_time
 
     def is_block_on_floor(self):
@@ -132,8 +133,8 @@ class TetrisGame(GameEngine):
                 blueprint_cell = self.block.blueprint[blueprint_y][blueprint_x]
 
                 if blueprint_cell:
-                    if (y + 1, x) in self.board.board and not self.board.is_cell_free(y + 1, x):
+                    if not self.board.is_cell_free(y + 1, x):
                         return True
-                    if y + 1 >= self.board.game_area.bottom_border:
+                    if y + 1 >= self.board.board_window.bottom_border:
                         return True
         return False

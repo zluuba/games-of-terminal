@@ -1,5 +1,5 @@
 class Field:
-    def __init__(self, parent_window, height, width, begin_y, begin_x):
+    def __init__(self, parent_window, height, width, begin_y, begin_x, show_borders=True):
         self.height = height
         self.width = width
         self.begin_y = begin_y
@@ -10,7 +10,9 @@ class Field:
             self.height, self.width,
             self.begin_y, self.begin_x,
         )
-        self.draw_borders()
+
+        if show_borders:
+            self.draw_borders()
 
     def _set_border_coordinates(self):
         self.top_border = self.begin_y - 1
