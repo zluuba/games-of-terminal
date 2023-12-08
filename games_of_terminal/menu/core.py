@@ -1,7 +1,7 @@
 from games_of_terminal.app_interface import InterfaceManager
-from games_of_terminal.constants import KEYS
+from games_of_terminal.constants import KEYS, LOGO_MENU, SWORD, SWORD_REV
 from games_of_terminal.menu.constants import (
-    GAMES, CREATOR_NAME, GOODBYE_MESSAGES
+    GAMES, CREATOR_NAME, GOODBYE_MESSAGES,
 )
 
 from curses import A_STANDOUT as REVERSE
@@ -18,7 +18,13 @@ class Menu(InterfaceManager):
         self.current_row = 0
         self.menu_length = len(GAMES)
 
+        self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 4
+        self.menu_start_y = self.logo_start_y + len(LOGO_MENU) + 3
+
     def run_menu_loop(self):
+        self.window.clear()
+        self._draw_menu_logo()
+        self._draw_creator_name()
         self.hide_cursor()
 
         while True:
@@ -39,26 +45,38 @@ class Menu(InterfaceManager):
                 chosen_game = GAMES[self.current_row]['game']
                 new_game = chosen_game(self.canvas)
                 new_game.start_new_game()
+                self.window.clear()
+                self._draw_menu_logo()
+                self._draw_creator_name()
 
             self._show_menu()
             self.window.refresh()
 
     def _show_menu(self):
-        self.window.clear()
-
         for row, game in enumerate(GAMES.values()):
             game_name = game['name']
-            begin_y = (self.height // 2) - (self.menu_length // 2) + row
-            begin_x = (self.width // 2) - (len(game_name) // 2)
+            y = self.menu_start_y + row
+            x = (self.width // 2) - (len(game_name) // 2)
 
             if row == self.current_row:
-                self.draw_message(begin_y, begin_x, self.window,
+                self.draw_message(y, x, self.window,
                                   game_name, self.default_color + REVERSE)
             else:
-                self.draw_message(begin_y, begin_x, self.window,
+                self.draw_message(y, x, self.window,
                                   game_name, self.default_color)
 
-        self._draw_creator_name()
+    def _draw_menu_logo(self):
+        color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
+        x = (self.width // 2) - (len(SWORD) // 2)
+
+        self.draw_message(self.logo_start_y - 1, x, self.window, SWORD, color)
+
+        for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
+            x = (self.width // 2) - (len(line) // 2)
+            self.draw_message(y, x, self.window, line, self.default_color)
+
+        x = (self.width // 2) - (len(SWORD_REV) // 2)
+        self.draw_message(y + 1, x, self.window, SWORD_REV, color)
 
     def _draw_creator_name(self):
         color = self.get_color_by_name('light_grey_text_black_bg')
