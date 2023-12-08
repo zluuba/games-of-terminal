@@ -2,7 +2,7 @@ from games_of_terminal.colors import Colors
 from games_of_terminal.field import Field
 from games_of_terminal.constants import (
     LOGO, APP_NAME, SIDE_MENU_TIPS, STATUS_BOX_HEIGHT,
-    DEFAULT_OFFSET, DEFAULT_Y_OFFSET,
+    BASE_OFFSET, DEFAULT_YX_OFFSET,
 )
 
 from curses import newwin, curs_set
@@ -96,7 +96,7 @@ class InterfaceManager(Colors):
 
     def _set_window_sizes(self):
         begin_x = begin_y = 0
-        side_menu_width = len(LOGO[0]) + (DEFAULT_OFFSET * 2)
+        side_menu_width = len(LOGO[0]) + (BASE_OFFSET * 2)
 
         self.window_box_sizes = {
             'lines': self.height,
@@ -105,27 +105,27 @@ class InterfaceManager(Colors):
             'begin_x': begin_x,
         }
         self.game_box_sizes = {
-            'lines': self.height - DEFAULT_OFFSET,
+            'lines': self.height - BASE_OFFSET,
             'cols': self.width - side_menu_width,
-            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_y': begin_y + DEFAULT_YX_OFFSET,
             'begin_x': begin_x,
         }
         self.side_menu_box_sizes = {
-            'lines': self.height - DEFAULT_OFFSET,
+            'lines': self.height - BASE_OFFSET,
             'cols': side_menu_width,
-            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_y': begin_y + DEFAULT_YX_OFFSET,
             'begin_x': self.width - side_menu_width,
         }
         self.logo_box_sizes = {
-            'lines': len(LOGO) + DEFAULT_OFFSET,
+            'lines': len(LOGO) + BASE_OFFSET,
             'cols': side_menu_width,
-            'begin_y': begin_y + DEFAULT_Y_OFFSET,
+            'begin_y': begin_y + DEFAULT_YX_OFFSET,
             'begin_x': self.width - side_menu_width,
         }
         self.status_box_sizes = {
-            'lines': STATUS_BOX_HEIGHT + DEFAULT_OFFSET,
+            'lines': STATUS_BOX_HEIGHT + BASE_OFFSET,
             'cols': side_menu_width,
-            'begin_y': self.height - (STATUS_BOX_HEIGHT + DEFAULT_OFFSET + DEFAULT_Y_OFFSET),
+            'begin_y': self.height - (STATUS_BOX_HEIGHT + BASE_OFFSET + DEFAULT_YX_OFFSET),
             'begin_x': self.width - side_menu_width,
         }
         self.tips_box_sizes = {

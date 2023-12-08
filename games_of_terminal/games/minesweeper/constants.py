@@ -11,10 +11,6 @@ RULES = (
 CELL_HEIGHT = 3
 CELL_WIDTH = 7
 
-# offset to ensure that game cells do not touch the edge
-# of the game field (-1 on each side)
-GAME_FIELD_OFFSET_XY = 2
-
 DIRECTIONS = {
     KEY_LEFT: (0, -CELL_WIDTH), KEY_RIGHT: (0, CELL_WIDTH),
     KEY_UP: (-CELL_HEIGHT, 0), KEY_DOWN: (CELL_HEIGHT, 0),

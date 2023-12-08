@@ -1,6 +1,7 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES, SIDE_MENU_TIPS,
+    BASE_OFFSET,
 )
 
 from curses import flushinp, A_BLINK as BLINK
@@ -51,9 +52,9 @@ class GameEngine(InterfaceManager):
         color_name = GAME_STATUSES[self.game_status]['color']
         color = self.get_color_by_name(color_name)
 
-        empty_line = ' ' * (self.game_status_area.width - 2)
+        empty_line = ' ' * (self.game_status_area.width - BASE_OFFSET)
 
-        for offset in range(self.game_status_area.height - 2):
+        for offset in range(self.game_status_area.height - BASE_OFFSET):
             new_y = y + offset
             # fill game_status field background, excluding borders
             self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
@@ -68,7 +69,6 @@ class GameEngine(InterfaceManager):
         self.draw_side_menu_tips(y, x, tips, color)
 
     def _is_restart(self):
-        # TODO: add transparent background color func
         """ Draws a message in the center of the playing field
         that the user can restart the game,
         waiting for a response (space bar pressing)

@@ -1,5 +1,5 @@
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.constants import KEYS
+from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
@@ -73,8 +73,8 @@ class MinesweeperGame(GameEngine):
         self.draw_game_tips(self.tips)
 
     def _draw_game_field(self):
-        lines = (self.game_area.height - GAME_FIELD_OFFSET_XY) // CELL_HEIGHT
-        cols = (self.game_area.width - GAME_FIELD_OFFSET_XY) // CELL_WIDTH
+        lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
+        cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
 
         # initial coordinates of the upper left corner (centered)
         y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2

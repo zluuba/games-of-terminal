@@ -1,4 +1,4 @@
-from games_of_terminal.constants import KEYS, DEFAULT_OFFSET
+from games_of_terminal.constants import KEYS
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard

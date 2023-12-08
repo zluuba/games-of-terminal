@@ -8,10 +8,6 @@ FIELD_WIDTH = 10
 CELL_WIDTH = 2
 CELL_HEIGHT = 1
 
-# 1 on each side
-BASE_OFFSET = 2
-
-
 BLOCKS = {
     'I-block': [
         [1], [1], [1], [1],

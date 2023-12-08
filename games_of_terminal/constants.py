@@ -14,8 +14,10 @@ LOGO = [
     ' #####    ####     ##  ',
 ]
 
-DEFAULT_Y_OFFSET = 1
-DEFAULT_OFFSET = 2
+# 1 on each side
+BASE_OFFSET = 2
+
+DEFAULT_YX_OFFSET = 1
 STATUS_BOX_HEIGHT = 3
 
 MESSAGES = {

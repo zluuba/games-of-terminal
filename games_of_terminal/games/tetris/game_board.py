@@ -1,6 +1,7 @@
 from games_of_terminal.games.tetris.constants import (
-    FIELD_WIDTH, CELL_WIDTH, CELL_HEIGHT, BASE_OFFSET,
+    FIELD_WIDTH, CELL_WIDTH, CELL_HEIGHT,
 )
+from games_of_terminal.constants import BASE_OFFSET
 from games_of_terminal.colors import Colors
 from games_of_terminal.field import Field
 
