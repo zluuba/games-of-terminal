@@ -112,3 +112,6 @@ class TetrisBlock(Colors):
         if end_y >= self.board.height:      # bottom border
             return True
         return False
+
+    def is_block_placed_in_land(self):
+        return self._is_there_another_blocks()

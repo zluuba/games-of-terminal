@@ -31,6 +31,16 @@ class TetrisGame(GameEngine):
             self.create_block()
             key = self.window.getch()
 
+            if self.game_status == 'user_lose':
+                self.show_game_status()
+                flash()
+                sleep(1)
+
+                if self._is_restart():
+                    self.__init__(self.canvas)
+                    self.start_new_game()
+                return
+
             if key == KEYS['escape']:
                 endwin()
                 return
@@ -117,6 +127,9 @@ class TetrisGame(GameEngine):
         # this line place block in the center of board
         self.block.x -= (self.block.width * CELL_WIDTH) // 2
         self.block.x += 1 if self.block.x % 2 == 0 else 0
+
+        if self.block.is_block_placed_in_land():
+            self.game_status = 'user_lose'
 
         self.board.draw_board(self.block)
 
