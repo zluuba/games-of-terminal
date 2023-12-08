@@ -33,18 +33,24 @@ class TetrisBlock(Colors):
         if self._is_there_another_blocks(y_offset=y_offset, x_offset=x_offset):
             return
 
+        self.board.block(self, action='hide')
         self.y += y_offset
         self.x += x_offset
+        self.board.block(self, action='draw')
 
     def flip(self):
         new_blueprint = list(zip(*self.blueprint[::-1]))
 
         if self._is_out_of_borders(blueprint=new_blueprint):
             return
+        if self._is_there_another_blocks(blueprint=new_blueprint):
+            return
 
+        self.board.block(self, action='hide')
         self.blueprint = new_blueprint
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
+        self.board.block(self, action='draw')
 
     def drop(self):
         y_offset = 0
@@ -59,20 +65,28 @@ class TetrisBlock(Colors):
 
             y_offset = new_y_offset
 
+        self.board.block(self, action='hide')
         self.y += y_offset
+        self.board.block(self, action='draw')
 
-    def _is_there_another_blocks(self, x_offset=0, y_offset=0):
+    def _is_there_another_blocks(self, x_offset=0, y_offset=0, blueprint=None):
+        if not blueprint:
+            blueprint = self.blueprint
+
+        height = len(blueprint)
+        width = len(blueprint[0])
+
         begin_y = self.y + y_offset
         begin_x = self.x + x_offset
 
-        end_y = begin_y + (self.height * CELL_HEIGHT)
-        end_x = begin_x + (self.width * CELL_WIDTH)
+        end_y = begin_y + (height * CELL_HEIGHT)
+        end_x = begin_x + (width * CELL_WIDTH)
 
         for y in range(begin_y, end_y, CELL_HEIGHT):
             for x in range(begin_x, end_x, CELL_WIDTH):
                 blueprint_y = (y - begin_y) // CELL_HEIGHT
                 blueprint_x = (x - begin_x) // CELL_WIDTH
-                blueprint_cell = self.blueprint[blueprint_y][blueprint_x]
+                blueprint_cell = blueprint[blueprint_y][blueprint_x]
 
                 if blueprint_cell and not self.board.is_cell_free(y, x):
                     return True

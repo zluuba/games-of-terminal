@@ -7,8 +7,8 @@ from games_of_terminal.games.tetris.constants import (
     CELL_WIDTH, CELL_HEIGHT, DOWN,
 )
 
-from curses import endwin
-from time import time
+from curses import endwin, flash
+from time import time, sleep
 from random import choice
 
 
@@ -37,31 +37,39 @@ class TetrisGame(GameEngine):
 
             if key == FLIP_BLOCK:
                 self.block.flip()
-                self.board.draw_board(self.block)
             elif key == DROP_BLOCK:
                 self.block.drop()
                 self.land_current_block()
-                self.board.draw_board(self.block)
+                self.remove_complete_lines()
                 continue
             elif key in DIRECTIONS:
                 direction = DIRECTIONS[key]
                 self.block.move(direction)
-                self.board.draw_board(self.block)
 
             self._block_auto_move()
 
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
-                self.board.draw_board(self.block)
+                self.remove_complete_lines()
+
+    def remove_complete_lines(self):
+        while True:
+            line_y = self.board.get_complete_line()
+            if not line_y:
+                break
+
+            self.board.remove_line(line_y)
+        self.board.draw_board()
 
     def land_current_block(self):
         if not self.is_block_on_floor():
             return
 
-        self.board.land_block(self.block)
+        self.board.block(self.block, 'land')
         self.block = None
         self.time = time()
+        self.board.draw_board(self.block)
 
     def move_block_before_land(self):
         """ Give the ability move block if it touches the floor """
@@ -89,6 +97,7 @@ class TetrisGame(GameEngine):
     def _game_setup(self):
         self.hide_cursor()
         self.window.nodelay(1)
+        self.window.timeout(150)
 
         self.setup_side_menu()
         self.show_game_status()
