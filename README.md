@@ -12,7 +12,7 @@ in your favourite environment - **terminal**.
 
 Make sure you have the following installed:
 
-- [Python](https://www.python.org/), version 3.9 or higher. You can download it [here](https://www.python.org/downloads/).
+- [Python](https://www.python.org/), version 3.11 or higher. You can download it [here](https://www.python.org/downloads/).
 - [Poetry](https://python-poetry.org/), version 1.2.0 or higher. Install it by following the instructions [here](https://python-poetry.org/docs/#installation).
 
 
