@@ -4,15 +4,37 @@ from games_of_terminal.games.tictactoe.core import TicTacToeGame
 from games_of_terminal.games.tetris.core import TetrisGame
 
 
-CREATOR_NAME = 'by zluuba'
-
 GAMES = {
-    0: {'name': 'Snake', 'game': SnakeGame},
+    0: {'name': 'Tetris', 'game': TetrisGame},
     1: {'name': 'Minesweeper', 'game': MinesweeperGame},
     2: {'name': 'Tic Tac Toe', 'game': TicTacToeGame},
-    3: {'name': 'Tetris', 'game': TetrisGame},
-    # 4: {'name': '2048', 'game': TwoThousandFortyEightGame},
+    3: {'name': 'Snake', 'game': SnakeGame},
+    # 4: {'name': 'Settings', 'game': Settings},
 }
+
+LOGO_MENU = [
+    ' ####     #####   ######',
+    '##       ##   ##    ##  ',
+    '##  ###  ##   ##    ##  ',
+    '##   ##  ##   ##    ##  ',
+    ' #####    #####     ##  ',
+]
+TOP_SWORD = (
+    ('blade', '<:::::::::::::::::::::'),
+    ('hilt', '}]xxxx)o'),
+)
+BOTTOM_SWORD = (
+    ('hilt', 'o(xxxx[{'),
+    ('blade', ':::::'),
+    ('other', 'GAMES'),
+    ('blade', ':::::::::::>'),
+)
+SWORD_COLORS = {
+    'blade': 'grey_text_black_bg',
+    'hilt': 'very_light_grey_text_black_bg',
+    'other': 'light_grey_text_black_bg',
+}
+CREATOR_NAME = 'by zluuba'
 
 GOODBYE_MESSAGES = [
     'Already miss you.', 'You\'re a geek, right?',
