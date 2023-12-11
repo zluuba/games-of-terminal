@@ -12,6 +12,8 @@ class TetrisBoard(Colors):
 
         self.height = parent_window.height
         self.width = FIELD_WIDTH * CELL_WIDTH
+        self.begin_y = None
+        self.begin_x = None
 
         self.bg_color_name = 'white_text_dark_grey_bg'
 
@@ -26,11 +28,11 @@ class TetrisBoard(Colors):
     def _create_board_window(self, parent_window):
         window_width = self.width + BASE_OFFSET
 
-        begin_y = parent_window.begin_y
-        begin_x = ((parent_window.begin_x + parent_window.width) // 2) - (window_width // 2)
+        self.begin_y = parent_window.begin_y
+        self.begin_x = ((parent_window.begin_x + parent_window.width) // 2) - (window_width // 2)
 
         return Field(parent_window.box, self.height, window_width,
-                     begin_y, begin_x, show_borders=False)
+                     self.begin_y, self.begin_x, show_borders=False)
 
     def is_cell_free(self, y, x):
         return (y, x) not in self.landed_blocks

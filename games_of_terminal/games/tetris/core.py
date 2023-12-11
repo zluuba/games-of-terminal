@@ -2,6 +2,7 @@ from games_of_terminal.constants import KEYS
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
+from games_of_terminal.games.tetris.next_block import NextBlockArea
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     CELL_WIDTH, CELL_HEIGHT, DOWN, SCORES, LEVELS,
@@ -17,6 +18,7 @@ class TetrisGame(GameEngine):
         super().__init__(canvas)
 
         self.block = None
+        self.next_block = None
         self.board = None
         self.falling_direction = 'down'
 
@@ -41,6 +43,7 @@ class TetrisGame(GameEngine):
             key = self.window.getch()
 
             if self.game_status == 'user_lose':
+                # and_game_and_ask_for_restart
                 self.show_game_status()
                 flash()
                 sleep(1)
@@ -140,23 +143,33 @@ class TetrisGame(GameEngine):
         self.time = time()
         self.board = TetrisBoard(self.game_area)
 
+        self.next_block_area = NextBlockArea(self.game_area, self.board)
+
     def create_block(self):
         if self.block:
             return
+        if self.next_block:
+            self.block = self.next_block
+            self.next_block = self.get_new_block()
+        if not self.block:
+            self.block = self.get_new_block()
+        if not self.next_block:
+            self.next_block = self.get_new_block()
 
+        self.board.draw_board(self.block)
+        self.next_block_area.show(self.next_block)
+
+    def get_new_block(self):
         block_shape_name = choice(list(BLOCKS))
         y, x = 1, self.board.width // 2
 
-        self.block = TetrisBlock(block_shape_name, y, x, self.board)
+        block = TetrisBlock(block_shape_name, y, x, self.board)
 
         # this line place block in the center of board
-        self.block.x -= (self.block.width * CELL_WIDTH) // 2
-        self.block.x += 1 if self.block.x % 2 == 0 else 0
+        block.x -= (block.width * CELL_WIDTH) // 2
+        block.x += 1 if block.x % 2 == 0 else 0
 
-        if self.block.is_block_placed_in_land():
-            self.game_status = 'user_lose'
-
-        self.board.draw_board(self.block)
+        return block
 
     def _block_auto_move(self):
         current_time = time()
