@@ -14,31 +14,11 @@ LOGO = [
     ' #####    ####     ##  ',
 ]
 
-LOGO_MENU = [
-    ' ####     #####   ######',
-    '##       ##   ##    ##  ',
-    '##  ###  ##   ##    ##  ',
-    '##   ##  ##   ##    ##  ',
-    ' #####    #####     ##  ',
-]
-
-SWORD = '<:::::::::::::::::::::}]xxxx)o'       # \_(꒡⌓꒡)
-SWORD_REV = 'o(xxxx[{:::::GAMES:::::::::::>'   # (◔_◔)_/
-
 # 1 on each side
 BASE_OFFSET = 2
 
 DEFAULT_YX_OFFSET = 1
 STATUS_BOX_HEIGHT = 3
-
-MESSAGES = {
-    'game_over': 'GAME OVER',
-    'score_text': 'Score: ',
-    'best_score': 'Best score: ',
-    'new_best_score': 'New best score!',
-    # 'start_text': 'Press any key to start',
-    'play_again': 'Press Space to play again',
-}
 
 KEYS = {
     'up_arrow': KEY_UP,
@@ -56,14 +36,20 @@ KEYS = {
     'd': ord('d'),
     'q': ord('q'),
 }
-
 GAME_STATUSES = {
     'game_is_on': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
     'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},
     'user_lose': {'text': 'You LOSE', 'color': 'white_text_red_bg'},
     'tie': {'text': 'TIE', 'color': 'white_text_yellow_bg'},
 }
-
+MESSAGES = {
+    'game_over': 'GAME OVER',
+    'score_text': 'Score: ',
+    'best_score': 'Best score: ',
+    'new_best_score': 'New best score!',
+    # 'start_text': 'Press any key to start',
+    'play_again': 'Press Space to play again',
+}
 SIDE_MENU_TIPS = {
     'Move': '← ↓ ↑ → (wasd)',
     'Restart': 'R',

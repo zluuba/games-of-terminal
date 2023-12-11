@@ -43,7 +43,6 @@ class SnakeGame(GameEngine):
                 self._change_direction(key)
 
             self._move_snake()
-            self.draw_game_tips(self.tips)
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 self.game_status = 'user_lose'
@@ -125,6 +124,7 @@ class SnakeGame(GameEngine):
         if snake_head == self.food:
             self.score += 1
             self._put_food_on_the_field()
+            self.draw_game_tips(self.tips)
         else:
             snake_tail = self.snake.pop()
             self.game_area.box.addstr(*snake_tail, ' ')
