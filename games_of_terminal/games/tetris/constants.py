@@ -68,11 +68,21 @@ BLOCK_COLORS = {
     'S-block': 'white_text_light_purple_bg',
 }
 
-# all scores multiplying by current level
+# rows: points you get if remove this num of rows in one move
 SCORES = {
-    'single': 100,          # 1 row
-    'double': 300,          # 2 rows
-    'triple': 1000,         # 3 rows
-    'full rows': 2400,      # 4 rows
-    'combo': 100,           # remove lines 2+ times straight
+    0: 0,
+    1: 100,          # 1 row, 'single'
+    2: 300,          # 2 rows, 'double'
+    3: 1_000,         # 3 rows, 'triple'
+    4: 2_400,         # 4 rows, 'four!'
+    # 'combo': 100,    # remove lines 2+ times straight
+}
+
+# level: points you need to gain to move up this level
+LEVELS = {
+    1: 0,
+    2: 2_000,
+    3: 5_000,
+    4: 10_000,
+    5: 20_000,
 }

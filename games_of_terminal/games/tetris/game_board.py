@@ -23,9 +23,6 @@ class TetrisBoard(Colors):
         # landed blocks storage
         self.landed_blocks = dict()
 
-    def is_cell_free(self, y, x):
-        return (y, x) not in self.landed_blocks
-
     def _create_board_window(self, parent_window):
         window_width = self.width + BASE_OFFSET
 
@@ -34,6 +31,9 @@ class TetrisBoard(Colors):
 
         return Field(parent_window.box, self.height, window_width,
                      begin_y, begin_x, show_borders=False)
+
+    def is_cell_free(self, y, x):
+        return (y, x) not in self.landed_blocks
 
     def hide_cell(self, y, x, *args):
         self._draw_cell(y, x, self.bg_color_name, CELL_WIDTH)
@@ -98,7 +98,6 @@ class TetrisBoard(Colors):
                 return y
             if not occupied_cells:
                 break
-
         return 0
 
     def remove_line(self, line_y):

@@ -4,7 +4,7 @@ from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
-    CELL_WIDTH, CELL_HEIGHT, DOWN,
+    CELL_WIDTH, CELL_HEIGHT, DOWN, SCORES, LEVELS,
 )
 
 from curses import endwin, flash
@@ -21,11 +21,20 @@ class TetrisGame(GameEngine):
         self.falling_direction = 'down'
 
         self.score = 0
+        self.level = 1
         self.time_interval = 1
         self.time = time()
 
+    @property
+    def tips(self):
+        return {
+            'Score': self.score,
+            'Level': self.level,
+        }
+
     def start_new_game(self):
         self._game_setup()
+        self.draw_game_tips(self.tips)
 
         while True:
             self.create_block()
@@ -63,15 +72,6 @@ class TetrisGame(GameEngine):
                 self.land_current_block()
                 self.remove_complete_lines()
 
-    def remove_complete_lines(self):
-        while True:
-            line_y = self.board.get_complete_line()
-            if not line_y:
-                break
-
-            self.board.remove_line(line_y)
-        self.board.draw_board()
-
     def land_current_block(self):
         if not self.is_block_on_floor():
             return
@@ -80,6 +80,31 @@ class TetrisGame(GameEngine):
         self.block = None
         self.time = time()
         self.board.draw_board(self.block)
+
+    def remove_complete_lines(self):
+        lines_count = 0
+
+        while True:
+            line_y = self.board.get_complete_line()
+            if not line_y:
+                break
+
+            lines_count += 1
+            self.board.remove_line(line_y)
+
+        self.score += SCORES[lines_count] * self.level
+        self._increase_level()
+        self.draw_game_tips(self.tips)
+        self.board.draw_board()
+
+    def _increase_level(self):
+        if self.level == max(LEVELS):
+            return
+
+        min_score_to_up_level = LEVELS[self.level + 1]
+        if self.score >= min_score_to_up_level:
+            self.level += 1
+            self.time_interval -= 0.2
 
     def move_block_before_land(self):
         """ Give the ability move block if it touches the floor """
