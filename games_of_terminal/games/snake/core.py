@@ -46,16 +46,8 @@ class SnakeGame(GameEngine):
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 self.game_status = 'user_lose'
-                self.show_game_status()
-                self._save_best_score()
-
-                flash()
-                sleep(1)
-
-                if self._is_restart():
-                    self.__init__(self.canvas)
-                    self.start_new_game()
-                return
+                if not self.is_game_over():
+                    return
 
             self.game_area.box.refresh()
             self.window.refresh()

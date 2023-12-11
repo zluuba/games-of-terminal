@@ -42,15 +42,8 @@ class MinesweeperGame(GameEngine):
                     self.game_status = 'user_win'
 
             if self.game_status != 'game_is_on':
-                flash()
-
-                self.show_game_status()
-                sleep(1)
-
-                if self._is_restart():
-                    self.__init__(self.canvas)
-                    self.start_new_game()
-                return
+                if not self.is_game_over():
+                    return
 
     @property
     def current_cell(self):

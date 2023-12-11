@@ -4,7 +4,8 @@ from games_of_terminal.constants import (
     BASE_OFFSET,
 )
 
-from curses import flushinp, A_BLINK as BLINK
+from curses import flash, flushinp, A_BLINK as BLINK
+from time import sleep
 
 
 class GameEngine(InterfaceManager):
@@ -67,6 +68,16 @@ class GameEngine(InterfaceManager):
         color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
         y, x = 3 + len(SIDE_MENU_TIPS), 2
         self.draw_side_menu_tips(y, x, tips, color)
+
+    def is_game_over(self):
+        flash()
+        self.show_game_status()
+        sleep(1)
+
+        if self._is_restart():
+            self.__init__(self.canvas)
+            self.start_new_game()
+        return False
 
     def _is_restart(self):
         """ Draws a message in the center of the playing field

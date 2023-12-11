@@ -41,14 +41,8 @@ class TicTacToeGame(GameEngine):
                     self._computer_move()
 
             if self.game_status != 'game_is_on':
-                self.show_game_status()
-                flash()
-                sleep(1)
-
-                if self._is_restart():
-                    self.__init__(self.canvas)
-                    self.start_new_game()
-                return
+                if not self.is_game_over():
+                    return
 
     @property
     def current_cell(self):

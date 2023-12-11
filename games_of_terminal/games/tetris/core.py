@@ -36,22 +36,14 @@ class TetrisGame(GameEngine):
 
     def start_new_game(self):
         self._game_setup()
-        self.draw_game_tips(self.tips)
 
         while True:
             self.create_block()
             key = self.window.getch()
 
-            if self.game_status == 'user_lose':
-                # and_game_and_ask_for_restart
-                self.show_game_status()
-                flash()
-                sleep(1)
-
-                if self._is_restart():
-                    self.__init__(self.canvas)
-                    self.start_new_game()
-                return
+            if self.game_status != 'game_is_on':
+                if not self.is_game_over():
+                    return
 
             if key == KEYS['escape']:
                 endwin()
@@ -62,7 +54,6 @@ class TetrisGame(GameEngine):
             elif key == DROP_BLOCK:
                 self.block.drop()
                 self.land_current_block()
-                self.remove_complete_lines()
                 continue
             elif key in DIRECTIONS:
                 direction = DIRECTIONS[key]
@@ -73,7 +64,6 @@ class TetrisGame(GameEngine):
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
-                self.remove_complete_lines()
 
     def land_current_block(self):
         if not self.is_block_on_floor():
@@ -83,6 +73,8 @@ class TetrisGame(GameEngine):
         self.block = None
         self.time = time()
         self.board.draw_board(self.block)
+
+        self.remove_complete_lines()
 
     def remove_complete_lines(self):
         lines_count = 0
@@ -139,10 +131,10 @@ class TetrisGame(GameEngine):
 
         self.setup_side_menu()
         self.show_game_status()
+        self.draw_game_tips(self.tips)
 
         self.time = time()
         self.board = TetrisBoard(self.game_area)
-
         self.next_block_area = NextBlockArea(self.game_area, self.board)
 
     def create_block(self):
@@ -158,6 +150,9 @@ class TetrisGame(GameEngine):
 
         self.board.draw_board(self.block)
         self.next_block_area.show(self.next_block)
+
+        if self.block.is_block_placed_in_land():
+            self.game_status = 'user_lose'
 
     def get_new_block(self):
         block_shape_name = choice(list(BLOCKS))
