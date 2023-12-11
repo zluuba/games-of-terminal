@@ -39,6 +39,9 @@ class Colors:
             'light_grey_text_black_bg': 22,
 
             'white_text_light_black_bg': 23,
+            'light_black_text_black_bg': 24,
+            'very_light_grey_text_black_bg': 25,
+            'grey_text_black_bg': 26,
         }
 
         start_color()
@@ -70,7 +73,11 @@ class Colors:
         init_pair(20, COLOR_WHITE, 136)
         init_pair(21, 147, COLOR_BLACK)
         init_pair(22, 245, COLOR_BLACK)
+
         init_pair(23, COLOR_WHITE, 232)
+        init_pair(24, 233, COLOR_BLACK)
+        init_pair(25, 248, COLOR_BLACK)
+        init_pair(26, 242, COLOR_BLACK)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
 
