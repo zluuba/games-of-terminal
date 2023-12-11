@@ -22,20 +22,14 @@ class MinesweeperGame(GameEngine):
         while True:
             key = self.window.getch()
             self.wait_for_keypress()
+            self.controller(key, pause_off=True)
 
-            if key == KEYS['escape']:
-                endwin()
+            if self.is_exit:
                 return
-
-            if key in DIRECTIONS:
-                offset = DIRECTIONS[key]
-                self._slide_field(*offset)
-            elif key == KEYS['q']:
-                self._switch_flag()
-            elif key in KEYS['enter']:
-                self._show_cell(self.current_cell)
-
-            self.draw_game_tips(self.tips)
+            if self.is_game_over():
+                is_restart = self.ask_for_restart()
+                if not is_restart:
+                    return
 
             if self._is_all_cells_open():
                 if self._is_no_unnecessary_flags():
@@ -44,6 +38,17 @@ class MinesweeperGame(GameEngine):
             if self.game_status != 'game_is_on':
                 if not self.is_game_over():
                     return
+
+    def controller(self, key, pause_off=False):
+        super().controller(key, pause_off)
+
+        if key in DIRECTIONS:
+            offset = DIRECTIONS[key]
+            self._slide_field(*offset)
+        elif key == KEYS['q']:
+            self._switch_flag()
+        elif key in KEYS['enter']:
+            self._show_cell(self.current_cell)
 
     @property
     def current_cell(self):

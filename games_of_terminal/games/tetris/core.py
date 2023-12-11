@@ -40,30 +40,32 @@ class TetrisGame(GameEngine):
         while True:
             self.create_block()
             key = self.window.getch()
+            self.controller(key)
 
-            if self.game_status != 'game_is_on':
-                if not self.is_game_over():
-                    return
-
-            if key == KEYS['escape']:
-                endwin()
+            if self.is_exit:
                 return
-
-            if key == FLIP_BLOCK:
-                self.block.flip()
-            elif key == DROP_BLOCK:
-                self.block.drop()
-                self.land_current_block()
-                continue
-            elif key in DIRECTIONS:
-                direction = DIRECTIONS[key]
-                self.block.move(direction)
+            if self.is_game_over():
+                is_restart = self.ask_for_restart()
+                if not is_restart:
+                    return
 
             self._block_auto_move()
 
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
+
+    def controller(self, key, pause_off=False):
+        super().controller(key, pause_off)
+
+        if key == FLIP_BLOCK:
+            self.block.flip()
+        elif key == DROP_BLOCK:
+            self.block.drop()
+            self.land_current_block()
+        elif key in DIRECTIONS:
+            direction = DIRECTIONS[key]
+            self.block.move(direction)
 
     def land_current_block(self):
         if not self.is_block_on_floor():
@@ -127,7 +129,7 @@ class TetrisGame(GameEngine):
     def _game_setup(self):
         self.hide_cursor()
         self.window.nodelay(1)
-        self.window.timeout(150)
+        # self.window.timeout(150)
 
         self.setup_side_menu()
         self.show_game_status()
@@ -151,6 +153,7 @@ class TetrisGame(GameEngine):
         self.board.draw_board(self.block)
         self.next_block_area.show(self.next_block)
 
+        # check new block for correct placement
         if self.block.is_block_placed_in_land():
             self.game_status = 'user_lose'
 
@@ -160,7 +163,7 @@ class TetrisGame(GameEngine):
 
         block = TetrisBlock(block_shape_name, y, x, self.board)
 
-        # this line place block in the center of board
+        # these lines place block in the center of board
         block.x -= (block.width * CELL_WIDTH) // 2
         block.x += 1 if block.x % 2 == 0 else 0
 
@@ -175,6 +178,9 @@ class TetrisGame(GameEngine):
             self.time = current_time
 
     def is_block_on_floor(self):
+        if not self.block:
+            return
+
         begin_y = self.block.y
         begin_x = self.block.x
 

@@ -27,6 +27,7 @@ KEYS = {
     'right_arrow': KEY_RIGHT,
     'enter': [KEY_ENTER, 10, 13],
     'resize': KEY_RESIZE,
+    'restart': ord('r'),
     'pause': ord('p'),
     'space': ord(' '),
     'escape': 27,

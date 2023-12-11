@@ -4,7 +4,7 @@ from games_of_terminal.constants import (
     BASE_OFFSET,
 )
 
-from curses import flash, flushinp, A_BLINK as BLINK
+from curses import flash, flushinp, endwin, A_BLINK as BLINK
 from time import sleep
 
 
@@ -13,8 +13,9 @@ class GameEngine(InterfaceManager):
         super().__init__(canvas)
 
         self.state = {
-            'pause': False,
             'game_status': 'game_is_on',
+            'pause': False,
+            'exit': False,
         }
 
     @property
@@ -25,7 +26,29 @@ class GameEngine(InterfaceManager):
     def game_status(self, status):
         self.state['game_status'] = status
 
-    def _pause(self):
+    @property
+    def is_exit(self):
+        return self.state['exit']
+
+    @is_exit.setter
+    def is_exit(self, value):
+        self.state['exit'] = value
+
+    def is_game_over(self):
+        return self.game_status != 'game_is_on'
+
+    def controller(self, key, pause_off):
+        if key == KEYS['escape']:
+            self.is_exit = True
+            endwin()
+        elif key == KEYS['pause'] and not pause_off:
+            self.pause()
+        elif key == KEYS['restart']:
+            self.game_area.box.erase()
+            self.__init__(self.canvas)
+            self.start_new_game()
+
+    def pause(self):
         self.state['pause'] = not self.state['pause']
         self.wait_for_keypress()
 
@@ -36,6 +59,8 @@ class GameEngine(InterfaceManager):
             while key != KEYS['pause']:
                 self.wait_for_keypress()
                 key = self.window.getch()
+
+            self.state['pause'] = not self.state['pause']
 
         self.window.timeout(150)
         return
@@ -69,7 +94,7 @@ class GameEngine(InterfaceManager):
         y, x = 3 + len(SIDE_MENU_TIPS), 2
         self.draw_side_menu_tips(y, x, tips, color)
 
-    def is_game_over(self):
+    def ask_for_restart(self):
         flash()
         self.show_game_status()
         sleep(1)

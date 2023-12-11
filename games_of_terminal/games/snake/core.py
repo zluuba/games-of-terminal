@@ -35,12 +35,14 @@ class SnakeGame(GameEngine):
 
         while True:
             key = self.window.getch()
+            self.controller(key)
 
-            if key == KEYS['escape']:
-                endwin()
+            if self.is_exit:
                 return
-            elif key in DIRECTIONS.keys():
-                self._change_direction(key)
+            if self.is_game_over():
+                is_restart = self.ask_for_restart()
+                if not is_restart:
+                    return
 
             self._move_snake()
 
@@ -51,6 +53,12 @@ class SnakeGame(GameEngine):
 
             self.game_area.box.refresh()
             self.window.refresh()
+
+    def controller(self, key, pause_off=False):
+        super().controller(key, pause_off)
+
+        if key in DIRECTIONS.keys():
+            self._change_direction(key)
 
     @property
     def best_score(self):

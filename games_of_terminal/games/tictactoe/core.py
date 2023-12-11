@@ -28,21 +28,28 @@ class TicTacToeGame(GameEngine):
         while True:
             key = self.window.getch()
             self.wait_for_keypress()
+            self.controller(key, pause_off=True)
 
-            if key == KEYS['escape']:
-                endwin()
+            if self.is_exit:
                 return
-
-            if key in DIRECTIONS:
-                self._slide_field(key)
-            elif key in KEYS['enter']:
-                if self.current_cell.is_free():
-                    self._user_move()
-                    self._computer_move()
+            if self.is_game_over():
+                is_restart = self.ask_for_restart()
+                if not is_restart:
+                    return
 
             if self.game_status != 'game_is_on':
                 if not self.is_game_over():
                     return
+
+    def controller(self, key, pause_off=False):
+        super().controller(key, pause_off)
+
+        if key in DIRECTIONS:
+            self._slide_field(key)
+        elif key in KEYS['enter']:
+            if self.current_cell.is_free():
+                self._user_move()
+                self._computer_move()
 
     @property
     def current_cell(self):
