@@ -30,7 +30,6 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 
 - **Beginner's Luck**: achieve your first victory.
 - **Ha-ha!**: experience your first defeat.
-- **Mkay**: achieve your first tie.
 - **You Scare Me**: personalize your gaming experience by changing the color scheme.
 - **Really..?**: play 20 games.
 - **Ah shit, here we go again**: start your 101st game.
@@ -39,22 +38,25 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 ## Tetris Game
 
 - **Did You See The Movie?**: start your first game.
-- **It was... Fast**: experience your first loss.
+- **It was.. Fast.**: experience your first loss.
 - **Block by Block**: complete 10 lines in a single game.
-- **Yoda**: achieve a score of 10,000 points.
+- **Cubie**: achieve a score of 10,000 points.
+- **Yoda**: achieve a score of 30,000 points.
+- **You beat me!**: achieve a score of 56,900 points and beat the creator's best score.
 - **Speed Demon**: clear a line in less than one minute.
+- **Nitrous**: reach the last level of block speed.
 - **Annihilator**: clear 4 lines at once.
 - **Shape Shifter**: use every shape in a single game.
 
 
 ## 2048 Game
-*In development.*
+*Game in development.*
 
-- **Reverse on You**: change the color scheme.
 - **Tile Tactician**: reach the 2048 tile.
 - **Back to Work, Please**: reach the 16384 tile.
 - **Quantum Merger**: perform multiple merges in a single move.
 - **Wanna Coffee?**: play 15 minutes straight. 
+- **Reverse on You**: change the color scheme.
 
 
 ## Global
@@ -71,7 +73,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 
 ##
 
-In total, GOT has 40 achievements. 
+In total, GOT has 41 achievements. 
 If you have a creative idea for an additional achievement, please share it with me by creating an issue following 
 [these instructions](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md).
 Your input is greatly appreciated!
