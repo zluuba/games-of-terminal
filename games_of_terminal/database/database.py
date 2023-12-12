@@ -1,0 +1,73 @@
+from games_of_terminal.database.common import *
+from pathlib import Path
+from os import path
+import sqlite3
+
+
+DB_FILENAME = 'got_games.db'
+BASE_DIR = Path(__file__).parents[1]
+FILE_PATH = path.join(BASE_DIR, DB_FILENAME)
+
+
+def create_connection():
+    connection = sqlite3.connect(FILE_PATH)
+    return connection
+
+
+def check_tables_exist():
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(check_tables_query)
+    existing_tables = cursor.fetchall()
+    return len(existing_tables) == len(TABLES)
+
+
+def create_tables():
+    if check_tables_exist():
+        return
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    for _, create_table_query in TABLES.items():
+        cursor.execute(create_table_query)
+
+    cursor.execute(insert_default_games_query)
+
+    for achievement_name, (description, game) in achievements.items():
+        cursor.execute(get_game_id_query, (game,))
+        data = cursor.fetchone()
+
+        game_id = data[0]
+        cursor.execute(
+            insert_achievements_query,
+            (game_id, achievement_name, description)
+        )
+
+    conn.commit()
+    conn.close()
+
+    return FILE_PATH
+
+
+def get_game_state(game_name, stat):
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    query = get_game_state_query(stat)
+    cursor.execute(query, (game_name,))
+    data = cursor.fetchone()
+    conn.close()
+    return data[0]
+
+
+def save_game_state(game_name, stat, value):
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    query = set_game_state_query(stat)
+    cursor.execute(query, (value, game_name))
+
+    conn.commit()
+    conn.close()
