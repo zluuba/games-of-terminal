@@ -29,14 +29,6 @@ class MinesweeperGame(GameEngine):
                 if not is_restart:
                     return
 
-            if self._is_all_cells_open():
-                if self._is_no_unnecessary_flags():
-                    self.game_status = 'user_win'
-
-            if self.game_status != 'game_is_on':
-                if not self.is_game_over():
-                    return
-
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -112,6 +104,8 @@ class MinesweeperGame(GameEngine):
             self.current_cell.select()
 
     def _plant_bombs(self):
+        # TODO add random div [2, 6] to set random num of bombs
+
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
         bombs_count = number_of_sells // 5
@@ -143,13 +137,10 @@ class MinesweeperGame(GameEngine):
             cell.set_background_color()
 
     def _open_first_empty_cell(self):
+        # TODO add (if not empty_cells) exclude cells with bombs
+
         empty_cells = self._get_empty_cells()
-
-        if empty_cells:
-            first_empty_cell = choice(empty_cells)
-        else:
-            first_empty_cell = choice(self.cells)
-
+        first_empty_cell = choice(empty_cells)
         first_empty_cell.open_cell()
         first_empty_cell.set_background_color()
 
@@ -179,6 +170,23 @@ class MinesweeperGame(GameEngine):
         cell.open_cell()
         cell.show_cell_text()
         cell.hide_cell()
+        self.check_to_win()
+
+    def _switch_flag(self):
+        cell = self.current_cell
+
+        if cell.have_flag():
+            self.flags += 1
+            cell.remove_flag()
+        elif not cell.have_flag() and not cell.is_open() and self.flags > 0:
+            self.flags -= 1
+            cell.set_flag()
+
+        cell.show_cell()
+        cell.show_cell_text()
+        cell.hide_cell()
+
+        self.check_to_win()
 
     def _open_near_empty_cells(self, cell):
         y, x = cell.coordinates
@@ -217,36 +225,7 @@ class MinesweeperGame(GameEngine):
                 return False
         return True
 
-    def _switch_flag(self):
-        cell = self.current_cell
-
-        if cell.have_flag():
-            self.flags += 1
-            cell.remove_flag()
-        elif not cell.have_flag() and not cell.is_open() and self.flags > 0:
-            self.flags -= 1
-            cell.set_flag()
-
-        cell.show_cell()
-        cell.show_cell_text()
-        cell.hide_cell()
-
-    # def _show_all_cells(self):
-    #     for coords, cell in self.cells.items():
-    #         self._show_cell(cell)
-
-    # def _open_all_cells(self):
-    #     for cell in self.cells.values():
-    #         cell.open_cell()
-
-    # def _check_window_resize(self):
-    #     self.resize = curses.is_term_resized(self.height, self.width)
-    #
-    #     if self.resize is True:
-    #         curses.flash()
-    #         self.canvas.clear()
-    #         y, x = self.canvas.getmaxyx()
-    #         curses.resizeterm(y, x)
-    #         self.height, self.width = y, x
-    #         self.canvas.refresh()
-    #         self._setup()
+    def check_to_win(self):
+        if self._is_all_cells_open():
+            if self._is_no_unnecessary_flags():
+                self.game_status = 'user_win'
