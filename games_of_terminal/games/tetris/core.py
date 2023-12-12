@@ -8,8 +8,7 @@ from games_of_terminal.games.tetris.constants import (
     CELL_WIDTH, CELL_HEIGHT, DOWN, SCORES, LEVELS,
 )
 
-from curses import endwin, flash
-from time import time, sleep
+from time import time
 from random import choice
 
 
@@ -74,9 +73,10 @@ class TetrisGame(GameEngine):
         self.board.block(self.block, 'land')
         self.block = None
         self.time = time()
-        self.board.draw_board(self.block)
+        self.board.draw_board()
 
         self.remove_complete_lines()
+        self.create_block()
 
     def remove_complete_lines(self):
         lines_count = 0
@@ -129,7 +129,6 @@ class TetrisGame(GameEngine):
     def _game_setup(self):
         self.hide_cursor()
         self.window.nodelay(1)
-        # self.window.timeout(150)
 
         self.setup_side_menu()
         self.show_game_status()
@@ -178,9 +177,6 @@ class TetrisGame(GameEngine):
             self.time = current_time
 
     def is_block_on_floor(self):
-        if not self.block:
-            return
-
         begin_y = self.block.y
         begin_x = self.block.x
 

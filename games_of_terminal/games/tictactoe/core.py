@@ -5,7 +5,6 @@ from games_of_terminal.games.tictactoe.constants import (
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 
-from curses import endwin, flash
 from random import choice
 from time import sleep
 

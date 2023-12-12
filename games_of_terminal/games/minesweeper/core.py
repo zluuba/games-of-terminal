@@ -3,9 +3,7 @@ from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
-from curses import endwin, flash
 from random import choice
-from time import sleep
 
 
 class MinesweeperGame(GameEngine):

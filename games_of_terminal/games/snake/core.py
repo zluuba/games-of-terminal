@@ -6,9 +6,7 @@ from games_of_terminal.games.snake.score import (
     get_best_score, save_best_score,
 )
 
-from curses import endwin, flash
 from random import randint
-from time import sleep
 
 
 class SnakeGame(GameEngine):
