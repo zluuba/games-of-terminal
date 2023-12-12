@@ -1,4 +1,4 @@
-from games_of_terminal.constants import KEYS
+from games_of_terminal.database.database import get_game_state, save_game_state
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
@@ -22,6 +22,7 @@ class TetrisGame(GameEngine):
         self.falling_direction = 'down'
 
         self.score = 0
+        self.best_score = None
         self.level = 1
         self.time_interval = 1
         self.time = time()
@@ -31,7 +32,16 @@ class TetrisGame(GameEngine):
         return {
             'Score': self.score,
             'Level': self.level,
+            'Best Score': self.best_score,
         }
+
+    def set_best_score(self):
+        data = get_game_state('Tetris', 'best_score')
+        self.best_score = data
+
+    def save_best_score(self):
+        if self.score > self.best_score:
+            save_game_state('Tetris', 'best_score', self.score)
 
     def start_new_game(self):
         self._game_setup()
@@ -44,6 +54,7 @@ class TetrisGame(GameEngine):
             if self.is_exit:
                 return
             if self.is_game_over():
+                self.save_best_score()
                 is_restart = self.ask_for_restart()
                 if not is_restart:
                     return
@@ -129,6 +140,8 @@ class TetrisGame(GameEngine):
     def _game_setup(self):
         self.hide_cursor()
         self.window.nodelay(1)
+
+        self.set_best_score()
 
         self.setup_side_menu()
         self.show_game_status()

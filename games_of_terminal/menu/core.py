@@ -1,5 +1,6 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET
+from games_of_terminal.database.database import create_tables
 from games_of_terminal.menu.constants import (
     GAMES, CREATOR_NAME, GOODBYE_MESSAGES,
     LOGO_MENU, TOP_SWORD, BOTTOM_SWORD, SWORD_COLORS,
@@ -15,6 +16,9 @@ from sys import exit
 class Menu(InterfaceManager):
     def _setup(self):
         super()._setup()
+
+        # create tables if they don't exist
+        create_tables()
 
         self.current_row = 0
         self.menu_length = len(GAMES)

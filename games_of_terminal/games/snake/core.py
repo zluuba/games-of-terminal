@@ -2,9 +2,7 @@ from games_of_terminal.constants import KEYS, MESSAGES
 from games_of_terminal.games.engine import GameEngine
 
 from games_of_terminal.games.snake.constants import *
-from games_of_terminal.games.snake.score import (
-    get_best_score, save_best_score,
-)
+from games_of_terminal.database.database import get_game_state, save_game_state
 
 from random import randint
 
@@ -14,6 +12,7 @@ class SnakeGame(GameEngine):
         super().__init__(canvas)
 
         self.score = 0
+        self.best_score = 0
         self.food = None
 
         # initial position of the snake:
@@ -38,6 +37,7 @@ class SnakeGame(GameEngine):
             if self.is_exit:
                 return
             if self.is_game_over():
+                self._save_best_score()
                 is_restart = self.ask_for_restart()
                 if not is_restart:
                     return
@@ -58,9 +58,9 @@ class SnakeGame(GameEngine):
         if key in DIRECTIONS.keys():
             self._change_direction(key)
 
-    @property
-    def best_score(self):
-        return get_best_score()
+    def set_best_score(self):
+        data = get_game_state('Snake', 'best_score')
+        self.best_score = data
 
     @property
     def tips(self):
@@ -90,6 +90,8 @@ class SnakeGame(GameEngine):
 
         self.setup_side_menu()
         self.show_game_status()
+
+        self.set_best_score()
 
     def _change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
@@ -130,9 +132,9 @@ class SnakeGame(GameEngine):
         self.game_area.box.refresh()
 
     def _save_best_score(self):
-        is_best_score = save_best_score(self.score)
+        if self.score > self.best_score:
+            save_game_state('Snake', 'best_score', self.score)
 
-        if is_best_score:
             message = MESSAGES['new_best_score']
             self.draw_message(9, 2,
                               self.tips_area.box, message,
