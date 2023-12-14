@@ -5,6 +5,7 @@
 # local files
 .env
 dist/
+__pycache__
 
 # upcoming features file
 list_of_features.txt
