@@ -9,32 +9,7 @@ GAMES = {
     1: {'name': 'Minesweeper', 'game': MinesweeperGame},
     2: {'name': 'Tic Tac Toe', 'game': TicTacToeGame},
     3: {'name': 'Snake', 'game': SnakeGame},
-    # 4: {'name': 'Settings', 'game': Settings},
 }
-
-LOGO_MENU = [
-    ' ####     #####   ######',
-    '##       ##   ##    ##  ',
-    '##  ###  ##   ##    ##  ',
-    '##   ##  ##   ##    ##  ',
-    ' #####    #####     ##  ',
-]
-TOP_SWORD = (
-    ('blade', '<:::::::::::::::::::::'),
-    ('hilt', '}]xxxx)o'),
-)
-BOTTOM_SWORD = (
-    ('hilt', 'o(xxxx[{'),
-    ('blade', ':::::'),
-    ('other', 'GAMES'),
-    ('blade', ':::::::::::>'),
-)
-SWORD_COLORS = {
-    'blade': 'grey_text_black_bg',
-    'hilt': 'very_light_grey_text_black_bg',
-    'other': 'light_grey_text_black_bg',
-}
-CREATOR_NAME = 'by zluuba'
 
 GOODBYE_MESSAGES = [
     'Already miss you.', 'You\'re a geek, right?',
@@ -45,3 +20,64 @@ GOODBYE_MESSAGES = [
     'May the Force be with you.', ' ♥ ', 'F',
     'We\'re all doomed.', 'Bye.', 'Nice.',
 ]
+
+LOGO_MENU = [
+    ' ####     #####   ######',
+    '##       ##   ##    ##  ',
+    '##  ###  ##   ##    ##  ',
+    '##   ##  ##   ##    ##  ',
+    ' #####    #####     ##  ',
+]
+
+LOGO_FILL = {
+    'default': '#',
+    'skull': '☠',
+    'two_asterisks': '⁑',
+    'balloons': '✤',
+    'heart': '♡',
+    'dots': '░',
+    'big_o': 'O',
+    'line': '|',
+}
+
+TOP_SWORD = (
+    ('blade', '<:::::::::::::::::::::'),
+    ('hilt', '}]xxxx)o'),
+)
+
+BOTTOM_SWORD = (
+    ('hilt', 'o(xxxx[{'),
+    ('blade', ':::::'),
+    ('other', 'GAMES'),
+    ('blade', ':::::::::::>'),
+)
+
+MENU_MAX_LEN = TOP_SWORD_LEN = sum([len(part) for _, part in TOP_SWORD])
+BOTTOM_SWORD_LEN = sum([len(part) for _, part in TOP_SWORD])
+
+SWORD_COLORS = {
+    'blade': 'grey_text_black_bg',
+    'hilt': 'very_light_grey_text_black_bg',
+    'other': 'light_grey_text_black_bg',
+}
+
+FIRE_CHARS = [" ", ".", ":", "*", "s", "S", "#", "$"]
+LAST_FIRE_CHAR_IND = len(FIRE_CHARS) - 1
+
+# then higher elements number, than higher flame you get
+FIRE_ELEMENTS_COUNT = 85
+
+FIRE_COLORS = {
+    'yellow': 'yellow_text_black_bg',
+    'red': 'red_text_black_bg',
+    'black': 'light_black_text_black_bg',
+}
+
+# delay between fire redraw
+ANIMATION_SPEED = {
+    'fast': 100,
+    'medium': 150,
+    'slow': 200,
+}
+
+CREATOR_NAME = 'by zluuba'

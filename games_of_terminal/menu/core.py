@@ -1,12 +1,9 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.database.database import create_tables
-from games_of_terminal.menu.constants import (
-    GAMES, CREATOR_NAME, GOODBYE_MESSAGES,
-    LOGO_MENU, TOP_SWORD, BOTTOM_SWORD, SWORD_COLORS,
-)
+from games_of_terminal.menu.constants import *
 
-from curses import A_STANDOUT as REVERSE, A_BOLD, color_pair
+from curses import A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
@@ -17,7 +14,7 @@ class Menu(InterfaceManager):
     def _setup(self):
         super()._setup()
 
-        # create tables if they don't exist
+        # create tables in database
         create_tables()
 
         self.current_row = 0
@@ -26,23 +23,21 @@ class Menu(InterfaceManager):
         self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 4
         self.menu_start_y = self.logo_start_y + len(LOGO_MENU) + 3
 
-        top_sword_len = sum([len(part) for _, part in TOP_SWORD])
         self.top_sword_y = self.logo_start_y - 1
-        self.top_sword_x = (self.width // 2) - (top_sword_len // 2)
+        self.top_sword_x = (self.width // 2) - (TOP_SWORD_LEN // 2)
 
-        bottom_sword_len = sum([len(part) for _, part in BOTTOM_SWORD])
         self.bottom_sword_y = self.logo_start_y + len(LOGO_MENU)
-        self.bottom_sword_x = (self.width // 2) - (bottom_sword_len // 2)
+        self.bottom_sword_x = (self.width // 2) - (BOTTOM_SWORD_LEN // 2)
 
         self.fire_area_size = self.width * self.height
-        self.fire_chars = [" ", ".", ":", "*", "s", "S", "#", "$"]
         self.fire_items = [0] * (self.fire_area_size + self.width + 1)
 
-        menu_max_len = top_sword_len
-        begin_offset = BASE_OFFSET
-        end_offset = (begin_offset * 2) if (menu_max_len % 2) else (begin_offset * 2 - 1)
-        self.fire_free_area_begin_x = (self.width // 2) - (menu_max_len // 2) - begin_offset
-        self.fire_free_area_end_x = self.fire_free_area_begin_x + menu_max_len + end_offset
+        end_offset = (BASE_OFFSET * 2) if (MENU_MAX_LEN % 2) else (BASE_OFFSET * 2 - 1)
+        self.fire_free_area_begin_x = (self.width // 2) - (MENU_MAX_LEN // 2) - BASE_OFFSET
+        self.fire_free_area_end_x = self.fire_free_area_begin_x + MENU_MAX_LEN + end_offset
+
+        # self.logo_fill = choice(list(LOGO_FILL.values()))
+        self.logo_fill = LOGO_FILL['default']
 
     def run_menu_loop(self):
         self.window.clear()
@@ -89,15 +84,12 @@ class Menu(InterfaceManager):
                                   game_name, self.default_color)
 
     def _draw_logo_with_swords(self):
-        # draw sword above the logo
-        self._draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
-
-        # draw logo
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
+            line = line.replace('#', self.logo_fill)
             x = (self.width // 2) - (len(line) // 2)
             self.draw_message(y, x, self.window, line, self.default_color)
 
-        # draw sword under the logo
+        self._draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
         self._draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
 
     def _draw_sword(self, sword, y, x):
@@ -133,32 +125,32 @@ class Menu(InterfaceManager):
         if not animation:
             return
 
-        self.window.timeout(120)
+        self.window.timeout(ANIMATION_SPEED['medium'])
 
         for i in range(int(self.width / 9)):
-            self.fire_items[int((random() * self.width) + self.width * (self.height - 1))] = 65
+            self.fire_items[int((random() * self.width) + self.width * (self.height - 1))] = FIRE_ELEMENTS_COUNT
 
         for i in range(self.fire_area_size):
             self.fire_items[i] = int(
                 (self.fire_items[i] + self.fire_items[i + 1] + self.fire_items[i + self.width] +
                  + self.fire_items[i + self.width + 1]) / 4
             )
-            color_num = (10 if self.fire_items[i] > 15 else (8 if self.fire_items[i] > 9 else 24))
+            color_name = ('yellow' if self.fire_items[i] > 15 else ('red' if self.fire_items[i] > 9 else 'black'))
+            color = self.get_color_by_name(FIRE_COLORS[color_name])
+
+            fire_char_index = LAST_FIRE_CHAR_IND if self.fire_items[i] > LAST_FIRE_CHAR_IND else self.fire_items[i]
+            char = FIRE_CHARS[fire_char_index]
 
             y = int(i / self.width)
-            x = i % self.width
-            char = self.fire_chars[(7 if self.fire_items[i] > 7 else self.fire_items[i])]
-            color = color_pair(color_num) | A_BOLD
+            x = int(i % self.width)
 
             if i >= self.fire_area_size - 1:
                 continue
 
-            if empty_middle:
-                if (x < self.fire_free_area_begin_x) or (x > self.fire_free_area_end_x):
-                    self.window.addstr(y, x, char, color)
-            else:
-                self.window.addstr(y, x, char, color)
+            if empty_middle and (self.fire_free_area_begin_x <= x <= self.fire_free_area_end_x):
+                continue
 
-        self._draw_menu()
+            self.window.addstr(y, x, char, color)
+
         self._show_games_list()
         self.window.refresh()
