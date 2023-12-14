@@ -67,7 +67,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Game-a-holic**: play 50 games in total.
 - **Ctrl + Alt + Achieve**: get 20 achieves.
 - **Creator's Favorite**: obtain all achievements.
-- **How You Doin'? ;)**: set username in the Settings.
+- **How You Doin'? ;)**: set username in the Settings and feel the Power.
 - **Nice!**: find cringe option in the Settings and click on it.
 
 
