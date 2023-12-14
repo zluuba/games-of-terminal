@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS achievements (
 '''
 
 check_tables_query = '''
-SELECT name FROM sqlite_master WHERE type='table' AND name IN ('games', 'achievements');
+SELECT name FROM sqlite_master 
+WHERE type='table' AND name IN ('games', 'achievements');
 '''
 
 insert_default_games_query = '''
@@ -35,7 +36,12 @@ INSERT INTO games (game_name) VALUES
 '''
 
 insert_achievements_query = '''
-INSERT INTO achievements (game_id, achievement_name, achievement_description, date_received)
+INSERT INTO achievements (
+    game_id,
+    achievement_name, 
+    achievement_description, 
+    date_received
+)
 VALUES (?, ?, ?, NULL);
 '''
 
