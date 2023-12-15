@@ -10,6 +10,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Fashionista**: change snake skin.
 - **Student**: reach 10 points in one game.
 - **Professor**: reach 42 points in one game.
+- **Are you okay?**: reach 101 points in one game.
 - **The Grass Must Be Touched**: reach 75 points in one game.
 - **Mode Mood**: change game mode.
 
