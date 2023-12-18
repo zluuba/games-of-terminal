@@ -39,17 +39,10 @@ class InterfaceManager(Colors):
         self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
 
     def setup_side_menu(self):
-        # TODO: rebuild - get tips as argument, draw it in three ways:
-        #                           - all showed
-        #                           - showed just game tips
-        #                           - side_menu not showed
-
         self._draw_logo()
         self.draw_side_menu_tips()
 
     def _draw_logo(self):
-        # TODO: get rid of megic numbers
-
         for y, line in enumerate(LOGO, start=1):
             self.draw_message(y, 2, self.logo_area.box, line, self.default_color)
 
@@ -88,9 +81,6 @@ class InterfaceManager(Colors):
         self.window.timeout(-1)
 
     def redraw_window(self):
-        # TODO: add state for window(s) - while redrawing,
-        #  it should show the current game field
-
         self.window.clear()
         self._setup()
 

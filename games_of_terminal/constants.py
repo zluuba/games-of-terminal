@@ -37,12 +37,14 @@ KEYS = {
     'd': ord('d'),
     'q': ord('q'),
 }
+
 GAME_STATUSES = {
-    'game_is_on': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
+    'game_active': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
     'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},
     'user_lose': {'text': 'You LOSE', 'color': 'white_text_red_bg'},
     'tie': {'text': 'TIE', 'color': 'white_text_yellow_bg'},
 }
+
 MESSAGES = {
     'game_over': 'GAME OVER',
     'score_text': 'Score: ',
@@ -50,6 +52,7 @@ MESSAGES = {
     'new_best_score': 'New best score!',
     'play_again': 'Press Space to play again',
 }
+
 SIDE_MENU_TIPS = {
     'Move': '← ↓ ↑ → (wasd)',
     'Restart': 'R',
