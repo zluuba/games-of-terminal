@@ -9,14 +9,19 @@ from time import sleep
 
 
 class GameEngine(InterfaceManager):
-    def __init__(self, canvas):
+    def __init__(self, canvas, game_name):
         super().__init__(canvas)
 
         self.state = {
-            'game_status': 'game_is_on',
+            'game_name': game_name,
+            'game_status': 'game_active',
             'pause': False,
             'exit': False,
         }
+
+    @property
+    def game_name(self):
+        return self.state['game_name']
 
     @property
     def game_status(self):
@@ -35,7 +40,7 @@ class GameEngine(InterfaceManager):
         self.state['exit'] = value
 
     def is_game_over(self):
-        return self.game_status != 'game_is_on'
+        return self.game_status != 'game_active'
 
     def controller(self, key, pause_off):
         if key == KEYS['escape']:
@@ -45,7 +50,7 @@ class GameEngine(InterfaceManager):
             self.pause()
         elif key == KEYS['restart']:
             self.game_area.box.erase()
-            self.__init__(self.canvas)
+            self.__init__(self.canvas, self.game_name)
             self.start_new_game()
 
     def pause(self):
@@ -100,7 +105,7 @@ class GameEngine(InterfaceManager):
         sleep(1)
 
         if self._is_restart():
-            self.__init__(self.canvas)
+            self.__init__(self.canvas, self.game_name)
             self.start_new_game()
         return False
 
