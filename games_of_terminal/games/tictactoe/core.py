@@ -36,10 +36,6 @@ class TicTacToeGame(GameEngine):
                 if not is_restart:
                     return
 
-            if self.game_status != 'game_is_on':
-                if not self.is_game_over():
-                    return
-
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -135,7 +131,7 @@ class TicTacToeGame(GameEngine):
         self._set_game_status()
 
     def _computer_move(self):
-        if self.game_status == 'game_is_on':
+        if self.game_status == 'game_active':
             sleep(0.3)
             cell = self._get_best_move()
             cell.owner = 'computer'
@@ -186,4 +182,4 @@ class TicTacToeGame(GameEngine):
         elif self._is_all_cells_occupied():
             self.game_status = 'tie'
         else:
-            self.game_status = 'game_is_on'
+            self.game_status = 'game_active'

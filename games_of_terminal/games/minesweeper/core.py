@@ -3,7 +3,7 @@ from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 
-from random import choice
+from random import choice, uniform
 
 
 class MinesweeperGame(GameEngine):
@@ -104,12 +104,13 @@ class MinesweeperGame(GameEngine):
             self.current_cell.select()
 
     def _plant_bombs(self):
-        # TODO add random div [2, 6] to set random num of bombs
-
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
-        bombs_count = number_of_sells // 5
-        self.flags = bombs_count
+
+        # random float divider for uniq bombs count in every game
+        div = uniform(3, 8)
+        bombs_count = number_of_sells // div
+        self.flags = int(bombs_count)
 
         while bombs_count != 0:
             cell = choice(all_cells)
@@ -154,17 +155,14 @@ class MinesweeperGame(GameEngine):
         return empty_cells
 
     def _show_cell(self, cell):
-        if cell.is_empty() and not cell.bombs_around():
-            self._open_near_empty_cells(cell)
-
         if cell.have_flag():
             return
+
+        if cell.is_empty() and not cell.bombs_around():
+            self._open_near_empty_cells(cell)
         if not cell.is_open():
-            # for first cell open we need to show cell color,
-            # not selected cell color
             cell.show_cell()
         if cell.is_bomb():
-            cell.show_cell()
             self.game_status = 'user_lose'
 
         cell.open_cell()
@@ -194,7 +192,6 @@ class MinesweeperGame(GameEngine):
         for y_offset, x_offset in CELL_OFFSETS:
             new_y = y + y_offset
             new_x = x + x_offset
-
             near_cell_coordinates = (new_y, new_x)
 
             if near_cell_coordinates not in self.cells:
@@ -226,6 +223,5 @@ class MinesweeperGame(GameEngine):
         return True
 
     def check_to_win(self):
-        if self._is_all_cells_open():
-            if self._is_no_unnecessary_flags():
-                self.game_status = 'user_win'
+        if self._is_all_cells_open() and self._is_no_unnecessary_flags():
+            self.game_status = 'user_win'

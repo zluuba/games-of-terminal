@@ -8,8 +8,8 @@ from random import randint
 
 
 class SnakeGame(GameEngine):
-    def __init__(self, canvas):
-        super().__init__(canvas)
+    def _setup(self):
+        super()._setup()
 
         self.score = 0
         self.best_score = 0
@@ -46,8 +46,6 @@ class SnakeGame(GameEngine):
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
                 self.game_status = 'user_lose'
-                if not self.is_game_over():
-                    return
 
             self.game_area.box.refresh()
             self.window.refresh()
