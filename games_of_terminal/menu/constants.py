@@ -11,6 +11,8 @@ GAMES = {
     3: {'name': 'Snake', 'game': SnakeGame},
 }
 
+MENU_LENGTH = len(GAMES)
+
 GOODBYE_MESSAGES = [
     'Already miss you.', 'You\'re a geek, right?',
     'Have a great day, babe', 'Don\'t you go ˙◠˙',

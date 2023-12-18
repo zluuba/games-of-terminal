@@ -3,7 +3,7 @@ from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.database.database import create_tables
 from games_of_terminal.menu.constants import *
 
-from curses import A_STANDOUT as REVERSE
+from curses import flushinp, A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
@@ -13,12 +13,9 @@ from sys import exit
 class Menu(InterfaceManager):
     def _setup(self):
         super()._setup()
-
-        # create tables in database
         create_tables()
 
         self.current_row = 0
-        self.menu_length = len(GAMES)
 
         self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 4
         self.menu_start_y = self.logo_start_y + len(LOGO_MENU) + 3
@@ -36,69 +33,92 @@ class Menu(InterfaceManager):
         self.fire_free_area_begin_x = (self.width // 2) - (MENU_MAX_LEN // 2) - BASE_OFFSET
         self.fire_free_area_end_x = self.fire_free_area_begin_x + MENU_MAX_LEN + end_offset
 
+        self.fire_animation_speed = ANIMATION_SPEED['medium']
+
         # self.logo_fill = choice(list(LOGO_FILL.values()))
-        self.logo_fill = LOGO_FILL['default']
+        # self.default_logo_fill = LOGO_FILL['default']
+        # self.logo_fill = LOGO_FILL['default']
 
     def run_menu_loop(self):
-        self.window.clear()
-        self.hide_cursor()
-        self._draw_menu()
+        self.initialize_menu()
 
         while True:
             key = self.window.getch()
 
             if key == KEYS['escape']:
-                self._exit()
-            if key == KEYS['resize']:
+                self.exit()
+            elif key == KEYS['resize']:
                 self.redraw_window()
-
-            if key in (KEYS['up_arrow'], KEYS['w']):
-                self.current_row -= 1 if self.current_row > 0 else 0
+            elif key in (KEYS['up_arrow'], KEYS['w']):
+                self.move_menu_selection(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
-                is_end_of_menu = self.current_row >= self.menu_length - 1
-                self.current_row += 1 if not is_end_of_menu else 0
+                self.move_menu_selection(1)
             elif key in KEYS['enter']:
-                chosen_game = GAMES[self.current_row]['game']
-                new_game = chosen_game(self.canvas)
-                new_game.start_new_game()
-                self._draw_menu()
+                self.start_selected_game()
 
+            self.update_menu_display()
             self.window.refresh()
-            self._fire_animation()
 
-    def _draw_menu(self):
-        self._draw_logo_with_swords()
-        self._draw_creator_name()
+    def initialize_menu(self):
+        self.window.clear()
+        self.hide_cursor()
+        self.set_window_redrawing_speed()
+        self.draw_menu()
 
-    def _show_games_list(self):
+    def move_menu_selection(self, direction):
+        self.current_row = max(
+            0, min(self.current_row + direction, MENU_LENGTH - 1)
+        )
+
+    def update_menu_display(self):
+        self.draw_fire_animation()
+        self.show_games_list()
+
+    def draw_menu(self):
+        self.draw_logo_with_swords()
+        self.draw_creator_name()
+        self.window.refresh()
+
+    def show_games_list(self):
         for row, game in enumerate(GAMES.values()):
             game_name = game['name']
             y = self.menu_start_y + row
             x = (self.width // 2) - (len(game_name) // 2)
 
-            if row == self.current_row:
-                self.draw_message(y, x, self.window,
-                                  game_name, self.default_color + REVERSE)
-            else:
-                self.draw_message(y, x, self.window,
-                                  game_name, self.default_color)
+            color = self.default_color + REVERSE if row == self.current_row \
+                else self.default_color
 
-    def _draw_logo_with_swords(self):
+            self.draw_message(y, x, self.window, game_name, color)
+
+    def start_selected_game(self):
+        chosen_game = GAMES[self.current_row]
+        game_name = chosen_game['name']
+        game_class = chosen_game['game']
+
+        game = game_class(self.canvas, game_name)
+        game.start_new_game()
+
+        self.handle_post_game()
+
+    def handle_post_game(self):
+        flushinp()
+        self.draw_menu()
+
+    def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
-            line = line.replace('#', self.logo_fill)
             x = (self.width // 2) - (len(line) // 2)
             self.draw_message(y, x, self.window, line, self.default_color)
 
-        self._draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
-        self._draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
+        self.draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
+        self.draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
 
-    def _draw_sword(self, sword, y, x):
+    def draw_sword(self, sword, y, x):
         for name, part in sword:
             color = self.get_color_by_name(SWORD_COLORS[name])
             self.draw_message(y, x, self.window, part, color)
             x += len(part)
 
-    def _draw_creator_name(self):
+    def draw_creator_name(self):
         color = self.get_color_by_name('light_grey_text_black_bg')
         begin_y = self.height - 2
         begin_x = (self.width // 2) - (len(CREATOR_NAME) // 2)
@@ -106,29 +126,24 @@ class Menu(InterfaceManager):
         self.draw_message(begin_y, begin_x, self.window,
                           CREATOR_NAME, color)
 
-    def _draw_goodbye_message(self):
+    def draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)
         begin_y = self.height // 2
         begin_x = (self.width // 2) - (len(goodbye_message) // 2)
 
         self.draw_message(begin_y, begin_x, self.window,
                           goodbye_message, self.default_color)
-        self.window.refresh()
 
-    def _exit(self):
-        self.window.clear()
-        self._draw_goodbye_message()
-        sleep(1)
-        exit(0)
+    def set_window_redrawing_speed(self):
+        self.window.timeout(self.fire_animation_speed)
 
-    def _fire_animation(self, animation=True, empty_middle=True):
+    def draw_fire_animation(self, animation=True, empty_middle=True):
         if not animation:
             return
 
-        self.window.timeout(ANIMATION_SPEED['medium'])
-
         for i in range(int(self.width / 9)):
-            self.fire_items[int((random() * self.width) + self.width * (self.height - 1))] = FIRE_ELEMENTS_COUNT
+            index = int((random() * self.width) + self.width * (self.height - 1))
+            self.fire_items[index] = FIRE_ELEMENTS_COUNT
 
         for i in range(self.fire_area_size):
             self.fire_items[i] = int(
@@ -152,5 +167,8 @@ class Menu(InterfaceManager):
 
             self.window.addstr(y, x, char, color)
 
-        self._show_games_list()
-        self.window.refresh()
+    def exit(self):
+        self.window.clear()
+        self.draw_goodbye_message()
+        sleep(1)
+        exit(0)
