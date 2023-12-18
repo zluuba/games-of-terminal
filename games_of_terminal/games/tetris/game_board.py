@@ -15,15 +15,13 @@ class TetrisBoard(Colors):
         self.begin_y = None
         self.begin_x = None
 
+        self.landed_blocks = dict()
         self.bg_color_name = 'white_text_dark_grey_bg'
 
         self.board_window = self._create_board_window(parent_window)
         self.win = self.board_window.box
 
         self.draw_background()
-
-        # landed blocks storage
-        self.landed_blocks = dict()
 
     def _create_board_window(self, parent_window):
         window_width = self.width + BASE_OFFSET
@@ -48,7 +46,7 @@ class TetrisBoard(Colors):
         self.draw_landed_blocks()
 
         if block:
-            self.block(block, action='draw')
+            self.change_block(block, action='draw')
 
     def _draw_cell(self, y, x, color_name, size=1):
         color = self.get_color_by_name(color_name)
@@ -64,7 +62,7 @@ class TetrisBoard(Colors):
             for x in range(x_start, x_end):
                 self._draw_cell(y, x, self.bg_color_name)
 
-    def block(self, block, action='draw'):
+    def change_block(self, block, action='draw'):
         actions = {
             'draw': self._draw_cell,
             'hide': self.hide_cell,
@@ -92,27 +90,25 @@ class TetrisBoard(Colors):
         for (y, x), color in self.landed_blocks.items():
             self._draw_cell(y, x, color, CELL_WIDTH)
 
-    def get_complete_line(self):
+    def get_complete_line(self, complete_line=0):
         for y in range(self.height - 2, 1, -1):
             occupied_cells = [x for x in range(1, self.width + 1) if (y, x) in self.landed_blocks.keys()]
 
-            if len(occupied_cells) == self.width // CELL_WIDTH:
-                return y
+            if len(occupied_cells) == (self.width // CELL_WIDTH):
+                complete_line = y
+                break
             if not occupied_cells:
                 break
-        return 0
+
+        return complete_line
 
     def remove_line(self, line_y):
         new_landed_blocks = dict()
 
-        for y in range(self.height - 2, 1, -1):
-            if y != line_y:
-                continue
-
-            for (ly, lx), color in self.landed_blocks.items():
-                if ly < y:
-                    new_landed_blocks[(ly + 1, lx)] = color
-                elif ly > y:
-                    new_landed_blocks[(ly, lx)] = color
+        for (ly, lx), color in self.landed_blocks.items():
+            if ly < line_y:
+                new_landed_blocks[(ly + 1, lx)] = color
+            elif ly > line_y:
+                new_landed_blocks[(ly, lx)] = color
 
         self.landed_blocks = new_landed_blocks

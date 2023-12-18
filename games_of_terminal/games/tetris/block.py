@@ -33,10 +33,10 @@ class TetrisBlock(Colors):
         if self._is_there_another_blocks(y_offset=y_offset, x_offset=x_offset):
             return
 
-        self.board.block(self, action='hide')
+        self.board.change_block(self, action='hide')
         self.y += y_offset
         self.x += x_offset
-        self.board.block(self, action='draw')
+        self.board.change_block(self, action='draw')
 
     def flip(self):
         new_blueprint = list(zip(*self.blueprint[::-1]))
@@ -46,11 +46,11 @@ class TetrisBlock(Colors):
         if self._is_there_another_blocks(blueprint=new_blueprint):
             return
 
-        self.board.block(self, action='hide')
+        self.board.change_block(self, action='hide')
         self.blueprint = new_blueprint
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
-        self.board.block(self, action='draw')
+        self.board.change_block(self, action='draw')
 
     def drop(self):
         y_offset = 0
@@ -65,9 +65,9 @@ class TetrisBlock(Colors):
 
             y_offset = new_y_offset
 
-        self.board.block(self, action='hide')
+        self.board.change_block(self, action='hide')
         self.y += y_offset
-        self.board.block(self, action='draw')
+        self.board.change_block(self, action='draw')
 
     def _is_there_another_blocks(self, x_offset=0, y_offset=0, blueprint=None):
         if not blueprint:

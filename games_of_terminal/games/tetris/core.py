@@ -13,8 +13,8 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
-    def __init__(self, canvas):
-        super().__init__(canvas)
+    def _setup(self):
+        super()._setup()
 
         self.block = None
         self.next_block = None
@@ -65,6 +65,20 @@ class TetrisGame(GameEngine):
                 self.move_block_before_land()
                 self.land_current_block()
 
+    def _game_setup(self):
+        self.hide_cursor()
+        self.window.nodelay(1)
+
+        self.set_best_score()
+
+        self.setup_side_menu()
+        self.show_game_status()
+        self.draw_game_tips(self.tips)
+
+        self.time = time()
+        self.board = TetrisBoard(self.game_area)
+        self.next_block_area = NextBlockArea(self.game_area, self.board)
+
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -81,7 +95,7 @@ class TetrisGame(GameEngine):
         if not self.is_block_on_floor():
             return
 
-        self.board.block(self.block, 'land')
+        self.board.change_block(self.block, 'land')
         self.block = None
         self.time = time()
         self.board.draw_board()
@@ -137,26 +151,12 @@ class TetrisGame(GameEngine):
             current_time = time()
         self.time = current_time
 
-    def _game_setup(self):
-        self.hide_cursor()
-        self.window.nodelay(1)
-
-        self.set_best_score()
-
-        self.setup_side_menu()
-        self.show_game_status()
-        self.draw_game_tips(self.tips)
-
-        self.time = time()
-        self.board = TetrisBoard(self.game_area)
-        self.next_block_area = NextBlockArea(self.game_area, self.board)
-
     def create_block(self):
         if self.block:
             return
         if self.next_block:
             self.block = self.next_block
-            self.next_block = self.get_new_block()
+            self.next_block = None
         if not self.block:
             self.block = self.get_new_block()
         if not self.next_block:

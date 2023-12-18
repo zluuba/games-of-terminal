@@ -68,6 +68,10 @@ BLOCK_COLORS = {
     'S-block': 'white_text_light_purple_bg',
 }
 
+# max height of blocks (4 - I-block) + borders (2)
+NEXT_BLOCK_AREA_HEIGHT = 6
+NEXT_BLOCK_TEXT = 'next block'
+
 # rows: points you get if remove this num of rows in one move
 SCORES = {
     0: 0,
