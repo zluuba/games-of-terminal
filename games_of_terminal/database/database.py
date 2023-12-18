@@ -10,15 +10,18 @@ FILE_PATH = path.join(BASE_DIR, DB_FILENAME)
 
 
 def create_connection():
-    connection = sqlite3.connect(FILE_PATH)
-    return connection
+    return sqlite3.connect(FILE_PATH)
+
+
+def get_connection_and_cursor():
+    connection = create_connection()
+    cursor = connection.cursor()
+    return connection, cursor
 
 
 def check_tables_exist():
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    cursor.execute(check_tables_query)
+    conn, cursor = get_connection_and_cursor()
+    cursor.execute(get_all_tables_query)
     existing_tables = cursor.fetchall()
     return len(existing_tables) == len(TABLES)
 
@@ -27,8 +30,7 @@ def create_tables():
     if check_tables_exist():
         return
 
-    conn = create_connection()
-    cursor = conn.cursor()
+    conn, cursor = get_connection_and_cursor()
 
     for _, create_table_query in TABLES.items():
         cursor.execute(create_table_query)
@@ -48,12 +50,9 @@ def create_tables():
     conn.commit()
     conn.close()
 
-    return FILE_PATH
-
 
 def get_game_state(game_name, stat):
-    conn = create_connection()
-    cursor = conn.cursor()
+    conn, cursor = get_connection_and_cursor()
 
     query = get_game_state_query(stat)
     cursor.execute(query, (game_name,))
@@ -63,9 +62,7 @@ def get_game_state(game_name, stat):
 
 
 def save_game_state(game_name, stat, value):
-    conn = create_connection()
-    cursor = conn.cursor()
-
+    conn, cursor = get_connection_and_cursor()
     query = set_game_state_query(stat)
     cursor.execute(query, (value, game_name))
 
