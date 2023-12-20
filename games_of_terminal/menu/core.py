@@ -7,7 +7,7 @@ from curses import flushinp, A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
-from sys import exit
+from sys import exit, stdin
 
 
 class Menu(InterfaceManager):
@@ -76,6 +76,7 @@ class Menu(InterfaceManager):
 
     def draw_menu(self):
         self.draw_logo_with_swords()
+        self.show_games_list()
         self.draw_creator_name()
         self.window.refresh()
 
@@ -102,7 +103,7 @@ class Menu(InterfaceManager):
 
     def handle_post_game(self):
         flushinp()
-        self.draw_menu()
+        self.initialize_menu()
 
     def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
