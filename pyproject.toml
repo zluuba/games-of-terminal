@@ -8,6 +8,7 @@ readme = "README.md"
 packages = [{include = "games_of_terminal"}]
 classifiers = [
     "Topic :: Games/Entertainment",
+    "Topic :: Terminals",
     "Environment :: Console",
     "Natural Language :: English",
     "Programming Language :: Python"
@@ -18,8 +19,6 @@ got-games = "games_of_terminal.scripts.app:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-board = "^1.0"
-python-dotenv = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.0.0"
