@@ -7,7 +7,7 @@ from curses import flushinp, A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
-from sys import exit, stdin
+from sys import exit
 
 
 class Menu(InterfaceManager):
