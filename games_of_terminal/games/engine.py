@@ -1,8 +1,13 @@
 from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES, SIDE_MENU_TIPS,
     BASE_OFFSET,
 )
+from games_of_terminal.database.database import (
+    update_game_state
+)
+from games_of_terminal.field import Field
 
 from curses import flash, flushinp, endwin, A_BLINK as BLINK
 from time import sleep
@@ -11,53 +16,48 @@ from time import sleep
 class GameEngine(InterfaceManager):
     def __init__(self, canvas, game_name):
         super().__init__(canvas)
+        self.game_name = game_name
+        self.stats = GameStats()
 
-        self.state = {
-            'game_name': game_name,
-            'game_status': 'game_active',
-            'pause': False,
-            'exit': False,
-        }
+    def run(self):
+        while True:
+            self.setup_game_stats()
+            self._setup_game_field()
+            self.start_new_game()
 
-    @property
-    def game_name(self):
-        return self.state['game_name']
+            if self.stats.is_exit or not self.stats.is_restart:
+                break
 
-    @property
-    def game_status(self):
-        return self.state['game_status']
+            self.reset_game_area()
+            self.reset_stats()
 
-    @game_status.setter
-    def game_status(self, status):
-        self.state['game_status'] = status
+    def reset_game_area(self):
+        """Reset the game by recreating game_area and resetting stats."""
 
-    @property
-    def is_exit(self):
-        return self.state['exit']
+        self.game_area.box.erase()
+        self.game_area = Field(self.window, *self.game_box_sizes.values())
+        self.game_area.box.refresh()
 
-    @is_exit.setter
-    def is_exit(self, value):
-        self.state['exit'] = value
+    def reset_stats(self):
+        self.stats = GameStats()
 
     def is_game_over(self):
-        return self.game_status != 'game_active'
+        return self.stats.game_status != 'game_active'
 
     def controller(self, key, pause_off):
         if key == KEYS['escape']:
-            self.is_exit = True
+            self.stats.is_exit = True
             endwin()
         elif key == KEYS['pause'] and not pause_off:
             self.pause()
         elif key == KEYS['restart']:
-            self.game_area.box.erase()
-            self.__init__(self.canvas, self.game_name)
-            self.start_new_game()
+            self.stats.is_restart = True
 
     def pause(self):
-        self.state['pause'] = not self.state['pause']
+        self.stats.is_pause = not self.stats.is_pause
         self.wait_for_keypress()
 
-        if self.state['pause']:
+        if self.stats.is_pause:
             self._show_pause_message()
             key = self.window.getch()
 
@@ -65,7 +65,7 @@ class GameEngine(InterfaceManager):
                 self.wait_for_keypress()
                 key = self.window.getch()
 
-            self.state['pause'] = not self.state['pause']
+            self.stats.is_pause = not self.stats.is_pause
 
         self.window.timeout(150)
         return
@@ -80,7 +80,7 @@ class GameEngine(InterfaceManager):
         self.draw_message(y, x, self.game_area.box, message, color)
 
     def show_game_status(self, y=1, x=1):
-        color_name = GAME_STATUSES[self.game_status]['color']
+        color_name = GAME_STATUSES[self.stats.game_status]['color']
         color = self.get_color_by_name(color_name)
 
         empty_line = ' ' * (self.game_status_area.width - BASE_OFFSET)
@@ -90,7 +90,7 @@ class GameEngine(InterfaceManager):
             # fill game_status field background, excluding borders
             self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
 
-        message = GAME_STATUSES[self.game_status]['text']
+        message = GAME_STATUSES[self.stats.game_status]['text']
         middle_x = (self.game_status_area.width // 2) - len(message) // 2
         self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
 
@@ -100,20 +100,14 @@ class GameEngine(InterfaceManager):
         self.draw_side_menu_tips(y, x, tips, color)
 
     def ask_for_restart(self):
-        flash()
-        self.show_game_status()
-        sleep(1)
-
-        if self._is_restart():
-            self.__init__(self.canvas, self.game_name)
-            self.start_new_game()
-        return False
-
-    def _is_restart(self):
         """ Draws a message in the center of the playing field
         that the user can restart the game,
         waiting for a response (space bar pressing)
         """
+
+        flash()
+        self.show_game_status()
+        sleep(1)
 
         message = f" {MESSAGES['play_again']} "
 
@@ -126,7 +120,7 @@ class GameEngine(InterfaceManager):
         flushinp()
         key = self.window.getch()
 
-        if key == KEYS['space']:
-            self.game_area.box.erase()
-            return True
-        return False
+        self.stats.is_restart = True if key == KEYS['space'] else False
+
+    def update_stat_in_db(self, stat, value):
+        update_game_state(self.game_name, stat, value)
