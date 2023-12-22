@@ -10,9 +10,7 @@ from time import sleep
 
 
 class TicTacToeGame(GameEngine):
-    def _setup(self):
-        super()._setup()
-
+    def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
         self.cell_height, self.cell_width = self._get_cell_size()
@@ -21,7 +19,6 @@ class TicTacToeGame(GameEngine):
         self.computer_moves = []
 
     def start_new_game(self):
-        self._setup_game_field()
         self.current_cell.select()
 
         while True:
@@ -29,12 +26,12 @@ class TicTacToeGame(GameEngine):
             self.wait_for_keypress()
             self.controller(key, pause_off=True)
 
-            if self.is_exit:
+            if self.stats.is_exit or self.stats.is_restart:
                 return
             if self.is_game_over():
-                is_restart = self.ask_for_restart()
-                if not is_restart:
-                    return
+                # self._save_best_score()
+                self.ask_for_restart()
+                return
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -131,7 +128,7 @@ class TicTacToeGame(GameEngine):
         self._set_game_status()
 
     def _computer_move(self):
-        if self.game_status == 'game_active':
+        if self.stats.game_status == 'game_active':
             sleep(0.3)
             cell = self._get_best_move()
             cell.owner = 'computer'
@@ -176,10 +173,8 @@ class TicTacToeGame(GameEngine):
 
     def _set_game_status(self):
         if self._check_to_win('user'):
-            self.game_status = 'user_win'
+            self.stats.game_status = 'user_win'
         elif self._check_to_win('computer'):
-            self.game_status = 'user_lose'
+            self.stats.game_status = 'user_lose'
         elif self._is_all_cells_occupied():
-            self.game_status = 'tie'
-        else:
-            self.game_status = 'game_active'
+            self.stats.game_status = 'tie'

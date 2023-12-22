@@ -7,14 +7,11 @@ from random import choice, uniform
 
 
 class MinesweeperGame(GameEngine):
-    def _setup(self):
-        super()._setup()
-
+    def setup_game_stats(self):
         self.cells = dict()
         self.flags = 0
 
     def start_new_game(self):
-        self._setup_game_field()
         self.current_cell.select()
 
         while True:
@@ -22,12 +19,12 @@ class MinesweeperGame(GameEngine):
             self.wait_for_keypress()
             self.controller(key, pause_off=True)
 
-            if self.is_exit:
+            if self.stats.is_exit or self.stats.is_restart:
                 return
             if self.is_game_over():
-                is_restart = self.ask_for_restart()
-                if not is_restart:
-                    return
+                # self._save_best_score()
+                self.ask_for_restart()
+                return
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -163,7 +160,7 @@ class MinesweeperGame(GameEngine):
         if not cell.is_open():
             cell.show_cell()
         if cell.is_bomb():
-            self.game_status = 'user_lose'
+            self.stats.game_status = 'user_lose'
 
         cell.open_cell()
         cell.show_cell_text()
@@ -224,4 +221,4 @@ class MinesweeperGame(GameEngine):
 
     def check_to_win(self):
         if self._is_all_cells_open() and self._is_no_unnecessary_flags():
-            self.game_status = 'user_win'
+            self.stats.game_status = 'user_win'

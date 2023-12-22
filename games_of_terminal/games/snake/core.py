@@ -8,13 +8,7 @@ from random import randint
 
 
 class SnakeGame(GameEngine):
-    def _setup(self):
-        super()._setup()
-
-        self.score = 0
-        self.best_score = 0
-        self.food = None
-
+    def setup_game_stats(self):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
         self.snake = [
@@ -25,30 +19,24 @@ class SnakeGame(GameEngine):
 
         # initial direction of the snake's movement
         self.direction = KEYS['right_arrow']
+        self.food = None
 
     def start_new_game(self):
-        self._setup_game_field()
-        self.draw_game_tips(self.tips)
-
         while True:
             key = self.window.getch()
             self.controller(key)
 
-            if self.is_exit:
+            if self.stats.is_exit or self.stats.is_restart:
                 return
             if self.is_game_over():
                 self._save_best_score()
-                is_restart = self.ask_for_restart()
-                if not is_restart:
-                    return
+                self.ask_for_restart()
+                return
 
             self._move_snake()
 
             if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
-                self.game_status = 'user_lose'
-
-            self.game_area.box.refresh()
-            self.window.refresh()
+                self.stats.game_status = 'user_lose'
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -58,13 +46,13 @@ class SnakeGame(GameEngine):
 
     def set_best_score(self):
         data = get_game_state('Snake', 'best_score')
-        self.best_score = data
+        self.stats.best_score = data
 
     @property
     def tips(self):
         return {
-            'Score': self.score,
-            'Best Score': self.best_score,
+            'Score': self.stats.score,
+            'Best Score': self.stats.best_score,
         }
 
     def _get_food_coords(self):
@@ -90,6 +78,7 @@ class SnakeGame(GameEngine):
         self.show_game_status()
 
         self.set_best_score()
+        self.draw_game_tips(self.tips)
 
     def _change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
@@ -120,7 +109,7 @@ class SnakeGame(GameEngine):
         self.game_area.box.addstr(*snake_head, SNAKE_SKIN)
 
         if snake_head == self.food:
-            self.score += 1
+            self.stats.score += 1
             self._put_food_on_the_field()
             self.draw_game_tips(self.tips)
         else:
@@ -130,8 +119,8 @@ class SnakeGame(GameEngine):
         self.game_area.box.refresh()
 
     def _save_best_score(self):
-        if self.score > self.best_score:
-            save_game_state('Snake', 'best_score', self.score)
+        if self.stats.score > self.stats.best_score:
+            save_game_state('Snake', 'best_score', self.stats.score)
 
             message = MESSAGES['new_best_score']
             self.draw_message(9, 2,

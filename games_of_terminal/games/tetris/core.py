@@ -13,51 +13,29 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
-    def _setup(self):
-        super()._setup()
-
+    def setup_game_stats(self):
         self.block = None
         self.next_block = None
         self.board = None
         self.falling_direction = 'down'
 
-        self.score = 0
-        self.best_score = None
         self.level = 1
         self.time_interval = 1
         self.time = time()
 
-    @property
-    def tips(self):
-        return {
-            'Score': self.score,
-            'Level': self.level,
-            'Best Score': self.best_score,
-        }
-
-    def set_best_score(self):
-        data = get_game_state('Tetris', 'best_score')
-        self.best_score = data
-
-    def save_best_score(self):
-        if self.score > self.best_score:
-            save_game_state('Tetris', 'best_score', self.score)
-
     def start_new_game(self):
-        self._game_setup()
-
         while True:
             self.create_block()
+
             key = self.window.getch()
             self.controller(key)
 
-            if self.is_exit:
+            if self.stats.is_exit or self.stats.is_restart:
                 return
             if self.is_game_over():
                 self.save_best_score()
-                is_restart = self.ask_for_restart()
-                if not is_restart:
-                    return
+                self.ask_for_restart()
+                return
 
             self._block_auto_move()
 
@@ -65,7 +43,23 @@ class TetrisGame(GameEngine):
                 self.move_block_before_land()
                 self.land_current_block()
 
-    def _game_setup(self):
+    @property
+    def tips(self):
+        return {
+            'Score': self.stats.score,
+            'Level': self.level,
+            'Best Score': self.stats.best_score,
+        }
+
+    def set_best_score(self):
+        data = get_game_state('Tetris', 'best_score')
+        self.stats.best_score = data
+
+    def save_best_score(self):
+        if self.stats.score > self.stats.best_score:
+            save_game_state('Tetris', 'best_score', self.stats.score)
+
+    def _setup_game_field(self):
         self.hide_cursor()
         self.window.nodelay(1)
 
@@ -75,9 +69,10 @@ class TetrisGame(GameEngine):
         self.show_game_status()
         self.draw_game_tips(self.tips)
 
-        self.time = time()
         self.board = TetrisBoard(self.game_area)
         self.next_block_area = NextBlockArea(self.game_area, self.board)
+
+        self.time = time()
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -114,7 +109,7 @@ class TetrisGame(GameEngine):
             lines_count += 1
             self.board.remove_line(line_y)
 
-        self.score += SCORES[lines_count] * self.level
+        self.stats.score += SCORES[lines_count] * self.level
         self._increase_level()
         self.draw_game_tips(self.tips)
         self.board.draw_board()
@@ -124,7 +119,7 @@ class TetrisGame(GameEngine):
             return
 
         min_score_to_up_level = LEVELS[self.level + 1]
-        if self.score >= min_score_to_up_level:
+        if self.stats.score >= min_score_to_up_level:
             self.level += 1
             self.time_interval -= 0.2
 
@@ -167,7 +162,7 @@ class TetrisGame(GameEngine):
 
         # check new block for correct placement
         if self.block.is_block_placed_in_land():
-            self.game_status = 'user_lose'
+            self.stats.game_status = 'user_lose'
 
     def get_new_block(self):
         block_shape_name = choice(list(BLOCKS))
