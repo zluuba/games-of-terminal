@@ -68,3 +68,13 @@ def save_game_state(game_name, stat, value):
 
     conn.commit()
     conn.close()
+
+
+def update_game_state(game_name, stat, value):
+    # same as save_game_state. bring them together
+    conn, cursor = get_connection_and_cursor()
+    query = update_game_state_query(stat)
+    cursor.execute(query, (value, game_name))
+
+    conn.commit()
+    conn.close()

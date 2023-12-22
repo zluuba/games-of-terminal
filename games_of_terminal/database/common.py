@@ -65,6 +65,14 @@ set_game_state_query = lambda stat_name: (
     '''
 )
 
+update_game_state_query = lambda stat_name: (
+    f'''
+    UPDATE games
+    SET {stat_name} = {stat_name} + ?
+    WHERE game_name = ?;
+    '''
+)
+
 TABLES = {
     'games': create_game_table_query,
     'achievements': create_achievements_table_query,
