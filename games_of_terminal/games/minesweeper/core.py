@@ -168,18 +168,22 @@ class MinesweeperGame(GameEngine):
         self.check_to_win()
 
     def _switch_flag(self):
-        cell = self.current_cell
+        if self.current_cell.is_open():
+            return
+        if not self.flags and not self.current_cell.have_flag():
+            return
 
-        if cell.have_flag():
+        if self.current_cell.have_flag():
             self.flags += 1
-            cell.remove_flag()
-        elif not cell.have_flag() and not cell.is_open() and self.flags > 0:
+            self.current_cell.remove_flag()
+        elif (not self.current_cell.have_flag() and
+              not self.current_cell.is_open()):
             self.flags -= 1
-            cell.set_flag()
+            self.current_cell.set_flag()
 
-        cell.show_cell()
-        cell.show_cell_text()
-        cell.hide_cell()
+        self.current_cell.show_cell()
+        self.current_cell.show_cell_text()
+        self.current_cell.hide_cell()
 
         self.check_to_win()
 
