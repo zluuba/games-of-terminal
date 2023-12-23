@@ -59,9 +59,10 @@ class TetrisGame(GameEngine):
         if self.stats.score > self.stats.best_score:
             save_game_state('Tetris', 'best_score', self.stats.score)
 
-    def _setup_game_field(self):
+    def setup_game_field(self):
         self.hide_cursor()
         self.window.nodelay(1)
+        self.window.timeout(150)
 
         self.set_best_score()
 

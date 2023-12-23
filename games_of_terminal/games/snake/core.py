@@ -21,6 +21,19 @@ class SnakeGame(GameEngine):
         self.direction = KEYS['right_arrow']
         self.food = None
 
+    def setup_game_field(self):
+        self.hide_cursor()
+        self.window.nodelay(1)
+        self.window.timeout(150)
+
+        self._put_food_on_the_field()
+
+        self.setup_side_menu()
+        self.show_game_status()
+
+        self.set_best_score()
+        self.draw_game_tips(self.tips)
+
     def start_new_game(self):
         while True:
             key = self.window.getch()
@@ -66,19 +79,6 @@ class SnakeGame(GameEngine):
     def _put_food_on_the_field(self):
         self.food = self._get_food_coords()
         self.game_area.box.addstr(*self.food, FOOD_SKIN)
-
-    def _setup_game_field(self):
-        self.hide_cursor()
-        self.window.nodelay(1)
-        self.window.timeout(150)
-
-        self._put_food_on_the_field()
-
-        self.setup_side_menu()
-        self.show_game_status()
-
-        self.set_best_score()
-        self.draw_game_tips(self.tips)
 
     def _change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]

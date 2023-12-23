@@ -22,7 +22,7 @@ class GameEngine(InterfaceManager):
     def run(self):
         while True:
             self.setup_game_stats()
-            self._setup_game_field()
+            self.setup_game_field()
             self.start_new_game()
 
             if self.stats.is_exit or not self.stats.is_restart:
@@ -32,8 +32,6 @@ class GameEngine(InterfaceManager):
             self.reset_stats()
 
     def reset_game_area(self):
-        """Reset the game by recreating game_area and resetting stats."""
-
         self.game_area.box.erase()
         self.game_area = Field(self.window, *self.game_box_sizes.values())
         self.game_area.box.refresh()

@@ -99,7 +99,7 @@ class TicTacToeGame(GameEngine):
             y += self.cell_height
             x = begin_x
 
-    def _setup_game_field(self):
+    def setup_game_field(self):
         self.hide_cursor()
         self._draw_game_field()
 

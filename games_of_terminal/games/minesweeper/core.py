@@ -45,7 +45,7 @@ class MinesweeperGame(GameEngine):
     def tips(self):
         return {'flags': self.flags}
 
-    def _setup_game_field(self):
+    def setup_game_field(self):
         self.hide_cursor()
 
         self._draw_game_field()
