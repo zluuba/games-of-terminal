@@ -8,6 +8,8 @@ DB_FILENAME = 'got_games.db'
 BASE_DIR = Path(__file__).parents[1]
 FILE_PATH = path.join(BASE_DIR, DB_FILENAME)
 
+# TODO: try SQL builder
+
 
 def create_connection():
     return sqlite3.connect(FILE_PATH)
@@ -26,7 +28,7 @@ def check_tables_exist():
     return len(existing_tables) == len(TABLES)
 
 
-def create_tables():
+def create_db_tables():
     if check_tables_exist():
         return
 
