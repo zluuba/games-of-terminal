@@ -16,8 +16,9 @@ create_achievements_table_query = '''
 CREATE TABLE IF NOT EXISTS achievements (
     id INTEGER PRIMARY KEY,
     game_id INTEGER,
-    achievement_name TEXT,
-    achievement_description TEXT,
+    name TEXT,
+    description TEXT,
+    is_unlocked INTEGER DEFAULT 0,
     date_received DATE,
     FOREIGN KEY (game_id) REFERENCES games(id)
 );
@@ -77,10 +78,4 @@ update_game_state_query = lambda stat_name: (
 TABLES = {
     'games': create_game_table_query,
     'achievements': create_achievements_table_query,
-}
-
-# temporary
-achievements = {
-    'Achievement1': ('Description for Achievement1', 'Snake'),
-    'Achievement2': ('Description for Achievement2', 'Tetris'),
 }

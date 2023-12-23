@@ -1,4 +1,5 @@
-from games_of_terminal.database.common import *
+from games_of_terminal.database.queries import *
+from games_of_terminal.database.achievements import achievements
 from pathlib import Path
 from os import path
 import sqlite3
