@@ -37,11 +37,12 @@ game_achievements = {
         'Block by Block': 'Complete 10 lines in a single game.',
         'Cubie': 'Achieve a score of 10,000 points.',
         'Yoda': 'Achieve a score of 30,000 points.',
-        'You beat me!': 'Achieve a score of 56,900 points and beat the creator\'s best score.',
+        'You beat me!': 'Achieve a score exceeding 122,000 points and beat the creator\'s best score.',
         'Speed Demon': 'Clear a line in less than one minute.',
         'Nitrous': 'Reach the last level of block speed.',
         'Annihilator': 'Clear 4 lines at once.',
         'Shape Shifter': 'Use every shape in a single game.',
+        'Void': 'Completely clear the field.',
     },
     # '2048': {
     #     'Tile Tactician': 'Reach the 2048 tile.',

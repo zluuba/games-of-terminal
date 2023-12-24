@@ -43,11 +43,12 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Block by Block**: complete 10 lines in a single game.
 - **Cubie**: achieve a score of 10,000 points.
 - **Yoda**: achieve a score of 30,000 points.
-- **You beat me!**: achieve a score of 56,900 points and beat the creator's best score.
+- **You beat me!**: achieve a score exceeding 122,000 points and beat the creator's best score.
 - **Speed Demon**: clear a line in less than one minute.
 - **Nitrous**: reach the last level of block speed.
 - **Annihilator**: clear 4 lines at once.
 - **Shape Shifter**: use every shape in a single game.
+- **Void**: completely clear the field.
 
 
 ## 2048 Game
