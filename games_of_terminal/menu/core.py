@@ -1,6 +1,6 @@
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET
-from games_of_terminal.database.database import create_tables
+from games_of_terminal.database.database import create_db_tables
 from games_of_terminal.menu.constants import *
 
 from curses import flushinp, A_STANDOUT as REVERSE
@@ -13,11 +13,11 @@ from sys import exit
 class Menu(InterfaceManager):
     def _setup(self):
         super()._setup()
-        create_tables()
+        create_db_tables()
 
         self.current_row = 0
 
-        self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 4
+        self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 3
         self.menu_start_y = self.logo_start_y + len(LOGO_MENU) + 3
 
         self.top_sword_y = self.logo_start_y - 1
@@ -71,19 +71,25 @@ class Menu(InterfaceManager):
         )
 
     def update_menu_display(self):
+        # redraw dynamic parts
         self.draw_fire_animation()
         self.show_games_list()
 
     def draw_menu(self):
+        # draw static parts
         self.draw_logo_with_swords()
         self.show_games_list()
         self.draw_creator_name()
         self.window.refresh()
 
     def show_games_list(self):
+        begin_y = self.menu_start_y
+
         for row, game in enumerate(GAMES.values()):
             game_name = game['name']
-            y = self.menu_start_y + row
+
+            begin_y += 1 if game_name == 'Settings' else 0
+            y = begin_y + row
             x = (self.width // 2) - (len(game_name) // 2)
 
             color = self.default_color + REVERSE if row == self.current_row \
@@ -97,7 +103,7 @@ class Menu(InterfaceManager):
         game_class = chosen_game['game']
 
         game = game_class(self.canvas, game_name)
-        game.start_new_game()
+        game.run()
 
         self.handle_post_game()
 

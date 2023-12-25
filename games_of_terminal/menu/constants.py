@@ -2,6 +2,7 @@ from games_of_terminal.games.snake.core import SnakeGame
 from games_of_terminal.games.minesweeper.core import MinesweeperGame
 from games_of_terminal.games.tictactoe.core import TicTacToeGame
 from games_of_terminal.games.tetris.core import TetrisGame
+from games_of_terminal.settings.core import Settings
 
 
 GAMES = {
@@ -9,6 +10,7 @@ GAMES = {
     1: {'name': 'Minesweeper', 'game': MinesweeperGame},
     2: {'name': 'Tic Tac Toe', 'game': TicTacToeGame},
     3: {'name': 'Snake', 'game': SnakeGame},
+    4: {'name': 'Settings', 'game': Settings},
 }
 
 MENU_LENGTH = len(GAMES)
@@ -24,6 +26,15 @@ GOODBYE_MESSAGES = [
 ]
 
 LOGO_MENU = [
+    ' ██████╗  █████╗ ████████╗',
+    '██╔════╝ ██╔══██╗╚══██╔══╝',
+    '██║      ██║  ██║   ██║   ',
+    '██║   ██╗██║  ██║   ██║   ',
+    '╚██████╔╝╚█████╔╝   ██║   ',
+    ' ╚═════╝  ╚════╝    ╚═╝   ',
+]
+
+OLD_LOGO_MENU = [
     ' ####     #####   ######',
     '##       ##   ##    ##  ',
     '##  ###  ##   ##    ##  ',
