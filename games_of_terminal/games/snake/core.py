@@ -28,11 +28,14 @@ class SnakeGame(GameEngine):
 
         self._put_food_on_the_field()
 
-        self.setup_side_menu()
+        self.draw_logo()
         self.show_game_status()
 
         self.set_best_score()
-        self.draw_game_tips(self.tips)
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
 
     def start_new_game(self):
         while True:
@@ -111,7 +114,10 @@ class SnakeGame(GameEngine):
         if snake_head == self.food:
             self.stats.score += 1
             self._put_food_on_the_field()
-            self.draw_game_tips(self.tips)
+            self.show_side_menu_tips(
+                game_state=self.tips,
+                game_tips=GAME_TIPS,
+            )
         else:
             snake_tail = self.snake.pop()
             self.game_area.box.addstr(*snake_tail, ' ')

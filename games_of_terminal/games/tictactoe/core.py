@@ -1,6 +1,6 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.games.tictactoe.constants import (
-    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS, BEST_MOVE_PATTERNS_BY_OWNERS,
+    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS, BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
 )
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tictactoe.cell import TicTacToeCell
@@ -17,6 +17,16 @@ class TicTacToeGame(GameEngine):
 
         self.user_moves = []
         self.computer_moves = []
+
+    def setup_game_field(self):
+        self.hide_cursor()
+        self._draw_game_field()
+
+        self.draw_logo()
+        self.show_side_menu_tips(
+            game_tips=GAME_TIPS,
+        )
+        self.show_game_status()
 
     def start_new_game(self):
         self.current_cell.select()
@@ -99,17 +109,9 @@ class TicTacToeGame(GameEngine):
             y += self.cell_height
             x = begin_x
 
-    def setup_game_field(self):
-        self.hide_cursor()
-        self._draw_game_field()
-
-        self.setup_side_menu()
-        self.show_game_status()
-
     def _slide_field(self, key):
-        base_y_offset, base_x_offset = DIRECTIONS[key]
-
         y, x = self.current_coordinates
+        base_y_offset, base_x_offset = DIRECTIONS[key]
 
         y_offset = base_y_offset * self.cell_height
         x_offset = base_x_offset * self.cell_width
@@ -125,15 +127,17 @@ class TicTacToeGame(GameEngine):
     def _user_move(self):
         self.current_cell.owner = 'user'
         self.user_moves.append(self.current_cell.field_number)
-        self._set_game_status()
+        self._update_game_status()
 
     def _computer_move(self):
-        if self.stats.game_status == 'game_active':
-            sleep(0.3)
-            cell = self._get_best_move()
-            cell.owner = 'computer'
-            self.computer_moves.append(cell.field_number)
-            self._set_game_status()
+        if self.stats.game_status != 'game_active':
+            return
+
+        sleep(0.3)
+        cell = self._get_best_move()
+        cell.owner = 'computer'
+        self.computer_moves.append(cell.field_number)
+        self._update_game_status()
 
     def _get_best_move(self):
         cells_by_number = {cell.field_number: cell for cell in self.cells.values()}
@@ -156,7 +160,7 @@ class TicTacToeGame(GameEngine):
 
         return random_cell
 
-    def _check_to_win(self, player):
+    def _is_player_win(self, player):
         player_moves = self.user_moves if player == 'user' else self.computer_moves
 
         for winning_pattern in WINNING_PATTERNS:
@@ -171,10 +175,10 @@ class TicTacToeGame(GameEngine):
                 return False
         return True
 
-    def _set_game_status(self):
-        if self._check_to_win('user'):
+    def _update_game_status(self):
+        if self._is_player_win('user'):
             self.stats.game_status = 'user_win'
-        elif self._check_to_win('computer'):
+        elif self._is_player_win('computer'):
             self.stats.game_status = 'user_lose'
         elif self._is_all_cells_occupied():
             self.stats.game_status = 'tie'

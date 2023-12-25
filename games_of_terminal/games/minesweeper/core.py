@@ -11,6 +11,22 @@ class MinesweeperGame(GameEngine):
         self.cells = dict()
         self.flags = 0
 
+    def setup_game_field(self):
+        self.hide_cursor()
+
+        self._draw_game_field()
+        self._plant_bombs()
+        self._set_bombs_around_counter()
+        self._open_first_empty_cell()
+
+        self.show_game_status()
+        self.draw_logo()
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
+        self.show_game_status()
+
     def start_new_game(self):
         self.current_cell.select()
 
@@ -44,18 +60,6 @@ class MinesweeperGame(GameEngine):
     @property
     def tips(self):
         return {'flags': self.flags}
-
-    def setup_game_field(self):
-        self.hide_cursor()
-
-        self._draw_game_field()
-        self._plant_bombs()
-        self._set_bombs_around_counter()
-        self._open_first_empty_cell()
-
-        self.show_game_status()
-        self.setup_side_menu()
-        self.draw_game_tips(self.tips)
 
     def _draw_game_field(self):
         lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
@@ -184,6 +188,11 @@ class MinesweeperGame(GameEngine):
         self.current_cell.show_cell()
         self.current_cell.show_cell_text()
         self.current_cell.hide_cell()
+
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
 
         self.check_to_win()
 

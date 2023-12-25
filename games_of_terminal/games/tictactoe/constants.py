@@ -18,3 +18,8 @@ BEST_MOVE_PATTERNS_BY_OWNERS = (
     ('computer', 'computer', 'free'),
     ('user', 'user', 'free'),
 )
+
+GAME_TIPS = {
+    'Move': '← ↓ ↑ →',
+    'Select cell': 'Enter',
+}

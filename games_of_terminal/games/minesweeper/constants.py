@@ -24,3 +24,9 @@ CELL_OFFSETS = (
     (CELL_HEIGHT, 0), (-CELL_HEIGHT, 0),
     (0, -CELL_WIDTH), (0, CELL_WIDTH),
 )
+
+GAME_TIPS = {
+    'Move': '← ↓ ↑ → (wasd)',
+    'Open cell': 'Enter',
+    'Place flag': 'Q',
+}

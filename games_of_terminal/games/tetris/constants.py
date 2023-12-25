@@ -90,3 +90,10 @@ LEVELS = {
     4: 10_000,
     5: 20_000,
 }
+
+GAME_TIPS = {
+    'Move': '← ↓ →',
+    'Flip': '↑',
+    'Drop': 'Space',
+    'Pause': 'P',
+}

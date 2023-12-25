@@ -3,10 +3,7 @@ from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
 from games_of_terminal.games.tetris.next_block import NextBlockArea
-from games_of_terminal.games.tetris.constants import (
-    BLOCKS, DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
-    CELL_WIDTH, CELL_HEIGHT, DOWN, SCORES, LEVELS,
-)
+from games_of_terminal.games.tetris.constants import *
 
 from time import time
 from random import choice
@@ -21,6 +18,25 @@ class TetrisGame(GameEngine):
 
         self.level = 1
         self.time_interval = 1
+        self.time = time()
+
+    def setup_game_field(self):
+        self.hide_cursor()
+        self.window.nodelay(1)
+        self.window.timeout(150)
+
+        self.set_best_score()
+
+        self.draw_logo()
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
+        self.show_game_status()
+
+        self.board = TetrisBoard(self.game_area)
+        self.next_block_area = NextBlockArea(self.game_area, self.board)
+
         self.time = time()
 
     def start_new_game(self):
@@ -46,8 +62,8 @@ class TetrisGame(GameEngine):
     @property
     def tips(self):
         return {
-            'Score': self.stats.score,
             'Level': self.level,
+            'Score': self.stats.score,
             'Best Score': self.stats.best_score,
         }
 
@@ -58,22 +74,6 @@ class TetrisGame(GameEngine):
     def save_best_score(self):
         if self.stats.score > self.stats.best_score:
             save_game_state('Tetris', 'best_score', self.stats.score)
-
-    def setup_game_field(self):
-        self.hide_cursor()
-        self.window.nodelay(1)
-        self.window.timeout(150)
-
-        self.set_best_score()
-
-        self.setup_side_menu()
-        self.show_game_status()
-        self.draw_game_tips(self.tips)
-
-        self.board = TetrisBoard(self.game_area)
-        self.next_block_area = NextBlockArea(self.game_area, self.board)
-
-        self.time = time()
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -112,7 +112,10 @@ class TetrisGame(GameEngine):
 
         self.stats.score += SCORES[lines_count] * self.level
         self._increase_level()
-        self.draw_game_tips(self.tips)
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
         self.board.draw_board()
 
     def _increase_level(self):
