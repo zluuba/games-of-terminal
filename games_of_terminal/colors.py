@@ -79,6 +79,7 @@ class Colors:
         init_pair(25, 242, COLOR_BLACK)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
+        self.game_state_color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
 
     def get_color_by_name(self, color_name):
         color_pair_number = self.color_mapping.get(color_name, 0)
