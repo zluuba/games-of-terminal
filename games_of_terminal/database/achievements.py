@@ -61,5 +61,5 @@ global_achievements = {
     'Ctrl + Alt + Achieve': 'Get 20 achieves.',
     'Creator\'s Favorite': 'Obtain all achievements.',
     'How You Doin\'? ;)': 'Set username in the Settings and feel the Power.',
-    'Nice!': 'Find cringe option in the Settings and click on it.',
+    'Nice!': 'Find suspicious option in the Settings and click on it.',
 }
