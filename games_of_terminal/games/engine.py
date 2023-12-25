@@ -1,13 +1,11 @@
+from games_of_terminal.database.database import update_game_state
 from games_of_terminal.app_interface import InterfaceManager
-from games_of_terminal.games.game_stats import GameStats
+from games_of_terminal.field import Field
 from games_of_terminal.constants import (
-    MESSAGES, KEYS, GAME_STATUSES, SIDE_MENU_TIPS,
+    MESSAGES, KEYS, GAME_STATUSES, COMMON_TIPS,
     BASE_OFFSET,
 )
-from games_of_terminal.database.database import (
-    update_game_state
-)
-from games_of_terminal.field import Field
+from .game_stats import GameStats
 
 from curses import flash, flushinp, endwin, A_BLINK as BLINK
 from time import sleep
@@ -29,14 +27,14 @@ class GameEngine(InterfaceManager):
                 break
 
             self.reset_game_area()
-            self.reset_stats()
+            self.reset_game_stats()
 
     def reset_game_area(self):
         self.game_area.box.erase()
         self.game_area = Field(self.window, *self.game_box_sizes.values())
         self.game_area.box.refresh()
 
-    def reset_stats(self):
+    def reset_game_stats(self):
         self.stats = GameStats()
 
     def is_game_over(self):
@@ -53,7 +51,6 @@ class GameEngine(InterfaceManager):
 
     def pause(self):
         self.stats.is_pause = not self.stats.is_pause
-        self.wait_for_keypress()
 
         if self.stats.is_pause:
             self._show_pause_message()
@@ -66,7 +63,6 @@ class GameEngine(InterfaceManager):
             self.stats.is_pause = not self.stats.is_pause
 
         self.window.timeout(150)
-        return
 
     def _show_pause_message(self):
         message = ' PAUSE '
@@ -77,32 +73,7 @@ class GameEngine(InterfaceManager):
 
         self.draw_message(y, x, self.game_area.box, message, color)
 
-    def show_game_status(self, y=1, x=1):
-        color_name = GAME_STATUSES[self.stats.game_status]['color']
-        color = self.get_color_by_name(color_name)
-
-        empty_line = ' ' * (self.game_status_area.width - BASE_OFFSET)
-
-        for offset in range(self.game_status_area.height - BASE_OFFSET):
-            new_y = y + offset
-            # fill game_status field background, excluding borders
-            self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
-
-        message = GAME_STATUSES[self.stats.game_status]['text']
-        middle_x = (self.game_status_area.width // 2) - len(message) // 2
-        self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
-
-    def draw_game_tips(self, tips):
-        color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
-        y, x = 3 + len(SIDE_MENU_TIPS), 2
-        self.draw_side_menu_tips(y, x, tips, color)
-
     def ask_for_restart(self):
-        """ Draws a message in the center of the playing field
-        that the user can restart the game,
-        waiting for a response (space bar pressing)
-        """
-
         flash()
         self.show_game_status()
         sleep(1)
@@ -120,5 +91,68 @@ class GameEngine(InterfaceManager):
 
         self.stats.is_restart = True if key == KEYS['space'] else False
 
-    def update_stat_in_db(self, stat, value):
+    def update_state_in_db(self, stat, value):
         update_game_state(self.game_name, stat, value)
+
+    def show_game_status(self, y=1, x=1):
+        color_name = GAME_STATUSES[self.stats.game_status]['color']
+        color = self.get_color_by_name(color_name)
+
+        empty_line = ' ' * (self.game_status_area.width - BASE_OFFSET)
+
+        for offset in range(self.game_status_area.height - BASE_OFFSET):
+            new_y = y + offset
+            self.draw_message(new_y, x, self.game_status_area.box, empty_line, color)
+
+        message = GAME_STATUSES[self.stats.game_status]['text']
+        middle_x = (self.game_status_area.width // 2) - len(message) // 2
+        self.draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
+
+    def show_side_menu_tips(self, game_state=None, game_tips=None):
+        all_tips = self._get_all_tips(game_state, game_tips)
+        y = x = 2
+
+        for curr_tips in all_tips:
+            tips_type = curr_tips['name']
+            tips = curr_tips['tips']
+            color = curr_tips['color']
+
+            if not tips:
+                continue
+
+            for description, key in tips.items():
+                if y >= self.tips_area.height - 2:
+                    return
+
+                message = f'{key} - {description}'
+                line_width = self.tips_area.width - (x * 2)
+                self._clear_field_line(y, x, self.tips_area.box, line_width)
+                self.draw_message(y, x, self.tips_area.box, message, color)
+                y += 1
+
+            if tips_type == 'state':
+                y += 1
+
+    def _get_all_tips(self, game_state, game_tips):
+        return [
+            {
+                'name': 'state',
+                'tips': game_state,
+                'color': self.game_state_color,
+            },
+            {
+                'name': 'game_tips',
+                'tips': game_tips,
+                'color': self.default_color,
+            },
+            {
+                'name': 'common',
+                'tips': COMMON_TIPS,
+                'color': self.default_color,
+            },
+        ]
+
+    def _clear_field_line(self, begin_y, begin_x, field, width):
+        empty_line = ' ' * width
+        self.draw_message(begin_y, begin_x, field,
+                          empty_line, self.default_color)
