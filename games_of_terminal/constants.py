@@ -14,6 +14,9 @@ LOGO = [
     ' #####    ####     ##  ',
 ]
 
+MIN_WIN_HEIGHT = 20
+MIN_WIN_WIDTH = 40
+
 # 1 on each side
 BASE_OFFSET = 2
 
@@ -53,10 +56,8 @@ MESSAGES = {
     'play_again': 'Press Space to play again',
 }
 
-SIDE_MENU_TIPS = {
-    'Move': '← ↓ ↑ → (wasd)',
+COMMON_TIPS = {
     'Restart': 'R',
-    'Tips, Rules': 'T',
-    'Side menu': 'M',
+    'Settings': 'S',
     'Quit': 'Esc',
 }
