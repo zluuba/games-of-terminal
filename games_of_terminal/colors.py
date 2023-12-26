@@ -42,6 +42,12 @@ class Colors:
             'light_black_text_black_bg': 23,
             'very_light_grey_text_black_bg': 24,
             'grey_text_black_bg': 25,
+
+            'white_text_bright_light_orange_bg': 26,
+            'white_text_peaceful_red_bg': 27,
+            'white_text_pastel_yellow_bg': 28,
+            'white_text_pastel_deep_blue_bg': 29,
+            'white_text_strong_magenta_bg': 30,
         }
 
         start_color()
@@ -77,6 +83,12 @@ class Colors:
         init_pair(23, 233, COLOR_BLACK)
         init_pair(24, 248, COLOR_BLACK)
         init_pair(25, 242, COLOR_BLACK)
+
+        init_pair(26, COLOR_WHITE, 208)
+        init_pair(27, COLOR_WHITE, 124)
+        init_pair(28, COLOR_WHITE, 185)
+        init_pair(29, COLOR_WHITE, 81)
+        init_pair(30, COLOR_WHITE, 163)
 
         self.default_color = self.get_color_by_name('white_text_black_bg')
         self.game_state_color = self.get_color_by_name('strong_pastel_purple_text_black_bg')
