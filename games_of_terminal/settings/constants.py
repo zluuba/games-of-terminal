@@ -1,3 +1,11 @@
+from .all_settings.user_preferences import UserPreferences
+from .all_settings.games_settings import GamesSettings
+from .all_settings.achievements import Achievements
+from .all_settings.statistics import Statistics
+from .all_settings.reset_all import ResetAll
+from .all_settings.confess_all import ConfessAll
+
+
 TITLE = [
     '   ░█▀▀▀█ ░█▀▀▀ ▀▀█▀▀ ▀▀█▀▀ ▀█▀ ░█▄ ░█ ░█▀▀█ ░█▀▀▀█   ',
     ' ▀  ▀▀▀▄▄ ░█▀▀▀  ░█    ░█   ░█  ░█░█░█ ░█ ▄▄  ▀▀▀▄▄ ▀ ',
@@ -5,12 +13,12 @@ TITLE = [
 ]
 
 ITEMS = {
-    0: {'name': 'User Preferences', 'class': ''},
-    1: {'name': 'Games Settings', 'class': ''},
-    2: {'name': 'Achievements', 'class': ''},
-    3: {'name': 'Statistics', 'class': ''},
-    4: {'name': 'Reset All', 'class': ''},
-    5: {'name': 'Confess All', 'class': ''},
+    0: {'name': 'User Preferences', 'class': UserPreferences, 'status': 'in_development'},
+    1: {'name': 'Games Settings', 'class': GamesSettings, 'status': 'production'},
+    2: {'name': 'Achievements', 'class': Achievements, 'status': 'production'},
+    3: {'name': 'Statistics', 'class': Statistics, 'status': 'production'},
+    4: {'name': 'Reset All', 'class': ResetAll, 'status': 'in_development'},
+    5: {'name': 'Confess All', 'class': ConfessAll, 'status': 'in_development'},
 }
 
 ITEMS_LEN = len(ITEMS)
