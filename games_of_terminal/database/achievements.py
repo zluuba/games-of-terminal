@@ -26,7 +26,7 @@ game_achievements = {
     },
     'Tic Tac Toe': {
         'Beginner\'s Luck': 'Achieve your first victory.',
-        'Ha-ha!': 'Experience your first defeat.',
+        'GOTcha!': 'Experience your first defeat.',
         'You Scare Me': 'Personalize your gaming experience by changing the color scheme.',
         'Really..?': 'Play 20 games.',
         'Ah shit, here we go again': 'Start your 101st game.',

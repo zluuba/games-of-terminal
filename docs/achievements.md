@@ -30,7 +30,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 ## TicTacToe Game
 
 - **Beginner's Luck**: achieve your first victory.
-- **Ha-ha!**: experience your first defeat.
+- **GOTcha!**: experience your first defeat.
 - **You Scare Me**: personalize your gaming experience by changing the color scheme.
 - **Really..?**: play 20 games.
 - **Ah shit, here we go again**: start your 101st game.
