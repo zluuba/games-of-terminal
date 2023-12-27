@@ -9,75 +9,66 @@ DB_FILENAME = 'got_games.db'
 BASE_DIR = Path(__file__).parents[1]
 FILE_PATH = path.join(BASE_DIR, DB_FILENAME)
 
-# TODO: try SQL builder
 
+class Connection:
+    def __init__(self, autocommit=False):
+        self.autocommit = autocommit
+        self.file_path = FILE_PATH
 
-def create_connection():
-    return sqlite3.connect(FILE_PATH)
+    def __enter__(self):
+        self.conn = sqlite3.connect(self.file_path)
+        self.cursor = self.conn.cursor()
+        return self
 
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if not self.conn:
+            return
 
-def get_connection_and_cursor():
-    connection = create_connection()
-    cursor = connection.cursor()
-    return connection, cursor
+        if self.autocommit:
+            self.conn.commit()
+
+        self.conn.close()
 
 
 def check_tables_exist():
-    conn, cursor = get_connection_and_cursor()
-    cursor.execute(get_all_tables_query)
-    existing_tables = cursor.fetchall()
-    return len(existing_tables) == len(TABLES)
+    with Connection() as c:
+        c.cursor.execute(get_all_tables_query)
+        existing_tables = c.cursor.fetchall()
+        return len(existing_tables) == len(TABLES)
 
 
 def create_db_tables():
     if check_tables_exist():
         return
 
-    conn, cursor = get_connection_and_cursor()
+    with Connection(autocommit=True) as c:
+        for _, create_table_query in TABLES.items():
+            c.cursor.execute(create_table_query)
 
-    for _, create_table_query in TABLES.items():
-        cursor.execute(create_table_query)
+        c.cursor.execute(insert_default_games_query)
 
-    cursor.execute(insert_default_games_query)
+        for achievement_name, (description, game) in achievements.items():
+            c.cursor.execute(get_game_id_query, (game,))
+            data = c.cursor.fetchone()
 
-    for achievement_name, (description, game) in achievements.items():
-        cursor.execute(get_game_id_query, (game,))
-        data = cursor.fetchone()
-
-        game_id = data[0]
-        cursor.execute(
-            insert_achievements_query,
-            (game_id, achievement_name, description)
-        )
-
-    conn.commit()
-    conn.close()
+            game_id = data[0]
+            c.cursor.execute(
+                insert_achievements_query,
+                (game_id, achievement_name, description)
+            )
 
 
 def get_game_state(game_name, stat):
-    conn, cursor = get_connection_and_cursor()
-
-    query = get_game_state_query(stat)
-    cursor.execute(query, (game_name,))
-    data = cursor.fetchone()
-    conn.close()
-    return data[0]
+    with Connection() as c:
+        query = get_game_state_query(stat)
+        c.cursor.execute(query, (game_name,))
+        data = c.cursor.fetchone()
+        return data[0]
 
 
-def save_game_state(game_name, stat, value):
-    conn, cursor = get_connection_and_cursor()
-    query = set_game_state_query(stat)
-    cursor.execute(query, (value, game_name))
+def update_game_state(game_name, stat, value, save_mode=False):
+    get_query = set_game_state_query if save_mode else update_game_state_query
+    query = get_query(stat)
 
-    conn.commit()
-    conn.close()
-
-
-def update_game_state(game_name, stat, value):
-    # same as save_game_state. bring them together
-    conn, cursor = get_connection_and_cursor()
-    query = update_game_state_query(stat)
-    cursor.execute(query, (value, game_name))
-
-    conn.commit()
-    conn.close()
+    with Connection(autocommit=True) as c:
+        c.cursor.execute(query, (value, game_name))
