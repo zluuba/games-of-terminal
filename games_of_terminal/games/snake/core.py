@@ -1,8 +1,11 @@
 from games_of_terminal.constants import KEYS, MESSAGES
 from games_of_terminal.games.engine import GameEngine
-
-from games_of_terminal.games.snake.constants import *
-from games_of_terminal.database.database import get_game_state, save_game_state
+from games_of_terminal.games.snake.constants import (
+    GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
+)
+from games_of_terminal.database.database import (
+    get_game_state, update_game_state,
+)
 
 from random import randint
 
@@ -126,7 +129,10 @@ class SnakeGame(GameEngine):
 
     def _save_best_score(self):
         if self.stats.score > self.stats.best_score:
-            save_game_state('Snake', 'best_score', self.stats.score)
+            update_game_state(
+                'Snake', 'best_score',
+                self.stats.score, save_mode=True
+            )
 
             message = MESSAGES['new_best_score']
             self.draw_message(9, 2,

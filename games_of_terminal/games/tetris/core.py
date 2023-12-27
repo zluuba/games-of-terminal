@@ -1,9 +1,15 @@
-from games_of_terminal.database.database import get_game_state, save_game_state
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
 from games_of_terminal.games.tetris.next_block import NextBlockArea
-from games_of_terminal.games.tetris.constants import *
+from games_of_terminal.games.tetris.constants import (
+    CELL_WIDTH, CELL_HEIGHT, BLOCKS,
+    DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
+    DOWN, SCORES, LEVELS, GAME_TIPS,
+)
+from games_of_terminal.database.database import (
+    get_game_state, update_game_state,
+)
 
 from time import time
 from random import choice
@@ -72,8 +78,13 @@ class TetrisGame(GameEngine):
         self.stats.best_score = data
 
     def save_best_score(self):
-        if self.stats.score > self.stats.best_score:
-            save_game_state('Tetris', 'best_score', self.stats.score)
+        if self.stats.score <= self.stats.best_score:
+            return
+
+        update_game_state(
+            'Tetris', 'best_score',
+            self.stats.score, save_mode=True,
+        )
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)

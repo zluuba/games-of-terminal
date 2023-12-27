@@ -53,6 +53,8 @@ class TetrisBlock(Colors):
         self.board.change_block(self, action='draw')
 
     def drop(self):
+        # TODO: ineffective, rebuild it
+
         y_offset = 0
 
         while True:

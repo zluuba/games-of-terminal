@@ -58,14 +58,13 @@ DOWN = KEY_DOWN
 
 BLOCK_COLORS = {
     'free': 'white_text_light_black_bg',
-    'placed_block': 'white_text_deep_purple_bg',
-    'I-block': 'white_text_pastel_blue_bg',
-    'J-block': 'white_text_green_bg',
-    'L-block': 'white_text_deep_blue_bg',
-    'O-block': 'white_text_pink_bg',
-    'Z-block': 'white_text_yellow_bg',
-    'T-block': 'black_text_deep_pink_bg',
-    'S-block': 'white_text_light_purple_bg',
+    'I-block': 'white_text_pastel_deep_blue_bg',
+    'J-block': 'white_text_medium_blue_bg',
+    'L-block': 'white_text_bright_light_orange_bg',
+    'O-block': 'white_text_pastel_yellow_bg',
+    'Z-block': 'white_text_peaceful_red_bg',
+    'T-block': 'white_text_strong_magenta_bg',
+    'S-block': 'white_text_green_bg',
 }
 
 # max height of blocks (4 - I-block) + borders (2)
