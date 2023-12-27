@@ -2,10 +2,11 @@
 .DS_Store
 .idea/
 
-# local files
+# local dev files
 .env
 dist/
 __pycache__
 
-# upcoming features file
+# upcoming features files
 list_of_features.md
+games_of_terminal/lab/
