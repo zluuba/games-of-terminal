@@ -1,7 +1,14 @@
+from games_of_terminal.database.database import create_db_tables
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET
-from games_of_terminal.database.database import create_db_tables
-from games_of_terminal.menu.constants import *
+from games_of_terminal.menu.constants import (
+    TOP_SWORD_LEN, LOGO_MENU, LOGO_MENU_LEN,
+    BOTTOM_SWORD_LEN, MENU_MAX_LEN, ANIMATION_SPEED,
+    TOP_SWORD, BOTTOM_SWORD, SWORD_COLORS,
+    CREATOR_NAME, GOODBYE_MESSAGES,
+    FIRE_CHARS, FIRE_COLORS, FIRE_ELEMENTS_COUNT,
+    LAST_FIRE_CHAR_IND, MENU_ITEMS, MENU_ITEMS_COUNT,
+)
 
 from curses import flushinp, A_STANDOUT as REVERSE
 
@@ -17,13 +24,13 @@ class Menu(InterfaceManager):
 
         self.current_row = 0
 
-        self.logo_start_y = (self.height // 2) - ((len(LOGO_MENU) + len(GAMES)) // 2) - 3
-        self.menu_start_y = self.logo_start_y + len(LOGO_MENU) + 3
+        self.logo_start_y = (self.height // 2) - ((LOGO_MENU_LEN + MENU_ITEMS_COUNT) // 2) - 3
+        self.menu_start_y = self.logo_start_y + LOGO_MENU_LEN + 3
 
         self.top_sword_y = self.logo_start_y - 1
         self.top_sword_x = (self.width // 2) - (TOP_SWORD_LEN // 2)
 
-        self.bottom_sword_y = self.logo_start_y + len(LOGO_MENU)
+        self.bottom_sword_y = self.logo_start_y + LOGO_MENU_LEN
         self.bottom_sword_x = (self.width // 2) - (BOTTOM_SWORD_LEN // 2)
 
         self.fire_area_size = self.width * self.height
@@ -54,7 +61,7 @@ class Menu(InterfaceManager):
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.move_menu_selection(1)
             elif key in KEYS['enter']:
-                self.start_selected_game()
+                self.run_selected_menu_item()
 
             self.update_menu_display()
             self.window.refresh()
@@ -67,47 +74,47 @@ class Menu(InterfaceManager):
 
     def move_menu_selection(self, direction):
         self.current_row = max(
-            0, min(self.current_row + direction, MENU_LENGTH - 1)
+            0, min(self.current_row + direction, MENU_ITEMS_COUNT - 1)
         )
 
     def update_menu_display(self):
         # redraw dynamic parts
         self.draw_fire_animation()
-        self.show_games_list()
+        self.show_menu_items_list()
 
     def draw_menu(self):
         # draw static parts
         self.draw_logo_with_swords()
-        self.show_games_list()
+        self.show_menu_items_list()
         self.draw_creator_name()
         self.window.refresh()
 
-    def show_games_list(self):
+    def show_menu_items_list(self):
         begin_y = self.menu_start_y
 
-        for row, game in enumerate(GAMES.values()):
-            game_name = game['name']
+        for row, menu_item in enumerate(MENU_ITEMS.values()):
+            menu_item_name = menu_item['name']
 
-            begin_y += 1 if game_name == 'Settings' else 0
+            begin_y += 1 if menu_item_name == 'Settings' else 0
             y = begin_y + row
-            x = (self.width // 2) - (len(game_name) // 2)
+            x = (self.width // 2) - (len(menu_item_name) // 2)
 
             color = self.default_color + REVERSE if row == self.current_row \
                 else self.default_color
 
-            self.draw_message(y, x, self.window, game_name, color)
+            self.draw_message(y, x, self.window, menu_item_name, color)
 
-    def start_selected_game(self):
-        chosen_game = GAMES[self.current_row]
-        game_name = chosen_game['name']
-        game_class = chosen_game['game']
+    def run_selected_menu_item(self):
+        chosen_menu_item = MENU_ITEMS[self.current_row]
+        menu_item_name = chosen_menu_item['name']
+        menu_item_class = chosen_menu_item['class']
 
-        game = game_class(self.canvas, game_name)
-        game.run()
+        menu_item = menu_item_class(self.canvas, menu_item_name)
+        menu_item.run()
 
-        self.handle_post_game()
+        self.handle_post_running_actions()
 
-    def handle_post_game(self):
+    def handle_post_running_actions(self):
         flushinp()
         self.initialize_menu()
 
