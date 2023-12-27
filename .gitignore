@@ -8,4 +8,4 @@ dist/
 __pycache__
 
 # upcoming features file
-list_of_features.txt
+list_of_features.md
