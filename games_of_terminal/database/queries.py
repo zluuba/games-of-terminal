@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS games (
     total_time INTEGER DEFAULT '00:00' NOT NULL,
     best_time INTEGER DEFAULT '00:00' NOT NULL,
     best_score INTEGER DEFAULT 0 NOT NULL,
+    specific_stats TEXT DEFAULT '',
     last_game TEXT DEFAULT ''
 );
 '''

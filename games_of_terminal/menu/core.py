@@ -1,6 +1,6 @@
 from games_of_terminal.database.database import create_db_tables
 from games_of_terminal.app_interface import InterfaceManager
-from games_of_terminal.constants import KEYS, BASE_OFFSET
+from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.menu.constants import (
     TOP_SWORD_LEN, LOGO_MENU, LOGO_MENU_LEN,
     BOTTOM_SWORD_LEN, MENU_MAX_LEN, ANIMATION_SPEED,
@@ -8,6 +8,9 @@ from games_of_terminal.menu.constants import (
     CREATOR_NAME, GOODBYE_MESSAGES,
     FIRE_CHARS, FIRE_COLORS, FIRE_ELEMENTS_COUNT,
     LAST_FIRE_CHAR_IND, MENU_ITEMS, MENU_ITEMS_COUNT,
+)
+from games_of_terminal.utils import (
+    get_color_by_name, draw_message, hide_cursor,
 )
 
 from curses import flushinp, A_STANDOUT as REVERSE
@@ -18,7 +21,7 @@ from sys import exit
 
 
 class Menu(InterfaceManager):
-    def _setup(self):
+    def _setup(self, **kwargs):
         super()._setup()
         create_db_tables()
 
@@ -68,7 +71,7 @@ class Menu(InterfaceManager):
 
     def initialize_menu(self):
         self.window.clear()
-        self.hide_cursor()
+        hide_cursor()
         self.set_window_redrawing_speed()
         self.draw_menu()
 
@@ -99,10 +102,10 @@ class Menu(InterfaceManager):
             y = begin_y + row
             x = (self.width // 2) - (len(menu_item_name) // 2)
 
-            color = self.default_color + REVERSE if row == self.current_row \
-                else self.default_color
+            color = DEFAULT_COLOR + REVERSE if row == self.current_row \
+                else DEFAULT_COLOR
 
-            self.draw_message(y, x, self.window, menu_item_name, color)
+            draw_message(y, x, self.window, menu_item_name, color)
 
     def run_selected_menu_item(self):
         chosen_menu_item = MENU_ITEMS[self.current_row]
@@ -121,23 +124,23 @@ class Menu(InterfaceManager):
     def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
             x = (self.width // 2) - (len(line) // 2)
-            self.draw_message(y, x, self.window, line, self.default_color)
+            draw_message(y, x, self.window, line, DEFAULT_COLOR)
 
         self.draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
         self.draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
 
     def draw_sword(self, sword, y, x):
         for name, part in sword:
-            color = self.get_color_by_name(SWORD_COLORS[name])
-            self.draw_message(y, x, self.window, part, color)
+            color = get_color_by_name(SWORD_COLORS[name])
+            draw_message(y, x, self.window, part, color)
             x += len(part)
 
     def draw_creator_name(self):
-        color = self.get_color_by_name('light_grey_text_black_bg')
+        color = get_color_by_name('light_grey_text_black_bg')
         begin_y = self.height - 2
         begin_x = (self.width // 2) - (len(CREATOR_NAME) // 2)
 
-        self.draw_message(begin_y, begin_x, self.window,
+        draw_message(begin_y, begin_x, self.window,
                           CREATOR_NAME, color)
 
     def draw_goodbye_message(self):
@@ -145,8 +148,8 @@ class Menu(InterfaceManager):
         begin_y = self.height // 2
         begin_x = (self.width // 2) - (len(goodbye_message) // 2)
 
-        self.draw_message(begin_y, begin_x, self.window,
-                          goodbye_message, self.default_color)
+        draw_message(begin_y, begin_x, self.window,
+                          goodbye_message, DEFAULT_COLOR)
 
     def set_window_redrawing_speed(self):
         self.window.timeout(self.fire_animation_speed)
@@ -165,7 +168,7 @@ class Menu(InterfaceManager):
                  + self.fire_items[i + self.width + 1]) / 4
             )
             color_name = ('yellow' if self.fire_items[i] > 15 else ('red' if self.fire_items[i] > 9 else 'black'))
-            color = self.get_color_by_name(FIRE_COLORS[color_name])
+            color = get_color_by_name(FIRE_COLORS[color_name])
 
             fire_char_index = LAST_FIRE_CHAR_IND if self.fire_items[i] > LAST_FIRE_CHAR_IND else self.fire_items[i]
             char = FIRE_CHARS[fire_char_index]

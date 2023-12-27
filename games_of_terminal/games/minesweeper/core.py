@@ -2,6 +2,7 @@ from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
+from games_of_terminal.utils import hide_cursor
 
 from random import choice, uniform
 
@@ -12,7 +13,7 @@ class MinesweeperGame(GameEngine):
         self.flags = 0
 
     def setup_game_field(self):
-        self.hide_cursor()
+        hide_cursor()
 
         self._draw_game_field()
         self._plant_bombs()

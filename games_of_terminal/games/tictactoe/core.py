@@ -1,9 +1,11 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.games.tictactoe.constants import (
-    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS, BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
+    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
+    BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
 )
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tictactoe.cell import TicTacToeCell
+from games_of_terminal.utils import hide_cursor
 
 from random import choice
 from time import sleep
@@ -19,7 +21,7 @@ class TicTacToeGame(GameEngine):
         self.computer_moves = []
 
     def setup_game_field(self):
-        self.hide_cursor()
+        hide_cursor()
         self._draw_game_field()
 
         self.draw_logo()

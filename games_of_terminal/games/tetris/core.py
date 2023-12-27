@@ -11,6 +11,8 @@ from games_of_terminal.database.database import (
     get_game_state, update_game_state,
 )
 
+from games_of_terminal.utils import hide_cursor
+
 from time import time
 from random import choice
 
@@ -27,7 +29,7 @@ class TetrisGame(GameEngine):
         self.time = time()
 
     def setup_game_field(self):
-        self.hide_cursor()
+        hide_cursor()
         self.window.nodelay(1)
         self.window.timeout(150)
 

@@ -1,15 +1,18 @@
-from games_of_terminal.colors import Colors
-from games_of_terminal.field import Field
-
 from games_of_terminal.games.tetris.constants import (
     CELL_HEIGHT, CELL_WIDTH, NEXT_BLOCK_TEXT,
     NEXT_BLOCK_AREA_HEIGHT,
 )
+from games_of_terminal.constants import DEFAULT_COLOR
+from games_of_terminal.field import Field
+from games_of_terminal.utils import (
+    init_curses_colors, get_color_by_name,
+    draw_message,
+)
 
 
-class NextBlockArea(Colors):
+class NextBlockArea:
     def __init__(self, parent_window, game_board):
-        super().__init__()
+        init_curses_colors()
 
         self.height = NEXT_BLOCK_AREA_HEIGHT * CELL_HEIGHT
         self.width = NEXT_BLOCK_AREA_HEIGHT * CELL_WIDTH
@@ -22,14 +25,12 @@ class NextBlockArea(Colors):
         self.win = self.next_block_area.box
 
     def _draw_cell(self, y, x, color_name, size=1):
-        color = self.get_color_by_name(color_name)
-
-        self.win.addstr(y, x, ' ' * size, color)
-        self.win.refresh()
+        color = get_color_by_name(color_name)
+        draw_message(y, x, self.win, ' ' * size, color)
 
     def show(self, block):
         self.clear_window()
-        self.draw_text()
+        self.show_next_block_title()
 
         block_y = (self.height // 2) - (block.height * CELL_HEIGHT // 2)
         begin_x = block_x = (self.width // 2) - (block.width * CELL_WIDTH // 2)
@@ -48,10 +49,9 @@ class NextBlockArea(Colors):
     def clear_window(self):
         for row in range(1, self.height - 1):
             for col in range(1, self.width - 1):
-                self._draw_cell(row, col, self.default_color)
+                self._draw_cell(row, col, DEFAULT_COLOR)
 
-    def draw_text(self):
+    def show_next_block_title(self):
         begin_y = 0     # top border
         begin_x = (self.width // 2) - (len(NEXT_BLOCK_TEXT) // 2)
-        self.win.addstr(begin_y, begin_x, NEXT_BLOCK_TEXT, self.default_color)
-        self.win.refresh()
+        draw_message(begin_y, begin_x, self.win, NEXT_BLOCK_TEXT, DEFAULT_COLOR)

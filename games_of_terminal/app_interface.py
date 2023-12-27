@@ -1,24 +1,32 @@
-from curses import newwin, curs_set
+from games_of_terminal.constants import (
+    LOGO, APP_NAME, MIN_WIN_HEIGHT, MIN_WIN_WIDTH, KEYS,
+    BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
+    DEFAULT_COLOR,
+)
+from games_of_terminal.field import Field
+from games_of_terminal.utils import (
+    draw_message, init_curses_colors,
+)
+
+from curses import newwin
 from time import sleep
 
-from .colors import Colors
-from .field import Field
-from .constants import *
 
-
-class InterfaceManager(Colors):
+class InterfaceManager:
     def __init__(self, canvas):
-        super().__init__()
+        init_curses_colors()
 
         self.canvas = canvas
         self._setup()
 
-    def _setup(self):
+    def _setup(self, only_main_win=False):
         self.height, self.width = self.canvas.getmaxyx()
-        self.canvas.bkgd(' ', self.default_color)
+        self.canvas.bkgd(' ', DEFAULT_COLOR)
         self._set_window_sizes()
         self._init_main_window()
-        self._init_subwindows()
+
+        if not only_main_win:
+            self._init_subwindows()
 
     def _init_main_window(self):
         window_sizes = self.window_box_sizes.values()
@@ -35,19 +43,10 @@ class InterfaceManager(Colors):
 
     def draw_logo(self):
         for y, line in enumerate(LOGO, start=1):
-            self.draw_message(y, 2, self.logo_area.box, line, self.default_color)
+            draw_message(y, 2, self.logo_area.box, line, DEFAULT_COLOR)
 
         y, x = 6, (self.logo_area.width - len(APP_NAME)) // 2
-        self.draw_message(y, x, self.logo_area.box, APP_NAME, self.default_color)
-
-    @staticmethod
-    def draw_message(begin_y, begin_x, field, message, color):
-        field.addstr(begin_y, begin_x, message, color)
-        field.refresh()
-
-    @staticmethod
-    def hide_cursor():
-        curs_set(0)
+        draw_message(y, x, self.logo_area.box, APP_NAME, DEFAULT_COLOR)
 
     def wait_for_keypress(self):
         self.window.timeout(-1)
@@ -81,7 +80,7 @@ class InterfaceManager(Colors):
 
         y = self.height // 2
         x = (self.width // 2) - (message_length // 2)
-        self.draw_message(y, x, self.canvas, message, self.default_color)
+        draw_message(y, x, self.canvas, message, DEFAULT_COLOR)
         self.canvas.refresh()
 
     def _set_window_sizes(self):

@@ -1,5 +1,6 @@
 from games_of_terminal.settings.placeholder_stub import show_placeholder_stub
 from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.constants import DEFAULT_COLOR
 import time
 
 
@@ -11,7 +12,7 @@ class ConfessAll(InterfaceManager):
     def run(self):
         show_placeholder_stub(
             self.height, self.width,
-            self.window, self.default_color,
+            self.window, DEFAULT_COLOR,
         )
 
         time.sleep(1)

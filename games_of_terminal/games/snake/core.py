@@ -1,4 +1,5 @@
-from games_of_terminal.constants import KEYS, MESSAGES
+from games_of_terminal.constants import KEYS
+from games_of_terminal.utils import hide_cursor
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
@@ -25,7 +26,7 @@ class SnakeGame(GameEngine):
         self.food = None
 
     def setup_game_field(self):
-        self.hide_cursor()
+        hide_cursor()
         self.window.nodelay(1)
         self.window.timeout(150)
 
@@ -128,13 +129,10 @@ class SnakeGame(GameEngine):
         self.game_area.box.refresh()
 
     def _save_best_score(self):
-        if self.stats.score > self.stats.best_score:
-            update_game_state(
-                'Snake', 'best_score',
-                self.stats.score, save_mode=True
-            )
+        if self.stats.score <= self.stats.best_score:
+            return
 
-            message = MESSAGES['new_best_score']
-            self.draw_message(9, 2,
-                              self.tips_area.box, message,
-                              self.get_color_by_name('white_text_green_bg'))
+        update_game_state(
+            'Snake', 'best_score',
+            self.stats.score, save_mode=True
+        )

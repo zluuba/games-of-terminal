@@ -1,9 +1,11 @@
-from games_of_terminal.colors import Colors
+from games_of_terminal.utils import (
+    init_curses_colors, get_color_by_name,
+)
 
 
-class Cell(Colors):
+class Cell:
     def __init__(self, field_box, coordinates):
-        super().__init__()
+        init_curses_colors()
 
         self.field_box = field_box
         self.coordinates = coordinates
@@ -18,16 +20,16 @@ class Cell(Colors):
         }
 
         self.colors = {
-            0: self.get_color_by_name('white_text_pastel_blue_bg'),        # 0 bombs
-            1: self.get_color_by_name('white_text_light_blue_bg'),         # 1 bomb
-            2: self.get_color_by_name('white_text_medium_blue_bg'),        # 2 bombs
-            3: self.get_color_by_name('white_text_dark_medium_blue_bg'),   # 3 bombs
-            4: self.get_color_by_name('white_text_deep_blue_bg'),          # 4 bombs or more
+            0: get_color_by_name('white_text_pastel_blue_bg'),        # 0 bombs
+            1: get_color_by_name('white_text_light_blue_bg'),         # 1 bomb
+            2: get_color_by_name('white_text_medium_blue_bg'),        # 2 bombs
+            3: get_color_by_name('white_text_dark_medium_blue_bg'),   # 3 bombs
+            4: get_color_by_name('white_text_deep_blue_bg'),          # 4 bombs or more
 
-            'bomb': self.get_color_by_name('white_text_red_bg'),           # bomb color
-            'closed': self.get_color_by_name('white_text_black_bg'),       # default cell color
-            'cursor': self.get_color_by_name('white_text_light_grey_bg'),  # selected cell
-            'flag': self.get_color_by_name('white_text_deep_purple_bg'),   # cell with flag
+            'bomb': get_color_by_name('white_text_red_bg'),           # bomb color
+            'closed': get_color_by_name('white_text_black_bg'),       # default cell color
+            'cursor': get_color_by_name('white_text_light_grey_bg'),  # selected cell
+            'flag': get_color_by_name('white_text_deep_purple_bg'),   # cell with flag
         }
 
     def is_open(self):
@@ -82,9 +84,6 @@ class Cell(Colors):
     def get_background_color(self):
         return self.state['background_color']
 
-    # def _is_user_step_on_bomb(self):
-    #     return self.is_open() and self.is_bomb()
-
     def is_empty(self):
         return (not self.is_open() and
                 not self.is_bomb() and
@@ -120,12 +119,12 @@ class Cell(Colors):
 
         if self.have_flag():
             message = 'bomb?'
-            color = self.get_color_by_name('white_text_deep_blue_bg')
+            color = get_color_by_name('white_text_deep_blue_bg')
             self.field_box.addstr(center_x, center_y - (len(message) // 2),
                                   message, color)
         elif self.is_bomb() and self.is_open():
             message = 'boom!'
-            color = self.get_color_by_name('black_text_red_bg')
+            color = get_color_by_name('black_text_red_bg')
             self.field_box.addstr(center_x, center_y - (len(message) // 2),
                                   message, color)
         elif self.is_open():

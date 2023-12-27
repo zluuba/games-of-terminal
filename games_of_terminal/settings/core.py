@@ -1,7 +1,10 @@
+from games_of_terminal.settings.constants import TITLE, ITEMS, ITEMS_LEN
 from games_of_terminal.app_interface import InterfaceManager
-from games_of_terminal.constants import KEYS
+from games_of_terminal.constants import KEYS, DEFAULT_COLOR
 
-from .constants import TITLE, ITEMS, ITEMS_LEN
+from games_of_terminal.utils import (
+    draw_message, hide_cursor, get_color_by_name,
+)
 
 from curses import A_STANDOUT as REVERSE
 from random import randint, choice
@@ -19,7 +22,7 @@ class Settings(InterfaceManager):
 
         self.noise_chars = ['.', '-', '-', '_', '_', '|', '|']
         self.noise_chars_len = len(self.noise_chars)
-        self.noise_color = self.get_color_by_name('grey_text_black_bg')
+        self.noise_color = get_color_by_name('grey_text_black_bg')
         self.chars_per_line = self.width // 4
 
     def run(self):
@@ -51,7 +54,7 @@ class Settings(InterfaceManager):
 
     def initialize_settings(self):
         self.window.clear()
-        self.hide_cursor()
+        hide_cursor()
 
         self.update_menu_display()
         self.window.refresh()
@@ -64,7 +67,7 @@ class Settings(InterfaceManager):
     def show_settings_title(self):
         for y, line in enumerate(TITLE, start=self.title_start_y):
             x = (self.width // 2) - (len(line) // 2)
-            self.draw_message(y, x, self.window, line, self.default_color)
+            draw_message(y, x, self.window, line, DEFAULT_COLOR)
 
     def show_items_list(self):
         begin_y = self.items_start_y
@@ -77,13 +80,13 @@ class Settings(InterfaceManager):
             x = (self.width // 2) - (len(settings_name) // 2)
 
             if row == self.current_row:
-                color = self.default_color + REVERSE
+                color = DEFAULT_COLOR + REVERSE
             elif settings['status'] == 'in_development':
-                color = self.get_color_by_name('grey_text_black_bg')
+                color = get_color_by_name('grey_text_black_bg')
             else:
-                color = self.default_color
+                color = DEFAULT_COLOR
 
-            self.draw_message(y, x, self.window, settings_name, color)
+            draw_message(y, x, self.window, settings_name, color)
 
     def move_menu_selection(self, direction):
         self.current_row = max(

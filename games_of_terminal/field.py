@@ -12,7 +12,7 @@ class Field:
         )
 
         if show_borders:
-            self.draw_borders()
+            self.show_borders()
 
     def _set_border_coordinates(self):
         self.top_border = self.begin_y - 1
@@ -20,5 +20,5 @@ class Field:
         self.left_border = self.begin_x
         self.right_border = self.width - self.left_border - 1
 
-    def draw_borders(self):
+    def show_borders(self):
         self.box.border()
