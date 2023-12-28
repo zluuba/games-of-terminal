@@ -12,10 +12,14 @@ from random import randint, choice
 
 class Settings(InterfaceManager):
     def __init__(self, canvas, name):
-        super().__init__(canvas)
+        super().__init__(canvas, only_main_win=True)
 
         self.name = name
         self.current_row = 0
+        self.setup_vars()
+
+    def setup_vars(self):
+        self.height, self.width = self.canvas.getmaxyx()
 
         self.title_start_y = (self.height // 2) - ((len(TITLE) + len(ITEMS)) // 2) - 3
         self.items_start_y = self.title_start_y + len(TITLE) + 3
@@ -34,6 +38,9 @@ class Settings(InterfaceManager):
 
             if key == KEYS['escape']:
                 return
+            elif key == KEYS['resize']:
+                self.window.timeout(0)
+                self.resize_menu_win_handler(key)
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.move_menu_selection(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
@@ -43,6 +50,10 @@ class Settings(InterfaceManager):
 
             self.update_menu_display()
             self.window.refresh()
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.initialize_settings()
 
     def open_selected_settings(self):
         chosen_settings = ITEMS[self.current_row]

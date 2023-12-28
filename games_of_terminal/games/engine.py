@@ -47,6 +47,10 @@ class GameEngine(InterfaceManager):
         if key == KEYS['escape']:
             self.stats.is_exit = True
             endwin()
+        elif key == KEYS['resize']:
+            self.window.timeout(0)
+            self.resize_game_win_handler(key)
+            self.stats.is_restart = True
         elif key == KEYS['pause'] and not pause_off:
             self.pause()
         elif key == KEYS['restart']:
@@ -134,3 +138,12 @@ class GameEngine(InterfaceManager):
 
             if tips_type == 'state':
                 y += 1
+
+    def setup_game_stats(self):
+        pass
+
+    def setup_game_field(self):
+        pass
+
+    def start_new_game(self):
+        pass

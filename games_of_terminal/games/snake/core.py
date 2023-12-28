@@ -31,11 +31,10 @@ class SnakeGame(GameEngine):
         self.window.timeout(150)
 
         self._put_food_on_the_field()
+        self.set_best_score()
 
         self.draw_logo()
         self.show_game_status()
-
-        self.set_best_score()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,

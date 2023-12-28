@@ -20,15 +20,12 @@ class TicTacToeGame(GameEngine):
         self.user_moves = []
         self.computer_moves = []
 
-    def setup_game_field(self):
+    def setup_game_field(self, initial=True):
         hide_cursor()
-        self._draw_game_field()
-
         self.draw_logo()
-        self.show_side_menu_tips(
-            game_tips=GAME_TIPS,
-        )
+        self.show_side_menu_tips(game_tips=GAME_TIPS)
         self.show_game_status()
+        self._draw_game_field()
 
     def start_new_game(self):
         self.current_cell.select()
@@ -98,6 +95,7 @@ class TicTacToeGame(GameEngine):
         x += self.game_area.begin_x
 
         self.current_coordinates = (y, x)
+        self.cells = {}
         field_number = 1
 
         for _ in range(CELLS_IN_ROW):

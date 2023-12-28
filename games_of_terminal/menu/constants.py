@@ -69,7 +69,7 @@ SWORD_COLORS = {
 }
 
 FIRE_CHARS = [" ", ".", ":", "*", "s", "S", "#", "$"]
-LAST_FIRE_CHAR_IND = len(FIRE_CHARS) - 1
+FIRE_CHARS_LEN = len(FIRE_CHARS)
 
 # then higher elements number, than higher flame you get
 FIRE_ELEMENTS_COUNT = 85

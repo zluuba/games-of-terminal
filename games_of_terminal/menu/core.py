@@ -7,13 +7,13 @@ from games_of_terminal.menu.constants import (
     TOP_SWORD, BOTTOM_SWORD, SWORD_COLORS,
     CREATOR_NAME, GOODBYE_MESSAGES,
     FIRE_CHARS, FIRE_COLORS, FIRE_ELEMENTS_COUNT,
-    LAST_FIRE_CHAR_IND, MENU_ITEMS, MENU_ITEMS_COUNT,
+    MENU_ITEMS, MENU_ITEMS_COUNT, FIRE_CHARS_LEN,
 )
 from games_of_terminal.utils import (
     get_color_by_name, draw_message, hide_cursor,
 )
 
-from curses import flushinp, A_STANDOUT as REVERSE
+from curses import endwin, flushinp, A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
@@ -21,11 +21,16 @@ from sys import exit
 
 
 class Menu(InterfaceManager):
-    def _setup(self, **kwargs):
-        super()._setup()
-        create_db_tables()
+    def __init__(self, canvas):
+        super().__init__(canvas, only_main_win=True)
 
+        create_db_tables()
         self.current_row = 0
+
+        self.setup_vars()
+
+    def setup_vars(self):
+        self.height, self.width = self.canvas.getmaxyx()
 
         self.logo_start_y = (self.height // 2) - ((LOGO_MENU_LEN + MENU_ITEMS_COUNT) // 2) - 3
         self.menu_start_y = self.logo_start_y + LOGO_MENU_LEN + 3
@@ -58,7 +63,7 @@ class Menu(InterfaceManager):
             if key == KEYS['escape']:
                 self.exit()
             elif key == KEYS['resize']:
-                self.redraw_window()
+                self.resize_menu_win_handler(key)
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.move_menu_selection(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
@@ -68,6 +73,10 @@ class Menu(InterfaceManager):
 
             self.update_menu_display()
             self.window.refresh()
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.initialize_menu()
 
     def initialize_menu(self):
         self.window.clear()
@@ -119,7 +128,7 @@ class Menu(InterfaceManager):
 
     def handle_post_running_actions(self):
         flushinp()
-        self.initialize_menu()
+        self.redraw_window()
 
     def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
@@ -155,10 +164,17 @@ class Menu(InterfaceManager):
         self.window.timeout(self.fire_animation_speed)
 
     def draw_fire_animation(self, animation=True, empty_middle=True):
+        """
+        A board (integer array) is created to reflect the size (width * height) of the screen.
+        Then, each frame the board is translated upward (top row removed) and decayed (each integer is decremented)
+        before a new, randomly seeded row is inserted at the bottom.
+        """
         if not animation:
             return
 
-        for i in range(int(self.width / 9)):
+        for i in range(self.width // 7):
+            # self.width // 7 - affects the amount of fire. should be dynamic
+            # AMOUNT_OF_FIRE_DIV ?
             index = int((random() * self.width) + self.width * (self.height - 1))
             self.fire_items[index] = FIRE_ELEMENTS_COUNT
 
@@ -170,7 +186,7 @@ class Menu(InterfaceManager):
             color_name = ('yellow' if self.fire_items[i] > 15 else ('red' if self.fire_items[i] > 9 else 'black'))
             color = get_color_by_name(FIRE_COLORS[color_name])
 
-            fire_char_index = LAST_FIRE_CHAR_IND if self.fire_items[i] > LAST_FIRE_CHAR_IND else self.fire_items[i]
+            fire_char_index = min(self.fire_items[i], FIRE_CHARS_LEN - 1)
             char = FIRE_CHARS[fire_char_index]
 
             y = int(i / self.width)
@@ -188,4 +204,5 @@ class Menu(InterfaceManager):
         self.window.clear()
         self.draw_goodbye_message()
         sleep(1)
+        endwin()
         exit(0)
