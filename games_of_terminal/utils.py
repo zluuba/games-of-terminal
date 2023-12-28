@@ -1,5 +1,6 @@
 from games_of_terminal.constants import (
     COLOR_MAPPING, COMMON_TIPS, DEFAULT_COLOR,
+    MIN_WIN_HEIGHT, MIN_WIN_WIDTH,
 )
 
 from curses import (
@@ -10,6 +11,7 @@ from curses import (
 )
 from random import choice
 from re import match
+from sys import exit
 
 
 def init_curses_colors():
@@ -55,6 +57,13 @@ def draw_message(begin_y, begin_x, field, message, color):
 def clear_field_line(begin_y, begin_x, field, width):
     empty_line = ' ' * width
     draw_message(begin_y, begin_x, field, empty_line, DEFAULT_COLOR)
+
+
+def too_small_window_handler(height, width):
+    if (height < MIN_WIN_HEIGHT) or (width < MIN_WIN_WIDTH):
+        exit(f'Window is too small.\n'
+             f'Minimum height: {MIN_WIN_HEIGHT}, width: {MIN_WIN_WIDTH}.\n'
+             f'Current height: {height}, width: {width}.')
 
 
 def get_game_tips(game_state, game_tips):
