@@ -1,11 +1,12 @@
 from games_of_terminal.constants import (
-    LOGO, APP_NAME, MIN_WIN_HEIGHT, MIN_WIN_WIDTH, KEYS,
+    LOGO, APP_NAME, KEYS,
     BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
-    DEFAULT_COLOR,
+    DEFAULT_COLOR, MESSAGES,
 )
 from games_of_terminal.field import Field
 from games_of_terminal.utils import (
     draw_message, init_curses_colors,
+    too_small_window_handler,
 )
 
 from curses import newwin
@@ -13,14 +14,15 @@ from time import sleep
 
 
 class InterfaceManager:
-    def __init__(self, canvas):
+    def __init__(self, canvas, only_main_win=False):
         init_curses_colors()
 
         self.canvas = canvas
-        self._setup()
+        self._setup(only_main_win=only_main_win)
 
     def _setup(self, only_main_win=False):
         self.height, self.width = self.canvas.getmaxyx()
+        too_small_window_handler(self.height, self.width)
         self.canvas.bkgd(' ', DEFAULT_COLOR)
         self._set_window_sizes()
         self._init_main_window()
@@ -51,75 +53,95 @@ class InterfaceManager:
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
-    def redraw_window(self):
-        self.win_too_small_handle()
-        self.window.clear()
-        self.__init__(self.canvas)
+    def resize_menu_win_handler(self, key):
+        message = MESSAGES['win_resize_menu']
 
-    def is_window_too_small(self):
-        return (self.height < MIN_WIN_HEIGHT or
-                self.width < MIN_WIN_WIDTH)
+        while key == KEYS['resize']:
+            self.window.clear()
+            new_height, new_width = self.canvas.getmaxyx()
+            too_small_window_handler(new_height, new_width)
 
-    def win_too_small_handle(self):
-        while self.is_window_too_small():
-            self.show_win_too_small_msg()
+            y = self.height // 2
+            x = (self.width // 2) - (len(message) // 2)
+
+            draw_message(y, x, self.window, message, DEFAULT_COLOR)
+            self.height, self.width = new_height, new_width
+            sleep(0.1)
+
+            key = self.window.getch()
+
+        self.redraw_window()
+
+    def resize_game_win_handler(self, key):
+        messages = MESSAGES['win_resize_game']
+
+        while key == KEYS['resize']:
+            self.window.clear()
+            new_height, new_width = self.canvas.getmaxyx()
+            too_small_window_handler(new_height, new_width)
+            start_y = new_height // 2
+
+            for y_offset, message in enumerate(messages):
+                y = start_y + y_offset
+                x = (new_width // 2) - (len(message) // 2)
+                draw_message(y, x, self.window, message, DEFAULT_COLOR)
+
+            self.height, self.width = new_height, new_width
             sleep(0.3)
 
-            key = self.canvas.getch()
-            self.wait_for_keypress()
+            key = self.window.getch()
 
-            if key == KEYS['resize']:
-                self.height, self.width = self.canvas.getmaxyx()
+        sleep(0.5)
+        self._set_window_sizes()
+        self.window.clear()
+        self._setup()
+        self.window.refresh()
 
-    def show_win_too_small_msg(self):
-        message = 'Window is too small.'
-        message_length = len(message)
+    def redraw_window(self):
+        pass
 
-        if message_length < self.width:
-            return
+    def _set_window_sizes(self, height=None, width=None):
+        if not height:
+            height = self.height
+        if not width:
+            width = self.width
 
-        y = self.height // 2
-        x = (self.width // 2) - (message_length // 2)
-        draw_message(y, x, self.canvas, message, DEFAULT_COLOR)
-        self.canvas.refresh()
-
-    def _set_window_sizes(self):
         begin_x = begin_y = 0
         side_menu_width = len(LOGO[0]) + (BASE_OFFSET * 2)
 
         self.window_box_sizes = {
-            'lines': self.height,
-            'cols': self.width,
+            'lines': height,
+            'cols': width,
             'begin_y': begin_y,
             'begin_x': begin_x,
         }
         self.game_box_sizes = {
-            'lines': self.height - BASE_OFFSET,
-            'cols': self.width - side_menu_width,
+            'lines': height - BASE_OFFSET,
+            'cols': width - side_menu_width,
             'begin_y': begin_y + DEFAULT_YX_OFFSET,
             'begin_x': begin_x,
         }
         self.side_menu_box_sizes = {
-            'lines': self.height - BASE_OFFSET,
+            'lines': height - BASE_OFFSET,
             'cols': side_menu_width,
             'begin_y': begin_y + DEFAULT_YX_OFFSET,
-            'begin_x': self.width - side_menu_width,
+            'begin_x': width - side_menu_width,
         }
         self.logo_box_sizes = {
             'lines': len(LOGO) + BASE_OFFSET,
             'cols': side_menu_width,
             'begin_y': begin_y + DEFAULT_YX_OFFSET,
-            'begin_x': self.width - side_menu_width,
+            'begin_x': width - side_menu_width,
         }
         self.status_box_sizes = {
             'lines': STATUS_BOX_HEIGHT + BASE_OFFSET,
             'cols': side_menu_width,
-            'begin_y': self.height - (STATUS_BOX_HEIGHT + BASE_OFFSET + DEFAULT_YX_OFFSET),
-            'begin_x': self.width - side_menu_width,
+            'begin_y': height - (STATUS_BOX_HEIGHT + BASE_OFFSET + DEFAULT_YX_OFFSET),
+            'begin_x': width - side_menu_width,
         }
         self.tips_box_sizes = {
-            'lines': self.height - self.logo_box_sizes['lines'] - self.status_box_sizes['lines'],
+            'lines': height - self.logo_box_sizes['lines'] - self.status_box_sizes['lines'],
             'cols': side_menu_width,
             'begin_y': self.logo_box_sizes['begin_y'] + self.logo_box_sizes['lines'] - 1,
-            'begin_x': self.width - side_menu_width,
+            'begin_x': width - side_menu_width,
         }
