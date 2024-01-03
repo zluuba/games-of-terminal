@@ -1,0 +1,19 @@
+{
+    "Snake": {
+        "best_score": 0
+    },
+    "Minesweeper": {
+        "total_wins": 0,
+        "total_losses": 0,
+        "bombs_defused": 0
+    },
+    "Tic Tac Toe": {
+        "total_wins": 0,
+        "total_losses": 0,
+        "total_ties": 0
+    },
+    "Tetris": {
+        "best_score": 0,
+        "lines_removed": 0
+    }
+}
