@@ -1,7 +1,7 @@
 from games_of_terminal.database import queries
 
 from sqlite3 import connect
-from json import load
+from json import load, dumps
 from pathlib import Path
 from os import path
 
@@ -57,6 +57,7 @@ def create_and_fill_db_tables():
             c.cursor.execute(create_table_query)
 
     add_achievements_to_db()
+    add_init_stats_to_db()
 
 
 def add_achievements_to_db():
@@ -76,6 +77,20 @@ def add_achievements_to_db():
                 )
 
 
+def add_init_stats_to_db():
+    with open(GAME_STATS_FILE_PATH, 'r') as file:
+        stats_data = load(file)
+
+    with Connection(autocommit=True) as c:
+        for game_name, stats in stats_data.items():
+            serialized_data = dumps(stats)
+
+            c.cursor.execute(
+                queries.insert_game_stats_query,
+                (game_name, serialized_data),
+            )
+
+
 def add_achievement_to_db(achievement, game_name, conn):
     achievement_name = achievement['name']
     description = achievement['description']
@@ -87,21 +102,47 @@ def add_achievement_to_db(achievement, game_name, conn):
     )
 
 
-def get_game_state(game_name, stat):
+def get_game_state(game_name, stat, unique=False):
+    stat_name = 'game_stats' if unique else stat
+
     with Connection() as c:
-        query = queries.get_game_state_query(game_name, stat)
+        query = queries.get_game_stat_query(game_name, stat_name)
         c.cursor.execute(query)
-        data = c.cursor.fetchone()
-        return data[0]
+        data = c.cursor.fetchone()[0]
+
+        if not unique:
+            return data
+
+    stats_data = dumps(data)
+    return stats_data[stat]
 
 
-def update_game_state(game_name, stat, value, save_mode=False):
-    get_query_func = queries.update_game_state_query
+def update_game_stat(game_name, stat, value, save_mode=False):
+    get_query_func = queries.update_game_stat_query
 
     if save_mode:
-        get_query_func = queries.set_game_state_query
+        get_query_func = queries.set_game_stat_query
 
     query = get_query_func(game_name, stat)
 
     with Connection(autocommit=True) as c:
         c.cursor.execute(query, (value,))
+
+
+def update_game_stats(game_name, stat_name, value, save_mode=False):
+    with Connection(autocommit=True) as c:
+        query = queries.get_game_stat_query(game_name, 'game_stats')
+        c.cursor.execute(query)
+        stats_data = c.cursor.fetchone()[0]
+
+        game_stats = load(stats_data)
+
+        if save_mode:
+            game_stats[stat_name] = value
+        else:
+            game_stats[stat_name] += value
+
+        get_query_func = queries.set_game_stat_query
+        query = get_query_func(game_name, 'game_stats')
+
+        c.cursor.execute(query, (game_stats,))

@@ -37,25 +37,33 @@ INSERT OR IGNORE INTO Achievements (
 VALUES (?, ?, ?, ?);
 '''
 
+insert_game_stats_query = '''
+INSERT INTO games (
+    game_name,
+    game_stats
+)
+VALUES (?, ?);
+'''
+
 update_achievements_table_query = """
 """
 
 
-def get_game_state_query(game_name, stat_name):
+def get_game_stat_query(game_name, stat_name):
     return f'''
     SELECT {stat_name}
     FROM {game_name};
     '''
 
 
-def set_game_state_query(game_name, stat_name):
+def set_game_stat_query(game_name, stat_name):
     return f'''
     UPDATE {game_name}
     SET {stat_name} = ?;
     '''
 
 
-def update_game_state_query(game_name, stat_name):
+def update_game_stat_query(game_name, stat_name):
     return f'''
     UPDATE {game_name}
     SET {stat_name} = {stat_name} + ?;
