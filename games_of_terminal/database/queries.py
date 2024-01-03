@@ -1,82 +1,62 @@
-create_game_table_query = '''
-CREATE TABLE IF NOT EXISTS games (
-    id INTEGER PRIMARY KEY,
-    game_name TEXT,
-    total_wins INTEGER DEFAULT 0 NOT NULL,
-    total_losses INTEGER DEFAULT 0 NOT NULL,
-    total_ties INTEGER DEFAULT 0 NOT NULL,
-    total_time INTEGER DEFAULT '00:00' NOT NULL,
-    best_time INTEGER DEFAULT '00:00' NOT NULL,
-    best_score INTEGER DEFAULT 0 NOT NULL,
-    specific_stats TEXT DEFAULT '',
-    last_game TEXT DEFAULT ''
-);
-'''
-
-create_achievements_table_query = '''
-CREATE TABLE IF NOT EXISTS achievements (
-    id INTEGER PRIMARY KEY,
-    game_id INTEGER,
-    name TEXT,
-    description TEXT,
-    is_unlocked INTEGER DEFAULT 0,
-    date_received DATE,
-    FOREIGN KEY (game_id) REFERENCES games(id)
-);
-'''
+TABLES = {
+    'Games': '''
+        CREATE TABLE IF NOT EXISTS Games (
+            id INTEGER PRIMARY KEY,
+            game_name TEXT NOT NULL,
+            total_games INTEGER DEFAULT 0 NOT NULL,
+            total_time INTEGER DEFAULT '00:00' NOT NULL,
+            last_game_state TEXT DEFAULT '',
+            game_stats TEXT DEFAULT ''
+        );
+    ''',
+    'Achievements': '''
+        CREATE TABLE IF NOT EXISTS Achievements (
+            id INTEGER PRIMARY KEY,
+            game_name TEXT NOT NULL,
+            name TEXT,
+            description TEXT,
+            status TEXT DEFAULT 'locked',
+            date_received DATE DEFAULT NULL,
+            UNIQUE (name)
+        );
+    ''',
+}
 
 get_all_tables_query = '''
 SELECT name FROM sqlite_master 
-WHERE type='table' AND name IN ('games', 'achievements');
+WHERE type='table';
 '''
 
-insert_default_games_query = '''
-INSERT INTO games (game_name) VALUES
-    ('Tetris'),
-    ('Minesweeper'),
-    ('TicTacToe'),
-    ('Snake');
-'''
-
-insert_achievements_query = '''
-INSERT INTO achievements (
-    game_id,
-    achievement_name, 
-    achievement_description, 
-    date_received
+insert_or_ignore_achievement_query = '''
+INSERT OR IGNORE INTO Achievements (
+    game_name,
+    name,
+    description,
+    status
 )
-VALUES (?, ?, ?, NULL);
+VALUES (?, ?, ?, ?);
 '''
 
-get_game_id_query = '''
-SELECT id FROM games WHERE game_name = ?;
-'''
+update_achievements_table_query = """
+"""
 
-get_game_state_query = lambda stat_name: (
-    f'''
+
+def get_game_state_query(game_name, stat_name):
+    return f'''
     SELECT {stat_name}
-    FROM games
-    WHERE game_name = ?;
+    FROM {game_name};
     '''
-)
 
-set_game_state_query = lambda stat_name: (
-    f'''
-    UPDATE games
-    SET {stat_name} = ?
-    WHERE game_name = ?;
+
+def set_game_state_query(game_name, stat_name):
+    return f'''
+    UPDATE {game_name}
+    SET {stat_name} = ?;
     '''
-)
 
-update_game_state_query = lambda stat_name: (
-    f'''
-    UPDATE games
-    SET {stat_name} = {stat_name} + ?
-    WHERE game_name = ?;
+
+def update_game_state_query(game_name, stat_name):
+    return f'''
+    UPDATE {game_name}
+    SET {stat_name} = {stat_name} + ?;
     '''
-)
-
-TABLES = {
-    'games': create_game_table_query,
-    'achievements': create_achievements_table_query,
-}
