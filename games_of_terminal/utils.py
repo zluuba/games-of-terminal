@@ -60,10 +60,16 @@ def clear_field_line(begin_y, begin_x, field, width):
 
 
 def too_small_window_handler(height, width):
+    red_color = '\033[91m'
+    default_color = '\033[39m'
+
+    error_message = f'ERROR: Window is too small.\n'
+    req_msg = f'Minimum height: {MIN_WIN_HEIGHT}, width: {MIN_WIN_WIDTH}.\n'
+    curr_msg = f'Current height: {height}, width: {width}.'
+
     if (height < MIN_WIN_HEIGHT) or (width < MIN_WIN_WIDTH):
-        exit(f'Window is too small.\n'
-             f'Minimum height: {MIN_WIN_HEIGHT}, width: {MIN_WIN_WIDTH}.\n'
-             f'Current height: {height}, width: {width}.')
+        exit(red_color + error_message +
+             default_color + req_msg + curr_msg)
 
 
 def get_game_tips(game_state, game_tips):
