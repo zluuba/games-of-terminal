@@ -90,3 +90,12 @@ def get_game_tips(game_state, game_tips):
             'color': DEFAULT_COLOR,
         }
     ]
+
+
+def show_placeholder_stub(height, width, window,
+                          color, message='In development.'):
+    y = height // 2
+    x = (width // 2) - (len(message) // 2)
+
+    window.clear()
+    draw_message(y, x, window, message, color)
