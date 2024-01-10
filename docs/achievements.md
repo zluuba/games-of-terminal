@@ -58,7 +58,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Back to Work, Please**: reach the 16384 tile.
 - **Quantum Merger**: perform multiple merges in a single move.
 - **Wanna Coffee?**: play 15 minutes straight. 
-- **Reverse on You**: change the color scheme.
+- **Reverse on You!**: change the color scheme.
 
 
 ## Global
