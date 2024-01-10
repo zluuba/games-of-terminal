@@ -45,7 +45,8 @@ def check_tables_exist():
     with Connection() as c:
         c.cursor.execute(queries.get_all_tables_query)
         existing_tables = c.cursor.fetchall()
-        return len(existing_tables) == len(queries.TABLES)
+
+    return len(existing_tables) == len(queries.TABLES)
 
 
 def create_and_fill_db_tables():
@@ -56,25 +57,8 @@ def create_and_fill_db_tables():
         for _, create_table_query in queries.TABLES.items():
             c.cursor.execute(create_table_query)
 
-    add_achievements_to_db()
     add_init_stats_to_db()
-
-
-def add_achievements_to_db():
-    with open(ACHIEVEMENTS_FILE_PATH, 'r') as file:
-        achievements_data = load(file)
-
-    with Connection(autocommit=True) as c:
-        for achievements in achievements_data:
-            item_name = achievements['name']
-            all_achieves = achievements['achievements']
-
-            for achievement_data in all_achieves:
-                add_achievement_to_db(
-                    achievement_data,
-                    item_name,
-                    c,
-                )
+    add_achievements_to_db()
 
 
 def add_init_stats_to_db():
@@ -83,12 +67,25 @@ def add_init_stats_to_db():
 
     with Connection(autocommit=True) as c:
         for game_name, stats in stats_data.items():
-            serialized_data = dumps(stats)
+            stats_data = dumps(stats)
 
             c.cursor.execute(
                 queries.insert_game_stats_query,
-                (game_name, serialized_data),
+                (game_name, stats_data),
             )
+
+
+def add_achievements_to_db():
+    with open(ACHIEVEMENTS_FILE_PATH, 'r') as file:
+        achievements_data = load(file)
+
+    with Connection(autocommit=True) as c:
+        for achievements in achievements_data:
+            game_name = achievements['name']
+            all_achieves = achievements['achievements']
+
+            for achievement_data in all_achieves:
+                add_achievement_to_db(achievement_data, game_name, c)
 
 
 def add_achievement_to_db(achievement, game_name, conn):
