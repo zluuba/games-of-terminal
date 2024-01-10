@@ -5,7 +5,8 @@ from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
 )
 from games_of_terminal.database.database import (
-    get_game_state, update_game_state,
+    get_game_state,
+    # update_game_state,
 )
 
 from random import randint
@@ -131,7 +132,7 @@ class SnakeGame(GameEngine):
         if self.stats.score <= self.stats.best_score:
             return
 
-        update_game_state(
-            'Snake', 'best_score',
-            self.stats.score, save_mode=True
-        )
+        # update_game_state(
+        #     'Snake', 'best_score',
+        #     self.stats.score, save_mode=True
+        # )

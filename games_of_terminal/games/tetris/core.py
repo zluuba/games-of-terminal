@@ -7,9 +7,9 @@ from games_of_terminal.games.tetris.constants import (
     DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     DOWN, SCORES, LEVELS, GAME_TIPS,
 )
-from games_of_terminal.database.database import (
-    get_game_state, update_game_state,
-)
+# from games_of_terminal.database.database import (
+#     get_game_state, update_game_state,
+# )
 
 from games_of_terminal.utils import hide_cursor
 
@@ -76,17 +76,17 @@ class TetrisGame(GameEngine):
         }
 
     def set_best_score(self):
-        data = get_game_state('Tetris', 'best_score')
-        self.stats.best_score = data
+        # data = get_game_state('Tetris', 'best_score')
+        self.stats.best_score = 0
 
     def save_best_score(self):
         if self.stats.score <= self.stats.best_score:
             return
 
-        update_game_state(
-            'Tetris', 'best_score',
-            self.stats.score, save_mode=True,
-        )
+        # update_game_state(
+        #     'Tetris', 'best_score',
+        #     self.stats.score, save_mode=True,
+        # )
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)

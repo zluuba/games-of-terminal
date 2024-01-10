@@ -42,6 +42,13 @@ KEYS = {
     'q': ord('q'),
 }
 
+GAMES = [
+    'Tetris',
+    'Minesweeper',
+    'Tic Tac Toe',
+    'Snake',
+]
+
 GAME_STATUSES = {
     'game_active': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
     'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},

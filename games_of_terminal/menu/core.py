@@ -1,4 +1,4 @@
-from games_of_terminal.database.database import create_db_tables
+from games_of_terminal.database.database import create_and_fill_db_tables
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.menu.constants import (
@@ -24,7 +24,7 @@ class Menu(InterfaceManager):
     def __init__(self, canvas):
         super().__init__(canvas, only_main_win=True)
 
-        create_db_tables()
+        create_and_fill_db_tables()
         self.current_row = 0
 
         self.setup_vars()

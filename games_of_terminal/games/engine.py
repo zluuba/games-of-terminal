@@ -1,4 +1,4 @@
-from games_of_terminal.database.database import update_game_state
+# from games_of_terminal.database.database import update_game_state
 from games_of_terminal.app_interface import InterfaceManager
 from games_of_terminal.field import Field
 from games_of_terminal.utils import (
@@ -99,7 +99,8 @@ class GameEngine(InterfaceManager):
         self.stats.is_restart = True if key == KEYS['space'] else False
 
     def update_state_in_db(self, stat, value):
-        update_game_state(self.game_name, stat, value)
+        pass
+        # update_game_state(self.game_name, stat, value)
 
     def show_game_status(self, y=1, x=1):
         color_name = GAME_STATUSES[self.stats.game_status]['color']

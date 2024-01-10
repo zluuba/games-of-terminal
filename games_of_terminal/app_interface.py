@@ -24,6 +24,7 @@ class InterfaceManager:
         self.height, self.width = self.canvas.getmaxyx()
         too_small_window_handler(self.height, self.width)
         self.canvas.bkgd(' ', DEFAULT_COLOR)
+
         self._set_window_sizes()
         self._init_main_window()
 
@@ -93,9 +94,7 @@ class InterfaceManager:
 
         sleep(0.5)
         self._set_window_sizes()
-        self.window.clear()
         self._setup()
-        self.window.refresh()
 
     def redraw_window(self):
         pass
