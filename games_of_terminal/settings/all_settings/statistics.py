@@ -9,38 +9,3 @@ class Statistics(InterfaceManager):
 
     def run(self):
         pass
-
-
-logic = """
-Game Played: int
-Total Time Played: int
-
-Snake Game
-    Total Games: int
-    Total Time: int
-    Best Score: int
-    Achievements Unlocked: int / int
-
-Minesweeper Game
-    Total Games: int
-    Total Time: int
-    Total Wins: int
-    Total Loses: int
-    Bombs Defused: int
-    Achievements Unlocked: int / int
-
-TicTacToe Game
-    Total Games: int
-    Total Time: int
-    Lines Removed: int
-    Total Wins: int
-    Total Loses: int
-    Total Ties: int
-    Achievements Unlocked: int / int
-
-Tetris Game
-    Total Games: int
-    Total Time: int
-    Best Score: int
-    Achievements Unlocked: int / int
-"""
