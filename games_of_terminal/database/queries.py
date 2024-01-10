@@ -49,22 +49,29 @@ update_achievements_table_query = """
 """
 
 
+get_game_statistic_query = '''
+SELECT total_games, total_time, game_stats
+FROM Games
+WHERE game_name = ?;
+'''
+
+
 def get_game_stat_query(game_name, stat_name):
     return f'''
-    SELECT {stat_name}
-    FROM {game_name};
+        SELECT {stat_name}
+        FROM {game_name};
     '''
 
 
 def set_game_stat_query(game_name, stat_name):
     return f'''
-    UPDATE {game_name}
-    SET {stat_name} = ?;
+        UPDATE {game_name}
+        SET {stat_name} = ?;
     '''
 
 
 def update_game_stat_query(game_name, stat_name):
     return f'''
-    UPDATE {game_name}
-    SET {stat_name} = {stat_name} + ?;
+        UPDATE {game_name}
+        SET {stat_name} = {stat_name} + ?;
     '''

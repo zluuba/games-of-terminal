@@ -1,7 +1,8 @@
 from games_of_terminal.database import queries
+from games_of_terminal.constants import GAMES
 
 from sqlite3 import connect
-from json import load, dumps
+from json import load, loads, dumps
 from pathlib import Path
 from os import path
 
@@ -143,3 +144,24 @@ def update_game_stats(game_name, stat_name, value, save_mode=False):
         query = get_query_func(game_name, 'game_stats')
 
         c.cursor.execute(query, (game_stats,))
+
+
+def get_games_statistic():
+    games_statistic = dict()
+
+    with Connection() as c:
+        for game_name in GAMES:
+            query = queries.get_game_statistic_query
+            c.cursor.execute(query, (game_name,))
+            game_statistic = c.cursor.fetchall()[0]
+
+            total_games, total_time, stats_json_data = game_statistic
+            stats = loads(stats_json_data)
+
+            games_statistic[game_name] = dict(
+                total_games=total_games,
+                total_time=total_time,
+                **stats,
+            )
+
+    return games_statistic
