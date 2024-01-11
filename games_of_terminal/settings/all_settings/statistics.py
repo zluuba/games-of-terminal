@@ -1,4 +1,4 @@
-from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.database.database import get_games_statistic
 from games_of_terminal.utils import draw_message, get_color_by_name, clear_field_line
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES

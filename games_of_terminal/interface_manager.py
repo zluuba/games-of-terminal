@@ -3,7 +3,7 @@ from games_of_terminal.constants import (
     BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
     DEFAULT_COLOR, MESSAGES,
 )
-from games_of_terminal.field import Field
+from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     draw_message, init_curses_colors,
     too_small_window_handler,
@@ -38,11 +38,11 @@ class InterfaceManager:
         self.window.keypad(True)
 
     def _init_subwindows(self):
-        self.game_area = Field(self.window, *self.game_box_sizes.values())
-        self.side_menu = Field(self.window, *self.side_menu_box_sizes.values())
-        self.tips_area = Field(self.side_menu.box, *self.tips_box_sizes.values())
-        self.logo_area = Field(self.side_menu.box, *self.logo_box_sizes.values())
-        self.game_status_area = Field(self.side_menu.box, *self.status_box_sizes.values())
+        self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
+        self.side_menu = SubWindow(self.window, *self.side_menu_box_sizes.values())
+        self.tips_area = SubWindow(self.side_menu.box, *self.tips_box_sizes.values())
+        self.logo_area = SubWindow(self.side_menu.box, *self.logo_box_sizes.values())
+        self.game_status_area = SubWindow(self.side_menu.box, *self.status_box_sizes.values())
 
     def draw_logo(self):
         for y, line in enumerate(LOGO, start=1):

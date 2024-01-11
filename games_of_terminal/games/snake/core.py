@@ -4,10 +4,10 @@ from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
 )
-from games_of_terminal.database.database import (
-    get_game_state,
-    # update_game_state,
-)
+# from games_of_terminal.database.database import (
+#     get_game_state,
+#     update_game_state,
+# )
 
 from random import randint
 
@@ -65,8 +65,9 @@ class SnakeGame(GameEngine):
             self._change_direction(key)
 
     def set_best_score(self):
-        data = get_game_state('Snake', 'best_score')
-        self.stats.best_score = data
+        pass
+        # data = get_game_state('Snake', 'best_score')
+        # self.stats.best_score = data
 
     @property
     def tips(self):

@@ -1,4 +1,4 @@
-class AchievementManager:
+class AchievementsManager:
     def snake_game_manager(self, game_state):
         pass
 

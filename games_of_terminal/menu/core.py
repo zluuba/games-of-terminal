@@ -1,5 +1,5 @@
 from games_of_terminal.database.database import create_and_fill_db_tables
-from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.menu.constants import (
     TOP_SWORD_LEN, LOGO_MENU, LOGO_MENU_LEN,

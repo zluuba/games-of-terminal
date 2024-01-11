@@ -228,4 +228,5 @@ COLOR_MAPPING = {
     },
 }
 
+# based on curses initial color pair (0: white text, black bg)
 DEFAULT_COLOR = 0

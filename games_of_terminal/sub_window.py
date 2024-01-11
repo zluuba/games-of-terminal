@@ -1,4 +1,4 @@
-class Field:
+class SubWindow:
     def __init__(self, parent_window, height, width, begin_y, begin_x, show_borders=True):
         self.height = height
         self.width = width

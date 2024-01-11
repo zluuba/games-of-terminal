@@ -1,5 +1,5 @@
 from games_of_terminal.settings.constants import TITLE, ITEMS, ITEMS_LEN
-from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR
 
 from games_of_terminal.utils import (

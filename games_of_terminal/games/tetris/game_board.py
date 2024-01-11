@@ -5,7 +5,7 @@ from games_of_terminal.utils import (
     init_curses_colors, get_color_by_name,
 )
 from games_of_terminal.constants import BASE_OFFSET
-from games_of_terminal.field import Field
+from games_of_terminal.sub_window import SubWindow
 
 
 class TetrisBoard:
@@ -31,8 +31,8 @@ class TetrisBoard:
         self.begin_y = parent_window.begin_y
         self.begin_x = ((parent_window.begin_x + parent_window.width) // 2) - (window_width // 2)
 
-        return Field(parent_window.box, self.height, window_width,
-                     self.begin_y, self.begin_x, show_borders=False)
+        return SubWindow(parent_window.box, self.height, window_width,
+                         self.begin_y, self.begin_x, show_borders=False)
 
     def is_cell_free(self, y, x):
         return (y, x) not in self.landed_blocks

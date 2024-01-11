@@ -1,4 +1,4 @@
-from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.interface_manager import InterfaceManager
 
 
 class GamesSettings(InterfaceManager):

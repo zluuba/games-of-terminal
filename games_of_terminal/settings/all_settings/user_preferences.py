@@ -1,4 +1,4 @@
-from games_of_terminal.app_interface import InterfaceManager
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import DEFAULT_COLOR
 from games_of_terminal.utils import show_placeholder_stub
 import time

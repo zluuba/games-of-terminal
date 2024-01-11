@@ -1,10 +1,5 @@
-from games_of_terminal.utils import init_curses_colors
-
-
 class BaseCell:
     def __init__(self, field_box, coordinates):
-        init_curses_colors()
-
         self.field_box = field_box
         self.coordinates = coordinates
 

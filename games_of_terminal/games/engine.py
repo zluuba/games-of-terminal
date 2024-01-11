@@ -1,6 +1,6 @@
 # from games_of_terminal.database.database import update_game_state
-from games_of_terminal.app_interface import InterfaceManager
-from games_of_terminal.field import Field
+from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     get_game_tips, draw_message,
     clear_field_line, get_color_by_name,
@@ -34,7 +34,7 @@ class GameEngine(InterfaceManager):
 
     def reset_game_area(self):
         self.game_area.box.erase()
-        self.game_area = Field(self.window, *self.game_box_sizes.values())
+        self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
         self.game_area.box.refresh()
 
     def reset_game_stats(self):

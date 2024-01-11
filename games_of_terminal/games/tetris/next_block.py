@@ -3,7 +3,7 @@ from games_of_terminal.games.tetris.constants import (
     NEXT_BLOCK_AREA_HEIGHT,
 )
 from games_of_terminal.constants import DEFAULT_COLOR
-from games_of_terminal.field import Field
+from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     init_curses_colors, get_color_by_name,
     draw_message,
@@ -17,10 +17,9 @@ class NextBlockArea:
         self.height = NEXT_BLOCK_AREA_HEIGHT * CELL_HEIGHT
         self.width = NEXT_BLOCK_AREA_HEIGHT * CELL_WIDTH
 
-        self.next_block_area = Field(
+        self.next_block_area = SubWindow(
             parent_window.box, self.height, self.width,
             game_board.begin_y + 1, game_board.begin_x + game_board.width + 1,
-            show_borders=True,
         )
         self.win = self.next_block_area.box
 
