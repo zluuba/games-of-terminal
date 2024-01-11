@@ -4,7 +4,7 @@ TABLES = {
             id INTEGER PRIMARY KEY,
             game_name TEXT NOT NULL,
             total_games INTEGER DEFAULT 0 NOT NULL,
-            total_time INTEGER DEFAULT '00:00' NOT NULL,
+            total_time INTEGER DEFAULT 0 NOT NULL,
             last_game_state TEXT DEFAULT '',
             game_stats TEXT DEFAULT ''
         );
@@ -56,22 +56,25 @@ WHERE game_name = ?;
 '''
 
 
-def get_game_stat_query(game_name, stat_name):
+def get_game_stat_query(stat_name):
     return f'''
         SELECT {stat_name}
-        FROM {game_name};
+        FROM Games
+        WHERE game_name = ?;
     '''
 
 
-def set_game_stat_query(game_name, stat_name):
+def set_game_stat_query(stat_name):
     return f'''
-        UPDATE {game_name}
-        SET {stat_name} = ?;
+        UPDATE Games
+        SET {stat_name} = ?
+        WHERE game_name = ?;
     '''
 
 
-def update_game_stat_query(game_name, stat_name):
+def update_game_stat_query(stat_name):
     return f'''
-        UPDATE {game_name}
-        SET {stat_name} = {stat_name} + ?;
+        UPDATE Games
+        SET {stat_name} = {stat_name} + ?
+        WHERE game_name = ?;
     '''

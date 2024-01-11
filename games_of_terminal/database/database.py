@@ -100,18 +100,18 @@ def add_achievement_to_db(achievement, game_name, conn):
     )
 
 
-def get_game_state(game_name, stat, unique=False):
+def get_game_stat(game_name, stat, unique=False):
     stat_name = 'game_stats' if unique else stat
 
     with Connection() as c:
-        query = queries.get_game_stat_query(game_name, stat_name)
-        c.cursor.execute(query)
+        query = queries.get_game_stat_query(stat_name)
+        c.cursor.execute(query, (game_name,))
         data = c.cursor.fetchone()[0]
 
         if not unique:
             return data
 
-    stats_data = dumps(data)
+    stats_data = loads(data)
     return stats_data[stat]
 
 
@@ -121,19 +121,19 @@ def update_game_stat(game_name, stat, value, save_mode=False):
     if save_mode:
         get_query_func = queries.set_game_stat_query
 
-    query = get_query_func(game_name, stat)
+    query = get_query_func(stat)
 
     with Connection(autocommit=True) as c:
-        c.cursor.execute(query, (value,))
+        c.cursor.execute(query, (value, game_name))
 
 
 def update_game_stats(game_name, stat_name, value, save_mode=False):
     with Connection(autocommit=True) as c:
-        query = queries.get_game_stat_query(game_name, 'game_stats')
-        c.cursor.execute(query)
+        query = queries.get_game_stat_query('game_stats')
+        c.cursor.execute(query, (game_name,))
         stats_data = c.cursor.fetchone()[0]
 
-        game_stats = load(stats_data)
+        game_stats = loads(stats_data)
 
         if save_mode:
             game_stats[stat_name] = value
@@ -141,9 +141,10 @@ def update_game_stats(game_name, stat_name, value, save_mode=False):
             game_stats[stat_name] += value
 
         get_query_func = queries.set_game_stat_query
-        query = get_query_func(game_name, 'game_stats')
+        query = get_query_func('game_stats')
 
-        c.cursor.execute(query, (game_stats,))
+        game_stats = dumps(game_stats)
+        c.cursor.execute(query, (game_stats, game_name))
 
 
 def get_games_statistic():
