@@ -32,9 +32,17 @@ class Statistics(InterfaceManager):
 
         self.arrow_x = self.get_arrow_x()
 
+    def setup_vars(self):
+        self.start_y = self.get_statistic_elements_start_y()
+
+        self.pagination_offset = 0
+        self.max_pagination_offset = self.get_max_pagination_offset()
+
+        self.arrow_x = self.get_arrow_x()
+
     def get_max_pagination_offset(self):
-        return (len(self.statistics_data) + len(GAMES) -
-                (self.height - self.start_y) - 1)
+        return ((len(self.statistics_data) + len(GAMES)) -
+                (self.height - self.start_y) - BOTTOM_OFFSET - 1)
 
     def get_arrow_x(self):
         return (self.width // 2) + max(
@@ -56,10 +64,20 @@ class Statistics(InterfaceManager):
 
             if key == KEYS['escape']:
                 return
+            elif key == KEYS['resize']:
+                self.window.timeout(0)
+                self.resize_menu_win_handler(key)
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.update_statistics_pagination(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.update_statistics_pagination(1)
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.window.clear()
+        self.draw_title()
+        self.draw_arrows()
+        self.show_statistics()
 
     def update_statistics_pagination(self, direction):
         new_pagination_offset = self.pagination_offset + direction
@@ -102,14 +120,8 @@ class Statistics(InterfaceManager):
         stat_y = self.start_y
 
         for type_, data in self.statistics_data[self.pagination_offset:]:
-            if stat_y != self.start_y and type_ == 'game_name':
-                # draw an empty line to visually separate the games
-                self.draw_stat_elem(stat_y, '')
-                stat_y += 1
-
             color = DEFAULT_COLOR if type_ == 'stat' else game_name_color
             self.draw_stat_elem(stat_y, data, color)
-
             stat_y += 1
 
     def draw_stat_elem(self, y, message, color=DEFAULT_COLOR):
@@ -127,6 +139,7 @@ class Statistics(InterfaceManager):
         statistics_prettify_data = []
 
         for game_name, game_data in statistics_dict.items():
+            statistics_prettify_data.append(('visual_separation_line', ''))
             statistics_prettify_data.append(('game_name', game_name))
 
             for stat_name, stat_data in game_data.items():
@@ -136,7 +149,18 @@ class Statistics(InterfaceManager):
                 prettify_stat = stat_name + ':' + (' ' * spaces) + stat_data
                 statistics_prettify_data.append(('stat', prettify_stat))
 
-        return statistics_prettify_data
+        return statistics_prettify_data[1:]
+
+    # def get_total_games_and_total_time(self, statistics_dict):
+    #     total_games = 0
+    #     total_time = 0
+    # 
+    #     for _, game_data in statistics_dict.items():
+    #         for stat_name, stat_data in game_data.items():
+    #             if stat_name == 'total_games':
+    #                 total_games += stat_data
+    #             elif stat_name == 'total_time':
+    #                 pass
 
     def get_spaces_count(self, *args):
         chars_count = sum(map(lambda word: len(word), args))
