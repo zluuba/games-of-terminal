@@ -1,9 +1,9 @@
-from .all_settings.user_preferences import UserPreferences
-from .all_settings.games_settings import GamesSettings
-from .all_settings.achievements import Achievements
-from .all_settings.statistics import Statistics
-from .all_settings.reset_all import ResetAll
-from .all_settings.confess_all import ConfessAll
+from games_of_terminal.settings.user_preferences.core import UserPreferences
+from games_of_terminal.settings.games_settings.core import GamesSettings
+from games_of_terminal.settings.achievements.core import Achievements
+from games_of_terminal.settings.statistics.core import Statistics
+from games_of_terminal.settings.reset_all.core import ResetAll
+from games_of_terminal.settings.confess_all.core import ConfessAll
 
 
 TITLE = [

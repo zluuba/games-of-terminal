@@ -1,23 +1,13 @@
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES
 from games_of_terminal.database.database import get_games_statistic
 from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.settings.statistics.constants import (
+    TITLE, UPWARDS_ARROW, DOWNWARDS_ARROW, TOP_OFFSET,
+    BOTTOM_OFFSET, BASE_OFFSET, ARROWS_OFFSET,
+)
 from games_of_terminal.utils import (
     draw_message, get_color_by_name, clear_field_line,
 )
-
-
-LOGO = [
-    '▄ █▀ ▀█▀ ▄▀█ ▀█▀ █ █▀ ▀█▀ █ █▀▀ ▄',
-    '  ▄█  █  █▀█  █  █ ▄█  █  █ █▄▄  ',
-]
-
-UPWARDS_ARROW = '▲'
-DOWNWARDS_ARROW = '▼'
-
-TOP_OFFSET = 3
-BOTTOM_OFFSET = 2
-BASE_OFFSET = 2
-ARROWS_OFFSET = 4
 
 
 class Statistics(InterfaceManager):
@@ -48,14 +38,15 @@ class Statistics(InterfaceManager):
 
     def get_arrow_x(self):
         return (self.width // 2) + max(
-            (self.max_elem_width // 2) + ARROWS_OFFSET, len(LOGO[0]) // 2
+            (self.max_elem_width // 2) + ARROWS_OFFSET,
+            len(TITLE[0]) // 2,
         )
 
     def get_statistic_elements_start_y(self):
-        return self.logo_start_y + len(LOGO) + BASE_OFFSET
+        return self.logo_start_y + len(TITLE) + BASE_OFFSET
 
     def run(self):
-        self.draw_logo()
+        self.draw_title()
         self.draw_arrows()
         self.show_statistics()
 
@@ -82,8 +73,8 @@ class Statistics(InterfaceManager):
         self.show_statistics()
         self.draw_arrows()
 
-    def draw_logo(self):
-        for y, line in enumerate(LOGO, start=self.logo_start_y):
+    def draw_title(self):
+        for y, line in enumerate(TITLE, start=self.logo_start_y):
             x = (self.width // 2) - (len(line) // 2)
             draw_message(y, x, self.window, line, DEFAULT_COLOR)
 
@@ -112,6 +103,7 @@ class Statistics(InterfaceManager):
 
         for type_, data in self.statistics_data[self.pagination_offset:]:
             if stat_y != self.start_y and type_ == 'game_name':
+                # draw an empty line to visually separate the games
                 self.draw_stat_elem(stat_y, '')
                 stat_y += 1
 
