@@ -1,7 +1,9 @@
-from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.database.database import get_games_statistic
-from games_of_terminal.utils import draw_message, get_color_by_name, clear_field_line
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES
+from games_of_terminal.database.database import get_games_statistic
+from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.utils import (
+    draw_message, get_color_by_name, clear_field_line,
+)
 
 
 LOGO = [
@@ -11,7 +13,11 @@ LOGO = [
 
 UPWARDS_ARROW = '▲'
 DOWNWARDS_ARROW = '▼'
+
+TOP_OFFSET = 3
 BOTTOM_OFFSET = 2
+BASE_OFFSET = 2
+ARROWS_OFFSET = 4
 
 
 class Statistics(InterfaceManager):
@@ -19,19 +25,34 @@ class Statistics(InterfaceManager):
         super().__init__(canvas, only_main_win=True)
 
         self.settings_name = settings_name
-        statistic_raw_data = get_games_statistic()
-        self.statistics_data = self.get_statistics_list_data(statistic_raw_data)
 
-        self.logo_start_y = 3
-        self.start_y = self.logo_start_y + len(LOGO) + 2
+        statistic_raw_data = get_games_statistic()
+        self.max_elem_width = self.get_max_elem_width(
+            statistic_raw_data
+        )
+        self.statistics_data = self.get_statistics_prettify_data(
+            statistic_raw_data
+        )
+
+        self.logo_start_y = TOP_OFFSET
+        self.start_y = self.get_statistic_elements_start_y()
 
         self.pagination_offset = 0
-        self.max_pagination_offset = len(self.statistics_data) - (self.height - self.start_y) + len(GAMES) - 1
+        self.max_pagination_offset = self.get_max_pagination_offset()
 
-        self.max_elem_width = max([len(elem[1]) for elem in self.statistics_data])
-        self.arrow_x = (self.width // 2) + max((self.max_elem_width // 2) + 4, len(LOGO[0]) // 2)
+        self.arrow_x = self.get_arrow_x()
 
-        # self.normalize_statistics_data()
+    def get_max_pagination_offset(self):
+        return (len(self.statistics_data) + len(GAMES) -
+                (self.height - self.start_y) - 1)
+
+    def get_arrow_x(self):
+        return (self.width // 2) + max(
+            (self.max_elem_width // 2) + ARROWS_OFFSET, len(LOGO[0]) // 2
+        )
+
+    def get_statistic_elements_start_y(self):
+        return self.logo_start_y + len(LOGO) + BASE_OFFSET
 
     def run(self):
         self.draw_logo()
@@ -67,14 +88,26 @@ class Statistics(InterfaceManager):
             draw_message(y, x, self.window, line, DEFAULT_COLOR)
 
     def draw_arrows(self):
-        up_arrow = UPWARDS_ARROW if self.pagination_offset else ' '
-        draw_message(self.start_y, self.arrow_x, self.window, up_arrow, DEFAULT_COLOR)
+        up_arrow = UPWARDS_ARROW
+        down_arrow = DOWNWARDS_ARROW
 
-        down_arrow = DOWNWARDS_ARROW if self.pagination_offset < self.max_pagination_offset else ' '
-        draw_message(self.height - BOTTOM_OFFSET, self.arrow_x, self.window, down_arrow, DEFAULT_COLOR)
+        if not self.pagination_offset:
+            up_arrow = ' '
+        if self.pagination_offset >= self.max_pagination_offset:
+            down_arrow = ' '
+
+        draw_message(
+            self.start_y, self.arrow_x,
+            self.window, up_arrow, DEFAULT_COLOR,
+        )
+
+        draw_message(
+            self.height - BOTTOM_OFFSET, self.arrow_x,
+            self.window, down_arrow, DEFAULT_COLOR
+        )
 
     def show_statistics(self):
-        game_name_color = get_color_by_name('strong_pastel_purple_text_black_bg')
+        game_name_color = get_color_by_name('yellow_text_black_bg')
         stat_y = self.start_y
 
         for type_, data in self.statistics_data[self.pagination_offset:]:
@@ -91,37 +124,44 @@ class Statistics(InterfaceManager):
         if y > self.height - BOTTOM_OFFSET:
             return
 
-        clear_line_x = (self.width // 2) - (self.max_elem_width // 2)
-        clear_field_line(y, clear_line_x, self.window, self.max_elem_width)
+        clear_line_x = (self.width // 2) - (self.max_elem_width // 2) - 1
+        clear_field_line(y, clear_line_x, self.window,
+                         self.max_elem_width + BASE_OFFSET)
 
         draw_elem_x = (self.width // 2) - (len(message) // 2)
         draw_message(y, draw_elem_x, self.window, message, color)
 
-    @staticmethod
-    def get_statistics_list_data(statistics_dict):
-        statistics_list_data = []
+    def get_statistics_prettify_data(self, statistics_dict):
+        statistics_prettify_data = []
 
         for game_name, game_data in statistics_dict.items():
-            statistics_list_data.append(('game_name', game_name))
+            statistics_prettify_data.append(('game_name', game_name))
 
             for stat_name, stat_data in game_data.items():
-                stat = f'{stat_name}: {stat_data}'
-                statistics_list_data.append(('stat', stat))
+                stat_name, stat_data = str(stat_name), str(stat_data)
+                stat_name = self.get_normalized_stat_name(stat_name)
+                spaces = self.get_spaces_count(stat_name, stat_data)
+                prettify_stat = stat_name + ':' + (' ' * spaces) + stat_data
+                statistics_prettify_data.append(('stat', prettify_stat))
 
-        return statistics_list_data
+        return statistics_prettify_data
 
-    def normalize_statistics_data(self):
-        normalized_statistics_data = []
+    def get_spaces_count(self, *args):
+        chars_count = sum(map(lambda word: len(word), args))
+        return self.max_elem_width - chars_count
 
-        for type_, data in self.statistics_data:
-            if type_ == 'game_name':
-                normalized_statistics_data.append((type_, data))
-                continue
+    @staticmethod
+    def get_normalized_stat_name(stat_name):
+        return ' '.join(
+            map(lambda word: word.capitalize(), stat_name.split('_'))
+        )
 
-            stat_name, stat_data = data
-            stat_name = ' '.join(map(lambda word: word.capitalize(), stat_name.split('_')))
-            spaces = self.max_elem_width - (len(stat_name) + len(str(stat_data)))
-            stat = f'{stat_name}: {" " * spaces}{stat_data}'
-            normalized_statistics_data.append((type_, stat))
+    @staticmethod
+    def get_max_elem_width(statistics_dict):
+        elements_width = [
+            len(f'{stat_name}{stat_data}') + BASE_OFFSET
+            for game_data in statistics_dict.values()
+            for stat_name, stat_data in game_data.items()
+        ]
 
-        self.statistics_data = normalized_statistics_data
+        return max(elements_width)
