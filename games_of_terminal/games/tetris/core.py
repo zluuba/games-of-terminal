@@ -7,17 +7,26 @@ from games_of_terminal.games.tetris.constants import (
     DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     DOWN, SCORES, LEVELS, GAME_TIPS,
 )
-# from games_of_terminal.database.database import (
-#     get_game_state, update_game_state,
-# )
-
-from games_of_terminal.utils import hide_cursor
+from games_of_terminal.database.database import (
+    update_game_stats,
+)
+from games_of_terminal.utils import (
+    hide_cursor,
+    update_total_time_count,
+    update_total_games_count,
+    update_best_score,
+)
 
 from time import time
 from random import choice
 
 
 class TetrisGame(GameEngine):
+    def __init__(self, canvas, game_name):
+        super().__init__(canvas, game_name)
+
+        self.start_time = time()
+
     def setup_game_stats(self):
         self.block = None
         self.next_block = None
@@ -27,6 +36,7 @@ class TetrisGame(GameEngine):
         self.level = 1
         self.time_interval = 1
         self.time = time()
+        self.lines_removed = 0
 
     def setup_game_field(self):
         hide_cursor()
@@ -55,9 +65,10 @@ class TetrisGame(GameEngine):
             self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
+                self.save_game_data()
                 return
             if self.is_game_over():
-                self.save_best_score()
+                self.save_game_data()
                 self.ask_for_restart()
                 return
 
@@ -73,20 +84,12 @@ class TetrisGame(GameEngine):
             'Level': self.level,
             'Score': self.stats.score,
             'Best Score': self.stats.best_score,
+            'Lines Removed': self.lines_removed,
         }
 
     def set_best_score(self):
         # data = get_game_state('Tetris', 'best_score')
         self.stats.best_score = 0
-
-    def save_best_score(self):
-        if self.stats.score <= self.stats.best_score:
-            return
-
-        # update_game_state(
-        #     'Tetris', 'best_score',
-        #     self.stats.score, save_mode=True,
-        # )
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
@@ -123,6 +126,7 @@ class TetrisGame(GameEngine):
             lines_count += 1
             self.board.remove_line(line_y)
 
+        self.lines_removed += lines_count
         self.stats.score += SCORES[lines_count] * self.level
         self._increase_level()
         self.show_side_menu_tips(
@@ -220,3 +224,18 @@ class TetrisGame(GameEngine):
                     if y + 1 >= self.board.board_window.bottom_border:
                         return True
         return False
+
+    def save_game_data(self):
+        update_total_games_count(self.game_name, 1)
+        update_total_time_count(self.game_name, self.start_time)
+
+        if self.stats.score > self.stats.best_score:
+            update_best_score(self.game_name, self.stats.score)
+
+        self.update_lines_removed_count()
+
+    def update_lines_removed_count(self):
+        update_game_stats(
+            self.game_name, 'lines_removed',
+            self.lines_removed,
+        )

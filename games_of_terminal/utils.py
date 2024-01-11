@@ -2,6 +2,10 @@ from games_of_terminal.constants import (
     COLOR_MAPPING, COMMON_TIPS, DEFAULT_COLOR,
     MIN_WIN_HEIGHT, MIN_WIN_WIDTH,
 )
+from games_of_terminal.database.database import (
+    update_game_stat,
+    update_game_stats,
+)
 
 from curses import (
     start_color as init_start_color,
@@ -10,6 +14,7 @@ from curses import (
     curs_set,
 )
 from random import choice
+from time import time
 from re import match
 from sys import exit
 
@@ -99,3 +104,18 @@ def show_placeholder_stub(height, width, window,
 
     window.clear()
     draw_message(y, x, window, message, color)
+
+
+def update_total_games_count(game_name, value):
+    update_game_stat(game_name, 'total_games', value)
+
+
+def update_total_time_count(game_name, start_time):
+    end_time = time()
+    time_in_game = end_time - start_time
+    seconds_in_game = int(time_in_game % 60)
+    update_game_stat(game_name, 'total_time', seconds_in_game)
+
+
+def update_best_score(game_name, score):
+    update_game_stats(game_name, 'best_score', score, save_mode=True)

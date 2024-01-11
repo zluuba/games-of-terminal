@@ -1,18 +1,28 @@
 from games_of_terminal.constants import KEYS
-from games_of_terminal.utils import hide_cursor
+from games_of_terminal.utils import (
+    hide_cursor,
+    update_total_time_count,
+    update_total_games_count,
+    update_best_score,
+)
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
 )
-# from games_of_terminal.database.database import (
-#     get_game_state,
-#     update_game_state,
-# )
+from games_of_terminal.database.database import (
+    get_game_stat,
+)
 
 from random import randint
+from time import time
 
 
 class SnakeGame(GameEngine):
+    def __init__(self, canvas, game_name):
+        super().__init__(canvas, game_name)
+
+        self.start_time = time()
+
     def setup_game_stats(self):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
@@ -47,9 +57,10 @@ class SnakeGame(GameEngine):
             self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
+                self.save_game_data(a)
                 return
             if self.is_game_over():
-                self._save_best_score()
+                self.save_game_data()
                 self.ask_for_restart()
                 return
 
@@ -65,9 +76,8 @@ class SnakeGame(GameEngine):
             self._change_direction(key)
 
     def set_best_score(self):
-        pass
-        # data = get_game_state('Snake', 'best_score')
-        # self.stats.best_score = data
+        data = get_game_stat('Snake', 'best_score', unique=True)
+        self.stats.best_score = data
 
     @property
     def tips(self):
@@ -129,11 +139,9 @@ class SnakeGame(GameEngine):
 
         self.game_area.box.refresh()
 
-    def _save_best_score(self):
-        if self.stats.score <= self.stats.best_score:
-            return
+    def save_game_data(self):
+        update_total_games_count(self.game_name, 1)
+        update_total_time_count(self.game_name, self.start_time)
 
-        # update_game_state(
-        #     'Snake', 'best_score',
-        #     self.stats.score, save_mode=True
-        # )
+        if self.stats.score > self.stats.best_score:
+            update_best_score(self.game_name, self.stats.score)

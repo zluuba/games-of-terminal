@@ -2,15 +2,27 @@ from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
-from games_of_terminal.utils import hide_cursor
+from games_of_terminal.utils import (
+    hide_cursor,
+    update_total_time_count,
+    update_total_games_count,
+)
+from games_of_terminal.database.database import update_game_stats
 
 from random import choice, uniform
+from time import time
 
 
 class MinesweeperGame(GameEngine):
+    def __init__(self, canvas, game_name):
+        super().__init__(canvas, game_name)
+
+        self.start_time = time()
+
     def setup_game_stats(self):
         self.cells = dict()
         self.flags = 0
+        self.bombs = 0
 
     def setup_game_field(self):
         hide_cursor()
@@ -37,9 +49,10 @@ class MinesweeperGame(GameEngine):
             self.controller(key, pause_off=True)
 
             if self.stats.is_exit or self.stats.is_restart:
+                self.save_game_data(is_game_over=False)
                 return
             if self.is_game_over():
-                # self._save_best_score()
+                self.save_game_data()
                 self.ask_for_restart()
                 return
 
@@ -112,7 +125,8 @@ class MinesweeperGame(GameEngine):
         # random float divider for uniq bombs count in every game
         div = uniform(3, 8)
         bombs_count = number_of_sells // div
-        self.flags = int(bombs_count)
+        self.bombs = int(bombs_count)
+        self.flags = self.bombs
 
         while bombs_count != 0:
             cell = choice(all_cells)
@@ -236,3 +250,26 @@ class MinesweeperGame(GameEngine):
     def check_to_win(self):
         if self._is_all_cells_open() and self._is_no_unnecessary_flags():
             self.stats.game_status = 'user_win'
+
+    def save_game_data(self, is_game_over=True):
+        update_total_games_count(self.game_name, 1)
+        update_total_time_count(self.game_name, self.start_time)
+
+        if is_game_over:
+            self.update_bombs_defused_count()
+            self.update_end_game_status_stat()
+
+    def update_end_game_status_stat(self):
+        if self.stats.game_status == 'user_win':
+            end_game_status_stat_name = 'total_wins'
+        else:
+            end_game_status_stat_name = 'total_losses'
+
+        update_game_stats(self.game_name, end_game_status_stat_name, 1)
+
+    def update_bombs_defused_count(self):
+        bombs_defused = sum([
+            1 for cell in self.cells.values()
+            if cell.is_bomb() and cell.have_flag()
+        ])
+        update_game_stats(self.game_name, 'bombs_defused', bombs_defused)

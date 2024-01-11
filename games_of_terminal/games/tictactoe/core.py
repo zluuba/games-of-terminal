@@ -5,13 +5,24 @@ from games_of_terminal.games.tictactoe.constants import (
 )
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tictactoe.cell import TicTacToeCell
-from games_of_terminal.utils import hide_cursor
+from games_of_terminal.utils import (
+    hide_cursor,
+    update_total_time_count,
+    update_total_games_count,
+)
+
+from games_of_terminal.database.database import update_game_stats
 
 from random import choice
-from time import sleep
+from time import sleep, time
 
 
 class TicTacToeGame(GameEngine):
+    def __init__(self, canvas, game_name):
+        super().__init__(canvas, game_name)
+
+        self.start_time = time()
+
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
@@ -36,9 +47,10 @@ class TicTacToeGame(GameEngine):
             self.controller(key, pause_off=True)
 
             if self.stats.is_exit or self.stats.is_restart:
+                self.save_game_data(is_game_over=False)
                 return
             if self.is_game_over():
-                # self._save_best_score()
+                self.save_game_data()
                 self.ask_for_restart()
                 return
 
@@ -182,3 +194,19 @@ class TicTacToeGame(GameEngine):
             self.stats.game_status = 'user_lose'
         elif self._is_all_cells_occupied():
             self.stats.game_status = 'tie'
+
+    def save_game_data(self, is_game_over=True):
+        update_total_games_count(self.game_name, 1)
+        update_total_time_count(self.game_name, self.start_time)
+
+        if is_game_over:
+            self.update_end_game_status_stat()
+
+    def update_end_game_status_stat(self):
+        end_game_status_stat_name = 'total_ties'
+        if self.stats.game_status == 'user_win':
+            end_game_status_stat_name = 'total_wins'
+        elif self.stats.game_status == 'user_lose':
+            end_game_status_stat_name = 'total_losses'
+
+        update_game_stats(self.game_name, end_game_status_stat_name, 1)
