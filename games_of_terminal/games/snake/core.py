@@ -54,7 +54,7 @@ class SnakeGame(GameEngine):
             self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
-                self.save_game_data(a)
+                self.save_game_data()
                 return
             if self.is_game_over():
                 self.save_game_data()

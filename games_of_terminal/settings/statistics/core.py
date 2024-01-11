@@ -83,6 +83,7 @@ class Statistics(InterfaceManager):
     def redraw_window(self):
         self.setup_vars()
         self.window.clear()
+
         self.draw_title()
         self.draw_arrows()
         self.show_statistics()
@@ -189,7 +190,8 @@ class Statistics(InterfaceManager):
         prettify_stat = stat_name + ':' + (' ' * spaces) + stat_data
         return prettify_stat
 
-    def get_total_games_and_total_time(self, statistics_dict):
+    @staticmethod
+    def get_total_games_and_total_time(statistics_dict):
         total_games = 0
         total_time = 0
 
