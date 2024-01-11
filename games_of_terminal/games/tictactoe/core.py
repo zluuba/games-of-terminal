@@ -18,11 +18,6 @@ from time import sleep, time
 
 
 class TicTacToeGame(GameEngine):
-    def __init__(self, canvas, game_name):
-        super().__init__(canvas, game_name)
-
-        self.start_time = time()
-
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
@@ -30,6 +25,8 @@ class TicTacToeGame(GameEngine):
 
         self.user_moves = []
         self.computer_moves = []
+
+        self.start_time = time()
 
     def setup_game_field(self, initial=True):
         hide_cursor()

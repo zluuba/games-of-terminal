@@ -18,11 +18,6 @@ from time import time
 
 
 class SnakeGame(GameEngine):
-    def __init__(self, canvas, game_name):
-        super().__init__(canvas, game_name)
-
-        self.start_time = time()
-
     def setup_game_stats(self):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
@@ -35,6 +30,8 @@ class SnakeGame(GameEngine):
         # initial direction of the snake's movement
         self.direction = KEYS['right_arrow']
         self.food = None
+
+        self.start_time = time()
 
     def setup_game_field(self):
         hide_cursor()

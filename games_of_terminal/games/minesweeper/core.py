@@ -14,12 +14,9 @@ from time import time
 
 
 class MinesweeperGame(GameEngine):
-    def __init__(self, canvas, game_name):
-        super().__init__(canvas, game_name)
-
+    def setup_game_stats(self):
         self.start_time = time()
 
-    def setup_game_stats(self):
         self.cells = dict()
         self.flags = 0
         self.bombs = 0

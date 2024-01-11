@@ -8,6 +8,7 @@ from games_of_terminal.games.tetris.constants import (
     DOWN, SCORES, LEVELS, GAME_TIPS,
 )
 from games_of_terminal.database.database import (
+    get_game_stat,
     update_game_stats,
 )
 from games_of_terminal.utils import (
@@ -22,11 +23,6 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
-    def __init__(self, canvas, game_name):
-        super().__init__(canvas, game_name)
-
-        self.start_time = time()
-
     def setup_game_stats(self):
         self.block = None
         self.next_block = None
@@ -36,6 +32,8 @@ class TetrisGame(GameEngine):
         self.level = 1
         self.time_interval = 1
         self.time = time()
+
+        self.start_time = time()
         self.lines_removed = 0
 
     def setup_game_field(self):
@@ -88,8 +86,8 @@ class TetrisGame(GameEngine):
         }
 
     def set_best_score(self):
-        # data = get_game_state('Tetris', 'best_score')
-        self.stats.best_score = 0
+        data = get_game_stat('Tetris', 'best_score', unique=True)
+        self.stats.best_score = int(data)
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
