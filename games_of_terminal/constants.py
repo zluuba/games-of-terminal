@@ -226,6 +226,11 @@ COLOR_MAPPING = {
         'text_color': COLOR_WHITE,
         'bg_color': 163,
     },
+    'white_text_medium_grey_bg': {
+        'pair_num': 31,
+        'text_color': COLOR_WHITE,
+        'bg_color': 8,
+    },
 }
 
 # based on curses initial color pair (0: white text, black bg)
