@@ -12,6 +12,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Professor**: reach 42 points in one game.
 - **Are you okay?**: reach 101 points in one game.
 - **The Grass Must Be Touched**: reach 75 points in one game.
+- **Good Soup**: eat yourself.
 - **Mode Mood**: change game mode.
 
 
