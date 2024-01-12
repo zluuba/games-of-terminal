@@ -28,16 +28,16 @@ class GameEngine(InterfaceManager):
             if self.stats.is_exit or not self.stats.is_restart:
                 break
 
-            self.reset_game_area()
             self.reset_game_stats()
+            self.reset_game_area()
+
+    def reset_game_stats(self):
+        self.stats = GameStats()
 
     def reset_game_area(self):
         self.game_area.box.erase()
         self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
-        self.game_area.box.refresh()
-
-    def reset_game_stats(self):
-        self.stats = GameStats()
+        # self.game_area.box.refresh()
 
     def is_game_over(self):
         return self.stats.game_status != 'game_active'
