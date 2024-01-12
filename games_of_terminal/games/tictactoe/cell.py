@@ -1,5 +1,6 @@
 from games_of_terminal.games.cell import BaseCell
 from games_of_terminal.utils import get_color_by_name
+
 from time import sleep
 
 

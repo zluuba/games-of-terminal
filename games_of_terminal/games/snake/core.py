@@ -1,16 +1,14 @@
 from games_of_terminal.constants import KEYS
+from games_of_terminal.database.database import get_game_stat
+from games_of_terminal.games.engine import GameEngine
+from games_of_terminal.games.snake.constants import (
+    GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
+)
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
     update_total_games_count,
     update_best_score,
-)
-from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.games.snake.constants import (
-    GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
-)
-from games_of_terminal.database.database import (
-    get_game_stat,
 )
 
 from random import randint
@@ -38,7 +36,7 @@ class SnakeGame(GameEngine):
         self.window.nodelay(1)
         self.window.timeout(150)
 
-        self._put_food_on_the_field()
+        self.put_food_on_the_field()
         self.set_best_score()
 
         self.draw_logo()
@@ -61,16 +59,16 @@ class SnakeGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-            self._move_snake()
+            self.move_snake()
 
-            if self._is_snake_eat_itself() or self._is_snake_touch_the_border():
+            if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
                 self.stats.game_status = 'user_lose'
 
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
         if key in DIRECTIONS.keys():
-            self._change_direction(key)
+            self.change_direction(key)
 
     def set_best_score(self):
         data = get_game_stat('Snake', 'best_score', unique=True)
@@ -83,32 +81,32 @@ class SnakeGame(GameEngine):
             'Best Score': self.stats.best_score,
         }
 
-    def _get_food_coords(self):
+    def get_food_coords(self):
         food = [randint(self.game_area.top_border + 1, self.game_area.bottom_border - 1),
                 randint(self.game_area.left_border + 1, self.game_area.right_border - 1)]
 
         if food in self.snake:
-            return self._get_food_coords()
+            return self.get_food_coords()
         return food
 
-    def _put_food_on_the_field(self):
-        self.food = self._get_food_coords()
+    def put_food_on_the_field(self):
+        self.food = self.get_food_coords()
         self.game_area.box.addstr(*self.food, FOOD_SKIN)
 
-    def _change_direction(self, chosen_direction):
+    def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
 
         if chosen_direction != opposite_direction:
             self.direction = chosen_direction
 
-    def _is_snake_eat_itself(self):
+    def is_snake_eat_itself(self):
         return self.snake[0] in self.snake[1:]
 
-    def _is_snake_touch_the_border(self):
+    def is_snake_touch_the_border(self):
         return (self.snake[0][0] in [self.game_area.top_border, self.game_area.bottom_border]) or \
                (self.snake[0][1] in [self.game_area.left_border, self.game_area.right_border])
 
-    def _move_snake(self):
+    def move_snake(self):
         snake_head = self.snake[0]
 
         if self.direction == KEYS['right_arrow']:
@@ -125,7 +123,7 @@ class SnakeGame(GameEngine):
 
         if snake_head == self.food:
             self.stats.score += 1
-            self._put_food_on_the_field()
+            self.put_food_on_the_field()
             self.show_side_menu_tips(
                 game_state=self.tips,
                 game_tips=GAME_TIPS,

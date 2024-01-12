@@ -1,3 +1,6 @@
+from games_of_terminal.database.database import (
+    get_game_stat, update_game_stats,
+)
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
 from games_of_terminal.games.tetris.game_board import TetrisBoard
@@ -6,10 +9,7 @@ from games_of_terminal.games.tetris.constants import (
     CELL_WIDTH, CELL_HEIGHT, BLOCKS,
     DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     DOWN, SCORES, LEVELS, GAME_TIPS,
-)
-from games_of_terminal.database.database import (
-    get_game_stat,
-    update_game_stats,
+    LEVEL_SPEED_DIFF,
 )
 from games_of_terminal.utils import (
     hide_cursor,
@@ -70,7 +70,7 @@ class TetrisGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-            self._block_auto_move()
+            self.block_auto_move()
 
             if self.is_block_on_floor():
                 self.move_block_before_land()
@@ -126,21 +126,21 @@ class TetrisGame(GameEngine):
 
         self.lines_removed += lines_count
         self.stats.score += SCORES[lines_count] * self.level
-        self._increase_level()
+        self.increase_level()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,
         )
         self.board.draw_board()
 
-    def _increase_level(self):
+    def increase_level(self):
         if self.level == max(LEVELS):
             return
 
         min_score_to_up_level = LEVELS[self.level + 1]
         if self.stats.score >= min_score_to_up_level:
             self.level += 1
-            self.time_interval -= 0.2
+            self.time_interval -= LEVEL_SPEED_DIFF
 
     def move_block_before_land(self):
         """ Give the ability move block if it touches the floor """
@@ -195,7 +195,7 @@ class TetrisGame(GameEngine):
 
         return block
 
-    def _block_auto_move(self):
+    def block_auto_move(self):
         current_time = time()
 
         if current_time - self.time >= self.time_interval:

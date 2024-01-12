@@ -1,13 +1,13 @@
+from games_of_terminal.constants import (
+    MESSAGES, KEYS, GAME_STATUSES, BASE_OFFSET,
+)
 from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     get_game_tips, draw_message,
     clear_field_line, get_color_by_name,
 )
-from games_of_terminal.constants import (
-    MESSAGES, KEYS, GAME_STATUSES, BASE_OFFSET,
-)
-from games_of_terminal.games.game_stats import GameStats
 
 from curses import flash, flushinp, endwin, A_BLINK as BLINK
 from time import sleep
@@ -59,7 +59,7 @@ class GameEngine(InterfaceManager):
         self.stats.is_pause = not self.stats.is_pause
 
         if self.stats.is_pause:
-            self._show_pause_message()
+            self.show_pause_message()
             key = self.window.getch()
 
             while key != KEYS['pause']:
@@ -70,11 +70,12 @@ class GameEngine(InterfaceManager):
 
         self.window.timeout(150)
 
-    def _show_pause_message(self):
+    def show_pause_message(self):
         message = ' PAUSE '
         color = get_color_by_name('yellow_text_black_bg')
 
-        x = (self.game_area.width // 2 + self.game_area.begin_x) - (len(message) // 2)
+        x = ((self.game_area.width // 2 + self.game_area.begin_x) -
+             (len(message) // 2))
         y = self.game_area.height // 2 + self.game_box_sizes['begin_y']
 
         draw_message(y, x, self.game_area.box, message, color)
@@ -105,11 +106,15 @@ class GameEngine(InterfaceManager):
 
         for offset in range(self.game_status_area.height - BASE_OFFSET):
             new_y = y + offset
-            draw_message(new_y, x, self.game_status_area.box, empty_line, color)
+            draw_message(
+                new_y, x, self.game_status_area.box, empty_line, color
+            )
 
         message = GAME_STATUSES[self.stats.game_status]['text']
         middle_x = (self.game_status_area.width // 2) - len(message) // 2
-        draw_message(y + 1, middle_x, self.game_status_area.box, message, color)
+        draw_message(
+            y + 1, middle_x, self.game_status_area.box, message, color
+        )
 
     def show_side_menu_tips(self, game_state=None, game_tips=None):
         y = x = 2

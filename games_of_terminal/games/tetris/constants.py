@@ -1,8 +1,9 @@
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 
-# standard Tetris field size: 10 (width) x 20 (height)
+# standard Tetris field size: 10 x 20
 FIELD_WIDTH = 10
+FIELD_HEIGHT = 20
 
 # little square size
 CELL_WIDTH = 2
@@ -89,6 +90,8 @@ LEVELS = {
     4: 10_000,
     5: 20_000,
 }
+
+LEVEL_SPEED_DIFF = 0.2
 
 GAME_TIPS = {
     'Move': '← ↓ →',

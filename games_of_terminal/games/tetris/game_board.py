@@ -1,11 +1,11 @@
+from games_of_terminal.constants import BASE_OFFSET
 from games_of_terminal.games.tetris.constants import (
     FIELD_WIDTH, CELL_WIDTH, CELL_HEIGHT,
 )
+from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     init_curses_colors, get_color_by_name,
 )
-from games_of_terminal.constants import BASE_OFFSET
-from games_of_terminal.sub_window import SubWindow
 
 
 class TetrisBoard:
@@ -20,12 +20,12 @@ class TetrisBoard:
         self.landed_blocks = dict()
         self.bg_color_name = 'white_text_dark_grey_bg'
 
-        self.board_window = self._create_board_window(parent_window)
+        self.board_window = self.create_board_window(parent_window)
         self.win = self.board_window.box
 
         self.draw_background()
 
-    def _create_board_window(self, parent_window):
+    def create_board_window(self, parent_window):
         window_width = self.width + BASE_OFFSET
 
         self.begin_y = parent_window.begin_y
@@ -38,7 +38,7 @@ class TetrisBoard:
         return (y, x) not in self.landed_blocks
 
     def hide_cell(self, y, x, *args):
-        self._draw_cell(y, x, self.bg_color_name, CELL_WIDTH)
+        self.draw_cell(y, x, self.bg_color_name, CELL_WIDTH)
 
     def land_cell(self, y, x, color, *args):
         self.landed_blocks[(y, x)] = color
@@ -50,7 +50,7 @@ class TetrisBoard:
         if block:
             self.change_block(block, action='draw')
 
-    def _draw_cell(self, y, x, color_name, size=1):
+    def draw_cell(self, y, x, color_name, size=1):
         color = get_color_by_name(color_name)
 
         self.win.addstr(y, x, ' ' * size, color)
@@ -62,11 +62,11 @@ class TetrisBoard:
 
         for y in range(y_start, y_end):
             for x in range(x_start, x_end):
-                self._draw_cell(y, x, self.bg_color_name)
+                self.draw_cell(y, x, self.bg_color_name)
 
     def change_block(self, block, action='draw'):
         actions = {
-            'draw': self._draw_cell,
+            'draw': self.draw_cell,
             'hide': self.hide_cell,
             'land': self.land_cell,
         }
@@ -90,7 +90,7 @@ class TetrisBoard:
 
     def draw_landed_blocks(self):
         for (y, x), color in self.landed_blocks.items():
-            self._draw_cell(y, x, color, CELL_WIDTH)
+            self.draw_cell(y, x, color, CELL_WIDTH)
 
     def get_complete_line(self, complete_line=0):
         for y in range(self.height - 2, 1, -1):

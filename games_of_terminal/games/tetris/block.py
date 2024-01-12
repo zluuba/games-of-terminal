@@ -1,6 +1,5 @@
 from games_of_terminal.games.tetris.constants import (
-    BLOCKS, BLOCK_COLORS,
-    OFFSETS, CELL_HEIGHT, CELL_WIDTH,
+    BLOCKS, BLOCK_COLORS, CELL_HEIGHT, CELL_WIDTH, OFFSETS,
 )
 from games_of_terminal.utils import (
     init_curses_colors, get_color_by_name,
@@ -30,9 +29,9 @@ class TetrisBlock:
         y_offset *= CELL_HEIGHT
         x_offset *= CELL_WIDTH
 
-        if self._is_out_of_borders(y_offset=y_offset, x_offset=x_offset):
+        if self.is_out_of_borders(y_offset=y_offset, x_offset=x_offset):
             return
-        if self._is_there_another_blocks(y_offset=y_offset, x_offset=x_offset):
+        if self.is_there_another_blocks(y_offset=y_offset, x_offset=x_offset):
             return
 
         self.board.change_block(self, action='hide')
@@ -43,9 +42,9 @@ class TetrisBlock:
     def flip(self):
         new_blueprint = list(zip(*self.blueprint[::-1]))
 
-        if self._is_out_of_borders(blueprint=new_blueprint):
+        if self.is_out_of_borders(blueprint=new_blueprint):
             return
-        if self._is_there_another_blocks(blueprint=new_blueprint):
+        if self.is_there_another_blocks(blueprint=new_blueprint):
             return
 
         self.board.change_block(self, action='hide')
@@ -62,9 +61,9 @@ class TetrisBlock:
         while True:
             new_y_offset = y_offset + CELL_HEIGHT
 
-            if self._is_out_of_borders(y_offset=new_y_offset):
+            if self.is_out_of_borders(y_offset=new_y_offset):
                 break
-            if self._is_there_another_blocks(y_offset=new_y_offset):
+            if self.is_there_another_blocks(y_offset=new_y_offset):
                 break
 
             y_offset = new_y_offset
@@ -73,7 +72,7 @@ class TetrisBlock:
         self.y += y_offset
         self.board.change_block(self, action='draw')
 
-    def _is_there_another_blocks(self, x_offset=0, y_offset=0, blueprint=None):
+    def is_there_another_blocks(self, x_offset=0, y_offset=0, blueprint=None):
         if not blueprint:
             blueprint = self.blueprint
 
@@ -96,7 +95,7 @@ class TetrisBlock:
                     return True
         return False
 
-    def _is_out_of_borders(self, y_offset=0, x_offset=0, blueprint=None):
+    def is_out_of_borders(self, y_offset=0, x_offset=0, blueprint=None):
         if blueprint is None:
             blueprint = self.blueprint
 
@@ -109,13 +108,13 @@ class TetrisBlock:
         end_x = begin_x + (width * CELL_WIDTH)
         end_y = begin_y + (height * CELL_HEIGHT)
 
-        if begin_x <= 0:                    # left border
+        if begin_x <= 0:
             return True
-        if end_x > self.board.width + 1:    # right border
+        if end_x > self.board.width + 1:
             return True
-        if end_y >= self.board.height:      # bottom border
+        if end_y >= self.board.height:
             return True
         return False
 
     def is_block_placed_in_land(self):
-        return self._is_there_another_blocks()
+        return self.is_there_another_blocks()

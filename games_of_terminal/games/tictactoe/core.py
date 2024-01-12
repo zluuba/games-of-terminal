@@ -1,17 +1,16 @@
 from games_of_terminal.constants import KEYS
+from games_of_terminal.database.database import update_game_stats
+from games_of_terminal.games.engine import GameEngine
+from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 from games_of_terminal.games.tictactoe.constants import (
     CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
     BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
 )
-from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
     update_total_games_count,
 )
-
-from games_of_terminal.database.database import update_game_stats
 
 from random import choice
 from time import sleep, time
@@ -21,7 +20,7 @@ class TicTacToeGame(GameEngine):
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
-        self.cell_height, self.cell_width = self._get_cell_size()
+        self.cell_height, self.cell_width = self.get_cell_size()
 
         self.user_moves = []
         self.computer_moves = []
@@ -33,7 +32,7 @@ class TicTacToeGame(GameEngine):
         self.draw_logo()
         self.show_side_menu_tips(game_tips=GAME_TIPS)
         self.show_game_status()
-        self._draw_game_field()
+        self.draw_game_field()
 
     def start_new_game(self):
         self.current_cell.select()
@@ -55,17 +54,17 @@ class TicTacToeGame(GameEngine):
         super().controller(key, pause_off)
 
         if key in DIRECTIONS:
-            self._slide_field(key)
+            self.slide_field(key)
         elif key in KEYS['enter']:
             if self.current_cell.is_free():
-                self._user_move()
-                self._computer_move()
+                self.user_move()
+                self.computer_move()
 
     @property
     def current_cell(self):
         return self.cells[self.current_coordinates]
 
-    def _get_cell_size(self):
+    def get_cell_size(self):
         """ Calculate cell sizes depending on the
         size of the game field.
         The ratio of cell width to cell height is always 2.5:1.
@@ -89,16 +88,17 @@ class TicTacToeGame(GameEngine):
 
         return estimated_height, estimated_width
 
-    def _create_cell(self, y, x, cell_height, cell_width, field_number):
+    def create_cell(self, y, x, cell_height, cell_width, field_number):
         field_box = self.game_area.box.subwin(cell_height, cell_width, y, x)
         cell = TicTacToeCell(field_box, (y, x))
         cell.field_number = field_number
         cell.set_background_color()
         return cell
 
-    def _draw_game_field(self):
+    def draw_game_field(self):
         y = (self.game_area.height - (CELLS_IN_ROW * self.cell_height)) // 2
-        x = begin_x = (self.game_area.width - (CELLS_IN_ROW * self.cell_width)) // 2
+        x = (self.game_area.width - (CELLS_IN_ROW * self.cell_width)) // 2
+        begin_x = x
 
         y += self.game_area.begin_y
         x += self.game_area.begin_x
@@ -109,7 +109,9 @@ class TicTacToeGame(GameEngine):
 
         for _ in range(CELLS_IN_ROW):
             for _ in range(CELLS_IN_ROW):
-                cell = self._create_cell(y, x, self.cell_height, self.cell_width, field_number)
+                cell = self.create_cell(
+                    y, x, self.cell_height, self.cell_width, field_number
+                )
                 self.cells[(y, x)] = cell
 
                 x += self.cell_width
@@ -118,7 +120,7 @@ class TicTacToeGame(GameEngine):
             y += self.cell_height
             x = begin_x
 
-    def _slide_field(self, key):
+    def slide_field(self, key):
         y, x = self.current_coordinates
         base_y_offset, base_x_offset = DIRECTIONS[key]
 
@@ -133,31 +135,33 @@ class TicTacToeGame(GameEngine):
             self.current_coordinates = new_coordinates
             self.current_cell.select()
 
-    def _user_move(self):
+    def user_move(self):
         self.current_cell.owner = 'user'
         self.user_moves.append(self.current_cell.field_number)
-        self._update_game_status()
+        self.update_game_status()
 
-    def _computer_move(self):
+    def computer_move(self):
         if self.stats.game_status != 'game_active':
             return
 
         sleep(0.3)
-        cell = self._get_best_move()
+        cell = self.get_best_move_cell()
         cell.owner = 'computer'
         self.computer_moves.append(cell.field_number)
-        self._update_game_status()
+        self.update_game_status()
 
-    def _get_best_move(self):
-        cells_by_number = {cell.field_number: cell for cell in self.cells.values()}
+    def get_best_move_cell(self):
+        cells = {cell.field_number: cell for cell in self.cells.values()}
 
-        for best_move_pattern_by_owners in BEST_MOVE_PATTERNS_BY_OWNERS:
+        for best_owner_move_pattern in BEST_MOVE_PATTERNS_BY_OWNERS:
             for pattern in WINNING_PATTERNS:
-                pattern_cells = [cells_by_number[num] for num in pattern]
+                pattern_cells = [cells[num] for num in pattern]
                 pattern_owners = [cell.owner for cell in pattern_cells]
 
-                if sorted(pattern_owners) == sorted(best_move_pattern_by_owners):
-                    best_move = [cell for cell in pattern_cells if cell.is_free()]
+                if sorted(pattern_owners) == sorted(best_owner_move_pattern):
+                    best_move = [
+                        cell for cell in pattern_cells if cell.is_free()
+                    ]
                     return best_move[0]
 
         random_move = self.get_random_empty_cell()
@@ -169,27 +173,31 @@ class TicTacToeGame(GameEngine):
 
         return random_cell
 
-    def _is_player_win(self, player):
-        player_moves = self.user_moves if player == 'user' else self.computer_moves
+    def is_player_win(self, player):
+        player_moves = self.user_moves if player == 'user' \
+            else self.computer_moves
 
         for winning_pattern in WINNING_PATTERNS:
-            is_win = all(map(lambda cell_number: cell_number in player_moves, winning_pattern))
+            is_win = all(map(
+                lambda cell_number: cell_number in player_moves,
+                winning_pattern
+            ))
             if is_win:
                 return True
         return False
 
-    def _is_all_cells_occupied(self):
+    def is_all_cells_occupied(self):
         for cell in self.cells.values():
             if cell.is_free():
                 return False
         return True
 
-    def _update_game_status(self):
-        if self._is_player_win('user'):
+    def update_game_status(self):
+        if self.is_player_win('user'):
             self.stats.game_status = 'user_win'
-        elif self._is_player_win('computer'):
+        elif self.is_player_win('computer'):
             self.stats.game_status = 'user_lose'
-        elif self._is_all_cells_occupied():
+        elif self.is_all_cells_occupied():
             self.stats.game_status = 'tie'
 
     def save_game_data(self, is_game_over=True):

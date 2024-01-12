@@ -23,9 +23,9 @@ class BaseCell:
         return self.state['background_color']
 
     def set_background_color(self):
-        self._update_cell_color()
+        self.update_cell_color()
 
-    def _update_cell_color(self):
+    def update_cell_color(self):
         color = self.get_background_color()
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()

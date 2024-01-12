@@ -1,6 +1,4 @@
-from games_of_terminal.utils import (
-    init_curses_colors, get_color_by_name,
-)
+from games_of_terminal.utils import init_curses_colors, get_color_by_name
 
 
 class Cell:
@@ -20,16 +18,16 @@ class Cell:
         }
 
         self.colors = {
-            0: get_color_by_name('white_text_pastel_blue_bg'),        # 0 bombs
-            1: get_color_by_name('white_text_light_blue_bg'),         # 1 bomb
-            2: get_color_by_name('white_text_medium_blue_bg'),        # 2 bombs
-            3: get_color_by_name('white_text_dark_medium_blue_bg'),   # 3 bombs
-            4: get_color_by_name('white_text_deep_blue_bg'),          # 4 bombs or more
+            0: get_color_by_name('white_text_pastel_blue_bg'),
+            1: get_color_by_name('white_text_light_blue_bg'),
+            2: get_color_by_name('white_text_medium_blue_bg'),
+            3: get_color_by_name('white_text_dark_medium_blue_bg'),
+            4: get_color_by_name('white_text_deep_blue_bg'),
 
-            'bomb': get_color_by_name('white_text_red_bg'),           # bomb color
-            'closed': get_color_by_name('white_text_black_bg'),       # default cell color
-            'cursor': get_color_by_name('white_text_light_grey_bg'),  # selected cell
-            'flag': get_color_by_name('white_text_deep_purple_bg'),   # cell with flag
+            'bomb': get_color_by_name('white_text_red_bg'),
+            'closed': get_color_by_name('white_text_black_bg'),
+            'cursor': get_color_by_name('white_text_light_grey_bg'),
+            'flag': get_color_by_name('white_text_deep_purple_bg'),
         }
 
     def is_open(self):
@@ -100,15 +98,13 @@ class Cell:
         elif not self.is_open():
             color = self.colors['closed']
         else:
-            # we have colors only for [0, 4] bombs,
-            # so if cell have 5-8 bombs around, we just use the deepest color
             num_of_bombs = min(self.bombs_around(), 4)
             color = self.colors[num_of_bombs]
 
         self.state['background_color'] = color
-        self._update_cell_color()
+        self.update_cell_color()
 
-    def _update_cell_color(self):
+    def update_cell_color(self):
         color = self.get_background_color()
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()
