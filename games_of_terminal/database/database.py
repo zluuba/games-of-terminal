@@ -43,8 +43,10 @@ class Connection:
 
 
 def check_tables_exist():
+    query = queries.get_all_tables_query
+
     with Connection() as c:
-        c.cursor.execute(queries.get_all_tables_query)
+        c.cursor.execute(query)
         existing_tables = c.cursor.fetchall()
 
     return len(existing_tables) == len(queries.TABLES)
@@ -63,17 +65,15 @@ def create_and_fill_db_tables():
 
 
 def add_init_stats_to_db():
+    query = queries.insert_game_stats_query
+
     with open(GAME_STATS_FILE_PATH, 'r') as file:
         stats_data = load(file)
 
     with Connection(autocommit=True) as c:
         for game_name, stats in stats_data.items():
             stats_data = dumps(stats)
-
-            c.cursor.execute(
-                queries.insert_game_stats_query,
-                (game_name, stats_data),
-            )
+            c.cursor.execute(query, (game_name, stats_data))
 
 
 def add_achievements_to_db():
@@ -92,19 +92,18 @@ def add_achievements_to_db():
 def add_achievement_to_db(achievement, game_name, conn):
     achievement_name = achievement['name']
     description = achievement['description']
-    status = achievement['status']
 
     conn.cursor.execute(
         queries.insert_or_ignore_achievement_query,
-        (game_name, achievement_name, description, status),
+        (game_name, achievement_name, description),
     )
 
 
 def get_game_stat(game_name, stat, unique=False):
     stat_name = 'game_stats' if unique else stat
+    query = queries.get_game_stat_query(stat_name)
 
     with Connection() as c:
-        query = queries.get_game_stat_query(stat_name)
         c.cursor.execute(query, (game_name,))
         data = c.cursor.fetchone()[0]
 
@@ -149,10 +148,10 @@ def update_game_stats(game_name, stat_name, value, save_mode=False):
 
 def get_games_statistic():
     games_statistic = dict()
+    query = queries.get_game_statistic_query
 
     with Connection() as c:
         for game_name in GAMES:
-            query = queries.get_game_statistic_query
             c.cursor.execute(query, (game_name,))
             game_statistic = c.cursor.fetchall()[0]
 
@@ -166,3 +165,27 @@ def get_games_statistic():
             )
 
     return games_statistic
+
+
+def get_all_achievements():
+    with Connection() as c:
+        c.cursor.execute(queries.get_all_achievements_query)
+        all_achievements_list = c.cursor.fetchall()
+
+    all_achievements = dict()
+
+    for achievement in all_achievements_list:
+        game_name, name, description, status, date_received = achievement
+
+        if game_name not in all_achievements:
+            all_achievements[game_name] = []
+
+        achievement_dict = dict(
+            name=name,
+            status=status,
+            description=description,
+            date_received=date_received,
+        )
+        all_achievements[game_name].append(achievement_dict)
+
+    return all_achievements

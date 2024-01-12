@@ -31,10 +31,9 @@ insert_or_ignore_achievement_query = '''
 INSERT OR IGNORE INTO Achievements (
     game_name,
     name,
-    description,
-    status
+    description
 )
-VALUES (?, ?, ?, ?);
+VALUES (?, ?, ?);
 '''
 
 insert_game_stats_query = '''
@@ -45,15 +44,19 @@ INSERT INTO games (
 VALUES (?, ?);
 '''
 
-update_achievements_table_query = """
-"""
-
-
 get_game_statistic_query = '''
 SELECT total_games, total_time, game_stats
 FROM Games
 WHERE game_name = ?;
 '''
+
+get_all_achievements_query = '''
+SELECT game_name, name, description, status, date_received
+FROM Achievements;
+'''
+
+update_achievements_table_query = """
+"""
 
 
 def get_game_stat_query(stat_name):
