@@ -1,5 +1,6 @@
-from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.constants import KEYS, BASE_OFFSET
+from games_of_terminal.database.database import update_game_stats
+from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 from games_of_terminal.utils import (
@@ -7,7 +8,6 @@ from games_of_terminal.utils import (
     update_total_time_count,
     update_total_games_count,
 )
-from games_of_terminal.database.database import update_game_stats
 
 from random import choice, uniform
 from time import time
@@ -24,10 +24,10 @@ class MinesweeperGame(GameEngine):
     def setup_game_field(self):
         hide_cursor()
 
-        self._draw_game_field()
-        self._plant_bombs()
-        self._set_bombs_around_counter()
-        self._open_first_empty_cell()
+        self.draw_game_field()
+        self.plant_bombs()
+        self.set_bombs_around_counter()
+        self.open_first_empty_cell()
 
         self.show_game_status()
         self.draw_logo()
@@ -58,11 +58,11 @@ class MinesweeperGame(GameEngine):
 
         if key in DIRECTIONS:
             offset = DIRECTIONS[key]
-            self._slide_field(*offset)
+            self.slide_field(*offset)
         elif key == KEYS['q']:
-            self._switch_flag()
+            self.switch_flag()
         elif key in KEYS['enter']:
-            self._show_cell(self.current_cell)
+            self.show_cell(self.current_cell)
 
     @property
     def current_cell(self):
@@ -72,11 +72,10 @@ class MinesweeperGame(GameEngine):
     def tips(self):
         return {'flags': self.flags}
 
-    def _draw_game_field(self):
+    def draw_game_field(self):
         lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
         cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
 
-        # initial coordinates of the upper left corner (centered)
         y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2
         x = begin_x = (self.game_area.width - (cols * CELL_WIDTH)) // 2
 
@@ -87,7 +86,7 @@ class MinesweeperGame(GameEngine):
 
         for _ in range(lines):
             for _ in range(cols):
-                cell = self._create_cell(y, x)
+                cell = self.create_cell(y, x)
                 self.cells[(y, x)] = cell
 
                 x += CELL_WIDTH
@@ -95,13 +94,13 @@ class MinesweeperGame(GameEngine):
             y += CELL_HEIGHT
             x = begin_x
 
-    def _create_cell(self, y, x):
+    def create_cell(self, y, x):
         field_box = self.game_area.box.subwin(CELL_HEIGHT, CELL_WIDTH, y, x)
         cell = Cell(field_box, (y, x))
         cell.set_background_color()
         return cell
 
-    def _slide_field(self, y_offset, x_offset):
+    def slide_field(self, y_offset, x_offset):
         y, x = self.current_coordinates
 
         new_y = y + y_offset
@@ -115,7 +114,7 @@ class MinesweeperGame(GameEngine):
             self.current_coordinates = new_coordinates
             self.current_cell.select()
 
-    def _plant_bombs(self):
+    def plant_bombs(self):
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
 
@@ -132,7 +131,7 @@ class MinesweeperGame(GameEngine):
                 cell.set_bomb()
                 bombs_count -= 1
 
-    def _set_bombs_around_counter(self):
+    def set_bombs_around_counter(self):
         for coordinates, cell in self.cells.items():
             if cell.is_bomb():
                 continue
@@ -150,15 +149,18 @@ class MinesweeperGame(GameEngine):
             cell.set_bombs_around_number(bombs)
             cell.set_background_color()
 
-    def _open_first_empty_cell(self):
-        # TODO add (if not empty_cells) exclude cells with bombs
+    def open_first_empty_cell(self):
+        empty_cells = self.get_empty_cells()
 
-        empty_cells = self._get_empty_cells()
+        if not empty_cells:
+            self.stats.is_restart = True
+            return
+
         first_empty_cell = choice(empty_cells)
         first_empty_cell.open_cell()
         first_empty_cell.set_background_color()
 
-    def _get_empty_cells(self):
+    def get_empty_cells(self):
         empty_cells = []
 
         for cell in self.cells.values():
@@ -167,12 +169,12 @@ class MinesweeperGame(GameEngine):
 
         return empty_cells
 
-    def _show_cell(self, cell):
+    def show_cell(self, cell):
         if cell.have_flag():
             return
 
         if cell.is_empty() and not cell.bombs_around():
-            self._open_near_empty_cells(cell)
+            self.open_near_empty_cells(cell)
         if not cell.is_open():
             cell.show_cell()
         if cell.is_bomb():
@@ -183,7 +185,7 @@ class MinesweeperGame(GameEngine):
         cell.hide_cell()
         self.check_to_win()
 
-    def _switch_flag(self):
+    def switch_flag(self):
         if self.current_cell.is_open():
             return
         if not self.flags and not self.current_cell.have_flag():
@@ -208,7 +210,7 @@ class MinesweeperGame(GameEngine):
 
         self.check_to_win()
 
-    def _open_near_empty_cells(self, cell):
+    def open_near_empty_cells(self, cell):
         y, x = cell.coordinates
 
         for y_offset, x_offset in CELL_OFFSETS:
@@ -230,22 +232,22 @@ class MinesweeperGame(GameEngine):
             if near_cell.bombs_around() > 0:
                 continue
 
-            self._open_near_empty_cells(near_cell)
+            self.open_near_empty_cells(near_cell)
 
-    def _is_all_cells_open(self):
+    def is_all_cells_open(self):
         for cell in self.cells.values():
             if not cell.is_open() and not cell.have_flag():
                 return False
         return True
 
-    def _is_no_unnecessary_flags(self):
+    def is_no_unnecessary_flags(self):
         for cell in self.cells.values():
             if cell.have_flag() and not cell.is_bomb():
                 return False
         return True
 
     def check_to_win(self):
-        if self._is_all_cells_open() and self._is_no_unnecessary_flags():
+        if self.is_all_cells_open() and self.is_no_unnecessary_flags():
             self.stats.game_status = 'user_win'
 
     def save_game_data(self, is_game_over=True):
