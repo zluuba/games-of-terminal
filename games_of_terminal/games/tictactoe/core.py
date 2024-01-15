@@ -6,6 +6,7 @@ from games_of_terminal.games.tictactoe.constants import (
     CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
     BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
 )
+from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -17,6 +18,9 @@ from time import sleep, time
 
 
 class TicTacToeGame(GameEngine):
+    def __repr__(self):
+        return '<TicTacToeGame>'
+
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
@@ -34,6 +38,7 @@ class TicTacToeGame(GameEngine):
         self.show_game_status()
         self.draw_game_field()
 
+    @log
     def start_new_game(self):
         self.current_cell.select()
 
@@ -50,6 +55,7 @@ class TicTacToeGame(GameEngine):
                 self.ask_for_restart()
                 return
 
+    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -120,6 +126,7 @@ class TicTacToeGame(GameEngine):
             y += self.cell_height
             x = begin_x
 
+    @log
     def slide_field(self, key):
         y, x = self.current_coordinates
         base_y_offset, base_x_offset = DIRECTIONS[key]
@@ -135,11 +142,13 @@ class TicTacToeGame(GameEngine):
             self.current_coordinates = new_coordinates
             self.current_cell.select()
 
+    @log
     def user_move(self):
         self.current_cell.owner = 'user'
         self.user_moves.append(self.current_cell.field_number)
         self.update_game_status()
 
+    @log
     def computer_move(self):
         if self.stats.game_status != 'game_active':
             return
@@ -192,6 +201,7 @@ class TicTacToeGame(GameEngine):
                 return False
         return True
 
+    @log
     def update_game_status(self):
         if self.is_player_win('user'):
             self.stats.game_status = 'user_win'
@@ -200,6 +210,7 @@ class TicTacToeGame(GameEngine):
         elif self.is_all_cells_occupied():
             self.stats.game_status = 'tie'
 
+    @log
     def save_game_data(self, is_game_over=True):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)

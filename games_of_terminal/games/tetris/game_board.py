@@ -3,15 +3,11 @@ from games_of_terminal.games.tetris.constants import (
     FIELD_WIDTH, CELL_WIDTH, CELL_HEIGHT,
 )
 from games_of_terminal.sub_window import SubWindow
-from games_of_terminal.utils import (
-    init_curses_colors, get_color_by_name,
-)
+from games_of_terminal.utils import get_color_by_name
 
 
 class TetrisBoard:
     def __init__(self, parent_window):
-        init_curses_colors()
-
         self.height = parent_window.height
         self.width = FIELD_WIDTH * CELL_WIDTH
         self.begin_y = None
@@ -24,6 +20,9 @@ class TetrisBoard:
         self.win = self.board_window.box
 
         self.draw_background()
+
+    def __repr__(self):
+        return f'<TetrisBoard: {self.height} x {self.width}>'
 
     def create_board_window(self, parent_window):
         window_width = self.width + BASE_OFFSET

@@ -1,10 +1,8 @@
-from games_of_terminal.utils import init_curses_colors, get_color_by_name
+from games_of_terminal.utils import get_color_by_name
 
 
 class Cell:
     def __init__(self, field_box, coordinates):
-        init_curses_colors()
-
         self.field_box = field_box
         self.coordinates = coordinates
 
@@ -128,7 +126,8 @@ class Cell:
 
             if num_of_bombs:
                 color = self.get_background_color()
-                self.field_box.addstr(center_x, center_y, str(num_of_bombs), color)
+                self.field_box.addstr(center_x, center_y,
+                                      str(num_of_bombs), color)
 
         self.set_background_color()
         self.field_box.refresh()

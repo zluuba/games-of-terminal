@@ -11,6 +11,7 @@ from games_of_terminal.games.tetris.constants import (
     DOWN, SCORES, LEVELS, GAME_TIPS,
     LEVEL_SPEED_DIFF,
 )
+from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -23,6 +24,9 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
+    def __repr__(self):
+        return '<TetrisGame>'
+
     def setup_game_stats(self):
         self.block = None
         self.next_block = None
@@ -55,6 +59,7 @@ class TetrisGame(GameEngine):
 
         self.time = time()
 
+    @log
     def start_new_game(self):
         while True:
             self.create_block()
@@ -89,6 +94,7 @@ class TetrisGame(GameEngine):
         data = get_game_stat('Tetris', 'best_score', unique=True)
         self.stats.best_score = int(data)
 
+    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -183,6 +189,7 @@ class TetrisGame(GameEngine):
         if self.block.is_block_placed_in_land():
             self.stats.game_status = 'user_lose'
 
+    @log
     def get_new_block(self):
         block_shape_name = choice(list(BLOCKS))
         y, x = 1, self.board.width // 2
@@ -223,6 +230,7 @@ class TetrisGame(GameEngine):
                         return True
         return False
 
+    @log
     def save_game_data(self):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)
@@ -232,8 +240,9 @@ class TetrisGame(GameEngine):
 
         self.update_lines_removed_count()
 
+    @log
     def update_lines_removed_count(self):
-        update_game_stats(
-            self.game_name, 'lines_removed',
-            self.lines_removed,
-        )
+        stat_name = 'lines_removed'
+
+        if self.lines_removed:
+            update_game_stats(self.game_name, stat_name, self.lines_removed)

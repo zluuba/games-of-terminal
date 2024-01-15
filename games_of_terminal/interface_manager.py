@@ -3,9 +3,10 @@ from games_of_terminal.constants import (
     BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
     DEFAULT_COLOR, MESSAGES,
 )
+from games_of_terminal.log import log
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
-    draw_message, init_curses_colors,
+    draw_message,
     too_small_window_handler,
 )
 
@@ -14,13 +15,16 @@ from time import sleep
 
 
 class InterfaceManager:
+    @log
     def __init__(self, canvas, only_main_win=False):
-        init_curses_colors()
-
         self.canvas = canvas
-        self._setup(only_main_win=only_main_win)
+        self.only_main_win = only_main_win
+        self._setup()
 
-    def _setup(self, only_main_win=False):
+    def __repr__(self):
+        return f'<InterfaceManager>'
+
+    def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
         too_small_window_handler(self.height, self.width)
         self.canvas.bkgd(' ', DEFAULT_COLOR)
@@ -28,7 +32,7 @@ class InterfaceManager:
         self._set_window_sizes()
         self._init_main_window()
 
-        if not only_main_win:
+        if not self.only_main_win:
             self._init_subwindows()
 
     def _init_main_window(self):

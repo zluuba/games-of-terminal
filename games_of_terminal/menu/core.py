@@ -1,6 +1,7 @@
 from games_of_terminal.database.database import create_and_fill_db_tables
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
+from games_of_terminal.log import log
 from games_of_terminal.menu.constants import (
     TOP_SWORD_LEN, LOGO_MENU, LOGO_MENU_LEN,
     BOTTOM_SWORD_LEN, MENU_MAX_LEN, ANIMATION_SPEED,
@@ -21,6 +22,7 @@ from sys import exit
 
 
 class Menu(InterfaceManager):
+    @log
     def __init__(self, canvas):
         super().__init__(canvas, only_main_win=True)
 
@@ -28,6 +30,9 @@ class Menu(InterfaceManager):
         self.current_row = 0
 
         self.setup_vars()
+
+    def __repr__(self):
+        return f'<Menu>'
 
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -54,6 +59,7 @@ class Menu(InterfaceManager):
         # self.default_logo_fill = LOGO_FILL['default']
         # self.logo_fill = LOGO_FILL['default']
 
+    @log
     def run_menu_loop(self):
         self.initialize_menu()
 
@@ -116,6 +122,7 @@ class Menu(InterfaceManager):
 
             draw_message(y, x, self.window, menu_item_name, color)
 
+    @log
     def run_selected_menu_item(self):
         chosen_menu_item = MENU_ITEMS[self.current_row]
         menu_item_name = chosen_menu_item['name']
@@ -150,7 +157,7 @@ class Menu(InterfaceManager):
         begin_x = (self.width // 2) - (len(CREATOR_NAME) // 2)
 
         draw_message(begin_y, begin_x, self.window,
-                          CREATOR_NAME, color)
+                     CREATOR_NAME, color)
 
     def draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)
@@ -158,7 +165,7 @@ class Menu(InterfaceManager):
         begin_x = (self.width // 2) - (len(goodbye_message) // 2)
 
         draw_message(begin_y, begin_x, self.window,
-                          goodbye_message, DEFAULT_COLOR)
+                     goodbye_message, DEFAULT_COLOR)
 
     def set_window_redrawing_speed(self):
         self.window.timeout(self.fire_animation_speed)
@@ -200,6 +207,7 @@ class Menu(InterfaceManager):
 
             self.window.addstr(y, x, char, color)
 
+    @log
     def exit(self):
         self.window.clear()
         self.draw_goodbye_message()

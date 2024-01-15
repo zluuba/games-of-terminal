@@ -3,6 +3,7 @@ from games_of_terminal.database.database import update_game_stats
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
+from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -14,6 +15,9 @@ from time import time
 
 
 class MinesweeperGame(GameEngine):
+    def __repr__(self):
+        return f'<MinesweeperGame>'
+
     def setup_game_stats(self):
         self.start_time = time()
 
@@ -37,6 +41,7 @@ class MinesweeperGame(GameEngine):
         )
         self.show_game_status()
 
+    @log
     def start_new_game(self):
         self.current_cell.select()
 
@@ -53,6 +58,7 @@ class MinesweeperGame(GameEngine):
                 self.ask_for_restart()
                 return
 
+    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -100,6 +106,7 @@ class MinesweeperGame(GameEngine):
         cell.set_background_color()
         return cell
 
+    @log
     def slide_field(self, y_offset, x_offset):
         y, x = self.current_coordinates
 
@@ -185,6 +192,7 @@ class MinesweeperGame(GameEngine):
         cell.hide_cell()
         self.check_to_win()
 
+    @log
     def switch_flag(self):
         if self.current_cell.is_open():
             return
@@ -250,6 +258,7 @@ class MinesweeperGame(GameEngine):
         if self.is_all_cells_open() and self.is_no_unnecessary_flags():
             self.stats.game_status = 'user_win'
 
+    @log
     def save_game_data(self, is_game_over=True):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)

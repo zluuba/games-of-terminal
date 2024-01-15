@@ -1,6 +1,7 @@
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES
 from games_of_terminal.database.database import get_games_statistic
 from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.log import log
 from games_of_terminal.settings.statistics.constants import (
     TITLE, UPWARDS_ARROW, DOWNWARDS_ARROW, TOP_OFFSET,
     BOTTOM_OFFSET, BASE_OFFSET, ARROWS_OFFSET,
@@ -13,6 +14,7 @@ from datetime import timedelta
 
 
 class Statistics(InterfaceManager):
+    @log
     def __init__(self, canvas, settings_name):
         super().__init__(canvas, only_main_win=True)
 
@@ -40,6 +42,9 @@ class Statistics(InterfaceManager):
 
         self.arrow_x = self.get_arrow_x()
 
+    def __repr__(self):
+        return f'<Statistics>'
+
     def setup_vars(self):
         self.start_y = self.get_statistic_elements_start_y()
 
@@ -61,6 +66,7 @@ class Statistics(InterfaceManager):
     def get_statistic_elements_start_y(self):
         return self.logo_start_y + len(TITLE) + BASE_OFFSET
 
+    @log
     def run(self):
         self.draw_title()
         self.draw_arrows()
@@ -88,6 +94,7 @@ class Statistics(InterfaceManager):
         self.draw_arrows()
         self.show_statistics()
 
+    @log
     def update_statistics_pagination(self, direction):
         new_pagination_offset = self.pagination_offset + direction
 

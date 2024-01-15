@@ -1,16 +1,12 @@
 from games_of_terminal.games.tetris.constants import (
     BLOCKS, BLOCK_COLORS, CELL_HEIGHT, CELL_WIDTH, OFFSETS,
 )
-from games_of_terminal.utils import (
-    init_curses_colors, get_color_by_name,
-)
+from games_of_terminal.utils import get_color_by_name
 from copy import deepcopy
 
 
 class TetrisBlock:
     def __init__(self, name, y, x, board):
-        init_curses_colors()
-
         self.y = y
         self.x = x
         self.name = name
@@ -23,6 +19,9 @@ class TetrisBlock:
 
         self.height = len(self.blueprint)
         self.width = len(self.blueprint[0])
+
+    def __repr__(self):
+        return f'<TetrisBlock: {self.name}>'
 
     def move(self, direction):
         y_offset, x_offset = OFFSETS[direction]

@@ -1,6 +1,7 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import get_game_stat
 from games_of_terminal.games.engine import GameEngine
+from games_of_terminal.log import log
 from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
 )
@@ -16,6 +17,9 @@ from time import time
 
 
 class SnakeGame(GameEngine):
+    def __repr__(self):
+        return f'<SnakeGame>'
+
     def setup_game_stats(self):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
@@ -46,6 +50,7 @@ class SnakeGame(GameEngine):
             game_tips=GAME_TIPS,
         )
 
+    @log
     def start_new_game(self):
         while True:
             key = self.window.getch()
@@ -64,6 +69,7 @@ class SnakeGame(GameEngine):
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
                 self.stats.game_status = 'user_lose'
 
+    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -93,6 +99,7 @@ class SnakeGame(GameEngine):
         self.food = self.get_food_coords()
         self.game_area.box.addstr(*self.food, FOOD_SKIN)
 
+    @log
     def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
 
@@ -134,6 +141,7 @@ class SnakeGame(GameEngine):
 
         self.game_area.box.refresh()
 
+    @log
     def save_game_data(self):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)

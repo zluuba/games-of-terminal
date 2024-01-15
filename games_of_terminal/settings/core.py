@@ -1,6 +1,7 @@
-from games_of_terminal.settings.constants import TITLE, ITEMS, ITEMS_LEN
-from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR
+from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.log import log
+from games_of_terminal.settings.constants import TITLE, ITEMS, ITEMS_LEN
 
 from games_of_terminal.utils import (
     draw_message, hide_cursor, get_color_by_name,
@@ -11,12 +12,16 @@ from random import randint, choice
 
 
 class Settings(InterfaceManager):
+    @log
     def __init__(self, canvas, name):
         super().__init__(canvas, only_main_win=True)
 
         self.name = name
         self.current_row = 0
         self.setup_vars()
+
+    def __repr__(self):
+        return f'<InterfaceManager>'
 
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -29,6 +34,7 @@ class Settings(InterfaceManager):
         self.noise_color = get_color_by_name('grey_text_black_bg')
         self.chars_per_line = self.width // 4
 
+    @log
     def run(self):
         self.initialize_settings()
 
@@ -55,6 +61,7 @@ class Settings(InterfaceManager):
         self.setup_vars()
         self.initialize_settings()
 
+    @log
     def open_selected_settings(self):
         chosen_settings = ITEMS[self.current_row]
         settings_name = chosen_settings['name']

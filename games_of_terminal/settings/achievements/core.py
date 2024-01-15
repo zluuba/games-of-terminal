@@ -1,6 +1,7 @@
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES
 from games_of_terminal.database.database import get_all_achievements
 from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.log import log
 from games_of_terminal.settings.achievements.constants import (
     TITLE, BASE_OFFSET, TOP_OFFSET,
     LEFT_ARROW, RIGHT_ARROW, SIDE_ARROW_OFFSET,
@@ -15,6 +16,7 @@ from math import ceil
 
 
 class Achievements(InterfaceManager):
+    @log
     def __init__(self, canvas, settings_name):
         super().__init__(canvas, only_main_win=True)
 
@@ -33,6 +35,9 @@ class Achievements(InterfaceManager):
         self.curr_game_ind = 0
         self.pagination_offset = 0
         self.max_pagination_offset = self.get_max_pagination_offset()
+
+    def __repr__(self):
+        return f'<Achievements>'
 
     @property
     def curr_achievements_list(self):
@@ -69,6 +74,7 @@ class Achievements(InterfaceManager):
     def chosen_game_game(self):
         return GAMES[self.curr_game_ind]
 
+    @log
     def run(self):
         self.draw_title()
         self.show_achievements()
@@ -170,6 +176,7 @@ class Achievements(InterfaceManager):
             self.window, right_arrow, DEFAULT_COLOR,
         )
 
+    @log
     def update_achievements_pagination(self, direction):
         new_pagination_offset = self.pagination_offset + direction
 
@@ -181,6 +188,7 @@ class Achievements(InterfaceManager):
         self.pagination_offset = new_pagination_offset
         self.show_achievements()
 
+    @log
     def update_current_game_index(self, direction):
         new_curr_game_index = self.curr_game_ind + direction
 

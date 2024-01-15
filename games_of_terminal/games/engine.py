@@ -4,6 +4,7 @@ from games_of_terminal.constants import (
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.sub_window import SubWindow
+from games_of_terminal.log import log
 from games_of_terminal.utils import (
     get_game_tips, draw_message,
     clear_field_line, get_color_by_name,
@@ -14,11 +15,16 @@ from time import sleep
 
 
 class GameEngine(InterfaceManager):
+    @log
     def __init__(self, canvas, game_name):
         super().__init__(canvas)
         self.game_name = game_name
         self.stats = GameStats()
 
+    def __repr__(self):
+        return f'<GameEngine for {self.game_name}>'
+
+    @log
     def run(self):
         while True:
             self.setup_game_stats()

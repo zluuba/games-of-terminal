@@ -1,4 +1,8 @@
+from games_of_terminal.log import log
+
+
 class SubWindow:
+    @log
     def __init__(self, parent_window, height, width, begin_y, begin_x,
                  show_borders=True):
 
@@ -15,6 +19,9 @@ class SubWindow:
 
         if show_borders:
             self.show_borders()
+
+    def __repr__(self):
+        return f'<SubWindow>'
 
     def set_border_coordinates(self):
         self.top_border = self.begin_y - 1

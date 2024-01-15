@@ -5,15 +5,13 @@ from games_of_terminal.games.tetris.constants import (
 )
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
-    init_curses_colors, get_color_by_name,
+    get_color_by_name,
     draw_message,
 )
 
 
 class NextBlockArea:
     def __init__(self, parent_window, game_board):
-        init_curses_colors()
-
         self.height = NEXT_BLOCK_AREA_HEIGHT * CELL_HEIGHT
         self.width = NEXT_BLOCK_AREA_HEIGHT * CELL_WIDTH
 
@@ -22,6 +20,9 @@ class NextBlockArea:
             game_board.begin_y + 1, game_board.begin_x + game_board.width + 1,
         )
         self.win = self.next_block_area.box
+
+    def __repr__(self):
+        return f'<NextBlockArea: {self.height} x {self.width}>'
 
     def draw_cell(self, y, x, color_name, size=1):
         color = get_color_by_name(color_name)

@@ -14,9 +14,9 @@ from curses import (
     curs_set,
 )
 from random import choice
-from time import time
 from re import match
 from sys import exit
+from time import time
 
 
 def init_curses_colors():

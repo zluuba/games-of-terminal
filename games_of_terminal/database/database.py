@@ -1,25 +1,26 @@
 from games_of_terminal.database import queries
 from games_of_terminal.constants import GAMES
+from games_of_terminal.log import log
 
-from sqlite3 import connect
 from json import load, loads, dumps
-from pathlib import Path
 from os import path
+from pathlib import Path
+from sqlite3 import connect
 
 
-def get_full_path(filename):
-    return str(path.join(BASE_DIR, filename))
+def get_full_path(base_dir, filename):
+    return str(path.join(base_dir, filename))
 
 
 DB_FILENAME = 'got_games.db'
 BASE_DIR = Path(__file__).parents[1]
-DB_FILE_PATH = get_full_path(DB_FILENAME)
+DB_FILE_PATH = get_full_path(BASE_DIR, DB_FILENAME)
 
 ACHIEVEMENTS_FILE = 'data/achievements.json'
-ACHIEVEMENTS_FILE_PATH = get_full_path(ACHIEVEMENTS_FILE)
+ACHIEVEMENTS_FILE_PATH = get_full_path(BASE_DIR, ACHIEVEMENTS_FILE)
 
 GAME_STATS_FILE = 'data/game_statistics.json'
-GAME_STATS_FILE_PATH = get_full_path(GAME_STATS_FILE)
+GAME_STATS_FILE_PATH = get_full_path(BASE_DIR, GAME_STATS_FILE)
 
 
 class Connection:
@@ -42,6 +43,7 @@ class Connection:
         self.conn.close()
 
 
+@log
 def check_tables_exist():
     query = queries.get_all_tables_query
 
@@ -52,6 +54,7 @@ def check_tables_exist():
     return len(existing_tables) == len(queries.TABLES)
 
 
+@log
 def create_and_fill_db_tables():
     if check_tables_exist():
         return
@@ -89,6 +92,7 @@ def add_achievements_to_db():
                 add_achievement_to_db(achievement_data, game_name, c)
 
 
+@log
 def add_achievement_to_db(achievement, game_name, conn):
     achievement_name = achievement['name']
     description = achievement['description']
@@ -99,6 +103,7 @@ def add_achievement_to_db(achievement, game_name, conn):
     )
 
 
+@log
 def get_game_stat(game_name, stat, unique=False):
     stat_name = 'game_stats' if unique else stat
     query = queries.get_game_stat_query(stat_name)
@@ -114,6 +119,7 @@ def get_game_stat(game_name, stat, unique=False):
     return stats_data[stat]
 
 
+@log
 def update_game_stat(game_name, stat, value, save_mode=False):
     get_query_func = queries.update_game_stat_query
 
@@ -126,6 +132,7 @@ def update_game_stat(game_name, stat, value, save_mode=False):
         c.cursor.execute(query, (value, game_name))
 
 
+@log
 def update_game_stats(game_name, stat_name, value, save_mode=False):
     with Connection(autocommit=True) as c:
         query = queries.get_game_stat_query('game_stats')
