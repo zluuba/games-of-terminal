@@ -18,6 +18,7 @@ class MinesweeperGame(GameEngine):
     def __repr__(self):
         return f'<MinesweeperGame>'
 
+    @log
     def setup_game_stats(self):
         self.start_time = time()
 
@@ -25,6 +26,7 @@ class MinesweeperGame(GameEngine):
         self.flags = 0
         self.bombs = 0
 
+    @log
     def setup_game_field(self):
         hide_cursor()
 
@@ -58,7 +60,6 @@ class MinesweeperGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -78,6 +79,7 @@ class MinesweeperGame(GameEngine):
     def tips(self):
         return {'flags': self.flags}
 
+    @log
     def draw_game_field(self):
         lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
         cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
@@ -121,6 +123,7 @@ class MinesweeperGame(GameEngine):
             self.current_coordinates = new_coordinates
             self.current_cell.select()
 
+    @log
     def plant_bombs(self):
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
@@ -138,6 +141,7 @@ class MinesweeperGame(GameEngine):
                 cell.set_bomb()
                 bombs_count -= 1
 
+    @log
     def set_bombs_around_counter(self):
         for coordinates, cell in self.cells.items():
             if cell.is_bomb():
@@ -156,6 +160,7 @@ class MinesweeperGame(GameEngine):
             cell.set_bombs_around_number(bombs)
             cell.set_background_color()
 
+    @log
     def open_first_empty_cell(self):
         empty_cells = self.get_empty_cells()
 
@@ -176,6 +181,7 @@ class MinesweeperGame(GameEngine):
 
         return empty_cells
 
+    @log
     def show_cell(self, cell):
         if cell.have_flag():
             return
@@ -254,6 +260,7 @@ class MinesweeperGame(GameEngine):
                 return False
         return True
 
+    @log
     def check_to_win(self):
         if self.is_all_cells_open() and self.is_no_unnecessary_flags():
             self.stats.game_status = 'user_win'
@@ -267,6 +274,7 @@ class MinesweeperGame(GameEngine):
             self.update_bombs_defused_count()
             self.update_end_game_status_stat()
 
+    @log
     def update_end_game_status_stat(self):
         if self.stats.game_status == 'user_win':
             end_game_status_stat_name = 'total_wins'
@@ -275,6 +283,7 @@ class MinesweeperGame(GameEngine):
 
         update_game_stats(self.game_name, end_game_status_stat_name, 1)
 
+    @log
     def update_bombs_defused_count(self):
         bombs_defused = sum([
             1 for cell in self.cells.values()

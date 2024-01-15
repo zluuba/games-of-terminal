@@ -37,9 +37,11 @@ class GameEngine(InterfaceManager):
             self.reset_game_stats()
             self.reset_game_area()
 
+    @log
     def reset_game_stats(self):
         self.stats = GameStats()
 
+    @log
     def reset_game_area(self):
         self.game_area.box.erase()
         self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
@@ -61,6 +63,7 @@ class GameEngine(InterfaceManager):
         elif key == KEYS['restart']:
             self.stats.is_restart = True
 
+    @log
     def pause(self):
         self.stats.is_pause = not self.stats.is_pause
 
@@ -91,6 +94,7 @@ class GameEngine(InterfaceManager):
 
         draw_message(y, x, self.game_area.box, message, color)
 
+    @log
     def ask_for_restart(self):
         flash()
         self.show_game_status()

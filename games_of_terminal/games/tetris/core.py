@@ -27,6 +27,7 @@ class TetrisGame(GameEngine):
     def __repr__(self):
         return '<TetrisGame>'
 
+    @log
     def setup_game_stats(self):
         self.block = None
         self.next_block = None
@@ -40,6 +41,7 @@ class TetrisGame(GameEngine):
         self.start_time = time()
         self.lines_removed = 0
 
+    @log
     def setup_game_field(self):
         hide_cursor()
         self.window.nodelay(1)
@@ -62,10 +64,12 @@ class TetrisGame(GameEngine):
     @log
     def start_new_game(self):
         while True:
-            self.create_block()
-
             key = self.window.getch()
-            self.controller(key)
+
+            if not self.block:
+                self.create_block()
+            if key != -1:
+                self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data()
@@ -90,11 +94,11 @@ class TetrisGame(GameEngine):
             'Lines Removed': self.lines_removed,
         }
 
+    @log
     def set_best_score(self):
         data = get_game_stat('Tetris', 'best_score', unique=True)
         self.stats.best_score = int(data)
 
-    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -139,6 +143,7 @@ class TetrisGame(GameEngine):
         )
         self.board.draw_board()
 
+    @log
     def increase_level(self):
         if self.level == max(LEVELS):
             return
@@ -172,8 +177,6 @@ class TetrisGame(GameEngine):
         self.time = current_time
 
     def create_block(self):
-        if self.block:
-            return
         if self.next_block:
             self.block = self.next_block
             self.next_block = None
@@ -189,7 +192,6 @@ class TetrisGame(GameEngine):
         if self.block.is_block_placed_in_land():
             self.stats.game_status = 'user_lose'
 
-    @log
     def get_new_block(self):
         block_shape_name = choice(list(BLOCKS))
         y, x = 1, self.board.width // 2

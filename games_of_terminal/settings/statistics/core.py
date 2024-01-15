@@ -45,6 +45,7 @@ class Statistics(InterfaceManager):
     def __repr__(self):
         return f'<Statistics>'
 
+    @log
     def setup_vars(self):
         self.start_y = self.get_statistic_elements_start_y()
 
@@ -86,6 +87,7 @@ class Statistics(InterfaceManager):
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.update_statistics_pagination(1)
 
+    @log
     def redraw_window(self):
         self.setup_vars()
         self.window.clear()
@@ -131,6 +133,7 @@ class Statistics(InterfaceManager):
             self.window, down_arrow, DEFAULT_COLOR
         )
 
+    @log
     def show_statistics(self):
         game_name_color = get_color_by_name('yellow_text_black_bg')
         stat_y = self.start_y

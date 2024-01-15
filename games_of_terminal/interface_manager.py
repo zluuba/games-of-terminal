@@ -24,6 +24,7 @@ class InterfaceManager:
     def __repr__(self):
         return f'<InterfaceManager>'
 
+    @log
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
         too_small_window_handler(self.height, self.width)
@@ -35,12 +36,14 @@ class InterfaceManager:
         if not self.only_main_win:
             self._init_subwindows()
 
+    @log
     def _init_main_window(self):
         window_sizes = self.window_box_sizes.values()
         self.window = newwin(*window_sizes)
         self.window.nodelay(True)
         self.window.keypad(True)
 
+    @log
     def _init_subwindows(self):
         self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
         self.side_menu = SubWindow(self.window, *self.side_menu_box_sizes.values())
@@ -58,6 +61,7 @@ class InterfaceManager:
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
+    @log
     def resize_menu_win_handler(self, key):
         message = MESSAGES['win_resize_menu']
 
@@ -77,6 +81,7 @@ class InterfaceManager:
 
         self.redraw_window()
 
+    @log
     def resize_game_win_handler(self, key):
         messages = MESSAGES['win_resize_game']
 
@@ -103,6 +108,7 @@ class InterfaceManager:
     def redraw_window(self):
         pass
 
+    @log
     def _set_window_sizes(self, height=None, width=None):
         if not height:
             height = self.height

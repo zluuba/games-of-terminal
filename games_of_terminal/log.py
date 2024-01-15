@@ -37,17 +37,17 @@ def get_enter_func_message(func, args, kwargs):
     signature = ", ".join(args_repr + kwargs_repr)
 
     if signature:
-        return (f'Entering function {func.__name__} '
+        return (f'Entering function [{func.__name__}] '
                 f'from {func.__module__} with signature: {signature}.')
-    return f'Entering function {func.__name__} from {func.__module__}.'
+    return f'Entering function [{func.__name__}] from {func.__module__}.'
 
 
 def get_exit_func_message(func, result):
     if result:
-        return (f'Function {func.__name__} '
+        return (f'Function [{func.__name__}] '
                 f'from {func.__module__} returned result: {result}.')
     # func.__module__
-    return (f'Function {func.__name__} '
+    return (f'Function [{func.__name__}] '
             f'from {func.__module__} returned None.')
 
 
@@ -68,7 +68,6 @@ def log(func, base_logger=None, log_level='debug'):
 
         except Exception as e:
             logger.error(f'Exception raised in {func.__name__}. '
-                         f'Function dict: {func.__dict__}.'
                          f'Exception: {str(e)}.')
             raise e
 

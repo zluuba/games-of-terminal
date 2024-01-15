@@ -20,6 +20,7 @@ class SnakeGame(GameEngine):
     def __repr__(self):
         return f'<SnakeGame>'
 
+    @log
     def setup_game_stats(self):
         # initial position of the snake:
         # placed in the center of the game box, have 3 sections [y, x]
@@ -35,6 +36,7 @@ class SnakeGame(GameEngine):
 
         self.start_time = time()
 
+    @log
     def setup_game_field(self):
         hide_cursor()
         self.window.nodelay(1)
@@ -54,7 +56,9 @@ class SnakeGame(GameEngine):
     def start_new_game(self):
         while True:
             key = self.window.getch()
-            self.controller(key)
+
+            if key != -1:
+                self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data()
@@ -69,13 +73,13 @@ class SnakeGame(GameEngine):
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
                 self.stats.game_status = 'user_lose'
 
-    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
         if key in DIRECTIONS.keys():
             self.change_direction(key)
 
+    @log
     def set_best_score(self):
         data = get_game_stat('Snake', 'best_score', unique=True)
         self.stats.best_score = data
@@ -99,7 +103,6 @@ class SnakeGame(GameEngine):
         self.food = self.get_food_coords()
         self.game_area.box.addstr(*self.food, FOOD_SKIN)
 
-    @log
     def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
 

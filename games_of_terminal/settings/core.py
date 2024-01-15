@@ -23,6 +23,7 @@ class Settings(InterfaceManager):
     def __repr__(self):
         return f'<InterfaceManager>'
 
+    @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
 
@@ -57,6 +58,7 @@ class Settings(InterfaceManager):
             self.update_menu_display()
             self.window.refresh()
 
+    @log
     def redraw_window(self):
         self.setup_vars()
         self.initialize_settings()
@@ -70,6 +72,7 @@ class Settings(InterfaceManager):
         settings = settings_class(self.canvas, settings_name)
         settings.run()
 
+    @log
     def initialize_settings(self):
         self.window.clear()
         hide_cursor()

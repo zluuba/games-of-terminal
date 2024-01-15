@@ -21,6 +21,7 @@ class TicTacToeGame(GameEngine):
     def __repr__(self):
         return '<TicTacToeGame>'
 
+    @log
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
@@ -31,6 +32,7 @@ class TicTacToeGame(GameEngine):
 
         self.start_time = time()
 
+    @log
     def setup_game_field(self, initial=True):
         hide_cursor()
         self.draw_logo()
@@ -55,7 +57,6 @@ class TicTacToeGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-    @log
     def controller(self, key, pause_off=False):
         super().controller(key, pause_off)
 
@@ -101,6 +102,7 @@ class TicTacToeGame(GameEngine):
         cell.set_background_color()
         return cell
 
+    @log
     def draw_game_field(self):
         y = (self.game_area.height - (CELLS_IN_ROW * self.cell_height)) // 2
         x = (self.game_area.width - (CELLS_IN_ROW * self.cell_width)) // 2
@@ -218,6 +220,7 @@ class TicTacToeGame(GameEngine):
         if is_game_over:
             self.update_end_game_status_stat()
 
+    @log
     def update_end_game_status_stat(self):
         end_game_status_stat_name = 'total_ties'
         if self.stats.game_status == 'user_win':

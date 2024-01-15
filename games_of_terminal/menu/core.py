@@ -34,6 +34,7 @@ class Menu(InterfaceManager):
     def __repr__(self):
         return f'<Menu>'
 
+    @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
 
@@ -80,16 +81,19 @@ class Menu(InterfaceManager):
             self.update_menu_display()
             self.window.refresh()
 
+    @log
     def redraw_window(self):
         self.setup_vars()
         self.initialize_menu()
 
+    @log
     def initialize_menu(self):
         self.window.clear()
         hide_cursor()
         self.set_window_redrawing_speed()
         self.draw_menu()
 
+    @log
     def move_menu_selection(self, direction):
         self.current_row = max(
             0, min(self.current_row + direction, MENU_ITEMS_COUNT - 1)
@@ -100,6 +104,7 @@ class Menu(InterfaceManager):
         self.draw_fire_animation()
         self.show_menu_items_list()
 
+    @log
     def draw_menu(self):
         # draw static parts
         self.draw_logo_with_swords()
@@ -133,6 +138,7 @@ class Menu(InterfaceManager):
 
         self.handle_post_running_actions()
 
+    @log
     def handle_post_running_actions(self):
         flushinp()
         self.redraw_window()
