@@ -37,7 +37,7 @@ class GameEngine(InterfaceManager):
     def reset_game_area(self):
         self.game_area.box.erase()
         self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
-        # self.game_area.box.refresh()
+        self.game_area.box.refresh()
 
     def is_game_over(self):
         return self.stats.game_status != 'game_active'
@@ -60,11 +60,16 @@ class GameEngine(InterfaceManager):
 
         if self.stats.is_pause:
             self.show_pause_message()
-            key = self.window.getch()
 
-            while key != KEYS['pause']:
-                self.wait_for_keypress()
+            while True:
                 key = self.window.getch()
+                self.wait_for_keypress()
+
+                if key == KEYS['escape']:
+                    self.stats.is_exit = True
+                    return
+                elif key == KEYS['pause']:
+                    break
 
             self.stats.is_pause = not self.stats.is_pause
 
