@@ -133,7 +133,6 @@ class Statistics(InterfaceManager):
             self.window, down_arrow, DEFAULT_COLOR
         )
 
-    @log
     def show_statistics(self):
         game_name_color = get_color_by_name('yellow_text_black_bg')
         stat_y = self.start_y

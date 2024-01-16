@@ -47,6 +47,8 @@ DIRECTIONS = {
     KEY_DOWN: 'down',
 }
 
+FALLING_DIRECTION = 'down'
+
 OFFSETS = {
     'left': (0, -1),
     'right': (0, 1),

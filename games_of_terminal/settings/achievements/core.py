@@ -176,7 +176,6 @@ class Achievements(InterfaceManager):
             self.window, right_arrow, DEFAULT_COLOR,
         )
 
-    @log
     def update_achievements_pagination(self, direction):
         new_pagination_offset = self.pagination_offset + direction
 
@@ -188,7 +187,6 @@ class Achievements(InterfaceManager):
         self.pagination_offset = new_pagination_offset
         self.show_achievements()
 
-    @log
     def update_current_game_index(self, direction):
         new_curr_game_index = self.curr_game_ind + direction
 

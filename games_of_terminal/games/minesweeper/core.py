@@ -108,7 +108,6 @@ class MinesweeperGame(GameEngine):
         cell.set_background_color()
         return cell
 
-    @log
     def slide_field(self, y_offset, x_offset):
         y, x = self.current_coordinates
 
@@ -260,7 +259,6 @@ class MinesweeperGame(GameEngine):
                 return False
         return True
 
-    @log
     def check_to_win(self):
         if self.is_all_cells_open() and self.is_no_unnecessary_flags():
             self.stats.game_status = 'user_win'

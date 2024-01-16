@@ -9,7 +9,7 @@ from games_of_terminal.games.tetris.constants import (
     CELL_WIDTH, CELL_HEIGHT, BLOCKS,
     DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
     DOWN, SCORES, LEVELS, GAME_TIPS,
-    LEVEL_SPEED_DIFF,
+    LEVEL_SPEED_DIFF, FALLING_DIRECTION,
 )
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
@@ -32,13 +32,11 @@ class TetrisGame(GameEngine):
         self.block = None
         self.next_block = None
         self.board = None
-        self.falling_direction = 'down'
 
         self.level = 1
         self.time_interval = 1
-        self.time = time()
+        self.start_time = self.time = time()
 
-        self.start_time = time()
         self.lines_removed = 0
 
     @log
@@ -63,11 +61,11 @@ class TetrisGame(GameEngine):
 
     @log
     def start_new_game(self):
+        self.create_block()
+
         while True:
             key = self.window.getch()
 
-            if not self.block:
-                self.create_block()
             if key != -1:
                 self.controller(key)
 
@@ -84,6 +82,8 @@ class TetrisGame(GameEngine):
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
+            if not self.block:
+                self.create_block()
 
     @property
     def tips(self):
@@ -134,6 +134,9 @@ class TetrisGame(GameEngine):
             lines_count += 1
             self.board.remove_line(line_y)
 
+        if not lines_count:
+            return
+
         self.lines_removed += lines_count
         self.stats.score += SCORES[lines_count] * self.level
         self.increase_level()
@@ -177,6 +180,8 @@ class TetrisGame(GameEngine):
         self.time = current_time
 
     def create_block(self):
+        if self.block:
+            return
         if self.next_block:
             self.block = self.next_block
             self.next_block = None
@@ -208,7 +213,7 @@ class TetrisGame(GameEngine):
         current_time = time()
 
         if current_time - self.time >= self.time_interval:
-            self.block.move(self.falling_direction)
+            self.block.move(FALLING_DIRECTION)
             self.board.draw_board(self.block)
             self.time = current_time
 

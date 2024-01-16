@@ -1,8 +1,4 @@
-from games_of_terminal.log import log
-
-
 class SubWindow:
-    @log
     def __init__(self, parent_window, height, width, begin_y, begin_x,
                  show_borders=True):
 
