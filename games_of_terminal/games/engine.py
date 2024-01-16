@@ -50,7 +50,7 @@ class GameEngine(InterfaceManager):
     def is_game_over(self):
         return self.stats.game_status != 'game_active'
 
-    def controller(self, key, pause_off):
+    def controller(self, key, pause_on):
         if key == KEYS['escape']:
             self.stats.is_exit = True
             endwin()
@@ -58,7 +58,7 @@ class GameEngine(InterfaceManager):
             self.window.timeout(0)
             self.resize_game_win_handler(key)
             self.stats.is_restart = True
-        elif key == KEYS['pause'] and not pause_off:
+        elif key == KEYS['pause'] and pause_on:
             self.pause()
         elif key == KEYS['restart']:
             self.stats.is_restart = True
@@ -81,6 +81,7 @@ class GameEngine(InterfaceManager):
                     break
 
             self.stats.is_pause = not self.stats.is_pause
+            self.draw_game_window()
 
         self.window.timeout(150)
 
@@ -154,6 +155,9 @@ class GameEngine(InterfaceManager):
 
             if tips_type == 'state':
                 y += 1
+
+    def draw_game_window(self):
+        pass
 
     def setup_game_stats(self):
         pass

@@ -50,7 +50,7 @@ class MinesweeperGame(GameEngine):
         while True:
             key = self.window.getch()
             self.wait_for_keypress()
-            self.controller(key, pause_off=True)
+            self.controller(key, pause_on=False)
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data(is_game_over=False)
@@ -60,8 +60,8 @@ class MinesweeperGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-    def controller(self, key, pause_off=False):
-        super().controller(key, pause_off)
+    def controller(self, key, pause_on=True):
+        super().controller(key, pause_on)
 
         if key in DIRECTIONS:
             offset = DIRECTIONS[key]
@@ -272,7 +272,6 @@ class MinesweeperGame(GameEngine):
             self.update_bombs_defused_count()
             self.update_end_game_status_stat()
 
-    @log
     def update_end_game_status_stat(self):
         if self.stats.game_status == 'user_win':
             end_game_status_stat_name = 'total_wins'
@@ -281,7 +280,6 @@ class MinesweeperGame(GameEngine):
 
         update_game_stats(self.game_name, end_game_status_stat_name, 1)
 
-    @log
     def update_bombs_defused_count(self):
         bombs_defused = sum([
             1 for cell in self.cells.values()

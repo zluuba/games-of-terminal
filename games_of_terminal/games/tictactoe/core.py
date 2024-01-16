@@ -47,7 +47,7 @@ class TicTacToeGame(GameEngine):
         while True:
             key = self.window.getch()
             self.wait_for_keypress()
-            self.controller(key, pause_off=True)
+            self.controller(key, pause_on=False)
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data(is_game_over=False)
@@ -57,8 +57,8 @@ class TicTacToeGame(GameEngine):
                 self.ask_for_restart()
                 return
 
-    def controller(self, key, pause_off=False):
-        super().controller(key, pause_off)
+    def controller(self, key, pause_on=True):
+        super().controller(key, pause_on)
 
         if key in DIRECTIONS:
             self.slide_field(key)
@@ -220,7 +220,6 @@ class TicTacToeGame(GameEngine):
         if is_game_over:
             self.update_end_game_status_stat()
 
-    @log
     def update_end_game_status_stat(self):
         end_game_status_stat_name = 'total_ties'
         if self.stats.game_status == 'user_win':

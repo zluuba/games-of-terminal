@@ -99,8 +99,8 @@ class TetrisGame(GameEngine):
         data = get_game_stat('Tetris', 'best_score', unique=True)
         self.stats.best_score = int(data)
 
-    def controller(self, key, pause_off=False):
-        super().controller(key, pause_off)
+    def controller(self, key, pause_on=True):
+        super().controller(key, pause_on)
 
         if key == FLIP_BLOCK:
             self.block.flip()
@@ -247,7 +247,6 @@ class TetrisGame(GameEngine):
 
         self.update_lines_removed_count()
 
-    @log
     def update_lines_removed_count(self):
         stat_name = 'lines_removed'
 
