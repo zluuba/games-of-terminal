@@ -1,4 +1,4 @@
-from games_of_terminal.constants import KEYS
+from games_of_terminal.constants import KEYS, DEFAULT_COLOR
 from games_of_terminal.database.database import get_game_stat
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.log import log
@@ -10,6 +10,7 @@ from games_of_terminal.utils import (
     update_total_time_count,
     update_total_games_count,
     update_best_score,
+    draw_message,
 )
 
 from random import randint
@@ -45,6 +46,7 @@ class SnakeGame(GameEngine):
         self.put_food_on_the_field()
         self.set_best_score()
 
+        self.draw_game_window()
         self.draw_logo()
         self.show_game_status()
         self.show_side_menu_tips(
@@ -73,8 +75,21 @@ class SnakeGame(GameEngine):
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
                 self.stats.game_status = 'user_lose'
 
-    def controller(self, key, pause_off=False):
-        super().controller(key, pause_off)
+    def draw_game_window(self):
+        self.game_area.box.erase()
+        self.game_area.show_borders()
+
+        if self.food:
+            draw_message(*self.food, self.game_area.box,
+                         FOOD_SKIN, DEFAULT_COLOR)
+
+        if self.snake:
+            for y, x in self.snake:
+                draw_message(y, x, self.game_area.box,
+                             SNAKE_SKIN, DEFAULT_COLOR)
+
+    def controller(self, key, pause_on=True):
+        super().controller(key, pause_on)
 
         if key in DIRECTIONS.keys():
             self.change_direction(key)
@@ -92,8 +107,15 @@ class SnakeGame(GameEngine):
         }
 
     def get_food_coords(self):
-        food = [randint(self.game_area.top_border + 1, self.game_area.bottom_border - 1),
-                randint(self.game_area.left_border + 1, self.game_area.right_border - 1)]
+        food_y = randint(
+            self.game_area.top_border + 1,
+            self.game_area.bottom_border - 1,
+        )
+        food_x = randint(
+            self.game_area.left_border + 1,
+            self.game_area.right_border - 1,
+        )
+        food = [food_y, food_x]
 
         if food in self.snake:
             return self.get_food_coords()
@@ -101,7 +123,8 @@ class SnakeGame(GameEngine):
 
     def put_food_on_the_field(self):
         self.food = self.get_food_coords()
-        self.game_area.box.addstr(*self.food, FOOD_SKIN)
+        draw_message(*self.food, self.game_area.box,
+                     FOOD_SKIN, DEFAULT_COLOR)
 
     def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
@@ -113,8 +136,10 @@ class SnakeGame(GameEngine):
         return self.snake[0] in self.snake[1:]
 
     def is_snake_touch_the_border(self):
-        return (self.snake[0][0] in [self.game_area.top_border, self.game_area.bottom_border]) or \
-               (self.snake[0][1] in [self.game_area.left_border, self.game_area.right_border])
+        return (self.snake[0][0] in [self.game_area.top_border,
+                                     self.game_area.bottom_border]) or \
+               (self.snake[0][1] in [self.game_area.left_border,
+                                     self.game_area.right_border])
 
     def move_snake(self):
         snake_head = self.snake[0]
@@ -129,7 +154,8 @@ class SnakeGame(GameEngine):
             snake_head = [snake_head[0] + 1, snake_head[1]]
 
         self.snake.insert(0, snake_head)
-        self.game_area.box.addstr(*snake_head, SNAKE_SKIN)
+        draw_message(*snake_head, self.game_area.box,
+                     SNAKE_SKIN, DEFAULT_COLOR)
 
         if snake_head == self.food:
             self.stats.score += 1
@@ -140,7 +166,9 @@ class SnakeGame(GameEngine):
             )
         else:
             snake_tail = self.snake.pop()
-            self.game_area.box.addstr(*snake_tail, ' ')
+            empty_space = ' '
+            draw_message(*snake_tail, self.game_area.box,
+                         empty_space, DEFAULT_COLOR)
 
         self.game_area.box.refresh()
 
