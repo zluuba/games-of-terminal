@@ -5,8 +5,9 @@ TABLES = {
             game_name TEXT NOT NULL,
             total_games INTEGER DEFAULT 0 NOT NULL,
             total_time INTEGER DEFAULT 0 NOT NULL,
+            game_stats TEXT DEFAULT '',
             last_game_state TEXT DEFAULT '',
-            game_stats TEXT DEFAULT ''
+            settings TEXT DEFAULT ''
         );
     ''',
     'Achievements': '''
