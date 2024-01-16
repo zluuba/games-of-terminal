@@ -22,7 +22,7 @@ def get_logger(name='GOT'):
         filename=filename,
         filemode='w',
         format='%(asctime)s : %(levelname)s : %(message)s',
-        datefmt='%H:%M:%S',
+        datefmt='%Y-%m-%d, %H:%M:%S',
         level=logging.DEBUG,
     )
     return logging.getLogger(name)
@@ -38,37 +38,44 @@ def get_enter_func_message(func, args, kwargs):
 
     if signature:
         return (f'Entering function [{func.__name__}] '
-                f'from {func.__module__} with signature: {signature}.')
-    return f'Entering function [{func.__name__}] from {func.__module__}.'
+                f'with signature: {signature}. '
+                f'Module: {func.__module__}.')
+    return (f'Entering function [{func.__name__}]. '
+            f'Module: {func.__module__}.')
 
 
 def get_exit_func_message(func, result):
     if result:
-        return (f'Function [{func.__name__}] '
-                f'from {func.__module__} returned result: {result}.')
+        return (f'Function [{func.__name__}] returned result: {result}. '
+                f'Module: {func.__module__}.')
     # func.__module__
-    return (f'Function [{func.__name__}] '
-            f'from {func.__module__} returned None.')
+    return (f'Function [{func.__name__}] returned None. '
+            f'Module: {func.__module__}.')
 
 
-def log(func, base_logger=None, log_level='debug'):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        logger = get_logger() if base_logger is None else base_logger
-        write_log = getattr(logger, log_level)
+def log(_func=None, *, logger=None, log_type='debug'):
+    def decorator_log(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            logger_ = logger if logger else get_logger()
+            write_log = getattr(logger_, log_type)
 
-        try:
-            enter_msg = get_enter_func_message(func, args, kwargs)
-            write_log(enter_msg)
+            try:
+                enter_msg = get_enter_func_message(func, args, kwargs)
+                write_log(enter_msg)
 
-            result = func(*args, **kwargs)
-            exit_msg = get_exit_func_message(func, result)
-            write_log(exit_msg)
-            return result
+                result = func(*args, **kwargs)
+                exit_msg = get_exit_func_message(func, result)
+                write_log(exit_msg)
+                return result
 
-        except Exception as e:
-            logger.error(f'Exception raised in {func.__name__}. '
-                         f'Exception: {str(e)}.')
-            raise e
+            except Exception as e:
+                logger.error(f'Exception raised in {func.__name__}. '
+                             f'Exception: {str(e)}.')
+                raise e
 
-    return wrapper
+        return wrapper
+
+    if _func:
+        return decorator_log(_func)
+    return decorator_log
