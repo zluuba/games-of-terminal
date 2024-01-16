@@ -43,10 +43,10 @@ KEYS = {
 }
 
 GAMES = [
-    'Tetris',
+    'Snake',
     'Minesweeper',
     'Tic Tac Toe',
-    'Snake',
+    'Tetris',
 ]
 
 GAME_STATUSES = {
