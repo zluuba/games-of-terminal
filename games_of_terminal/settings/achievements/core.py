@@ -2,6 +2,7 @@ from games_of_terminal.constants import KEYS, DEFAULT_COLOR, GAMES
 from games_of_terminal.database.database import get_all_achievements
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
+from games_of_terminal.settings.achievements.achievement import Achievement
 from games_of_terminal.settings.achievements.constants import (
     TITLE, BASE_OFFSET, TOP_OFFSET,
     LEFT_ARROW, RIGHT_ARROW, SIDE_ARROW_OFFSET,
@@ -10,8 +11,10 @@ from games_of_terminal.settings.achievements.constants import (
 )
 from games_of_terminal.utils import (
     draw_message, clear_field_line,
+    get_color_by_name,
 )
 
+from collections import defaultdict
 from math import ceil
 
 
@@ -21,10 +24,8 @@ class Achievements(InterfaceManager):
         super().__init__(canvas, only_main_win=True)
 
         self.settings_name = settings_name
-        # {game_name: [{name, status, description}, {...}]}
-        self.achievements = get_all_achievements()
-
         self.ach_height, self.ach_width = self.get_achievements_height_and_width()
+        self.achievements = self.get_achievements()
 
         self.title_start_y = TOP_OFFSET
         self.game_name_y = self.get_game_name_y()
@@ -39,6 +40,18 @@ class Achievements(InterfaceManager):
     def __repr__(self):
         return f'<Achievements>'
 
+    def get_achievements(self):
+        # {game_name: [{name, status, description}, {...}]}
+        all_achievements = get_all_achievements()
+        achievements = defaultdict(list)
+
+        for game_name, achievements_ in all_achievements.items():
+            for achieve_data in achievements_:
+                new_achieve = Achievement(self.ach_height, self.ach_width, achieve_data)
+                achievements[game_name].append(new_achieve)
+
+        return achievements
+
     @property
     def curr_achievements_list(self):
         game_name = GAMES[self.curr_game_ind]
@@ -48,7 +61,7 @@ class Achievements(InterfaceManager):
         return self.title_start_y + len(TITLE) + BASE_OFFSET
 
     def get_achievements_start_y(self):
-        return self.game_name_y + BASE_OFFSET
+        return self.game_name_y + 1 + BASE_OFFSET
 
     @staticmethod
     def get_game_name_max_length():
@@ -97,36 +110,60 @@ class Achievements(InterfaceManager):
     def show_achievements(self):
         self.show_game_name_with_arrows()
         self.show_achievements_body()
-        self.get_max_pagination_offset()
+
+    def clear_achievements_body(self):
+        curr_y = self.achievements_start_y
+        curr_x = SIDE_OFFSET
+
+        curr_height = self.height - self.achievements_start_y - BASE_OFFSET
+        clear_line_width = self.width - (SIDE_OFFSET * 2)
+
+        for y_offset in range(curr_height):
+            clear_field_line(curr_y + y_offset, curr_x, self.window, clear_line_width)
 
     def show_achievements_body(self):
-        height, width = self.get_achievements_height_and_width()
+        self.clear_achievements_body()
 
         y = self.achievements_start_y
         x = start_x = SIDE_OFFSET
+        ach_num = 4
 
-        msg = '.' * width
-
-        while True:
-            if y + height > self.height - BOTTOM_OFFSET:
+        for achieve in self.curr_achievements_list:
+            if y + self.ach_height > self.height - BOTTOM_OFFSET:
                 return
 
-            for _ in range(height):
-                for _ in range(ACHIEVEMENTS_IN_ROW):
-                    draw_message(y, x, self.window, msg, DEFAULT_COLOR)
-                    x += width + ACHIEVEMENTS_SPACING
+            curr_y = y
+            curr_x = x
+            color_ind = 0
 
+            for ach_y, _ in enumerate(range(self.ach_height), start=curr_y):
+                for ach_x, _ in enumerate(range(self.ach_width), start=curr_x):
+                    self.draw_achieve_cell(ach_y, ach_x, achieve, color_ind)
+                    color_ind += 1
+                curr_x = x
+
+            if not ach_num:
+                ach_num = 4
+                y += self.ach_height + BASE_OFFSET
                 x = start_x
-                y += 1
+            else:
+                ach_num -= 1
+                x = curr_x + self.ach_width + ACHIEVEMENTS_SPACING
 
-            x = start_x
-            y += BASE_OFFSET
+    def draw_achieve_cell(self, y, x, achieve, color_ind):
+        achieve_cell = ' '
+        color_name = achieve.get_picture_color_by_index(color_ind)
+        color = get_color_by_name(color_name)
+        draw_message(y, x, self.window, achieve_cell, color)
 
     def get_max_pagination_offset(self):
-        rows_with_achievs = ceil(len(self.curr_achievements_list) / ACHIEVEMENTS_IN_ROW)
         visible_rows = 0
-
-        achievs_place_height = self.height - self.achievements_start_y - BOTTOM_OFFSET
+        rows_with_achievs = ceil(
+            len(self.curr_achievements_list) / ACHIEVEMENTS_IN_ROW
+        )
+        achievs_place_height = (
+                self.height - self.achievements_start_y - BOTTOM_OFFSET
+        )
 
         while True:
             achievs_place_height -= self.ach_height
@@ -144,6 +181,8 @@ class Achievements(InterfaceManager):
                   (SIDE_OFFSET * 2) -
                   ((ACHIEVEMENTS_IN_ROW - 1) * ACHIEVEMENTS_SPACING))
                  // ACHIEVEMENTS_IN_ROW)
+
+        width -= 1 if (width % 2 != 0) else 0
         height = width // 2
 
         return height, width
