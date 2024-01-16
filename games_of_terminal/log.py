@@ -70,8 +70,8 @@ def log(_func=None, *, logger=None, log_type='debug'):
                 return result
 
             except Exception as e:
-                logger.error(f'Exception raised in {func.__name__}. '
-                             f'Exception: {str(e)}.')
+                logger_.error(f'Exception raised in {func.__name__}. '
+                              f'Exception: {str(e)}.')
                 raise e
 
         return wrapper
