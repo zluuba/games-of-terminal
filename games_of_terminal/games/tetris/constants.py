@@ -1,9 +1,9 @@
 from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 
-# standard Tetris field size: 10 x 20
-FIELD_WIDTH = 10
+# standard Tetris field size: 20 x 10
 FIELD_HEIGHT = 20
+FIELD_WIDTH = 10
 
 # little square size
 CELL_WIDTH = 2

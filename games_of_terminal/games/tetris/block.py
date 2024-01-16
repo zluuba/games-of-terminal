@@ -53,8 +53,6 @@ class TetrisBlock:
         self.board.change_block(self, action='draw')
 
     def drop(self):
-        # TODO: ineffective, rebuild it
-
         y_offset = 0
 
         while True:
@@ -101,11 +99,11 @@ class TetrisBlock:
         height = len(blueprint)
         width = len(blueprint[0])
 
-        begin_x = self.x + x_offset
         begin_y = self.y + y_offset
+        begin_x = self.x + x_offset
 
-        end_x = begin_x + (width * CELL_WIDTH)
         end_y = begin_y + (height * CELL_HEIGHT)
+        end_x = begin_x + (width * CELL_WIDTH)
 
         if begin_x <= 0:
             return True
