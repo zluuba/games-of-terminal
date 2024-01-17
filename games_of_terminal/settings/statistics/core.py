@@ -10,6 +10,7 @@ from games_of_terminal.utils import (
     draw_message, get_color_by_name, clear_field_line,
 )
 
+from collections import defaultdict
 from datetime import timedelta
 
 
@@ -171,17 +172,13 @@ class Statistics(InterfaceManager):
         return statistics_list_data
 
     def get_statistics_prettify_data(self, statistics_dict):
-        prettify_statistics_dict = dict()
+        prettify_statistics_dict = defaultdict(dict)
 
         for game_name, game_data in statistics_dict.items():
             for stat_name, stat_data in game_data.items():
                 stat_name, stat_data = self.get_prettify_stats(
                     stat_name, stat_data,
                 )
-
-                if game_name not in prettify_statistics_dict:
-                    prettify_statistics_dict[game_name] = {}
-
                 prettify_statistics_dict[game_name][stat_name] = stat_data
 
         return prettify_statistics_dict
@@ -199,6 +196,18 @@ class Statistics(InterfaceManager):
         prettify_stat = stat_name + ':' + (' ' * spaces) + stat_data
         return prettify_stat
 
+    def add_common_stats_into_statistics(self, statistics_dict):
+        total_games, total_time = self.get_total_games_and_total_time(
+            statistics_dict
+        )
+
+        statistics_dict[''] = {
+            'all_games_played': total_games,
+            'time_spent_in_games': total_time,
+        }
+
+        return statistics_dict
+
     @staticmethod
     def get_total_games_and_total_time(statistics_dict):
         total_games = 0
@@ -213,25 +222,13 @@ class Statistics(InterfaceManager):
 
         return total_games, total_time
 
-    def add_common_stats_into_statistics(self, statistics_dict):
-        total_games, total_time = self.get_total_games_and_total_time(
-            statistics_dict
-        )
-
-        statistics_dict[''] = {
-            'all_games_played': total_games,
-            'time_spent_in_games': total_time,
-        }
-
-        return statistics_dict
+    def get_spaces_count(self, *args):
+        chars_count = sum(map(lambda word: len(word), args))
+        return self.max_elem_width - chars_count
 
     @staticmethod
     def get_prettify_time(time_in_seconds):
         return str(timedelta(seconds=time_in_seconds))
-
-    def get_spaces_count(self, *args):
-        chars_count = sum(map(lambda word: len(word), args))
-        return self.max_elem_width - chars_count
 
     @staticmethod
     def get_normalized_stat_name(stat_name):
