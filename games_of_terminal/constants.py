@@ -231,6 +231,31 @@ COLOR_MAPPING = {
         'text_color': COLOR_WHITE,
         'bg_color': 8,
     },
+    'white_text_bright_blue_green_bg': {
+        'pair_num': 32,
+        'text_color': COLOR_WHITE,
+        'bg_color': 35,
+    },
+    'white_text_bright_pink_orange_bg': {
+        'pair_num': 33,
+        'text_color': COLOR_WHITE,
+        'bg_color': 203,
+    },
+    'white_text_bright_pink_magenta_bg': {
+        'pair_num': 34,
+        'text_color': COLOR_WHITE,
+        'bg_color': 205,
+    },
+    'white_text_bright_light_pastel_orange_bg': {
+        'pair_num': 35,
+        'text_color': COLOR_WHITE,
+        'bg_color': 209,
+    },
+    'bright_white_text_bright_white_bg': {
+        'pair_num': 36,
+        'text_color': 255,
+        'bg_color': 255,
+    },
 }
 
 # based on curses initial color pair (0: white text, black bg)
