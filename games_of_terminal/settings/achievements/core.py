@@ -23,6 +23,8 @@ class Achievements(InterfaceManager):
     def __init__(self, canvas, settings_name):
         super().__init__(canvas, only_main_win=True)
 
+        self.showed_achievements_count = 0
+
         self.settings_name = settings_name
         self.ach_height, self.ach_width = self.get_achievements_height_and_width()
         self.achievements = self.get_achievements()
@@ -37,8 +39,21 @@ class Achievements(InterfaceManager):
         self.pagination_offset = 0
         self.max_pagination_offset = self.get_max_pagination_offset()
 
+        self.detail_mode = False
+        self.selected_ach_num = 0
+
     def __repr__(self):
         return f'<Achievements>'
+
+    def get_achievement_by_number(self, number):
+        for achievement in self.curr_achievements_list:
+            if achievement.number == number:
+                return achievement
+
+    def switch_achieve_selection(self):
+        for ach_num, achieve in enumerate(self.curr_achievements_list, start=0):
+            if ach_num == self.selected_ach_num:
+                achieve.is_selected = not achieve.is_selected
 
     def get_achievements(self):
         # {game_name: [{name, status, description}, {...}]}
@@ -46,8 +61,8 @@ class Achievements(InterfaceManager):
         achievements = defaultdict(list)
 
         for game_name, achievements_ in all_achievements.items():
-            for achieve_data in achievements_:
-                new_achieve = Achievement(self.ach_height, self.ach_width, achieve_data)
+            for achieve_num, achieve_data in enumerate(achievements_, start=0):
+                new_achieve = Achievement(self.window, achieve_num, self.ach_height, self.ach_width, achieve_data)
                 achievements[game_name].append(new_achieve)
 
         return achievements
@@ -84,7 +99,7 @@ class Achievements(InterfaceManager):
         return left_arrow_x, right_arrow_x
 
     @property
-    def chosen_game_game(self):
+    def chosen_game_name(self):
         return GAMES[self.curr_game_ind]
 
     @log
@@ -98,14 +113,47 @@ class Achievements(InterfaceManager):
 
             if key == KEYS['escape']:
                 return
+            elif key in KEYS['enter']:
+                self.switch_detail_mode()
+                self.switch_achieve_selection()
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.update_achievements_pagination(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.update_achievements_pagination(1)
             elif key in (KEYS['left_arrow'], KEYS['a']):
-                self.update_current_game_index(-1)
+                if self.detail_mode:
+                    self.select_cell(x_offset=-1)
+                else:
+                    self.update_current_game_index(-1)
             elif key in (KEYS['right_arrow'], KEYS['d']):
-                self.update_current_game_index(1)
+                if self.detail_mode:
+                    self.select_cell(x_offset=1)
+                else:
+                    self.update_current_game_index(1)
+
+    def select_cell(self, y_offset=0, x_offset=0):
+        all_curr_achievements_count = len(self.curr_achievements_list)
+
+        chosen_num_x = self.selected_ach_num + x_offset
+
+        if (chosen_num_x // ACHIEVEMENTS_IN_ROW) != (self.selected_ach_num // ACHIEVEMENTS_IN_ROW):
+            return
+
+        chosen_num_xy = chosen_num_x + (y_offset * 5)
+
+        if 0 <= chosen_num_xy < all_curr_achievements_count:
+            curr_selected = self.get_achievement_by_number(self.selected_ach_num)
+            curr_selected.is_selected = not curr_selected.is_selected
+
+            self.selected_ach_num = chosen_num_xy
+            new_selected = self.get_achievement_by_number(self.selected_ach_num)
+            new_selected.is_selected = not new_selected.is_selected
+
+            self.show_achievements_body()
+
+    def switch_detail_mode(self):
+        self.selected_ach = 0
+        self.detail_mode = not self.detail_mode
 
     def show_achievements(self):
         self.show_game_name_with_arrows()
@@ -121,7 +169,9 @@ class Achievements(InterfaceManager):
         for y_offset in range(curr_height):
             clear_field_line(curr_y + y_offset, curr_x, self.window, clear_line_width)
 
+    @log(with_runtime=True)
     def show_achievements_body(self):
+        # runtime min: 20.47ms, max: 36.09ms
         self.clear_achievements_body()
 
         y = self.achievements_start_y
@@ -139,6 +189,7 @@ class Achievements(InterfaceManager):
             for ach_y, _ in enumerate(range(self.ach_height), start=curr_y):
                 for ach_x, _ in enumerate(range(self.ach_width), start=curr_x):
                     self.draw_achieve_cell(ach_y, ach_x, achieve, color_ind)
+                    self.showed_achievements_count += 1
                     color_ind += 1
                 curr_x = x
 
@@ -196,7 +247,7 @@ class Achievements(InterfaceManager):
         if self.curr_game_ind == len(GAMES) - 1:
             right_arrow = ' '
 
-        game_name_x = (self.width // 2) - (len(self.chosen_game_game) // 2)
+        game_name_x = (self.width // 2) - (len(self.chosen_game_name) // 2)
 
         clear_field_line(
             self.game_name_y, 1,
@@ -208,7 +259,7 @@ class Achievements(InterfaceManager):
         )
         draw_message(
             self.game_name_y, game_name_x,
-            self.window, self.chosen_game_game, DEFAULT_COLOR,
+            self.window, self.chosen_game_name, DEFAULT_COLOR,
         )
         draw_message(
             self.game_name_y, self.right_arrow_x,
