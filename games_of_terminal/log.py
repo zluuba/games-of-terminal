@@ -1,3 +1,4 @@
+import time
 from inspect import getfullargspec
 import functools
 import logging
@@ -53,7 +54,33 @@ def get_exit_func_message(func, result):
             f'Module: {func.__module__}.')
 
 
-def log(_func=None, *, logger=None, log_type='debug'):
+def get_func_runtime_message(func, runtime):
+    return f'Function [{func.__name__}] runtime is {runtime}ms.'
+
+
+def write_logs(write_log_func, func, args, kwargs, with_runtime):
+    # rebuilt it in decorator
+    enter_msg = get_enter_func_message(func, args, kwargs)
+    write_log_func(enter_msg)
+
+    if with_runtime:
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        runtime_in_sec = end_time - start_time
+        runtime_in_ms = round(runtime_in_sec * 1000, 2)
+        runtime_message = get_func_runtime_message(func, runtime_in_ms)
+        write_log_func(runtime_message)
+    else:
+        result = func(*args, **kwargs)
+
+    exit_msg = get_exit_func_message(func, result)
+    write_log_func(exit_msg)
+
+    return result
+
+
+def log(_func=None, *, logger=None, log_type='debug', with_runtime=False):
     def decorator_log(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -61,12 +88,10 @@ def log(_func=None, *, logger=None, log_type='debug'):
             write_log = getattr(logger_, log_type)
 
             try:
-                enter_msg = get_enter_func_message(func, args, kwargs)
-                write_log(enter_msg)
-
-                result = func(*args, **kwargs)
-                exit_msg = get_exit_func_message(func, result)
-                write_log(exit_msg)
+                result = write_logs(
+                    write_log, func, args, kwargs,
+                    with_runtime,
+                )
                 return result
 
             except Exception as e:
