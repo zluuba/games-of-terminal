@@ -256,6 +256,11 @@ COLOR_MAPPING = {
         'text_color': 255,
         'bg_color': 255,
     },
+    'bright_white_text_black_bg': {
+        'pair_num': 37,
+        'text_color': 255,
+        'bg_color': COLOR_BLACK,
+    },
 }
 
 # based on curses initial color pair (0: white text, black bg)
