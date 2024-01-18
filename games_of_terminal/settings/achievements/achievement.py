@@ -1,17 +1,20 @@
 from games_of_terminal.settings.achievements.constants import (
     COLORS, PICTURE_COLORS_COUNT, CELL_WIDTH,
-    SELECTED_CELL_COLOR, ACHIEVEMENTS_IN_ROW,
+    SELECTED_CELL_COLOR,
 )
-from games_of_terminal.sub_window import SubWindow
+from games_of_terminal.utils import draw_message, get_color_by_name
 
 from random import choice
 
 
 class Achievement:
     def __init__(self, parent_window, number, height, width, achieve_data):
+        self.window = parent_window
         self.number = number
         self.height = height
         self.width = width
+
+        self.y = self.x = 0
 
         self.name = achieve_data['name']
         self.description = achieve_data['description']
@@ -26,9 +29,6 @@ class Achievement:
             'is_selected': False,
         }
 
-        # self.start_y, self.start_x = coords
-        # self.box = SubWindow(parent_window, self.height, self.width, self.start_y, self.start_x)
-
     @property
     def is_selected(self):
         return self.state['is_selected']
@@ -36,6 +36,33 @@ class Achievement:
     @is_selected.setter
     def is_selected(self, value):
         self.state['is_selected'] = value
+
+    def update_coordinates(self, new_y, new_x):
+        self.y = new_y
+        self.x = new_x
+
+    def show(self, start_y=None, start_x=None):
+        start_y = self.y if start_y is None else start_y
+        start_x = self.x if start_x is None else start_x
+
+        end_y = self.height + start_y
+        end_x = self.width + start_x
+
+        picture_colors_generator = iter(self.picture)
+
+        for y in range(start_y, end_y):
+            for x in range(start_x, end_x):
+                colors = next(picture_colors_generator)
+
+                if self.is_selected and self.is_it_picture_frame_coordinates(
+                        y - start_y, x - start_x,
+                ):
+                    color_name = SELECTED_CELL_COLOR
+                else:
+                    color_name = colors[self.status]
+
+                color = get_color_by_name(color_name)
+                draw_message(y, x, self.window, ' ', color)
 
     @staticmethod
     def get_random_picture_colors():
@@ -73,8 +100,12 @@ class Achievement:
         return random_picture
 
     def is_it_picture_frame_coordinates(self, y, x):
-        return ((y == 0) or (y == self.height - 1) or
-                (x in (0, 1)) or (x in (self.width - 1, self.width - 2)))
+        start_y = start_x = 0
+        end_y = self.height - 1
+        end_x = self.width - 1
+
+        return ((y == start_y) or (y == end_y) or
+                (x in (start_x, start_x + 1)) or (x in (end_x, end_x - 1)))
 
     def get_picture_color_by_index(self, index):
         if self.is_selected:
