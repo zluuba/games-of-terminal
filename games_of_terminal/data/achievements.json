@@ -4,35 +4,35 @@
         "achievements": [
             {
                 "name": "Snake Lover",
-                "description": "Embark on your first snake game adventure."
+                "description": "Embark on your first snake game adventure"
             },
             {
                 "name": "Fashionista",
-                "description": "Change snake skin."
+                "description": "Change snake skin"
             },
             {
                 "name": "Student",
-                "description": "Reach 10 points in one game."
+                "description": "Reach 10 points in one game"
             },
             {
                 "name": "Professor",
-                "description": "Reach 42 points in one game."
+                "description": "Reach 42 points in one game"
             },
             {
                 "name": "Are you okay?",
-                "description": "Reach 101 points in one game."
+                "description": "Reach 101 points in one game"
             },
             {
                 "name": "The Grass Must Be Touched",
-                "description": "Reach 75 points in one game."
+                "description": "Reach 75 points in one game"
             },
             {
                 "name": "Good Soup",
-                "description": "Eat yourself."
+                "description": "Eat yourself"
             },
             {
                 "name": "Mode Mood",
-                "description": "Change game mode."
+                "description": "Change game mode"
             }
         ]
     },
@@ -41,35 +41,35 @@
         "achievements": [
             {
                 "name": "New Meat",
-                "description": "Embark on your first game."
+                "description": "Embark on your first game"
             },
             {
                 "name": "Knee Shot, but Legs Saved",
-                "description": "Embrace victory, no matter how many attempts it takes."
+                "description": "Embrace victory, no matter how many attempts it takes"
             },
             {
-                "name": "Where's the Detonator?",
-                "description": "Experience your first defeat."
+                "name": "RIP",
+                "description": "Experience your first defeat"
             },
             {
                 "name": "Tuna",
-                "description": "Change the color scheme."
+                "description": "Change the color scheme"
             },
             {
                 "name": "Lucky",
-                "description": "Safely defuse 100 bombs in total."
+                "description": "Safely defuse 100 bombs in total"
             },
             {
                 "name": "I Have No Girlfriend",
-                "description": "Successfully defuse 1,000 bombs."
+                "description": "Successfully defuse 1,000 bombs"
             },
             {
                 "name": "That's Enough",
-                "description": "Attempt to place a flag when there are none left."
+                "description": "Attempt to place a flag when there are none left"
             },
             {
                 "name": "AGI in Front of Me",
-                "description": "Defuse 6, 7 or 8 bombs around 1 cell."
+                "description": "Defuse 6, 7 or 8 bombs around 1 cell"
             }
         ]
     },
@@ -78,23 +78,23 @@
         "achievements": [
             {
                 "name": "Beginners Luck",
-                "description": "Achieve your first victory."
+                "description": "Achieve your first victory"
             },
             {
                 "name": "GOTcha!",
-                "description": "Experience your first defeat."
+                "description": "Experience your first defeat"
             },
             {
                 "name": "You Scare Me",
-                "description": "Personalize your gaming experience by changing the color scheme."
+                "description": "Personalize your gaming experience by changing the color scheme"
             },
             {
                 "name": "Really..?",
-                "description": "Play 20 games."
+                "description": "Play 20 games"
             },
             {
                 "name": "Ah shit, here we go again",
-                "description": "Start your 101st game."
+                "description": "Start your 101st game"
             }
         ]
     },
@@ -103,47 +103,47 @@
         "achievements": [
             {
                 "name": "Did You See The Movie?",
-                "description": "Start your first game."
+                "description": "Start your first game"
             },
             {
                 "name": "It was.. Fast.",
-                "description": "Experience your first loss."
+                "description": "Experience your first loss"
             },
             {
                 "name": "Block by Block",
-                "description": "Complete 10 lines in a single game."
+                "description": "Complete 10 lines in a single game"
             },
             {
                 "name": "Cubie",
-                "description": "Achieve a score of 10,000 points."
+                "description": "Achieve a score of 10,000 points"
             },
             {
                 "name": "Yoda",
-                "description": "Achieve a score of 30,000 points."
+                "description": "Achieve a score of 30,000 points"
             },
             {
                 "name": "You beat me!",
-                "description": "Achieve a score exceeding 122,000 points and beat the creator's best score."
+                "description": "Achieve a score exceeding 122,000 points and beat the creator's best score"
             },
             {
                 "name": "Speed Demon",
-                "description": "Clear a line in less than one minute."
+                "description": "Clear a line in less than one minute"
             },
             {
                 "name": "Nitrous",
-                "description": "Reach the last level of block speed."
+                "description": "Reach the last level of block speed"
             },
             {
                 "name": "Annihilator",
-                "description": "Clear 4 lines at once."
+                "description": "Clear 4 lines at once"
             },
             {
                 "name": "Shape Shifter",
-                "description": "Use every shape in a single game."
+                "description": "Use every shape in a single game"
             },
             {
                 "name": "Void",
-                "description": "Completely clear the field."
+                "description": "Completely clear the field"
             }
         ]
     },
@@ -152,35 +152,35 @@
         "achievements": [
             {
                 "name": "Hello, World!",
-                "description": "Run the GOT for the first time."
+                "description": "Run the GOT for the first time"
             },
             {
                 "name": "Gamer",
-                "description": "Play all the games."
+                "description": "Play all the games"
             },
             {
                 "name": "Better Than Sex",
-                "description": "Play in games more than 1 hour."
+                "description": "Play in games more than 1 hour"
             },
             {
                 "name": "Game-a-holic",
-                "description": "Play 50 games in total."
+                "description": "Play 50 games in total"
             },
             {
                 "name": "Ctrl + Alt + Achieve",
-                "description": "Get 20 achieves."
+                "description": "Get 20 achieves"
             },
             {
                 "name": "Creator's Favorite",
-                "description": "Obtain all achievements."
+                "description": "Obtain all achievements"
             },
             {
                 "name": "How You Doin'? ;)",
-                "description": "Set username in the Settings and feel the Power."
+                "description": "Set username in the Settings and feel the Power"
             },
             {
                 "name": "Nice!",
-                "description": "Find suspicious option in the Settings and click on it."
+                "description": "Find suspicious option in the Settings and click on it"
             }
         ]
     }
