@@ -7,7 +7,7 @@ from games_of_terminal.settings.achievements.constants import (
     TITLE, BASE_OFFSET, TOP_OFFSET,
     LEFT_ARROW, RIGHT_ARROW, SIDE_ARROW_OFFSET,
     SIDE_OFFSET, BOTTOM_OFFSET, ACHIEVEMENTS_IN_ROW,
-    ACHIEVEMENTS_SPACING,
+    ACHIEVEMENTS_SPACING, OFFSETS,
 )
 from games_of_terminal.utils import (
     draw_message, clear_field_line, get_color_by_name,
@@ -50,6 +50,7 @@ class Achievements(InterfaceManager):
                 return achievement
 
     def switch_achieve_selection(self):
+        # achieve = self.get_achievement_by_number()
         for ach_num, achieve in enumerate(self.curr_achievements_list, start=0):
             if ach_num == self.selected_ach_num:
                 achieve.is_selected = not achieve.is_selected
@@ -95,10 +96,7 @@ class Achievements(InterfaceManager):
         )
 
         left_arrow_x = (self.width // 2) - (game_name_line_len // 2)
-        right_arrow_x = left_arrow_x + game_name_line_len
-
-        # horizontal alignment
-        right_arrow_x -= 1
+        right_arrow_x = left_arrow_x + game_name_line_len - 1
 
         return left_arrow_x, right_arrow_x
 
@@ -132,7 +130,9 @@ class Achievements(InterfaceManager):
     def moving_controller(self, direction):
         if self.detail_mode:
             y_offset, x_offset = self.get_moving_offsets(direction)
-            self.select_cell(y_offset=y_offset, x_offset=x_offset, direction=direction)
+            self.select_cell(y_offset=y_offset,
+                             x_offset=x_offset,
+                             direction=direction)
             return
 
         if direction == 'left':
@@ -152,22 +152,16 @@ class Achievements(InterfaceManager):
 
     @staticmethod
     def get_moving_offsets(key):
-        offsets = {
-            'up': (-1, 0),
-            'down': (1, 0),
-            'left': (0, -1),
-            'right': (0, 1),
-        }
-
-        for keys, offset in offsets.items():
+        for keys, offset in OFFSETS.items():
             if key in keys:
-                return offsets[keys]
+                return OFFSETS[keys]
 
     def select_cell(self, y_offset=0, x_offset=0, direction=None):
-        all_curr_achievements_count = len(self.curr_achievements_list)
-        chosen_num_xy = self.selected_ach_num + x_offset + (y_offset * ACHIEVEMENTS_IN_ROW)
+        chosen_ach_num = ((y_offset * ACHIEVEMENTS_IN_ROW) +
+                          self.selected_ach_num +
+                          x_offset)
 
-        if not (0 <= chosen_num_xy < all_curr_achievements_count):
+        if not self.is_chosen_achieve_exists(chosen_ach_num):
             return
 
         # unselect current cell
@@ -175,29 +169,39 @@ class Achievements(InterfaceManager):
         curr_selected.is_selected = not curr_selected.is_selected
         curr_selected.show()
 
-        # update pagination and redraw achievements body
-        if (direction in ['down', 'right']) and (chosen_num_xy not in range(
-                self.pagination_offset * 5,
-                self.pagination_offset * 5 + self.showed_achievements_count,
-        )):
-            self.update_achievements_pagination(1)
-            self.achievements_action(show=True, update_coords=True)
+        pagination_change_value = self.get_pagination_changing_value(
+            direction, chosen_ach_num,
+        )
 
-        if (direction in ['up', 'left']) and (chosen_num_xy not in range(
-                self.pagination_offset * 5,
-                self.pagination_offset * 5 + self.showed_achievements_count,
-        )):
-            self.update_achievements_pagination(-1)
+        if pagination_change_value != 0:
+            self.update_achievements_pagination(pagination_change_value)
             self.achievements_action(show=True, update_coords=True)
 
         # select chosen cell
-        self.selected_ach_num = chosen_num_xy
+        self.selected_ach_num = chosen_ach_num
         new_selected = self.get_achievement_by_number(self.selected_ach_num)
         new_selected.is_selected = not new_selected.is_selected
         new_selected.show()
         self.show_achievement_details(new_selected)
 
+    def is_chosen_achieve_exists(self, chosen_ach_num):
+        return 0 <= chosen_ach_num < len(self.curr_achievements_list)
+
+    def get_pagination_changing_value(self, direction, ach_num):
+        curr_ach_range = self.get_current_achievements_nums_range()
+
+        if ach_num not in curr_ach_range:
+            return 1 if direction in ['down', 'right'] else -1
+        return 0
+
+    def get_current_achievements_nums_range(self):
+        ach_range_start = self.pagination_offset * ACHIEVEMENTS_IN_ROW
+        ach_range_end = ach_range_start + self.showed_achievements_count
+
+        return range(ach_range_start, ach_range_end)
+
     def show_achievement_details(self, achievement):
+        # REFACTOR. THIS. NOW.
         self.clear_achievement_details()
 
         name_y = self.height - 4
@@ -246,14 +250,13 @@ class Achievements(InterfaceManager):
 
     @log(with_runtime=True)
     def achievements_action(self, show=False, update_coords=False):
-        # runtime min: 20.47ms, max: 36.09ms
         self.clear_achievements_body()
 
         y = self.achievements_start_y
         x = start_x = SIDE_OFFSET
         ach_num = ACHIEVEMENTS_IN_ROW
 
-        ach_offset_start = self.pagination_offset * 5
+        ach_offset_start = self.pagination_offset * ACHIEVEMENTS_IN_ROW
 
         for achieve in self.curr_achievements_list[ach_offset_start:]:
             if y + self.ach_height > self.height - BOTTOM_OFFSET:
@@ -262,10 +265,7 @@ class Achievements(InterfaceManager):
             if update_coords:
                 achieve.update_coordinates(y, x)
             if show:
-                achieve.show(y, x)
-
-                if self.detail_mode and achieve.is_selected:
-                    self.show_achievement_details(achieve)
+                self.show_achieve(achieve)
 
             if ach_num == 1:
                 ach_num = ACHIEVEMENTS_IN_ROW
@@ -274,6 +274,12 @@ class Achievements(InterfaceManager):
             else:
                 ach_num -= 1
                 x += self.ach_width + ACHIEVEMENTS_SPACING
+
+    def show_achieve(self, achieve):
+        achieve.show()
+
+        if self.detail_mode and achieve.is_selected:
+            self.show_achievement_details(achieve)
 
     def get_showed_achievements_count(self):
         showed_achievements_count = 0
@@ -291,7 +297,7 @@ class Achievements(InterfaceManager):
             len(self.curr_achievements_list) / ACHIEVEMENTS_IN_ROW
         )
         achievs_place_height = (
-                self.height - self.achievements_start_y - BOTTOM_OFFSET
+            self.height - self.achievements_start_y - BOTTOM_OFFSET
         )
 
         while True:
@@ -329,7 +335,7 @@ class Achievements(InterfaceManager):
 
         clear_field_line(
             self.game_name_y, 1,
-            self.window, self.width - 2,
+            self.window, self.width - BASE_OFFSET,
         )
         draw_message(
             self.game_name_y, self.left_arrow_x,

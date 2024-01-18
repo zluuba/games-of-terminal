@@ -24,6 +24,13 @@ ACHIEVEMENTS_SPACING = 5
 PICTURE_COLORS_COUNT = 3
 SELECTED_CELL_COLOR = 'bright_white_text_bright_white_bg'
 
+OFFSETS = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1),
+}
+
 COLORS = {
     'pictures': [{
         'unlocked': 'black_text_deep_pink_bg',
