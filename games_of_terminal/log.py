@@ -1,9 +1,9 @@
-import time
 from inspect import getfullargspec
 import functools
 import logging
 from os import path
 from pathlib import Path
+import time
 
 
 BASE_DIR = Path(__file__).parent
@@ -29,6 +29,11 @@ def get_logger(name='GOT'):
     return logging.getLogger(name)
 
 
+def get_short_module_path(module):
+    path_parts = module.split('.')
+    return '.'.join(path_parts[1:])
+
+
 def get_enter_func_message(func, args, kwargs):
     argspec = getfullargspec(func)
     arg_names = argspec.args
@@ -37,21 +42,24 @@ def get_enter_func_message(func, args, kwargs):
     kwargs_repr = [f"{key}={val!r}" for key, val in kwargs.items()]
     signature = ", ".join(args_repr + kwargs_repr)
 
+    module_short_name = get_short_module_path(func.__module__)
+
     if signature:
         return (f'Entering function [{func.__name__}] '
                 f'with signature: {signature}. '
-                f'Module: {func.__module__}.')
+                f'Module: {module_short_name}.')
     return (f'Entering function [{func.__name__}]. '
-            f'Module: {func.__module__}.')
+            f'Module: {module_short_name}.')
 
 
 def get_exit_func_message(func, result):
+    module_short_name = get_short_module_path(func.__module__)
+
     if result:
         return (f'Function [{func.__name__}] returned result: {result}. '
-                f'Module: {func.__module__}.')
-    # func.__module__
+                f'Module: {module_short_name}.')
     return (f'Function [{func.__name__}] returned None. '
-            f'Module: {func.__module__}.')
+            f'Module: {module_short_name}.')
 
 
 def get_func_runtime_message(func, runtime):
@@ -85,11 +93,12 @@ def log(_func=None, *, logger=None, log_type='debug', with_runtime=False):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             logger_ = logger if logger else get_logger()
-            write_log = getattr(logger_, log_type)
+            write_log_func = getattr(logger_, log_type)
 
             try:
                 result = write_logs(
-                    write_log, func, args, kwargs,
+                    write_log_func, func,
+                    args, kwargs,
                     with_runtime,
                 )
                 return result
