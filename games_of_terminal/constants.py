@@ -264,4 +264,9 @@ COLOR_MAPPING = {
         'text_color': COLOR_WHITE,
         'bg_color': COLOR_WHITE,
     },
+    'bright_white_text_black_bg': {
+        'pair_num': 38,
+        'text_color': 255,
+        'bg_color': COLOR_BLACK,
+    }
 }
