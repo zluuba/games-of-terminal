@@ -4,10 +4,19 @@ TITLE = [
     '╩ ╩╚═╝╩ ╩╩╚═╝ ╚╝ ╚═╝╩ ╩╚═╝╝╚╝ ╩ ╚═╝',
 ]
 
+ACHIEVEMENT_LIST = [
+    'Global',
+    'Snake',
+    'Minesweeper',
+    'Tic Tac Toe',
+    'Tetris',
+]
+
 UPWARDS_ARROW = '▲'
 DOWNWARDS_ARROW = '▼'
 LEFT_ARROW = '<'
 RIGHT_ARROW = '>'
+NO_ARROW = ' '
 
 TOP_OFFSET = 2
 SIDE_OFFSET = 5
@@ -21,8 +30,12 @@ CELL_WIDTH = 2
 ACHIEVEMENTS_IN_ROW = 5
 ACHIEVEMENTS_SPACING = 5
 
+PICTURE_ELEMENT = ' '
 PICTURE_COLORS_COUNT = 3
-SELECTED_CELL_COLOR = 'bright_white_text_bright_white_bg'
+
+SELECTED_CELL_COLOR_NAME = 'bright_white_text_bright_white_bg'
+ACH_NAME_COLOR_NAME = 'strong_pastel_purple_text_black_bg'
+ACH_DESCRIPTION_COLOR_NAME = 'bright_white_text_black_bg'
 
 OFFSETS = {
     'up': (-1, 0),

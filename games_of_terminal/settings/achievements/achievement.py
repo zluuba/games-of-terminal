@@ -1,8 +1,10 @@
 from games_of_terminal.settings.achievements.constants import (
     COLORS, PICTURE_COLORS_COUNT, CELL_WIDTH,
-    SELECTED_CELL_COLOR,
+    SELECTED_CELL_COLOR_NAME, PICTURE_ELEMENT,
 )
-from games_of_terminal.utils import draw_message, get_color_by_name
+from games_of_terminal.utils import (
+    draw_message, get_color_by_name,
+)
 
 from random import choice
 
@@ -14,16 +16,16 @@ class Achievement:
         self.height = height
         self.width = width
 
-        self.y = self.x = 0
-
         self.name = achieve_data['name']
         self.description = achieve_data['description']
         self.status = achieve_data['status']
         self.date_received = achieve_data['date_received']
 
         self.picture_colors = self.get_random_picture_colors()
-        self.picture_frame_color = self.get_picture_frame_color()
+        self.picture_frame_color = self.get_random_picture_frame_color()
         self.picture = self.get_random_picture()
+
+        self.y = self.x = 0
 
         self.state = {
             'is_selected': False,
@@ -57,12 +59,12 @@ class Achievement:
                 if self.is_selected and self.is_it_picture_frame_coordinates(
                         y - start_y, x - start_x,
                 ):
-                    color_name = SELECTED_CELL_COLOR
+                    color_name = SELECTED_CELL_COLOR_NAME
                 else:
                     color_name = colors[self.status]
 
                 color = get_color_by_name(color_name)
-                draw_message(y, x, self.window, ' ', color)
+                draw_message(y, x, self.window, PICTURE_ELEMENT, color)
 
     @staticmethod
     def get_random_picture_colors():
@@ -76,7 +78,7 @@ class Achievement:
 
         return random_picture_colors
 
-    def get_picture_frame_color(self):
+    def get_random_picture_frame_color(self):
         frame_color = choice(COLORS['pictures'])
 
         while frame_color in self.picture_colors:
@@ -104,12 +106,7 @@ class Achievement:
         end_y = self.height - 1
         end_x = self.width - 1
 
-        return ((y == start_y) or (y == end_y) or
-                (x in (start_x, start_x + 1)) or (x in (end_x, end_x - 1)))
-
-    def get_picture_color_by_index(self, index):
-        if self.is_selected:
-            return SELECTED_CELL_COLOR
-
-        color_dict = self.picture[index]
-        return color_dict[self.status]
+        return ((y == start_y) or
+                (y == end_y) or
+                (x in (start_x, start_x + 1)) or
+                (x in (end_x, end_x - 1)))
