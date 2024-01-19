@@ -75,6 +75,9 @@ COMMON_TIPS = {
     'Quit': 'Esc',
 }
 
+# based on curses initial color pair (0: white text, black bg)
+DEFAULT_COLOR = 0
+
 COLOR_MAPPING = {
     'white_text_green_bg': {
         'pair_num': 1,
@@ -256,12 +259,9 @@ COLOR_MAPPING = {
         'text_color': 255,
         'bg_color': 255,
     },
-    'bright_white_text_black_bg': {
+    'white_text_white_bg': {
         'pair_num': 37,
-        'text_color': 255,
-        'bg_color': COLOR_BLACK,
+        'text_color': COLOR_WHITE,
+        'bg_color': COLOR_WHITE,
     },
 }
-
-# based on curses initial color pair (0: white text, black bg)
-DEFAULT_COLOR = 0
