@@ -1,9 +1,9 @@
 from inspect import getfullargspec
-import functools
-import logging
+from functools import wraps
+from logging import basicConfig, getLogger, DEBUG
 from os import path
 from pathlib import Path
-import time
+from time import time
 
 
 BASE_DIR = Path(__file__).parent
@@ -15,18 +15,18 @@ def get_full_path(base_dir, filename):
 
 
 def get_logger(name='GOT'):
-    # LVL:  debug, info, warning, error, critical
     filename = get_full_path(BASE_DIR, LOG_FILENAME)
+    output_format = '%(asctime)s : %(levelname)s : %(message)s'
+    date_format = '%Y-%m-%d, %H:%M:%S'
 
-    # try logging.FileHandler
-    logging.basicConfig(
+    basicConfig(
         filename=filename,
         filemode='w',
-        format='%(asctime)s : %(levelname)s : %(message)s',
-        datefmt='%Y-%m-%d, %H:%M:%S',
-        level=logging.DEBUG,
+        format=output_format,
+        datefmt=date_format,
+        level=DEBUG,
     )
-    return logging.getLogger(name)
+    return getLogger(name)
 
 
 def get_short_module_path(module):
@@ -72,9 +72,9 @@ def get_error_message(func, error):
 
 
 def write_logs_with_runtime(func, args, kwargs, write_log_func):
-    start_time = time.time()
+    start_time = time()
     result = func(*args, **kwargs)
-    end_time = time.time()
+    end_time = time()
 
     runtime_in_sec = end_time - start_time
     runtime_in_ms = round(runtime_in_sec * 1000, 2)
@@ -99,9 +99,9 @@ def write_logs(write_log_func, func, args, kwargs, with_runtime):
     return result
 
 
-def log(_func=None, logger=None, log_type='debug', with_runtime=False):
+def log(_func=None, *, logger=None, log_type='debug', with_runtime=False):
     def decorator_log(func):
-        @functools.wraps(func)
+        @wraps(func)
         def wrapper(*args, **kwargs):
             logger_ = logger if logger else get_logger()
             write_log_func = getattr(logger_, log_type)
