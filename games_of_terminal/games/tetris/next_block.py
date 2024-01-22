@@ -54,4 +54,4 @@ class NextBlockArea:
     def show_next_block_title(self):
         begin_y = 0     # top border
         begin_x = (self.width // 2) - (len(NEXT_BLOCK_TEXT) // 2)
-        draw_message(begin_y, begin_x, self.win, NEXT_BLOCK_TEXT, DEFAULT_COLOR)
+        draw_message(begin_y, begin_x, self.win, NEXT_BLOCK_TEXT)

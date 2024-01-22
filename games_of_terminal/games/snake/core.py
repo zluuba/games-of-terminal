@@ -1,4 +1,4 @@
-from games_of_terminal.constants import KEYS, DEFAULT_COLOR
+from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import get_game_stat
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.log import log
@@ -80,13 +80,11 @@ class SnakeGame(GameEngine):
         self.game_area.show_borders()
 
         if self.food:
-            draw_message(*self.food, self.game_area.box,
-                         FOOD_SKIN, DEFAULT_COLOR)
+            draw_message(*self.food, self.game_area.box, FOOD_SKIN)
 
         if self.snake:
             for y, x in self.snake:
-                draw_message(y, x, self.game_area.box,
-                             SNAKE_SKIN, DEFAULT_COLOR)
+                draw_message(y, x, self.game_area.box, SNAKE_SKIN)
 
     def controller(self, key, pause_on=True):
         super().controller(key, pause_on)
@@ -123,8 +121,7 @@ class SnakeGame(GameEngine):
 
     def put_food_on_the_field(self):
         self.food = self.get_food_coords()
-        draw_message(*self.food, self.game_area.box,
-                     FOOD_SKIN, DEFAULT_COLOR)
+        draw_message(*self.food, self.game_area.box, FOOD_SKIN)
 
     def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
@@ -154,8 +151,7 @@ class SnakeGame(GameEngine):
             snake_head = [snake_head[0] + 1, snake_head[1]]
 
         self.snake.insert(0, snake_head)
-        draw_message(*snake_head, self.game_area.box,
-                     SNAKE_SKIN, DEFAULT_COLOR)
+        draw_message(*snake_head, self.game_area.box, SNAKE_SKIN)
 
         if snake_head == self.food:
             self.stats.score += 1
@@ -167,8 +163,7 @@ class SnakeGame(GameEngine):
         else:
             snake_tail = self.snake.pop()
             empty_space = ' '
-            draw_message(*snake_tail, self.game_area.box,
-                         empty_space, DEFAULT_COLOR)
+            draw_message(*snake_tail, self.game_area.box, empty_space)
 
         self.game_area.box.refresh()
 

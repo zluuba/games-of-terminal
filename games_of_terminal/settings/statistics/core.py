@@ -113,7 +113,7 @@ class Statistics(InterfaceManager):
     def draw_title(self):
         for y, line in enumerate(TITLE, start=self.logo_start_y):
             x = (self.width // 2) - (len(line) // 2)
-            draw_message(y, x, self.window, line, DEFAULT_COLOR)
+            draw_message(y, x, self.window, line)
 
     def draw_arrows(self):
         up_arrow = UPWARDS_ARROW
@@ -124,15 +124,10 @@ class Statistics(InterfaceManager):
         if self.pagination_offset >= self.max_pagination_offset:
             down_arrow = ' '
 
-        draw_message(
-            self.start_y, self.arrow_x,
-            self.window, up_arrow, DEFAULT_COLOR,
-        )
+        draw_message(self.start_y, self.arrow_x, self.window, up_arrow)
 
-        draw_message(
-            self.height - BOTTOM_OFFSET, self.arrow_x,
-            self.window, down_arrow, DEFAULT_COLOR
-        )
+        down_arrow_y = self.height - BOTTOM_OFFSET
+        draw_message(down_arrow_y, self.arrow_x, self.window, down_arrow)
 
     def show_statistics(self):
         game_name_color = get_color_by_name('yellow_text_black_bg')

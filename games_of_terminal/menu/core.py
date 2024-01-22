@@ -88,8 +88,8 @@ class Menu(InterfaceManager):
 
     @log
     def initialize_menu(self):
-        self.window.clear()
         hide_cursor()
+        self.window.clear()
         self.set_window_redrawing_speed()
         self.draw_menu()
 
@@ -146,7 +146,7 @@ class Menu(InterfaceManager):
     def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):
             x = (self.width // 2) - (len(line) // 2)
-            draw_message(y, x, self.window, line, DEFAULT_COLOR)
+            draw_message(y, x, self.window, line)
 
         self.draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
         self.draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
@@ -162,26 +162,27 @@ class Menu(InterfaceManager):
         begin_y = self.height - 2
         begin_x = (self.width // 2) - (len(CREATOR_NAME) // 2)
 
-        draw_message(begin_y, begin_x, self.window,
-                     CREATOR_NAME, color)
+        draw_message(begin_y, begin_x, self.window, CREATOR_NAME, color)
 
     def draw_goodbye_message(self):
         goodbye_message = choice(GOODBYE_MESSAGES)
         begin_y = self.height // 2
         begin_x = (self.width // 2) - (len(goodbye_message) // 2)
 
-        draw_message(begin_y, begin_x, self.window,
-                     goodbye_message, DEFAULT_COLOR)
+        draw_message(begin_y, begin_x, self.window, goodbye_message)
 
     def set_window_redrawing_speed(self):
         self.window.timeout(self.fire_animation_speed)
 
     def draw_fire_animation(self, animation=True, empty_middle=True):
         """
-        A board (integer array) is created to reflect the size (width * height) of the screen.
-        Then, each frame the board is translated upward (top row removed) and decayed (each integer is decremented)
+        A board (integer array) is created to reflect
+        the size (width * height) of the screen.
+        Then, each frame the board is translated upward (top row removed)
+        and decayed (each integer is decremented)
         before a new, randomly seeded row is inserted at the bottom.
         """
+
         if not animation:
             return
 

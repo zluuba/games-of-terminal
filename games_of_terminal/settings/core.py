@@ -88,7 +88,7 @@ class Settings(InterfaceManager):
     def show_settings_title(self):
         for y, line in enumerate(TITLE, start=self.title_start_y):
             x = (self.width // 2) - (len(line) // 2)
-            draw_message(y, x, self.window, line, DEFAULT_COLOR)
+            draw_message(y, x, self.window, line)
 
     def show_items_list(self):
         begin_y = self.items_start_y

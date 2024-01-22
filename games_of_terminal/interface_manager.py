@@ -53,10 +53,10 @@ class InterfaceManager:
 
     def draw_logo(self):
         for y, line in enumerate(LOGO, start=1):
-            draw_message(y, 2, self.logo_area.box, line, DEFAULT_COLOR)
+            draw_message(y, 2, self.logo_area.box, line)
 
         y, x = 6, (self.logo_area.width - len(APP_NAME)) // 2
-        draw_message(y, x, self.logo_area.box, APP_NAME, DEFAULT_COLOR)
+        draw_message(y, x, self.logo_area.box, APP_NAME)
 
     def wait_for_keypress(self):
         self.window.timeout(-1)
@@ -73,7 +73,7 @@ class InterfaceManager:
             y = self.height // 2
             x = (self.width // 2) - (len(message) // 2)
 
-            draw_message(y, x, self.window, message, DEFAULT_COLOR)
+            draw_message(y, x, self.window, message)
             self.height, self.width = new_height, new_width
             sleep(0.1)
 
@@ -94,7 +94,7 @@ class InterfaceManager:
             for y_offset, message in enumerate(messages):
                 y = start_y + y_offset
                 x = (new_width // 2) - (len(message) // 2)
-                draw_message(y, x, self.window, message, DEFAULT_COLOR)
+                draw_message(y, x, self.window, message)
 
             self.height, self.width = new_height, new_width
             sleep(0.3)

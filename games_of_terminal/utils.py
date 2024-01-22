@@ -54,14 +54,14 @@ def hide_cursor():
     curs_set(0)
 
 
-def draw_message(begin_y, begin_x, field, message, color):
+def draw_message(begin_y, begin_x, field, message, color=DEFAULT_COLOR):
     field.addstr(begin_y, begin_x, message, color)
     field.refresh()
 
 
 def clear_field_line(begin_y, begin_x, field, width):
     empty_line = ' ' * width
-    draw_message(begin_y, begin_x, field, empty_line, DEFAULT_COLOR)
+    draw_message(begin_y, begin_x, field, empty_line)
 
 
 def too_small_window_handler(height, width):
