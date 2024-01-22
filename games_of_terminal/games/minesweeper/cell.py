@@ -1,10 +1,13 @@
-from games_of_terminal.utils import get_color_by_name
+from games_of_terminal.utils import get_color_by_name, draw_message
 
 
 class Cell:
     def __init__(self, field_box, coordinates):
         self.field_box = field_box
         self.coordinates = coordinates
+
+        height, width = field_box.getmaxyx()
+        self.center_y, self.center_x = height // 2, width // 2
 
         self.state = {
             'status': 'closed',                 # open, closed
@@ -107,27 +110,19 @@ class Cell:
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()
 
-    def show_cell_text(self):
-        center_y = 3
-        center_x = 1
-
+    def show_cell_text(self, text=''):
         if self.have_flag():
-            message = 'bomb?'
-            color = get_color_by_name('white_text_deep_blue_bg')
-            self.field_box.addstr(center_x, center_y - (len(message) // 2),
-                                  message, color)
+            text = 'bomb?'
         elif self.is_bomb() and self.is_open():
-            message = 'boom!'
-            color = get_color_by_name('black_text_red_bg')
-            self.field_box.addstr(center_x, center_y - (len(message) // 2),
-                                  message, color)
+            text = 'boom!'
         elif self.is_open():
             num_of_bombs = self.bombs_around()
 
             if num_of_bombs:
-                color = self.get_background_color()
-                self.field_box.addstr(center_x, center_y,
-                                      str(num_of_bombs), color)
+                text = str(num_of_bombs)
 
+        y = self.center_y
+        x = self.center_x - (len(text) // 2)
+
+        draw_message(y, x, self.field_box, text)
         self.set_background_color()
-        self.field_box.refresh()
