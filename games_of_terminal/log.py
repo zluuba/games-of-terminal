@@ -66,19 +66,30 @@ def get_func_runtime_message(func, runtime):
     return f'Function [{func.__name__}] runtime is {runtime}ms.'
 
 
+def get_error_message(func, error):
+    return (f'Exception raised in {func.__name__}.'
+            f'Exception: {str(error)}.')
+
+
+def write_logs_with_runtime(func, args, kwargs, write_log_func):
+    start_time = time.time()
+    result = func(*args, **kwargs)
+    end_time = time.time()
+
+    runtime_in_sec = end_time - start_time
+    runtime_in_ms = round(runtime_in_sec * 1000, 2)
+    runtime_message = get_func_runtime_message(func, runtime_in_ms)
+    write_log_func(runtime_message)
+
+    return result
+
+
 def write_logs(write_log_func, func, args, kwargs, with_runtime):
-    # rebuilt it in decorator
     enter_msg = get_enter_func_message(func, args, kwargs)
     write_log_func(enter_msg)
 
     if with_runtime:
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        runtime_in_sec = end_time - start_time
-        runtime_in_ms = round(runtime_in_sec * 1000, 2)
-        runtime_message = get_func_runtime_message(func, runtime_in_ms)
-        write_log_func(runtime_message)
+        result = write_logs_with_runtime(func, args, kwargs, write_log_func)
     else:
         result = func(*args, **kwargs)
 
@@ -88,7 +99,7 @@ def write_logs(write_log_func, func, args, kwargs, with_runtime):
     return result
 
 
-def log(_func=None, *, logger=None, log_type='debug', with_runtime=False):
+def log(_func=None, logger=None, log_type='debug', with_runtime=False):
     def decorator_log(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -96,16 +107,13 @@ def log(_func=None, *, logger=None, log_type='debug', with_runtime=False):
             write_log_func = getattr(logger_, log_type)
 
             try:
-                result = write_logs(
-                    write_log_func, func,
-                    args, kwargs,
-                    with_runtime,
-                )
+                result = write_logs(write_log_func, func,
+                                    args, kwargs, with_runtime)
                 return result
 
             except Exception as e:
-                logger_.error(f'Exception raised in {func.__name__}. '
-                              f'Exception: {str(e)}.')
+                error_message = get_error_message(func, e)
+                logger_.error(error_message)
                 raise e
 
         return wrapper
