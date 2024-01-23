@@ -14,7 +14,7 @@ from games_of_terminal.utils import (
     get_color_by_name, draw_message, hide_cursor,
 )
 
-from curses import endwin, flushinp, A_STANDOUT as REVERSE
+from curses import endwin, A_STANDOUT as REVERSE
 
 from random import choice, random
 from time import sleep
@@ -137,11 +137,6 @@ class Menu(InterfaceManager):
         menu_item.run()
 
         self.handle_post_running_actions()
-
-    @log
-    def handle_post_running_actions(self):
-        flushinp()
-        self.redraw_window()
 
     def draw_logo_with_swords(self):
         for y, line in enumerate(LOGO_MENU, start=self.logo_start_y):

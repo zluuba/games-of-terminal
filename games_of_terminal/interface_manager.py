@@ -10,7 +10,7 @@ from games_of_terminal.utils import (
     too_small_window_handler,
 )
 
-from curses import newwin
+from curses import flushinp, newwin
 from time import sleep
 
 
@@ -60,6 +60,11 @@ class InterfaceManager:
 
     def wait_for_keypress(self):
         self.window.timeout(-1)
+
+    @log
+    def handle_post_running_actions(self):
+        flushinp()
+        self.redraw_window()
 
     @log
     def resize_menu_win_handler(self, key):
