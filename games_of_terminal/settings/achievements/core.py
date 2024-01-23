@@ -1,4 +1,4 @@
-from games_of_terminal.constants import KEYS, DEFAULT_COLOR
+from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import get_all_achievements
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
@@ -24,10 +24,13 @@ class Achievements(InterfaceManager):
     def __init__(self, canvas, settings_name):
         super().__init__(canvas, only_main_win=True)
 
+        self.settings_name = settings_name
+        self.setup_vars()
+
+    def setup_vars(self):
         ach_height, ach_width = self.get_achievements_height_and_width()
         self.ach_height, self.ach_width = ach_height, ach_width
 
-        self.settings_name = settings_name
         self.achievements = self.get_achievements()
         self.achievement_items = self.get_achievement_items()
         self.achievement_items_len = len(self.achievement_items)
@@ -119,6 +122,9 @@ class Achievements(InterfaceManager):
 
             if key == KEYS['escape']:
                 return
+            elif key == KEYS['resize']:
+                self.window.timeout(0)
+                self.resize_menu_win_handler(key)
             elif key in KEYS['enter']:
                 self.switch_detail_mode()
                 self.switch_achieve_selection()
@@ -130,6 +136,15 @@ class Achievements(InterfaceManager):
                 self.moving_controller('left')
             elif key in (KEYS['right_arrow'], KEYS['d']):
                 self.moving_controller('right')
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.window.clear()
+        self.update_win_display()
+
+    def update_win_display(self):
+        self.show_achievements()
+        self.draw_title()
 
     def switch_detail_mode(self):
         self.detail_mode = not self.detail_mode
