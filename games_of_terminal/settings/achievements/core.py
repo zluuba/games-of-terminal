@@ -283,7 +283,7 @@ class Achievements(InterfaceManager):
         self.clear_achievements_body()
 
         y = self.achievements_start_y
-        x = start_x = SIDE_OFFSET
+        x = start_x = self.get_achievements_start_x()
 
         ach_num = ACHIEVEMENTS_IN_ROW
         ach_offset_start = self.pagination_offset * ACHIEVEMENTS_IN_ROW
@@ -304,6 +304,19 @@ class Achievements(InterfaceManager):
             else:
                 ach_num -= 1
                 x += self.ach_width + ACHIEVEMENTS_SPACING
+
+    def get_achievements_start_x(self):
+        width = self.width
+        all_ach_length = ACHIEVEMENTS_IN_ROW * self.ach_width
+        spacing = ACHIEVEMENTS_SPACING * (ACHIEVEMENTS_IN_ROW - 1)
+
+        ach_container_len = all_ach_length + spacing
+        available_offsets = width - ach_container_len
+
+        achievements_start_x = available_offsets // 2
+        achievements_start_x -= 1 if (achievements_start_x % 2 != 0) else 0
+
+        return achievements_start_x
 
     def clear_achievements_body(self):
         curr_y = self.achievements_start_y
