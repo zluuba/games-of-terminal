@@ -4,7 +4,6 @@ from games_of_terminal.constants import (
 )
 from games_of_terminal.database.database import (
     update_game_stat,
-    update_game_stats,
 )
 
 from curses import (
@@ -108,13 +107,15 @@ def show_placeholder_stub(height, width, window,
 
 def update_total_games_count(game_name, value):
     update_game_stat(game_name, 'total_games', value)
+    update_game_stat('Global', 'total_games', value)
 
 
 def update_total_time_count(game_name, start_time):
     end_time = time()
     time_in_game = int(end_time - start_time)
     update_game_stat(game_name, 'total_time', time_in_game)
+    update_game_stat('Global', 'total_time', time_in_game)
 
 
 def update_best_score(game_name, score):
-    update_game_stats(game_name, 'best_score', score, save_mode=True)
+    update_game_stat(game_name, 'best_score', score, save_mode=True)

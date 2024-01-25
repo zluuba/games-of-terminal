@@ -1,5 +1,5 @@
 from games_of_terminal.constants import KEYS
-from games_of_terminal.database.database import get_game_stat
+from games_of_terminal.database.database import get_game_stat_value
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.log import log
 from games_of_terminal.games.snake.constants import (
@@ -94,8 +94,8 @@ class SnakeGame(GameEngine):
 
     @log
     def set_best_score(self):
-        data = get_game_stat('Snake', 'best_score', unique=True)
-        self.stats.best_score = data
+        data = get_game_stat_value('Snake', 'best_score')
+        self.stats.best_score = int(data)
 
     @property
     def tips(self):

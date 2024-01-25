@@ -1,5 +1,5 @@
 from games_of_terminal.constants import KEYS
-from games_of_terminal.database.database import update_game_stats
+from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 from games_of_terminal.games.tictactoe.constants import (
@@ -218,13 +218,14 @@ class TicTacToeGame(GameEngine):
         update_total_time_count(self.game_name, self.start_time)
 
         if is_game_over:
-            self.update_end_game_status_stat()
+            self.update_game_result_stat()
 
-    def update_end_game_status_stat(self):
-        end_game_status_stat_name = 'total_ties'
+    def update_game_result_stat(self):
         if self.stats.game_status == 'user_win':
-            end_game_status_stat_name = 'total_wins'
+            stat_name = 'total_wins'
         elif self.stats.game_status == 'user_lose':
-            end_game_status_stat_name = 'total_losses'
+            stat_name = 'total_losses'
+        else:
+            stat_name = 'total_ties'
 
-        update_game_stats(self.game_name, end_game_status_stat_name, 1)
+        update_game_stat(self.game_name, stat_name, 1)

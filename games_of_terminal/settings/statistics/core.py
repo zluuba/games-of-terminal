@@ -22,9 +22,6 @@ class Statistics(InterfaceManager):
         self.settings_name = settings_name
 
         statistic_raw_data = get_games_statistic()
-        statistic_raw_data = self.add_common_stats_into_statistics(
-            statistic_raw_data
-        )
         prettify_statistics_data = self.get_statistics_prettify_data(
             statistic_raw_data
         )
@@ -190,32 +187,6 @@ class Statistics(InterfaceManager):
         spaces = self.get_spaces_count(stat_name, stat_data)
         prettify_stat = stat_name + ':' + (' ' * spaces) + stat_data
         return prettify_stat
-
-    def add_common_stats_into_statistics(self, statistics_dict):
-        total_games, total_time = self.get_total_games_and_total_time(
-            statistics_dict
-        )
-
-        statistics_dict[''] = {
-            'all_games_played': total_games,
-            'time_spent_in_games': total_time,
-        }
-
-        return statistics_dict
-
-    @staticmethod
-    def get_total_games_and_total_time(statistics_dict):
-        total_games = 0
-        total_time = 0
-
-        for _, game_data in statistics_dict.items():
-            for stat_name, stat_data in game_data.items():
-                if stat_name == 'total_games':
-                    total_games += stat_data
-                elif stat_name == 'total_time':
-                    total_time += stat_data
-
-        return total_games, total_time
 
     def get_spaces_count(self, *args):
         chars_count = sum(map(lambda word: len(word), args))

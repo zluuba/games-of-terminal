@@ -1,5 +1,5 @@
 from games_of_terminal.constants import KEYS, BASE_OFFSET
-from games_of_terminal.database.database import update_game_stats
+from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
@@ -278,11 +278,11 @@ class MinesweeperGame(GameEngine):
         else:
             end_game_status_stat_name = 'total_losses'
 
-        update_game_stats(self.game_name, end_game_status_stat_name, 1)
+        update_game_stat(self.game_name, end_game_status_stat_name, 1)
 
     def update_bombs_defused_count(self):
         bombs_defused = sum([
             1 for cell in self.cells.values()
             if cell.is_bomb() and cell.have_flag()
         ])
-        update_game_stats(self.game_name, 'bombs_defused', bombs_defused)
+        update_game_stat(self.game_name, 'bombs_defused', bombs_defused)

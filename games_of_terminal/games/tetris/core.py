@@ -1,5 +1,5 @@
 from games_of_terminal.database.database import (
-    get_game_stat, update_game_stats,
+    get_game_stat_value, update_game_stat,
 )
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.tetris.block import TetrisBlock
@@ -96,7 +96,7 @@ class TetrisGame(GameEngine):
 
     @log
     def set_best_score(self):
-        data = get_game_stat('Tetris', 'best_score', unique=True)
+        data = get_game_stat_value(self.game_name, 'best_score')
         self.stats.best_score = int(data)
 
     def controller(self, key, pause_on=True):
@@ -251,4 +251,4 @@ class TetrisGame(GameEngine):
         stat_name = 'lines_removed'
 
         if self.lines_removed:
-            update_game_stats(self.game_name, stat_name, self.lines_removed)
+            update_game_stat(self.game_name, stat_name, self.lines_removed)
