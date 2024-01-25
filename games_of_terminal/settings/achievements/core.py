@@ -21,10 +21,10 @@ from math import ceil
 
 class Achievements(InterfaceManager):
     @log
-    def __init__(self, canvas, settings_name):
+    def __init__(self, canvas, name):
         super().__init__(canvas, only_main_win=True)
 
-        self.settings_name = settings_name
+        self.name = name
         self.setup_vars()
 
     def setup_vars(self):
@@ -54,9 +54,6 @@ class Achievements(InterfaceManager):
 
         self.detail_mode = False
         self.selected_ach_num = 0
-
-    def __repr__(self):
-        return '<Achievements>'
 
     def get_achievement_items(self):
         return sorted(list(self.achievements.keys()))
@@ -163,6 +160,8 @@ class Achievements(InterfaceManager):
             self.update_current_game_index(-1)
         elif direction == 'right':
             self.update_current_game_index(1)
+        else:
+            return
 
         self.reset_game_settings()
         self.show_pagination_arrows()
