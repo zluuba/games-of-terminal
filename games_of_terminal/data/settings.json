@@ -1,0 +1,21 @@
+{
+  "Global": {
+    "username": "",
+    "color_schemes": "",
+    "control_keys": ""
+  },
+  "Minesweeper": {
+    "color_schemes": ""
+  },
+  "Snake": {
+    "modes": "",
+    "skins": "",
+    "color_schemes": ""
+  },
+  "Tetris": {
+    "color_schemes": ""
+  },
+  "Tic Tac Toe": {
+    "color_schemes": ""
+  }
+}
