@@ -1,19 +1,31 @@
 {
-    "Snake": {
-        "best_score": 0
-    },
-    "Minesweeper": {
-        "total_wins": 0,
-        "total_losses": 0,
-        "bombs_defused": 0
-    },
-    "Tic Tac Toe": {
-        "total_wins": 0,
-        "total_losses": 0,
-        "total_ties": 0
-    },
-    "Tetris": {
-        "best_score": 0,
-        "lines_removed": 0
-    }
+  "Global": {
+    "total_games": 0,
+    "total_time": 0
+  },
+  "Minesweeper": {
+    "total_games": 0,
+    "total_time": 0,
+    "total_wins": 0,
+    "total_losses": 0,
+    "bombs_defused": 0
+  },
+  "Snake": {
+    "total_games": 0,
+    "total_time": 0,
+    "best_score": 0
+  },
+  "Tetris": {
+    "total_games": 0,
+    "total_time": 0,
+    "best_score": 0,
+    "lines_removed": 0
+  },
+  "Tic Tac Toe": {
+    "total_games": 0,
+    "total_time": 0,
+    "total_wins": 0,
+    "total_losses": 0,
+    "total_ties": 0
+  }
 }
