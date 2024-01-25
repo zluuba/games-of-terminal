@@ -20,9 +20,6 @@ class Settings(InterfaceManager):
         self.current_row = 0
         self.setup_vars()
 
-    def __repr__(self):
-        return f'<InterfaceManager>'
-
     @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()

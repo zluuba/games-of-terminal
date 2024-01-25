@@ -16,10 +16,10 @@ from datetime import timedelta
 
 class Statistics(InterfaceManager):
     @log
-    def __init__(self, canvas, settings_name):
+    def __init__(self, canvas, name):
         super().__init__(canvas, only_main_win=True)
 
-        self.settings_name = settings_name
+        self.name = name
 
         statistic_raw_data = get_games_statistic()
         prettify_statistics_data = self.get_statistics_prettify_data(
@@ -39,9 +39,6 @@ class Statistics(InterfaceManager):
         self.max_pagination_offset = self.get_max_pagination_offset()
 
         self.arrow_x = self.get_arrow_x()
-
-    def __repr__(self):
-        return f'<Statistics>'
 
     @log
     def setup_vars(self):

@@ -15,9 +15,6 @@ from time import time
 
 
 class MinesweeperGame(GameEngine):
-    def __repr__(self):
-        return f'<MinesweeperGame>'
-
     @log
     def setup_game_stats(self):
         self.start_time = time()

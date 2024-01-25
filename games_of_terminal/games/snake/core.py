@@ -18,9 +18,6 @@ from time import time
 
 
 class SnakeGame(GameEngine):
-    def __repr__(self):
-        return f'<SnakeGame>'
-
     @log
     def setup_game_stats(self):
         # initial position of the snake:

@@ -18,9 +18,6 @@ from time import sleep, time
 
 
 class TicTacToeGame(GameEngine):
-    def __repr__(self):
-        return '<TicTacToeGame>'
-
     @log
     def setup_game_stats(self):
         self.cells = {}

@@ -10,6 +10,9 @@ class ResetAll(InterfaceManager):
         super().__init__(canvas)
         self.settings_name = settings_name
 
+    def __repr__(self):
+        return f'<{self.__class__.__name__}>'
+
     def run(self):
         show_placeholder_stub(
             self.height, self.width,

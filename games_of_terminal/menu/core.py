@@ -31,9 +31,6 @@ class Menu(InterfaceManager):
 
         self.setup_vars()
 
-    def __repr__(self):
-        return f'<Menu>'
-
     @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()

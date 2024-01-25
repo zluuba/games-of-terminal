@@ -24,9 +24,6 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
-    def __repr__(self):
-        return '<TetrisGame>'
-
     @log
     def setup_game_stats(self):
         self.block = None

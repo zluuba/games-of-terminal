@@ -21,9 +21,6 @@ class GameEngine(InterfaceManager):
         self.game_name = game_name
         self.stats = GameStats()
 
-    def __repr__(self):
-        return f'<GameEngine for {self.game_name}>'
-
     @log
     def run(self):
         while True:

@@ -22,7 +22,7 @@ class InterfaceManager:
         self._setup()
 
     def __repr__(self):
-        return f'<InterfaceManager>'
+        return f'<{self.__class__.__name__}>'
 
     @log
     def _setup(self):
