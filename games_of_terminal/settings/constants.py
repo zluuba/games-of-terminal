@@ -1,5 +1,4 @@
-from games_of_terminal.settings.user_preferences.core import UserPreferences
-from games_of_terminal.settings.games_settings.core import GamesSettings
+from games_of_terminal.settings.all_settings.core import GamesSettings
 from games_of_terminal.settings.achievements.core import Achievements
 from games_of_terminal.settings.statistics.core import Statistics
 from games_of_terminal.settings.reset_all.core import ResetAll
@@ -13,12 +12,11 @@ TITLE = [
 ]
 
 ITEMS = {
-    0: {'name': 'User Preferences', 'class': UserPreferences, 'status': 'in_development'},
-    1: {'name': 'Games Settings', 'class': GamesSettings, 'status': 'production'},
-    2: {'name': 'Achievements', 'class': Achievements, 'status': 'production'},
-    3: {'name': 'Statistics', 'class': Statistics, 'status': 'production'},
-    4: {'name': 'Reset All', 'class': ResetAll, 'status': 'in_development'},
-    5: {'name': 'Confess All', 'class': ConfessAll, 'status': 'in_development'},
+    0: {'name': 'All Settings', 'class': GamesSettings, 'status': 'production'},
+    1: {'name': 'Achievements', 'class': Achievements, 'status': 'production'},
+    2: {'name': 'Statistics', 'class': Statistics, 'status': 'production'},
+    3: {'name': 'Reset All', 'class': ResetAll, 'status': 'in_development'},
+    4: {'name': 'Confess All', 'class': ConfessAll, 'status': 'in_development'},
 }
 
 ITEMS_LEN = len(ITEMS)
