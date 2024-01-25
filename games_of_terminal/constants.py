@@ -57,6 +57,14 @@ GAMES = [
     'Tetris',
 ]
 
+ITEMS = [
+    'Global',
+    'Snake',
+    'Minesweeper',
+    'Tic Tac Toe',
+    'Tetris',
+]
+
 GAME_STATUSES = {
     'game_active': {'text': 'ON GAME', 'color': 'white_text_dark_grey_bg'},
     'user_win': {'text': 'You WIN!', 'color': 'white_text_green_bg'},
