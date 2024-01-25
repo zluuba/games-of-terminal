@@ -1,8 +1,9 @@
 from games_of_terminal.database import queries
-from games_of_terminal.constants import GAMES
+from games_of_terminal.constants import ITEMS
 from games_of_terminal.log import log
 
-from json import load, loads, dumps
+from collections import defaultdict
+from json import load
 from os import path
 from pathlib import Path
 from sqlite3 import connect
@@ -21,6 +22,9 @@ ACHIEVEMENTS_FILE_PATH = get_full_path(BASE_DIR, ACHIEVEMENTS_FILE)
 
 GAME_STATS_FILE = 'data/game_statistics.json'
 GAME_STATS_FILE_PATH = get_full_path(BASE_DIR, GAME_STATS_FILE)
+
+SETTINGS_FILE = 'data/settings.json'
+SETTINGS_FILE_PATH = get_full_path(BASE_DIR, SETTINGS_FILE)
 
 
 class Connection:
@@ -59,140 +63,109 @@ def create_and_fill_db_tables():
     if check_tables_exist():
         return
 
-    with Connection(autocommit=True) as c:
-        for _, create_table_query in queries.TABLES.items():
-            c.cursor.execute(create_table_query)
+    with Connection(autocommit=True) as conn:
+        for create_table_query in queries.TABLES.values():
+            conn.cursor.execute(create_table_query)
 
-    add_init_stats_to_db()
-    add_achievements_to_db()
-
-
-def add_init_stats_to_db():
-    query = queries.insert_game_stats_query
-
-    with open(GAME_STATS_FILE_PATH, 'r') as file:
-        stats_data = load(file)
-
-    with Connection(autocommit=True) as c:
-        for game_name, stats in stats_data.items():
-            stats_data = dumps(stats)
-            c.cursor.execute(query, (game_name, stats_data))
+        fill_game_table(conn)
+        fill_full_game_data_table(conn)
+        fill_achievement_table(conn)
 
 
-def add_achievements_to_db():
+def fill_game_table(conn):
+    for game_name in ITEMS:
+        conn.cursor.execute(
+            queries.add_new_game_query,
+            (game_name,)
+        )
+
+
+def fill_full_game_data_table(conn):
+    fill_game_data_table(conn, 'statistics', GAME_STATS_FILE_PATH)
+    fill_game_data_table(conn, 'settings', SETTINGS_FILE_PATH)
+
+
+def fill_game_data_table(conn, data_type, file_path):
+    with open(file_path, 'r') as file:
+        data_dict = load(file)
+
+    for game_name, data in data_dict.items():
+        for name, value in data.items():
+            conn.cursor.execute(
+                queries.add_game_data_query,
+                (game_name, data_type, name,
+                 str(value))
+            )
+
+
+def fill_achievement_table(conn):
     with open(ACHIEVEMENTS_FILE_PATH, 'r') as file:
-        achievements_data = load(file)
+        games_achievements_data = load(file)
 
-    with Connection(autocommit=True) as c:
-        for achievements in achievements_data:
-            game_name = achievements['name']
-            all_achieves = achievements['achievements']
-
-            for achievement_data in all_achieves:
-                add_achievement_to_db(achievement_data, game_name, c)
-
-
-@log
-def add_achievement_to_db(achievement, game_name, conn):
-    achievement_name = achievement['name']
-    description = achievement['description']
-
-    conn.cursor.execute(
-        queries.insert_or_ignore_achievement_query,
-        (game_name, achievement_name, description),
-    )
+    for game in games_achievements_data:
+        for achievement in game['achievements']:
+            conn.cursor.execute(
+                queries.add_achievement_query,
+                (game['name'], achievement['name'],
+                 achievement['description'])
+            )
 
 
 @log
-def get_game_stat(game_name, stat, unique=False):
-    stat_name = 'game_stats' if unique else stat
-    query = queries.get_game_stat_query(stat_name)
+def get_game_stat_value(game_name, stat_name, data_type='statistics'):
+    with Connection() as conn:
+        conn.cursor.execute(
+            queries.get_game_stat_query,
+            (game_name, data_type, stat_name))
+        value = conn.cursor.fetchone()[0]
 
-    with Connection() as c:
-        c.cursor.execute(query, (game_name,))
-        data = c.cursor.fetchone()[0]
-
-        if not unique:
-            return data
-
-    stats_data = loads(data)
-    return stats_data[stat]
+    return value
 
 
 @log
-def update_game_stat(game_name, stat, value, save_mode=False):
-    get_query_func = queries.update_game_stat_query
-
+def update_game_stat(game_name, stat_name, value,
+                     data_type='statistics',
+                     save_mode=False):
     if save_mode:
-        get_query_func = queries.set_game_stat_query
+        query = queries.set_game_stat_query
+    else:
+        query = queries.increase_game_stat_query
 
-    query = get_query_func(stat)
-
-    with Connection(autocommit=True) as c:
-        c.cursor.execute(query, (value, game_name))
-
-
-@log
-def update_game_stats(game_name, stat_name, value, save_mode=False):
-    with Connection(autocommit=True) as c:
-        query = queries.get_game_stat_query('game_stats')
-        c.cursor.execute(query, (game_name,))
-        stats_data = c.cursor.fetchone()[0]
-
-        game_stats = loads(stats_data)
-
-        if save_mode:
-            game_stats[stat_name] = value
-        else:
-            game_stats[stat_name] += value
-
-        get_query_func = queries.set_game_stat_query
-        query = get_query_func('game_stats')
-
-        game_stats = dumps(game_stats)
-        c.cursor.execute(query, (game_stats, game_name))
+    with Connection(autocommit=True) as conn:
+        conn.cursor.execute(
+            query,
+            (str(value), game_name, data_type, stat_name)
+        )
 
 
 def get_games_statistic():
-    games_statistic = dict()
-    query = queries.get_game_statistic_query
+    games_statistic = defaultdict(dict)
 
-    with Connection() as c:
-        for game_name in GAMES:
-            c.cursor.execute(query, (game_name,))
-            game_statistic = c.cursor.fetchall()[0]
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_all_statistics_query)
+        statistics_data = conn.cursor.fetchall()
 
-            total_games, total_time, stats_json_data = game_statistic
-            stats = loads(stats_json_data)
-
-            games_statistic[game_name] = dict(
-                total_games=total_games,
-                total_time=total_time,
-                **stats,
-            )
+        for statistics in statistics_data:
+            game_name, stat_name, value = statistics
+            games_statistic[game_name][stat_name] = int(value)
 
     return games_statistic
 
 
 def get_all_achievements():
-    with Connection() as c:
-        c.cursor.execute(queries.get_all_achievements_query)
-        all_achievements_list = c.cursor.fetchall()
+    all_achievements = defaultdict(list)
 
-    all_achievements = dict()
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_all_achievements_query)
+        all_achievements_list = conn.cursor.fetchall()
 
     for achievement in all_achievements_list:
         game_name, name, description, status, date_received = achievement
-
-        if game_name not in all_achievements:
-            all_achievements[game_name] = []
-
-        achievement_dict = dict(
+        all_achievements[game_name].append(dict(
             name=name,
             status=status,
             description=description,
             date_received=date_received,
-        )
-        all_achievements[game_name].append(achievement_dict)
+        ))
 
     return all_achievements
