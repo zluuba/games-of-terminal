@@ -1,6 +1,11 @@
 from games_of_terminal.database import queries
 from games_of_terminal.constants import ITEMS
 from games_of_terminal.log import log
+from games_of_terminal.database.constants import (
+    STATISTICS_DATATYPE, SETTINGS_DATATYPE,
+    DB_FILENAME, ACHIEVEMENTS_FILE,
+    GAME_STATS_FILE, SETTINGS_FILE,
+)
 
 from collections import defaultdict
 from json import load
@@ -13,17 +18,11 @@ def get_full_path(base_dir, filename):
     return str(path.join(base_dir, filename))
 
 
-DB_FILENAME = 'got_games.db'
 BASE_DIR = Path(__file__).parents[1]
+
 DB_FILE_PATH = get_full_path(BASE_DIR, DB_FILENAME)
-
-ACHIEVEMENTS_FILE = 'data/achievements.json'
 ACHIEVEMENTS_FILE_PATH = get_full_path(BASE_DIR, ACHIEVEMENTS_FILE)
-
-GAME_STATS_FILE = 'data/game_statistics.json'
 GAME_STATS_FILE_PATH = get_full_path(BASE_DIR, GAME_STATS_FILE)
-
-SETTINGS_FILE = 'data/settings.json'
 SETTINGS_FILE_PATH = get_full_path(BASE_DIR, SETTINGS_FILE)
 
 
@@ -81,8 +80,8 @@ def fill_game_table(conn):
 
 
 def fill_full_game_data_table(conn):
-    fill_game_data_table(conn, 'statistics', GAME_STATS_FILE_PATH)
-    fill_game_data_table(conn, 'settings', SETTINGS_FILE_PATH)
+    fill_game_data_table(conn, STATISTICS_DATATYPE, GAME_STATS_FILE_PATH)
+    fill_game_data_table(conn, SETTINGS_DATATYPE, SETTINGS_FILE_PATH)
 
 
 def fill_game_data_table(conn, data_type, file_path):

@@ -6,7 +6,6 @@ TABLES = {
         );
     ''',
     # data_type: statistics, settings
-    # if it global - paste 0 as id_game (bc id_game starts from 1)
     'game_data': '''
         CREATE TABLE IF NOT EXISTS game_data (
             id_game_data INTEGER PRIMARY KEY,
