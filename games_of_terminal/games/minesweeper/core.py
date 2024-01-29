@@ -33,7 +33,7 @@ class MinesweeperGame(GameEngine):
         self.open_first_empty_cell()
 
         self.show_game_status()
-        self.draw_logo()
+        self.draw_side_menu_logo()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,

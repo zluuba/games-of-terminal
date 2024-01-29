@@ -34,7 +34,7 @@ class InterfaceManager:
         self._init_main_window()
 
         if not self.only_main_win:
-            self._init_subwindows()
+            self._init_game_sub_windows()
 
     @log
     def _init_main_window(self):
@@ -44,19 +44,22 @@ class InterfaceManager:
         self.window.keypad(True)
 
     @log
-    def _init_subwindows(self):
-        self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
-        self.side_menu = SubWindow(self.window, *self.side_menu_box_sizes.values())
-        self.tips_area = SubWindow(self.side_menu.box, *self.tips_box_sizes.values())
-        self.logo_area = SubWindow(self.side_menu.box, *self.logo_box_sizes.values())
-        self.game_status_area = SubWindow(self.side_menu.box, *self.status_box_sizes.values())
-
-    def draw_logo(self):
-        for y, line in enumerate(LOGO, start=1):
-            draw_message(y, 2, self.logo_area.box, line)
-
-        y, x = 6, (self.logo_area.width - len(APP_NAME)) // 2
-        draw_message(y, x, self.logo_area.box, APP_NAME)
+    def _init_game_sub_windows(self):
+        self.game_area = SubWindow(
+            self.window, *self.game_box_sizes.values()
+        )
+        self.side_menu = SubWindow(
+            self.window, *self.side_menu_box_sizes.values()
+        )
+        self.tips_area = SubWindow(
+            self.side_menu.box, *self.tips_box_sizes.values()
+        )
+        self.logo_area = SubWindow(
+            self.side_menu.box, *self.logo_box_sizes.values()
+        )
+        self.game_status_area = SubWindow(
+            self.side_menu.box, *self.status_box_sizes.values()
+        )
 
     def wait_for_keypress(self):
         self.window.timeout(-1)
@@ -112,6 +115,13 @@ class InterfaceManager:
 
     def redraw_window(self):
         pass
+
+    def draw_side_menu_logo(self, begin_y=6, begin_x=2):
+        for y, line in enumerate(LOGO, start=1):
+            draw_message(y, begin_x, self.logo_area.box, line)
+
+        y, x = begin_y, (self.logo_area.width - len(APP_NAME)) // 2
+        draw_message(y, x, self.logo_area.box, APP_NAME)
 
     @log
     def _set_window_sizes(self, height=None, width=None):

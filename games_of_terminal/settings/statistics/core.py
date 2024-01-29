@@ -43,11 +43,10 @@ class Statistics(InterfaceManager):
     @log
     def setup_vars(self):
         self.start_y = self.get_statistic_elements_start_y()
+        self.arrow_x = self.get_arrow_x()
 
         self.pagination_offset = 0
         self.max_pagination_offset = self.get_max_pagination_offset()
-
-        self.arrow_x = self.get_arrow_x()
 
     def get_max_pagination_offset(self):
         return ((len(self.statistics_data) + len(GAMES)) -

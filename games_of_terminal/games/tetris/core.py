@@ -44,7 +44,7 @@ class TetrisGame(GameEngine):
 
         self.set_best_score()
 
-        self.draw_logo()
+        self.draw_side_menu_logo()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,

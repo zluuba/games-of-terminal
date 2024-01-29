@@ -7,7 +7,7 @@ from games_of_terminal.utils import (
     draw_message, hide_cursor, get_color_by_name,
 )
 
-from curses import flushinp, A_STANDOUT as REVERSE
+from curses import A_STANDOUT as REVERSE
 from random import randint, choice
 
 
@@ -52,7 +52,7 @@ class Settings(InterfaceManager):
             elif key in KEYS['enter']:
                 self.open_selected_settings()
 
-            self.update_menu_display()
+            self.update_settings_display()
             self.window.refresh()
 
     @log
@@ -76,10 +76,10 @@ class Settings(InterfaceManager):
         hide_cursor()
         self.window.clear()
 
-        self.update_menu_display()
+        self.update_settings_display()
         self.window.refresh()
 
-    def update_menu_display(self):
+    def update_settings_display(self):
         self.draw_noise_animation()
         self.show_settings_title()
         self.show_items_list()

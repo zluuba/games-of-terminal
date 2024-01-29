@@ -32,7 +32,7 @@ class TicTacToeGame(GameEngine):
     @log
     def setup_game_field(self, initial=True):
         hide_cursor()
-        self.draw_logo()
+        self.draw_side_menu_logo()
         self.show_side_menu_tips(game_tips=GAME_TIPS)
         self.show_game_status()
         self.draw_game_field()

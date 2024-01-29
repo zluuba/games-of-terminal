@@ -73,10 +73,7 @@ def create_and_fill_db_tables():
 
 def fill_game_table(conn):
     for game_name in ITEMS:
-        conn.cursor.execute(
-            queries.add_new_game_query,
-            (game_name,)
-        )
+        conn.cursor.execute(queries.add_new_game_query, (game_name,))
 
 
 def fill_full_game_data_table(conn):
@@ -92,8 +89,7 @@ def fill_game_data_table(conn, data_type, file_path):
         for name, value in data.items():
             conn.cursor.execute(
                 queries.add_game_data_query,
-                (game_name, data_type, name,
-                 str(value))
+                (game_name, data_type, name, str(value)),
             )
 
 

@@ -44,7 +44,7 @@ class SnakeGame(GameEngine):
         self.set_best_score()
 
         self.draw_game_window()
-        self.draw_logo()
+        self.draw_side_menu_logo()
         self.show_game_status()
         self.show_side_menu_tips(
             game_state=self.tips,

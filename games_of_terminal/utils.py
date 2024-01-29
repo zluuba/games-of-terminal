@@ -97,12 +97,12 @@ def get_game_tips(game_state, game_tips):
 
 
 def show_placeholder_stub(height, width, window,
-                          color, message='In development.'):
+                          message='In development.'):
     y = height // 2
     x = (width // 2) - (len(message) // 2)
 
     window.clear()
-    draw_message(y, x, window, message, color)
+    draw_message(y, x, window, message, DEFAULT_COLOR)
 
 
 def update_total_games_count(game_name, value):
