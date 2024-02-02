@@ -135,14 +135,25 @@ def update_game_stat(game_name, stat_name, value,
 
 def get_games_statistic():
     games_statistic = defaultdict(dict)
+    games_statistic[''] = {
+        'all_games_played': 0,
+        'time_spent_in_games': 0,
+    }
 
     with Connection() as conn:
         conn.cursor.execute(queries.get_all_statistics_query)
         statistics_data = conn.cursor.fetchall()
 
         for statistics in statistics_data:
-            game_name, stat_name, value = statistics
-            games_statistic[game_name][stat_name] = int(value)
+            game_name, stat_name, stat_value = statistics
+            stat_value = int(stat_value)
+
+            if stat_name == 'total_games':
+                games_statistic['']['all_games_played'] += stat_value
+            elif stat_name == 'total_time':
+                games_statistic['']['time_spent_in_games'] += stat_value
+
+            games_statistic[game_name][stat_name] = stat_value
 
     return games_statistic
 
