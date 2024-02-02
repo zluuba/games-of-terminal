@@ -1,8 +1,4 @@
 {
-  "Global": {
-    "total_games": 0,
-    "total_time": 0
-  },
   "Minesweeper": {
     "total_games": 0,
     "total_time": 0,

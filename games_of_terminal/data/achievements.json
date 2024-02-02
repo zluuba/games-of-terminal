@@ -1,38 +1,38 @@
 [
   {
-    "name": "Snake",
+    "name": "Global",
     "achievements": [
       {
-        "name": "Snake Lover",
-        "description": "Embark on your first snake game adventure"
+        "name": "Hello, World!",
+        "description": "Run the GOT for the first time"
       },
       {
-        "name": "Fashionista",
-        "description": "Change snake skin"
+        "name": "Gamer",
+        "description": "Play all the games"
       },
       {
-        "name": "Student",
-        "description": "Reach 10 points in one game"
+        "name": "Better Than Sex",
+        "description": "Play in games more than 1 hour"
       },
       {
-        "name": "Professor",
-        "description": "Reach 42 points in one game"
+        "name": "Game-a-holic",
+        "description": "Play 50 games in total"
       },
       {
-        "name": "Are you okay?",
-        "description": "Reach 101 points in one game"
+        "name": "Ctrl + Alt + Achieve",
+        "description": "Get 20 achieves"
       },
       {
-        "name": "The Grass Must Be Touched",
-        "description": "Reach 75 points in one game"
+        "name": "Creator's Favorite",
+        "description": "Obtain all achievements"
       },
       {
-        "name": "Good Soup",
-        "description": "Eat yourself"
+        "name": "How You Doin'? ;)",
+        "description": "Set username in the Settings and feel the Power"
       },
       {
-        "name": "Mode Mood",
-        "description": "Change game mode"
+        "name": "Nice!",
+        "description": "Find suspicious option in the Settings and click on it"
       }
     ]
   },
@@ -74,27 +74,39 @@
     ]
   },
   {
-    "name": "Tic Tac Toe",
+    "name": "Snake",
     "achievements": [
       {
-        "name": "Beginners Luck",
-        "description": "Achieve your first victory"
+        "name": "Snake Lover",
+        "description": "Embark on your first snake game adventure"
       },
       {
-        "name": "GOTcha!",
-        "description": "Experience your first defeat"
+        "name": "Fashionista",
+        "description": "Change snake skin"
       },
       {
-        "name": "You Scare Me",
-        "description": "Personalize your gaming experience by changing the color scheme"
+        "name": "Student",
+        "description": "Reach 10 points in one game"
       },
       {
-        "name": "Really..?",
-        "description": "Play 20 games"
+        "name": "Professor",
+        "description": "Reach 42 points in one game"
       },
       {
-        "name": "Ah shit, here we go again",
-        "description": "Start your 101st game"
+        "name": "Are you okay?",
+        "description": "Reach 101 points in one game"
+      },
+      {
+        "name": "The Grass Must Be Touched",
+        "description": "Reach 75 points in one game"
+      },
+      {
+        "name": "Good Soup",
+        "description": "Eat yourself"
+      },
+      {
+        "name": "Mode Mood",
+        "description": "Change game mode"
       }
     ]
   },
@@ -148,39 +160,27 @@
     ]
   },
   {
-    "name": "Global",
+    "name": "Tic Tac Toe",
     "achievements": [
       {
-        "name": "Hello, World!",
-        "description": "Run the GOT for the first time"
+        "name": "Beginners Luck",
+        "description": "Achieve your first victory"
       },
       {
-        "name": "Gamer",
-        "description": "Play all the games"
+        "name": "GOTcha!",
+        "description": "Experience your first defeat"
       },
       {
-        "name": "Better Than Sex",
-        "description": "Play in games more than 1 hour"
+        "name": "You Scare Me",
+        "description": "Personalize your gaming experience by changing the color scheme"
       },
       {
-        "name": "Game-a-holic",
-        "description": "Play 50 games in total"
+        "name": "Really..?",
+        "description": "Play 20 games"
       },
       {
-        "name": "Ctrl + Alt + Achieve",
-        "description": "Get 20 achieves"
-      },
-      {
-        "name": "Creator's Favorite",
-        "description": "Obtain all achievements"
-      },
-      {
-        "name": "How You Doin'? ;)",
-        "description": "Set username in the Settings and feel the Power"
-      },
-      {
-        "name": "Nice!",
-        "description": "Find suspicious option in the Settings and click on it"
+        "name": "Ah shit, here we go again",
+        "description": "Start your 101st game"
       }
     ]
   }
