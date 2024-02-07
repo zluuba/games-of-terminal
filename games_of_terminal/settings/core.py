@@ -109,9 +109,14 @@ class Settings(InterfaceManager):
             draw_message(y, x, self.window, settings_name, color)
 
     def move_menu_selection(self, direction):
-        self.current_row = max(
-            0, min(self.current_row + direction, ITEMS_LEN - 1)
-        )
+        new_current_row = self.current_row + direction
+
+        if new_current_row < 0:
+            self.current_row = ITEMS_LEN - 1
+        elif new_current_row >= ITEMS_LEN:
+            self.current_row = 0
+        else:
+            self.current_row = new_current_row
 
     def draw_noise_animation(self):
         self.window.clear()
