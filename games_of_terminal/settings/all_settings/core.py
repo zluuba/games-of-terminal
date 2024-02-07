@@ -1,12 +1,18 @@
-from games_of_terminal.constants import ITEMS, KEYS, BASE_OFFSET
 from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.utils import (
-    draw_message, hide_cursor, get_color_by_name,
-)
 from games_of_terminal.sub_window import SubWindow
+
+from games_of_terminal.constants import (
+    ITEMS, KEYS, BASE_OFFSET, DEFAULT_COLOR,
+)
+from games_of_terminal.database.database import get_all_settings
+from games_of_terminal.utils import (
+    draw_message, hide_cursor,
+)
 from games_of_terminal.settings.all_settings.constants import (
     TITLE, TOP_OFFSET,
 )
+
+from curses import A_STANDOUT as REVERSE
 
 
 class GamesSettings(InterfaceManager):
@@ -15,6 +21,8 @@ class GamesSettings(InterfaceManager):
 
         self.name = name
         self.current_row = 0
+
+        self.all_settings = get_all_settings()
         self.setup_vars()
 
     def setup_vars(self):
@@ -53,13 +61,37 @@ class GamesSettings(InterfaceManager):
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.move_menu_selection(1)
             elif key in KEYS['enter']:
-                self.show_selected_settings()
+                self.go_to_selected_settings()
 
             self.update_settings_display()
             self.window.refresh()
 
-    def update_settings_display(self):
+    def go_to_selected_settings(self):
         pass
+
+    def update_settings_display(self):
+        # draw dynamic parts
+        self.show_settings_items_list()
+        self.show_selected_settings()
+
+    def show_settings_items_list(self):
+        begin_y = 1
+
+        for row, settings_item in enumerate(ITEMS):
+            y = begin_y + row
+            x = (self.items_list_width // 2) - (len(settings_item) // 2)
+            color = DEFAULT_COLOR + REVERSE if row == self.current_row \
+                else DEFAULT_COLOR
+
+            draw_message(y, 1, self.items_list_area.box, ' ' * (self.items_list_width - 2), color)
+            draw_message(y, x, self.items_list_area.box, settings_item, color)
+
+    def show_selected_settings(self):
+        self.settings_area.box.clear()
+        self.settings_area.show_borders()
+
+        curr_settings = self.all_settings[ITEMS[self.current_row]]
+        draw_message(1, 1, self.settings_area.box, str(curr_settings))
 
     def initialize_settings(self):
         hide_cursor()
@@ -81,14 +113,16 @@ class GamesSettings(InterfaceManager):
         )
 
         self.settings_area = SubWindow(
-            self.window, self.sub_windows_height, settings_area_width,
-            settings_area_begin_y, settings_area_begin_x,
+            self.window, self.sub_windows_height, self.settings_area_width,
+            self.settings_area_begin_y, self.settings_area_begin_x,
         )
 
     def move_menu_selection(self, direction):
-        self.current_row = max(
-            0, min(self.current_row + direction, self.items_len - 1)
-        )
+        new_current_row = self.current_row + direction
 
-    def show_selected_settings(self):
-        pass
+        if new_current_row < 0:
+            self.current_row = len(ITEMS) - 1
+        elif new_current_row >= len(ITEMS):
+            self.current_row = 0
+        else:
+            self.current_row = new_current_row
