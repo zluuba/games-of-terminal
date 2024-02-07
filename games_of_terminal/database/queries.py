@@ -117,3 +117,12 @@ SELECT game.name as game_name,
 FROM achievement
 JOIN game ON achievement.id_game = game.id_game;
 '''
+
+get_all_settings_query = '''
+SELECT game.name as game_name, 
+       game_data.name, 
+       game_data.value
+FROM game_data
+JOIN game ON game_data.id_game = game.id_game
+WHERE game_data.data_type = 'settings'; 
+'''

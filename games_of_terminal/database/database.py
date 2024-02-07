@@ -144,16 +144,16 @@ def get_games_statistic():
         conn.cursor.execute(queries.get_all_statistics_query)
         statistics_data = conn.cursor.fetchall()
 
-        for statistics in statistics_data:
-            game_name, stat_name, stat_value = statistics
-            stat_value = int(stat_value)
+    for statistics in statistics_data:
+        game_name, stat_name, stat_value = statistics
+        stat_value = int(stat_value)
 
-            if stat_name == 'total_games':
-                games_statistic['']['all_games_played'] += stat_value
-            elif stat_name == 'total_time':
-                games_statistic['']['time_spent_in_games'] += stat_value
+        if stat_name == 'total_games':
+            games_statistic['']['all_games_played'] += stat_value
+        elif stat_name == 'total_time':
+            games_statistic['']['time_spent_in_games'] += stat_value
 
-            games_statistic[game_name][stat_name] = stat_value
+        games_statistic[game_name][stat_name] = stat_value
 
     return games_statistic
 
@@ -175,3 +175,17 @@ def get_all_achievements():
         ))
 
     return all_achievements
+
+
+def get_all_settings():
+    all_settings = defaultdict(dict)
+
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_all_settings_query)
+        settings_data = conn.cursor.fetchall()
+
+    for settings in settings_data:
+        game_name, setting_name, setting_value = settings
+        all_settings[game_name][setting_name] = setting_value
+
+    return all_settings
