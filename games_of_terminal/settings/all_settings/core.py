@@ -53,9 +53,9 @@ class GamesSettings(InterfaceManager):
 
             if key == KEYS['escape']:
                 return
-            # elif key == KEYS['resize']:
-            #     self.window.timeout(0)
-            #     self.resize_menu_win_handler(key)
+            elif key == KEYS['resize']:
+                self.window.timeout(0)
+                self.resize_menu_win_handler(key)
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.move_menu_selection(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
@@ -126,3 +126,7 @@ class GamesSettings(InterfaceManager):
             self.current_row = 0
         else:
             self.current_row = new_current_row
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.initialize_settings()
