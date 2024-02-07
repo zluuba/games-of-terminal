@@ -38,6 +38,7 @@ KEYS = {
     'left_arrow': KEY_LEFT,
     'right_arrow': KEY_RIGHT,
     'enter': [KEY_ENTER, 10, 13],
+    'tab': [ord('\t'), 9],
     'resize': KEY_RESIZE,
     'restart': ord('r'),
     'pause': ord('p'),
@@ -73,6 +74,7 @@ GAME_STATUSES = {
 }
 
 MESSAGES = {
+    'pause': 'PAUSE',
     'game_over': 'GAME OVER',
     'score_text': 'Score: ',
     'best_score': 'Best score: ',
