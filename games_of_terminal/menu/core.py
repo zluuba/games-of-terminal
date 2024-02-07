@@ -72,6 +72,8 @@ class Menu(InterfaceManager):
                 self.move_menu_selection(-1)
             elif key in (KEYS['down_arrow'], KEYS['s']):
                 self.move_menu_selection(1)
+            elif key in KEYS['tab']:
+                self.move_menu_selection(destination='Settings')
             elif key in KEYS['enter']:
                 self.run_selected_menu_item()
 
@@ -91,13 +93,30 @@ class Menu(InterfaceManager):
         self.draw_menu()
 
     @log
-    def move_menu_selection(self, direction):
-        self.current_row = max(
-            0, min(self.current_row + direction, MENU_ITEMS_COUNT - 1)
-        )
+    def move_menu_selection(self, direction=0, destination=None):
+        if direction:
+            self.current_row = self.get_current_row_by_direction(direction)
+        elif destination:
+            self.current_row = self.get_current_row_by_destination(destination)
+
+    def get_current_row_by_direction(self, direction):
+        new_current_row = self.current_row + direction
+
+        if new_current_row < 0:
+            return MENU_ITEMS_COUNT - 1
+        elif new_current_row >= MENU_ITEMS_COUNT:
+            return 0
+
+        return new_current_row
+
+    @staticmethod
+    def get_current_row_by_destination(destination):
+        for row, menu_item in MENU_ITEMS.items():
+            if menu_item['name'] == destination:
+                return row
 
     def update_menu_display(self):
-        # redraw dynamic parts
+        # draw dynamic parts
         self.draw_fire_animation()
         self.show_menu_items_list()
 
