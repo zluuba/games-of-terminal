@@ -18,6 +18,7 @@ class GameEngine(InterfaceManager):
     @log
     def __init__(self, canvas, game_name):
         super().__init__(canvas)
+
         self.game_name = game_name
         self.stats = GameStats()
 
@@ -83,7 +84,7 @@ class GameEngine(InterfaceManager):
         self.window.timeout(150)
 
     def show_pause_message(self):
-        message = ' PAUSE '
+        message = f" {MESSAGES['pause']} "
         color = get_color_by_name('yellow_text_black_bg')
 
         x = ((self.game_area.width // 2 + self.game_area.begin_x) -

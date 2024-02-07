@@ -160,12 +160,15 @@ class InterfaceManager:
         self.status_box_sizes = {
             'lines': STATUS_BOX_HEIGHT + BASE_OFFSET,
             'cols': side_menu_width,
-            'begin_y': height - (STATUS_BOX_HEIGHT + BASE_OFFSET + DEFAULT_YX_OFFSET),
+            'begin_y': height - (STATUS_BOX_HEIGHT + BASE_OFFSET +
+                                 DEFAULT_YX_OFFSET),
             'begin_x': width - side_menu_width,
         }
         self.tips_box_sizes = {
-            'lines': height - self.logo_box_sizes['lines'] - self.status_box_sizes['lines'],
+            'lines': (height - self.logo_box_sizes['lines'] -
+                      self.status_box_sizes['lines']),
             'cols': side_menu_width,
-            'begin_y': self.logo_box_sizes['begin_y'] + self.logo_box_sizes['lines'] - 1,
+            'begin_y': (self.logo_box_sizes['begin_y'] +
+                        self.logo_box_sizes['lines'] - 1),
             'begin_x': width - side_menu_width,
         }

@@ -124,7 +124,6 @@ class MinesweeperGame(GameEngine):
         all_cells = list(self.cells.values())
         number_of_sells = len(all_cells)
 
-        # random float divider for uniq bombs count in every game
         div = uniform(3, 8)
         bombs_count = number_of_sells // div
         self.bombs = int(bombs_count)
@@ -280,6 +279,6 @@ class MinesweeperGame(GameEngine):
     def update_bombs_defused_count(self):
         bombs_defused = sum([
             1 for cell in self.cells.values()
-            if cell.is_bomb() and cell.have_flag()
+            if (cell.is_bomb() and cell.have_flag())
         ])
         update_game_stat(self.game_name, 'bombs_defused', bombs_defused)
