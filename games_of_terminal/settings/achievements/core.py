@@ -166,18 +166,18 @@ class Achievements(InterfaceManager):
         self.reset_game_settings()
         self.show_pagination_arrows()
         self.clear_achievement_details()
-        self.achievements_action(update_coords=True)
-
-    @staticmethod
-    def get_moving_offsets(key):
-        for keys, offset in OFFSETS.items():
-            if key in keys:
-                return OFFSETS[keys]
+        self.achievements_action(show=True, update_coords=True)
 
     def reset_game_settings(self):
         self.selected_ach_num = 0
         self.pagination_offset = 0
         self.max_pagination_offset = self.get_max_pagination_offset()
+
+    @staticmethod
+    def get_moving_offsets(direction):
+        for direction_name, offsets in OFFSETS.items():
+            if direction == direction_name:
+                return offsets
 
     def select_cell(self, direction):
         y_offset, x_offset = self.get_moving_offsets(direction)
@@ -197,7 +197,7 @@ class Achievements(InterfaceManager):
 
         if pagination_value != 0:
             self.update_achievements_pagination(pagination_value)
-            self.achievements_action(update_coords=True)
+            self.achievements_action(show=True, update_coords=True)
 
         # select chosen cell
         self.selected_ach_num = chosen_ach_num
@@ -275,10 +275,10 @@ class Achievements(InterfaceManager):
     def show_achievements(self):
         self.show_game_name_with_arrows()
         self.show_pagination_arrows()
-        self.achievements_action(update_coords=True)
+        self.achievements_action(show=True, update_coords=True)
 
     @log(with_runtime=True)
-    def achievements_action(self, show=True, update_coords=False):
+    def achievements_action(self, show=False, update_coords=False):
         self.clear_achievements_body()
 
         y = self.achievements_start_y
@@ -305,12 +305,11 @@ class Achievements(InterfaceManager):
                 x += self.ach_width + ACHIEVEMENTS_SPACING
 
     def get_achievements_start_x(self):
-        width = self.width
         all_ach_length = ACHIEVEMENTS_IN_ROW * self.ach_width
         spacing = ACHIEVEMENTS_SPACING * (ACHIEVEMENTS_IN_ROW - 1)
 
         ach_container_len = all_ach_length + spacing
-        available_offsets = width - ach_container_len
+        available_offsets = self.width - ach_container_len
 
         achievements_start_x = available_offsets // 2
         achievements_start_x -= 1 if (achievements_start_x % 2 != 0) else 0
@@ -319,7 +318,7 @@ class Achievements(InterfaceManager):
 
     def clear_achievements_body(self):
         curr_y = self.achievements_start_y
-        curr_x = SIDE_OFFSET
+        curr_x = SIDE_OFFSET - 1
 
         curr_height = self.height - self.achievements_start_y
         clear_line_width = self.width - (SIDE_OFFSET * 2)
@@ -360,7 +359,7 @@ class Achievements(InterfaceManager):
             achievs_place_height -= BASE_OFFSET
             visible_rows += 1
 
-        return max(rows_with_achievs - visible_rows, 0)
+        return max(0, rows_with_achievs - visible_rows)
 
     def get_achievements_height_and_width(self):
         width = ((self.width -
