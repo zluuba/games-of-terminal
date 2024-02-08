@@ -6,7 +6,7 @@ from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
-    get_game_tips, draw_message,
+    get_side_menu_tips, draw_message,
     clear_field_line, get_color_by_name,
 )
 
@@ -131,9 +131,10 @@ class GameEngine(InterfaceManager):
         )
 
     def show_side_menu_tips(self, game_state=None, game_tips=None):
+        side_menu_tips = get_side_menu_tips(game_state, game_tips)
         y = x = 2
 
-        for curr_tips in get_game_tips(game_state, game_tips):
+        for curr_tips in side_menu_tips:
             tips_type = curr_tips['name']
             tips = curr_tips['tips']
             color = curr_tips['color']

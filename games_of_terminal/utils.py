@@ -76,7 +76,7 @@ def too_small_window_handler(height, width):
              default_color + req_msg + curr_msg)
 
 
-def get_game_tips(game_state, game_tips):
+def get_side_menu_tips(game_state, game_tips):
     return [
         {
             'name': 'state',
