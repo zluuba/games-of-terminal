@@ -1,21 +1,132 @@
 {
   "Global": {
     "username": "",
-    "color_schemes": "",
-    "control_keys": ""
+    "color_schemes": [
+        {
+          "name": "Red",
+          "selected": true
+        },
+        {
+          "name": "Blue",
+          "selected": false
+        }
+      ],
+    "additional_control_keys": {}
   },
   "Minesweeper": {
-    "color_schemes": ""
+    "color_schemes": [
+      {
+        "name": "Blue Jeans",
+        "selected": true
+      },
+      {
+        "name": "Sweet Summer Child",
+        "selected": false
+      },
+      {
+        "name": "Dragon Burn",
+        "selected": false
+      }
+    ]
   },
   "Snake": {
-    "modes": "",
-    "skins": "",
-    "color_schemes": ""
+    "modes": [
+      {
+        "name": "Casual",
+        "selected": true
+      },
+      {
+        "name": "Obstacles",
+        "selected": false
+      }
+    ],
+    "snake_skins": [
+        {
+          "name": "Big O-some",
+          "skin": "O",
+          "selected": true
+        },
+        {
+          "name": "Jaily",
+          "skin": "#",
+          "selected": false
+        },
+        {
+          "name": "X-Ed",
+          "skin": "×",
+          "selected": false
+        },
+        {
+          "name": "Starcoil",
+          "skin": "¤",
+          "selected": false
+        },
+        {
+          "name": "Straight",
+          "skin": "■",
+          "selected": false
+        },
+        {
+          "name": "Straighter",
+          "skin": "█",
+          "selected": false
+        },
+        {
+          "name": "Equalizer",
+          "skin": "≡",
+          "selected": false
+        },
+        {
+          "name": "Copy",
+          "skin": "©",
+          "selected": false
+        }
+      ],
+    "color_schemes": [
+      {
+        "name": "Snow",
+        "selected": true
+      },
+      {
+        "name": "Elegant",
+        "selected": false
+      }
+    ]
   },
   "Tetris": {
-    "color_schemes": ""
+    "color_schemes": [
+      {
+        "name": "Rainbow",
+        "selected": true
+      },
+      {
+        "name": "50 Shades of Gray",
+        "selected": false
+      },
+      {
+        "name": "Wild",
+        "selected": false
+      }
+    ]
   },
   "Tic Tac Toe": {
-    "color_schemes": ""
+    "color_schemes": [
+      {
+        "name": "Boring",
+        "selected": true
+      },
+      {
+        "name": "He/Him",
+        "selected": false
+      },
+      {
+        "name": "She/Her",
+        "selected": false
+      },
+      {
+        "name": "It/It",
+        "selected": false
+      }
+    ]
   }
 }
