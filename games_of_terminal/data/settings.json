@@ -82,6 +82,48 @@
           "selected": false
         }
       ],
+    "food_skins": [
+      {
+        "name": "Treasure",
+        "skin": "×",
+        "selected": true
+      },
+      {
+        "name": "Worm",
+        "skin": "~",
+        "selected": false
+      },
+      {
+        "name": "Stick",
+        "skin": "-",
+        "selected": false
+      },
+      {
+        "name": "Cash",
+        "skin": "$",
+        "selected": false
+      },
+      {
+        "name": "Snail",
+        "skin": "ᓙ",
+        "selected": false
+      },
+      {
+        "name": "Snail In Fear",
+        "skin": "ᓆ",
+        "selected": false
+      },
+      {
+        "name": "Snaker",
+        "skin": "⊹",
+        "selected": false
+      },
+      {
+        "name": "42",
+        "skin": "ᢁ",
+        "selected": false
+      }
+    ],
     "color_schemes": [
       {
         "name": "Snow",
