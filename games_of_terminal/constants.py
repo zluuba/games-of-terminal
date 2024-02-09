@@ -286,5 +286,10 @@ COLOR_MAPPING = {
         'pair_num': 38,
         'text_color': 255,
         'bg_color': COLOR_BLACK,
+    },
+    'green_text_white_bg': {
+        'pair_num': 39,
+        'text_color': COLOR_GREEN,
+        'bg_color': COLOR_WHITE,
     }
 }
