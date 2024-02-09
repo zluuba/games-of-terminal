@@ -15,7 +15,7 @@ ITEMS = {
     0: {'name': 'All Settings', 'class': GamesSettings, 'status': 'production'},
     1: {'name': 'Achievements', 'class': Achievements, 'status': 'production'},
     2: {'name': 'Statistics', 'class': Statistics, 'status': 'production'},
-    3: {'name': 'Reset All', 'class': ResetAll, 'status': 'in_development'},
+    3: {'name': 'Reset All', 'class': ResetAll, 'status': 'production'},
     4: {'name': 'Confess All', 'class': ConfessAll, 'status': 'in_development'},
 }
 
