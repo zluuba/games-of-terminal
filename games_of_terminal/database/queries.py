@@ -10,7 +10,6 @@ TABLES = {
             DROP TABLE IF EXISTS game;
         ''',
     },
-    # data_type: statistics, settings
     'game_data': {
         'create_table': '''
             CREATE TABLE IF NOT EXISTS game_data (

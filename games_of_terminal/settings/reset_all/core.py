@@ -43,7 +43,8 @@ class ResetAll(InterfaceManager):
             OPTIONS.keys(),
         ))
 
-    def get_selected_option(self):
+    @property
+    def selected_option(self):
         all_options = list(OPTIONS.keys())
         return all_options[self.position]
 
@@ -65,7 +66,7 @@ class ResetAll(InterfaceManager):
             elif key in (KEYS['right_arrow'], KEYS['d']):
                 self.update_position(1)
             elif key in KEYS['enter']:
-                self.handling_user_selection()
+                self.select_option()
                 return
 
     def initialize_settings(self):
@@ -83,14 +84,12 @@ class ResetAll(InterfaceManager):
         self.position = new_position
         self.show_options()
 
-    def handling_user_selection(self):
-        user_selection = self.get_selected_option()
-
-        if user_selection == 'yes':
+    def select_option(self):
+        if self.selected_option == 'yes':
             reset_all_user_data()
 
         self.draw_option_selection_animation()
-        self.show_option_text(user_selection)
+        self.show_option_selection_text()
 
     def show_reset_all_main_text(self):
         for row, sentence in enumerate(TEXT):
@@ -113,11 +112,10 @@ class ResetAll(InterfaceManager):
             begin_x += self.options_len + OPTIONS_OFFSET
 
     def draw_option_selection_animation(self):
-        selected_option = self.get_selected_option()
         begin_x = self.options_begin_x
 
         for index, option in enumerate(OPTIONS.keys()):
-            if option != selected_option:
+            if option != self.selected_option:
                 begin_x += self.options_len + OPTIONS_OFFSET
                 continue
 
@@ -129,10 +127,10 @@ class ResetAll(InterfaceManager):
             sleep(0.2)
             return
 
-    def show_option_text(self, user_selection):
+    def show_option_selection_text(self):
         self.window.clear()
 
-        text = OPTIONS[user_selection]['text']
+        text = OPTIONS[self.selected_option]['text']
         y = (self.height - BASE_OFFSET) // 2
         x = (self.width // 2) - (len(text) // 2)
 
