@@ -2,6 +2,7 @@ from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
 
 
 CELLS_IN_ROW = 3
+CELL_RATIO_COEFF = 2.5
 
 DIRECTIONS = {
     KEY_RIGHT: (0, 1), KEY_LEFT: (0, -1),

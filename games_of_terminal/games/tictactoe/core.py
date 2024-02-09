@@ -5,6 +5,7 @@ from games_of_terminal.games.tictactoe.cell import TicTacToeCell
 from games_of_terminal.games.tictactoe.constants import (
     CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
     BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
+    CELL_RATIO_COEFF,
 )
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
@@ -69,16 +70,18 @@ class TicTacToeGame(GameEngine):
         return self.cells[self.current_coordinates]
 
     def get_cell_size(self):
-        """ Calculate cell sizes depending on the
+        """
+        Calculate cell sizes depending on the
         size of the game field.
-        The ratio of cell width to cell height is always 2.5:1.
+        The ratio of cell width to cell height
+        is always 1:2.5 (height:width).
         """
 
         maximum_height = (self.game_area.height - 2) // CELLS_IN_ROW
         maximum_width = (self.game_area.width - 2) // CELLS_IN_ROW
 
-        estimated_width = int(maximum_height * 2.5)
-        estimated_height = int(maximum_width // 2.5)
+        estimated_width = int(maximum_height * CELL_RATIO_COEFF)
+        estimated_height = int(maximum_width // CELL_RATIO_COEFF)
 
         if estimated_width <= maximum_width:
             return maximum_height, estimated_width
@@ -88,7 +91,7 @@ class TicTacToeGame(GameEngine):
         while (estimated_height > maximum_height) \
                 and (estimated_width > maximum_width):
             estimated_width -= 1
-            estimated_height = int(estimated_width // 2.5)
+            estimated_height = int(estimated_width // CELL_RATIO_COEFF)
 
         return estimated_height, estimated_width
 
