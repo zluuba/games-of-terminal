@@ -11,11 +11,12 @@ from curses import (
     color_pair,
     init_pair,
     curs_set,
+    flushinp,
 )
 from random import choice
 from re import match
 from sys import exit
-from time import time
+from time import time, sleep
 
 
 def init_curses_colors():
@@ -61,6 +62,11 @@ def draw_message(begin_y, begin_x, field, message, color=DEFAULT_COLOR):
 def clear_field_line(begin_y, begin_x, field, width):
     empty_line = ' ' * width
     draw_message(begin_y, begin_x, field, empty_line)
+
+
+def handle_accidentally_key_pressing():
+    sleep(0.3)
+    flushinp()
 
 
 def too_small_window_handler(height, width):
