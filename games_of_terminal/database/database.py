@@ -63,7 +63,8 @@ def create_and_fill_db_tables():
         return
 
     with Connection(autocommit=True) as conn:
-        for create_table_query in queries.TABLES.values():
+        for table_queries in queries.TABLES.values():
+            create_table_query = table_queries['create_table']
             conn.cursor.execute(create_table_query)
 
         fill_game_table(conn)
@@ -189,3 +190,12 @@ def get_all_settings():
         all_settings[game_name][setting_name] = setting_value
 
     return all_settings
+
+
+def reset_all_user_data():
+    with Connection() as conn:
+        for table_queries in queries.TABLES.values():
+            drop_table_query = table_queries['drop_table']
+            conn.cursor.execute(drop_table_query)
+
+    create_and_fill_db_tables()

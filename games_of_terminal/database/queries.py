@@ -1,32 +1,47 @@
 TABLES = {
-    'game': '''
-        CREATE TABLE IF NOT EXISTS game (
-            id_game INTEGER PRIMARY KEY,
-            name TEXT NOT NULL
-        );
-    ''',
+    'game': {
+        'create_table': '''
+            CREATE TABLE IF NOT EXISTS game (
+                id_game INTEGER PRIMARY KEY,
+                name TEXT NOT NULL
+            );
+        ''',
+        'drop_table': '''
+            DROP TABLE IF EXISTS game;
+        ''',
+    },
     # data_type: statistics, settings
-    'game_data': '''
-        CREATE TABLE IF NOT EXISTS game_data (
-            id_game_data INTEGER PRIMARY KEY,
-            id_game INTEGER NOT NULL DEFAULT 0,
-            data_type TEXT NOT NULL,
-            name TEXT NOT NULL,
-            value TEXT,
-            FOREIGN KEY (id_game) REFERENCES game(id_game)
-        );
-    ''',
-    'achievement': '''
-        CREATE TABLE IF NOT EXISTS achievement (
-            id_achievement INTEGER PRIMARY KEY,
-            id_game INTEGER NULL,
-            name TEXT UNIQUE NOT NULL,
-            description TEXT NOT NULL,
-            status TEXT DEFAULT 'locked',
-            date_received TEXT NULL,
-            FOREIGN KEY (id_game) REFERENCES game(id_game)
-        );
-    ''',
+    'game_data': {
+        'create_table': '''
+            CREATE TABLE IF NOT EXISTS game_data (
+                id_game_data INTEGER PRIMARY KEY,
+                id_game INTEGER NOT NULL DEFAULT 0,
+                data_type TEXT NOT NULL,
+                name TEXT NOT NULL,
+                value TEXT,
+                FOREIGN KEY (id_game) REFERENCES game(id_game)
+            );
+        ''',
+        'drop_table': '''
+            DROP TABLE IF EXISTS game_data;
+        ''',
+    },
+    'achievement': {
+        'create_table': '''
+            CREATE TABLE IF NOT EXISTS achievement (
+                id_achievement INTEGER PRIMARY KEY,
+                id_game INTEGER NULL,
+                name TEXT UNIQUE NOT NULL,
+                description TEXT NOT NULL,
+                status TEXT DEFAULT 'locked',
+                date_received TEXT NULL,
+                FOREIGN KEY (id_game) REFERENCES game(id_game)
+            );
+        ''',
+        'drop_table': '''
+            DROP TABLE IF EXISTS achievement;
+        ''',
+    }
 }
 
 get_all_tables_query = '''
