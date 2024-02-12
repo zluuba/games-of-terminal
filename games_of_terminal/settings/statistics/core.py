@@ -4,7 +4,7 @@ from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
 from games_of_terminal.settings.statistics.constants import (
     TITLE, UPWARDS_ARROW, DOWNWARDS_ARROW, TOP_OFFSET,
-    BOTTOM_OFFSET, BASE_OFFSET, ARROWS_OFFSET,
+    BOTTOM_OFFSET, BASE_OFFSET, ARROWS_OFFSET, NO_ARROW,
 )
 from games_of_terminal.utils import (
     draw_message, get_color_by_name, clear_field_line,
@@ -113,9 +113,9 @@ class Statistics(InterfaceManager):
         down_arrow = DOWNWARDS_ARROW
 
         if not self.pagination_offset:
-            up_arrow = ' '
+            up_arrow = NO_ARROW
         if self.pagination_offset >= self.max_pagination_offset:
-            down_arrow = ' '
+            down_arrow = NO_ARROW
 
         draw_message(self.start_y, self.arrow_x, self.window, up_arrow)
 
