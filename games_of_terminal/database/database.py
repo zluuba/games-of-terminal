@@ -13,6 +13,8 @@ from os import path
 from pathlib import Path
 from sqlite3 import connect
 
+from ast import literal_eval
+
 
 def get_full_path(base_dir, filename):
     return str(path.join(base_dir, filename))
@@ -187,6 +189,10 @@ def get_all_settings():
 
     for settings in settings_data:
         game_name, setting_name, setting_value = settings
+
+        if setting_value:
+            setting_value = literal_eval(setting_value)
+
         all_settings[game_name][setting_name] = setting_value
 
     return all_settings
