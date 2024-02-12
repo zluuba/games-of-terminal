@@ -7,7 +7,7 @@ from games_of_terminal.settings.achievements.constants import (
     TITLE, BASE_OFFSET, TOP_OFFSET,
     LEFT_ARROW, RIGHT_ARROW, SIDE_ARROW_OFFSET,
     SIDE_OFFSET, BOTTOM_OFFSET, ACHIEVEMENTS_IN_ROW,
-    ACHIEVEMENTS_SPACING, OFFSETS,
+    ACHIEVEMENTS_SPACING, OFFSETS, MAX_ACH_WIDTH,
     ACH_NAME_COLOR_NAME, ACH_DESCRIPTION_COLOR_NAME,
     UPWARDS_ARROW, DOWNWARDS_ARROW, NO_ARROW,
 )
@@ -28,6 +28,10 @@ class Achievements(InterfaceManager):
         self.setup_vars()
 
     def setup_vars(self):
+        self.curr_game_ind = 0
+        self.selected_ach_num = 0
+        self.detail_mode = False
+
         ach_height, ach_width = self.get_achievements_height_and_width()
         self.ach_height, self.ach_width = ach_height, ach_width
 
@@ -37,23 +41,37 @@ class Achievements(InterfaceManager):
 
         self.title_start_y = TOP_OFFSET
         self.game_name_y = self.get_game_name_y()
-        self.achievements_start_y = self.get_achievements_start_y()
 
-        self.showed_achievements_count = self.get_showed_achievements_count()
+        # pagination arrows
+        self.pag_up_arrow_y = self.game_name_y + BASE_OFFSET
+        self.pag_down_arrow_y = self.height - BOTTOM_OFFSET - 1
 
-        self.left_arrow_x, self.right_arrow_x = self.get_arrows_xs()
-
-        self.curr_game_ind = 0
         self.pagination_offset = 0
         self.max_pagination_offset = self.get_max_pagination_offset()
 
-        # pagination arrows
-        self.pag_arrow_x = self.width - (SIDE_OFFSET // 2)
-        self.pag_up_arrow_y = self.achievements_start_y
-        self.pag_down_arrow_y = self.height - BOTTOM_OFFSET - 1
+        self.showed_achievements_count = self.get_showed_achievements_count()
 
-        self.detail_mode = False
-        self.selected_ach_num = 0
+        self.achievements_start_y = self.get_achievements_start_y()
+
+        self.pag_arrow_x = self.get_pagination_start_x()
+        self.left_arrow_x, self.right_arrow_x = self.get_arrows_xs()
+
+    def get_pagination_start_x(self):
+        start_x = self.get_achievements_start_x()
+        ach_width = ((self.ach_width * ACHIEVEMENTS_IN_ROW) +
+                     (ACHIEVEMENTS_SPACING * (ACHIEVEMENTS_IN_ROW - 1)))
+
+        return start_x + ach_width + SIDE_ARROW_OFFSET
+
+    def get_achievements_start_y(self):
+        ach_rows_count = self.showed_achievements_count // ACHIEVEMENTS_IN_ROW
+        visible_ach_height = ach_rows_count * self.ach_height
+        visible_ach_height += (BASE_OFFSET * (ach_rows_count - 1))
+        ach_win_height = (self.height - BOTTOM_OFFSET) - self.pag_up_arrow_y
+
+        y_offset = (ach_win_height - visible_ach_height) // 2
+
+        return self.pag_up_arrow_y + max(0, y_offset)
 
     def get_achievement_items(self):
         return sorted(list(self.achievements.keys()))
@@ -79,9 +97,6 @@ class Achievements(InterfaceManager):
 
     def get_game_name_y(self):
         return self.title_start_y + len(TITLE) + BASE_OFFSET
-
-    def get_achievements_start_y(self):
-        return self.game_name_y + 1 + BASE_OFFSET
 
     def get_game_name_max_length(self):
         return max([len(game_name) for game_name in self.achievement_items])
@@ -134,15 +149,6 @@ class Achievements(InterfaceManager):
             elif key in (KEYS['right_arrow'], KEYS['d']):
                 self.moving_controller('right')
 
-    def redraw_window(self):
-        self.setup_vars()
-        self.window.clear()
-        self.update_win_display()
-
-    def update_win_display(self):
-        self.show_achievements()
-        self.draw_title()
-
     def switch_detail_mode(self):
         self.detail_mode = not self.detail_mode
 
@@ -164,9 +170,9 @@ class Achievements(InterfaceManager):
             return
 
         self.reset_game_settings()
-        self.show_pagination_arrows()
         self.clear_achievement_details()
         self.achievements_action(show=True, update_coords=True)
+        self.show_pagination_arrows()
 
     def reset_game_settings(self):
         self.selected_ach_num = 0
@@ -198,6 +204,7 @@ class Achievements(InterfaceManager):
         if pagination_value != 0:
             self.update_achievements_pagination(pagination_value)
             self.achievements_action(show=True, update_coords=True)
+            self.show_pagination_arrows()
 
         # select chosen cell
         self.selected_ach_num = chosen_ach_num
@@ -268,14 +275,14 @@ class Achievements(InterfaceManager):
         ]
 
     def clear_achievement_details(self):
-        for y in range(self.height - BOTTOM_OFFSET, self.height):
-            clear_field_line(y, SIDE_OFFSET, self.window,
-                             self.width - (SIDE_OFFSET * 2))
+        for y in range(self.pag_down_arrow_y + 1, self.height):
+            clear_field_line(y, SIDE_OFFSET - 1, self.window,
+                             self.width - SIDE_OFFSET)
 
     def show_achievements(self):
         self.show_game_name_with_arrows()
-        self.show_pagination_arrows()
         self.achievements_action(show=True, update_coords=True)
+        self.show_pagination_arrows()
 
     @log(with_runtime=True)
     def achievements_action(self, show=False, update_coords=False):
@@ -333,7 +340,7 @@ class Achievements(InterfaceManager):
 
     def get_showed_achievements_count(self):
         showed_achievements_count = 0
-        y = self.achievements_start_y
+        y = self.pag_up_arrow_y
 
         while y + self.ach_height <= self.height - BOTTOM_OFFSET:
             showed_achievements_count += ACHIEVEMENTS_IN_ROW
@@ -347,7 +354,7 @@ class Achievements(InterfaceManager):
             len(self.curr_achievements_list) / ACHIEVEMENTS_IN_ROW
         )
         achievs_place_height = (
-            self.height - self.achievements_start_y - BOTTOM_OFFSET
+            self.height - self.pag_up_arrow_y - BOTTOM_OFFSET
         )
 
         while True:
@@ -368,6 +375,7 @@ class Achievements(InterfaceManager):
                  // ACHIEVEMENTS_IN_ROW)
 
         width -= 1 if (width % 2 != 0) else 0
+        width = min(MAX_ACH_WIDTH, width)
         height = width // 2
 
         return height, width
@@ -442,3 +450,12 @@ class Achievements(InterfaceManager):
         for y, line in enumerate(TITLE, start=self.title_start_y):
             x = (self.width // 2) - (len(line) // 2)
             draw_message(y, x, self.window, line)
+
+    def redraw_window(self):
+        self.window.clear()
+        self.setup_vars()
+        self.update_win_display()
+
+    def update_win_display(self):
+        self.show_achievements()
+        self.draw_title()
