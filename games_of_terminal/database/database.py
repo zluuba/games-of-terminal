@@ -190,7 +190,7 @@ def get_all_settings():
     for settings in settings_data:
         game_name, setting_name, setting_value = settings
 
-        if setting_value:
+        if setting_value and (not setting_name == 'username'):
             setting_value = literal_eval(setting_value)
 
         all_settings[game_name][setting_name] = setting_value
@@ -199,9 +199,22 @@ def get_all_settings():
 
 
 def reset_all_user_data():
-    with Connection() as conn:
+    with Connection(autocommit=True) as conn:
         for table_queries in queries.TABLES.values():
             drop_table_query = table_queries['drop_table']
             conn.cursor.execute(drop_table_query)
 
     create_and_fill_db_tables()
+
+
+def get_username():
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_username_query)
+        username = conn.cursor.fetchone()
+
+    return username[0]
+
+
+def save_username(username):
+    with Connection(autocommit=True) as conn:
+        conn.cursor.execute(queries.save_username_query, (username,))

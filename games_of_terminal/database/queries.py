@@ -140,3 +140,18 @@ FROM game_data
 JOIN game ON game_data.id_game = game.id_game
 WHERE game_data.data_type = 'settings'; 
 '''
+
+get_username_query = '''
+SELECT value FROM game_data
+WHERE id_game IN (SELECT id_game FROM game WHERE name = 'Global')
+    AND data_type = 'settings'
+    AND name = 'username';
+'''
+
+save_username_query = '''
+UPDATE game_data
+SET value = ?
+WHERE id_game IN (SELECT id_game FROM game WHERE name = 'Global')
+    AND data_type = 'settings'
+    AND name = 'username';
+'''
