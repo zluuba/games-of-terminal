@@ -1,6 +1,7 @@
 from curses import (
     KEY_ENTER, KEY_UP, KEY_DOWN,
     KEY_LEFT, KEY_RIGHT, KEY_RESIZE,
+    KEY_BACKSPACE,
     COLOR_WHITE, COLOR_BLACK, COLOR_GREEN,
     COLOR_RED, COLOR_YELLOW,
 )
@@ -37,8 +38,9 @@ KEYS = {
     'down_arrow': KEY_DOWN,
     'left_arrow': KEY_LEFT,
     'right_arrow': KEY_RIGHT,
-    'enter': [KEY_ENTER, 10, 13],
-    'tab': [ord('\t'), 9],
+    'enter': (KEY_ENTER, 10, 13),
+    'delete': (KEY_BACKSPACE, '\b', '\x7f', 127),
+    'tab': (ord('\t'), 9),
     'resize': KEY_RESIZE,
     'restart': ord('r'),
     'pause': ord('p'),
