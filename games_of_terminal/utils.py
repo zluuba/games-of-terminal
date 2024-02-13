@@ -54,9 +54,22 @@ def hide_cursor():
     curs_set(0)
 
 
-def draw_message(begin_y, begin_x, field, message, color=DEFAULT_COLOR):
-    field.addstr(begin_y, begin_x, message, color)
+def show_cursor():
+    curs_set(2)
+
+
+def draw_message(y, x, field, message, color=DEFAULT_COLOR):
+    field.addstr(y, x, message, color)
     field.refresh()
+
+
+def draw_colorful_message(y, win_width, field, message_with_colors):
+    message_len = sum(map(lambda tuples: len(tuples[0]), message_with_colors))
+    x = (win_width // 2) - (message_len // 2)
+
+    for message, color in message_with_colors:
+        draw_message(y, x, field, message, color)
+        x += len(message)
 
 
 def clear_field_line(begin_y, begin_x, field, width):
