@@ -155,3 +155,10 @@ WHERE id_game IN (SELECT id_game FROM game WHERE name = 'Global')
     AND data_type = 'settings'
     AND name = 'username';
 '''
+
+unlock_achievement_query = '''
+UPDATE achievement
+SET status = 'unlocked', date_received = ?
+WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
+    AND name = ?;
+'''

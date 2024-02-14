@@ -7,13 +7,13 @@ from games_of_terminal.database.constants import (
     GAME_STATS_FILE, SETTINGS_FILE,
 )
 
+from ast import literal_eval
 from collections import defaultdict
+from datetime import datetime
 from json import load
 from os import path
 from pathlib import Path
 from sqlite3 import connect
-
-from ast import literal_eval
 
 
 def get_full_path(base_dir, filename):
@@ -218,3 +218,11 @@ def get_username():
 def save_username(username):
     with Connection(autocommit=True) as conn:
         conn.cursor.execute(queries.save_username_query, (username,))
+
+
+def unlock_achievement(game_name, achievement_name):
+    current_date = datetime.today().strftime('%d.%m.%Y')
+
+    with Connection(autocommit=True) as conn:
+        conn.cursor.execute(queries.unlock_achievement_query,
+                            (current_date, game_name, achievement_name,))
