@@ -51,7 +51,18 @@ class AchievementsManager:
         self.achievements = self.get_locked_achievements()
 
     def notify_user(self, achievement, set_pause):
-        pass
+        self.draw_background()
+        self.draw_achievement_unlocked_text()
+        self.draw_achievement_name(achievement)
+        self.draw_frame_animation(action='appearing')
+
+        sleep(0.5)
+        self.draw_frame_animation(action='disappearing')
+
+        self.class_object.draw_game_window()
+
+        if set_pause:
+            self.class_object.pause()
 
     def has_achievement_been_unlocked(self, achievement):
         pass
