@@ -33,6 +33,12 @@ BASE_OFFSET = 2
 DEFAULT_YX_OFFSET = 1
 STATUS_BOX_HEIGHT = 3
 
+ACHIEVEMENT_WIN_HEIGHT = 6
+FRAME_CHARS = {
+    'appearing': ':',
+    'disappearing': ' ',
+}
+
 KEYS = {
     'up_arrow': KEY_UP,
     'down_arrow': KEY_DOWN,
