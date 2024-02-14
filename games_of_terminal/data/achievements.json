@@ -15,6 +15,10 @@
         "description": "Play 50 games in total"
       },
       {
+        "name": "666 Days of Darkness",
+        "description": "Play 666 games in total"
+      },
+      {
         "name": "How You Doin'? ;)",
         "description": "Set username in the Settings and feel the Power"
       },
@@ -53,7 +57,7 @@
       },
       {
         "name": "Skilled",
-        "description": "Defuse 6, 7 or 8 bombs around 1 cell"
+        "description": "Defuse 6, 7 or 8 bombs around 1 cell and win the game"
       },
       {
         "name": "That's Enough",
@@ -69,16 +73,16 @@
     "name": "Snake",
     "achievements": [
       {
-        "name": "Student",
-        "description": "Reach 10 points in one game"
-      },
-      {
-        "name": "Professor",
+        "name": "Answer Seeker",
         "description": "Reach 42 points in one game"
       },
       {
-        "name": "Are you okay?",
+        "name": "Are You Okay?",
         "description": "Reach 101 points in one game"
+      },
+      {
+        "name": "Ten Out of Ten",
+        "description": "Play 10 games in total"
       },
       {
         "name": "The Grass Must Be Touched",
@@ -95,6 +99,10 @@
       {
         "name": "Mode Mood",
         "description": "Change game mode"
+      },
+      {
+        "name": "GOD",
+        "description": "Win the game"
       }
     ]
   },
@@ -102,7 +110,7 @@
     "name": "Tetris",
     "achievements": [
       {
-        "name": "It was.. Fast.",
+        "name": "It Was.. Fast.",
         "description": "Experience your first loss"
       },
       {
@@ -114,7 +122,7 @@
         "description": "Achieve a score of 100,000 points"
       },
       {
-        "name": "You beat me!",
+        "name": "You Beat Me!",
         "description": "Achieve a score exceeding 339,500 points and beat the creator's best score"
       },
       {
@@ -139,24 +147,24 @@
     "name": "Tic Tac Toe",
     "achievements": [
       {
-        "name": "Beginners Luck",
-        "description": "Achieve your first victory"
+        "name": "Can a Robot Write a Symphony?",
+        "description": "Experience 50 defeats"
       },
       {
-        "name": "GOTcha!",
-        "description": "Experience your first defeat"
-      },
-      {
-        "name": "You Scare Me",
-        "description": "Change the color scheme"
+        "name": "Fifty Flavors of Victory",
+        "description": "Experience 50 victories"
       },
       {
         "name": "Really..?",
         "description": "Play 20 games"
       },
       {
-        "name": "Ah shit, here we go again",
+        "name": "Ah Shit, Here We Go Again",
         "description": "Start your 101st game"
+      },
+      {
+        "name": "You Scare Me",
+        "description": "Change the color scheme"
       }
     ]
   }
