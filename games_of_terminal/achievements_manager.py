@@ -1,5 +1,6 @@
 from games_of_terminal.constants import (
-    ACHIEVEMENT_WIN_HEIGHT, FRAME_CHARS,
+    DEFAULT_COLOR, BASE_OFFSET, ACH_BG_COLOR_NAME,
+    ACH_FRAME_COLOR_NAME, ACH_NAME_COLOR_NAME,
 )
 from games_of_terminal.database.database import (
     get_all_achievements, unlock_achievement,
@@ -17,28 +18,35 @@ class AchievementsManager:
         self.class_object = class_object
         self.achievements = self.get_locked_achievements()
 
-        self.y, self.x = self.get_begin_coordinates()
-        self.frame_color = get_color_by_name('strong_red_text_black_bg')
+        self.ach_text = 'ACHIEVEMENT UNLOCKED'
+        self.ach_text_color = DEFAULT_COLOR + A_BOLD
+
+        self.bg_color = get_color_by_name(ACH_BG_COLOR_NAME)
+        self.frame_color = get_color_by_name(ACH_FRAME_COLOR_NAME) + A_BOLD
+        self.ach_name_color = get_color_by_name(ACH_NAME_COLOR_NAME) + A_BOLD
 
     def get_locked_achievements(self):
         all_achievements = get_all_achievements()
-        locked_achievements = []
+        game_achievements = all_achievements[self.class_object.game_name]
 
-        for game_name, achievements in all_achievements.items():
-            if self.class_object.game_name != game_name:
-                continue
+        return [achievement for achievement in game_achievements
+                if achievement['status'] == 'locked']
 
-            for achievement in achievements:
-                if achievement['status'] == 'locked':
-                    locked_achievements.append(achievement)
-
-        return locked_achievements
-
-    def get_begin_coordinates(self):
-        y = (self.class_object.game_area.height // 2) - (4 // 2) - 1
-        x = (self.class_object.game_area.width // 2) - (26 // 2)
+    def get_begin_coordinates(self, height, width):
+        y = (self.class_object.game_area.height // 2) - (height // 2)
+        x = (self.class_object.game_area.width // 2) - (width // 2)
 
         return y, x
+
+    def get_frame_height_and_width(self, achievement):
+        # frame (2) + empty space (2) + lines of text (2)
+        height = BASE_OFFSET * 3
+
+        ach_name_width = len(achievement['name']) + (BASE_OFFSET * 2)
+        ach_unlocked_text_width = len(self.ach_text) + (BASE_OFFSET * 2)
+        width = max(ach_name_width, ach_unlocked_text_width)
+
+        return height, width
 
     def check(self, set_pause=False):
         for achievement in self.achievements:
@@ -51,74 +59,80 @@ class AchievementsManager:
         self.achievements = self.get_locked_achievements()
 
     def notify_user(self, achievement, set_pause):
-        self.draw_background()
-        self.draw_achievement_unlocked_text()
-        self.draw_achievement_name(achievement)
-        self.draw_frame_animation(action='appearing')
-
-        sleep(0.5)
-        self.draw_frame_animation(action='disappearing')
-
+        self.draw_achievement_animation(achievement)
         self.class_object.draw_game_window()
 
         if set_pause:
             self.class_object.pause()
 
-    def has_achievement_been_unlocked(self, achievement):
-        pass
+    def draw_achievement_animation(self, achievement):
+        height, width = self.get_frame_height_and_width(achievement)
+        y, x = self.get_begin_coordinates(height, width)
+
+        self.draw_background(height, width, y, x)
+        self.draw_achievement_unlocked_text()
+        self.draw_achievement_name(achievement)
+        self.draw_frame_animation(height, width, y, x)
+
+    def draw_background(self, height, width, y, x):
+        for col in range(height):
+            for row in range(width):
+                draw_message(y + col, x + row,
+                             self.class_object.game_area.box,
+                             ' ', self.bg_color)
 
     def draw_achievement_unlocked_text(self):
-        text = 'ACHIEVEMENT UNLOCKED'
-        color = get_color_by_name('light_grey_text_black_bg') + A_BOLD
-
         y = (self.class_object.game_area.height // 2) - 1
-        x = (self.class_object.game_area.width // 2) - (len(text) // 2)
+        x = ((self.class_object.game_area.width // 2) -
+             (len(self.ach_text) // 2))
 
-        draw_message(y, x, self.class_object.game_area.box, text, color)
+        draw_message(y, x, self.class_object.game_area.box,
+                     self.ach_text, self.ach_text_color)
 
     def draw_achievement_name(self, achievement):
         achievement_name = achievement['name']
-        color = get_color_by_name('bright_white_text_black_bg') + A_BOLD
 
         y = (self.class_object.game_area.height // 2)
-        x = (self.class_object.game_area.width // 2) - (len(achievement_name) // 2)
+        x = ((self.class_object.game_area.width // 2) -
+             (len(achievement_name) // 2))
 
-        draw_message(y, x, self.class_object.game_area.box, achievement_name, color)
+        draw_message(y, x, self.class_object.game_area.box,
+                     achievement_name, self.ach_name_color)
 
-    def draw_background(self):
-        bg_color = get_color_by_name('light_grey_text_black_bg')
-        y = (self.class_object.game_area.height // 2) - (4 // 2) - 1
-        x = (self.class_object.game_area.width // 2) - (26 // 2)
+    def draw_frame_animation_chunk(self, y, x, top_coords,
+                                   bottom_coords, char):
+        top_y, top_x = top_coords
+        bottom_y, bottom_x = bottom_coords
 
-        for col in range(6):
-            for row in range(27):
-                draw_message(y + col, x + row,
-                             self.class_object.game_area.box, ' ', bg_color)
-
-    def draw_frame_animation_chunk(self, char, j, k):
-        draw_message(self.y + j[0], self.x + j[1],
+        draw_message(y + top_y, x + top_x,
                      self.class_object.game_area.box,
                      char, self.frame_color)
-        draw_message(self.y + k[0], self.x + k[1],
+        draw_message(y + bottom_y, x + bottom_x,
                      self.class_object.game_area.box,
                      char, self.frame_color)
 
-    def draw_frame_animation(self, action):
-        char = FRAME_CHARS[action]
-        finish, j, k = [5, 26], [0, 0], [0, 0]
+    def draw_frame_animation(self, height, width, y, x):
+        for char in (':', ' '):
+            finish_coords = [height - 1, width - 1]
+            top_coords, bottom_coords = [0, 0], [0, 0]
 
-        while (k <= finish) and (j <= finish):
-            self.draw_frame_animation_chunk(char, j, k)
-            sleep(0.025)
+            while ((top_coords <= finish_coords) and
+                   (bottom_coords <= finish_coords)):
 
-            if j[1] < finish[1]:
-                j[1] += 1
-            else:
-                j[0] += 1
+                self.draw_frame_animation_chunk(
+                    y, x, top_coords, bottom_coords, char,
+                )
+                sleep(0.03)
 
-            if k[0] < finish[0]:
-                k[0] += 1
-            else:
-                k[1] += 1
+                if top_coords[1] < finish_coords[1]:
+                    top_coords[1] += 1
+                else:
+                    top_coords[0] += 1
 
-        sleep(0.1)
+                if bottom_coords[0] < finish_coords[0]:
+                    bottom_coords[0] += 1
+                else:
+                    bottom_coords[1] += 1
+
+    def has_achievement_been_unlocked(self, achievement):
+        pass
