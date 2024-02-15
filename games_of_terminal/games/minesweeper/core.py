@@ -1,6 +1,9 @@
 from games_of_terminal.constants import KEYS, BASE_OFFSET
 from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
+from games_of_terminal.games.minesweeper.achievements_manager import (
+    MinesweeperAchievementsManager,
+)
 from games_of_terminal.games.minesweeper.constants import *
 from games_of_terminal.games.minesweeper.cell import Cell
 from games_of_terminal.log import log
@@ -23,11 +26,13 @@ class MinesweeperGame(GameEngine):
         self.flags = 0
         self.bombs = 0
 
+        self.achievement_manager = MinesweeperAchievementsManager(self)
+
     @log
     def setup_game_field(self):
         hide_cursor()
 
-        self.draw_game_field()
+        self.draw_game_field(initial=True)
         self.plant_bombs()
         self.set_bombs_around_counter()
         self.open_first_empty_cell()
@@ -51,9 +56,11 @@ class MinesweeperGame(GameEngine):
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data(is_game_over=False)
+                self.achievement_manager.check()
                 return
             if self.is_game_over():
                 self.save_game_data()
+                self.achievement_manager.check()
                 self.ask_for_restart()
                 return
 
@@ -77,7 +84,7 @@ class MinesweeperGame(GameEngine):
         return {'flags': self.flags}
 
     @log
-    def draw_game_field(self):
+    def draw_game_field(self, initial=False):
         lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
         cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
 
@@ -91,8 +98,13 @@ class MinesweeperGame(GameEngine):
 
         for _ in range(lines):
             for _ in range(cols):
-                cell = self.create_cell(y, x)
-                self.cells[(y, x)] = cell
+                if initial:
+                    cell = self.create_cell(y, x)
+                    self.cells[(y, x)] = cell
+                else:
+                    self.cells[(y, x)].clear_cell()
+                    self.cells[(y, x)].update_cell_color()
+                    self.cells[(y, x)].show_cell_text()
 
                 x += CELL_WIDTH
 
@@ -216,7 +228,6 @@ class MinesweeperGame(GameEngine):
             game_state=self.tips,
             game_tips=GAME_TIPS,
         )
-
         self.check_to_win()
 
     def open_near_empty_cells(self, cell):
@@ -282,3 +293,6 @@ class MinesweeperGame(GameEngine):
             if (cell.is_bomb() and cell.have_flag())
         ])
         update_game_stat(self.game_name, 'bombs_defused', bombs_defused)
+
+    def draw_game_window(self):
+        self.draw_game_field()
