@@ -33,11 +33,9 @@ BASE_OFFSET = 2
 DEFAULT_YX_OFFSET = 1
 STATUS_BOX_HEIGHT = 3
 
-ACHIEVEMENT_WIN_HEIGHT = 6
-FRAME_CHARS = {
-    'appearing': ':',
-    'disappearing': ' ',
-}
+ACH_FRAME_COLOR_NAME = 'bright_light_pastel_orange_text_black_bg'
+ACH_NAME_COLOR_NAME = 'bright_white_text_black_bg'
+ACH_BG_COLOR_NAME = 'bright_light_pastel_orange_text_black_bg'
 
 KEYS = {
     'up_arrow': KEY_UP,
@@ -304,5 +302,10 @@ COLOR_MAPPING = {
         'pair_num': 40,
         'text_color': 160,
         'bg_color': COLOR_BLACK,
-    }
+    },
+    'bright_light_pastel_orange_text_black_bg': {
+        'pair_num': 41,
+        'text_color': 209,
+        'bg_color': COLOR_BLACK,
+    },
 }
