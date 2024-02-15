@@ -126,3 +126,6 @@ class Cell:
 
         draw_message(y, x, self.field_box, text)
         self.set_background_color()
+
+    def clear_cell(self):
+        self.field_box.erase()
