@@ -5,6 +5,9 @@ from games_of_terminal.log import log
 from games_of_terminal.games.snake.constants import (
     GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
 )
+from games_of_terminal.games.snake.achievements_manager import (
+    SnakeGameAchievementsManager,
+)
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -33,6 +36,7 @@ class SnakeGame(GameEngine):
         self.food = None
 
         self.start_time = time()
+        self.achievement_manager = SnakeGameAchievementsManager(self)
 
     @log
     def setup_game_field(self):
@@ -61,15 +65,18 @@ class SnakeGame(GameEngine):
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data()
+                self.achievement_manager.check()
                 return
             if self.is_game_over():
                 self.save_game_data()
+                self.achievement_manager.check()
                 self.ask_for_restart()
                 return
 
             self.move_snake()
 
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
+                self.achievement_manager.check()
                 self.stats.game_status = 'user_lose'
 
     def draw_game_window(self):
@@ -157,6 +164,7 @@ class SnakeGame(GameEngine):
                 game_state=self.tips,
                 game_tips=GAME_TIPS,
             )
+            self.achievement_manager.check(set_pause=True)
         else:
             snake_tail = self.snake.pop()
             empty_space = ' '
