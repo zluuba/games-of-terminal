@@ -3,7 +3,7 @@ from games_of_terminal.database.database import get_username, save_username
 from games_of_terminal.settings.all_settings.constants import (
     USERNAME_EDITING_MSGS, USERNAME_ALLOWED_CHARS,
     USERNAME_VALID_MSGS, USERNAME_INVALID_MSGS,
-    USERNAME_COLOR_NAME,
+    USERNAME_COLOR_NAME, MAX_USERNAME_LEN,
 )
 from games_of_terminal.utils import (
     draw_message, clear_field_line,
@@ -11,7 +11,7 @@ from games_of_terminal.utils import (
     show_cursor, hide_cursor,
 )
 
-from curses import A_BOLD as BOLD
+from curses import flushinp, A_BOLD as BOLD
 from random import choice
 from time import sleep
 
@@ -24,6 +24,9 @@ class UsernameEditing:
         self.new_username = ''
         self.text_start_y = self.get_text_start_y()
         self.text_input_field_y = self.get_text_input_field_y()
+        self.too_many_characters_msg_y = self.text_input_field_y + BASE_OFFSET
+
+        self.max_username_length = 20
 
     def get_text_start_y(self):
         return ((self.parent_class.height // 2) -
@@ -37,7 +40,8 @@ class UsernameEditing:
 
     def run(self):
         self.parent_class.window.clear()
-        self.draw_editing_window_text()
+        self.show_current_username()
+        self.draw_tips_text()
         self.draw_text_input_field()
 
         while True:
@@ -45,6 +49,7 @@ class UsernameEditing:
             self.parent_class.wait_for_keypress()
 
             if key == KEYS['escape']:
+                hide_cursor()
                 return
             elif key in KEYS['enter']:
                 hide_cursor()
@@ -100,8 +105,25 @@ class UsernameEditing:
             return
         elif len(char) > 1:
             return
+        elif len(self.new_username) >= 20:
+            self.show_too_many_characters_msg()
+            return
 
         self.new_username += char
+
+    def show_too_many_characters_msg(self):
+        hide_cursor()
+        color = get_color_by_name('strong_red_text_black_bg')
+        message = f'Username can contain {MAX_USERNAME_LEN} characters maximum.'
+        y = self.too_many_characters_msg_y
+        x = (self.parent_class.width // 2) - (len(message) // 2)
+
+        draw_message(y, x, self.parent_class.window, message, color)
+        sleep(1)
+
+        clear_field_line(y, x, self.parent_class.window, len(message))
+        show_cursor()
+        flushinp()
 
     def handle_char_deleting(self):
         text_input_field_x = self.get_text_input_field_x()
@@ -122,14 +144,14 @@ class UsernameEditing:
         self.parent_class.window.move(self.text_input_field_y, x)
         show_cursor()
 
-    def draw_editing_window_text(self):
-        self.show_current_username()
+    def draw_tips_text(self):
+        color = get_color_by_name('grey_text_black_bg')
 
         for row, message in enumerate(USERNAME_EDITING_MSGS):
             y = self.text_start_y + row
             x = (self.parent_class.width // 2) - (len(message) // 2)
 
-            draw_message(y, x, self.parent_class.window, message)
+            draw_message(y, x, self.parent_class.window, message, color)
 
     def show_current_username(self):
         y = self.text_start_y - BASE_OFFSET
