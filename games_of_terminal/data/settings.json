@@ -3,15 +3,14 @@
     "username": "",
     "color_schemes": [
         {
-          "name": "Red",
+          "name": "Warm Home",
           "selected": true
         },
         {
-          "name": "Blue",
+          "name": "Cold Dungeon",
           "selected": false
         }
-      ],
-    "additional_control_keys": {}
+      ]
   },
   "Minesweeper": {
     "color_schemes": [
@@ -114,12 +113,12 @@
         "selected": false
       },
       {
-        "name": "Snaker",
+        "name": "Snaker's Scope",
         "skin": "⊹",
         "selected": false
       },
       {
-        "name": "42",
+        "name": "Singularity",
         "skin": "ᢁ",
         "selected": false
       }
@@ -146,7 +145,7 @@
         "selected": false
       },
       {
-        "name": "Wild",
+        "name": "Aristocrat",
         "selected": false
       }
     ]
@@ -154,15 +153,11 @@
   "Tic Tac Toe": {
     "color_schemes": [
       {
-        "name": "Boring",
+        "name": "She/Her",
         "selected": true
       },
       {
         "name": "He/Him",
-        "selected": false
-      },
-      {
-        "name": "She/Her",
         "selected": false
       },
       {
