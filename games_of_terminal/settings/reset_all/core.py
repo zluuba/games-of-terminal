@@ -131,7 +131,7 @@ class ResetAll(InterfaceManager):
         self.window.clear()
 
         text = OPTIONS[self.selected_option]['text']
-        y = (self.height - BASE_OFFSET) // 2
+        y = self.height // 2
         x = (self.width // 2) - (len(text) // 2)
 
         draw_message(y, x, self.window, text)
