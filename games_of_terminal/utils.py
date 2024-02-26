@@ -64,7 +64,7 @@ def draw_message(y, x, field, message, color=DEFAULT_COLOR):
 
 
 def draw_colorful_message(y, win_width, field, message_with_colors):
-    message_len = sum(map(lambda tuples: len(tuples[0]), message_with_colors))
+    message_len = sum(map(lambda pair: len(pair[0]), message_with_colors))
     x = (win_width // 2) - (message_len // 2)
 
     for message, color in message_with_colors:
