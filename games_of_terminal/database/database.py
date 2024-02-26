@@ -226,3 +226,21 @@ def unlock_achievement(game_name, achievement_name):
     with Connection(autocommit=True) as conn:
         conn.cursor.execute(queries.unlock_achievement_query,
                             (current_date, game_name, achievement_name,))
+
+
+def save_selected_option(game_name, option_name, chosen_item):
+    with Connection(autocommit=True) as conn:
+        conn.cursor.execute(queries.get_option_query,
+                            (game_name, option_name))
+        options = conn.cursor.fetchone()[0]
+        options_list = literal_eval(options)
+
+        # unselect current and select chosen item
+        for option in options_list:
+            if option['selected']:
+                option['selected'] = False
+            if option['name'] == chosen_item:
+                option['selected'] = True
+
+        conn.cursor.execute(queries.update_option_query,
+                            (str(options_list), game_name, option_name))

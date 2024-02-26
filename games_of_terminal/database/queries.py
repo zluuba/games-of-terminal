@@ -162,3 +162,18 @@ SET status = 'unlocked', date_received = ?
 WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
     AND name = ?;
 '''
+
+get_option_query = '''
+SELECT value FROM game_data
+WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
+    AND data_type = 'settings'
+    AND name = ?;
+'''
+
+update_option_query = '''
+UPDATE game_data
+SET value = ?
+WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
+    AND data_type = 'settings'
+    AND name = ?;
+'''
