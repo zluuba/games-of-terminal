@@ -1,17 +1,17 @@
-from games_of_terminal.constants import (
-    KEYS, BASE_OFFSET,
-)
+from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.database.database import get_all_settings
 from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.utils import (
-    draw_message, clear_field_line,
-)
-from games_of_terminal.settings.all_settings.constants import (
-    TITLE, TOP_OFFSET, SIDE_ARROW_OFFSET,
-    LEFT_ARROW, RIGHT_ARROW, NO_ARROW,
-    UPWARDS_ARROW, DOWNWARDS_ARROW,
+from games_of_terminal.utils import draw_message, clear_field_line
+
+from .constants import (
+    TITLE, SIDE_ARROW_OFFSET,
+    LEFT_ARROW, RIGHT_ARROW,
     BOTTOM_OFFSET,
 )
+from .username_editing import UsernameEditing
+from .option_choosing import OptionChoosing
+
+from curses import A_REVERSE as REVERSE
 
 
 class GamesSettings(InterfaceManager):
@@ -24,18 +24,16 @@ class GamesSettings(InterfaceManager):
         self.items = list(self.all_settings.keys())
         self.items_len = len(self.items)
 
-        self.title_start_y = TOP_OFFSET
-
         self.setup_vars()
 
     def setup_vars(self):
         self.curr_game_ind = 0
-        self.detail_mode = False
-
         self.curr_option_ind = 0
-
         self.pagination_offset = 0
 
+        self.detail_mode = False
+
+        self.title_start_y = BASE_OFFSET
         self.game_name_y = self.get_game_name_y()
         self.settings_start_y = self.get_settings_start_y()
 
@@ -48,7 +46,17 @@ class GamesSettings(InterfaceManager):
                 (self.height - self.settings_start_y) - BOTTOM_OFFSET - 1)
 
     def get_game_name_y(self):
-        return self.title_start_y + len(TITLE) + BASE_OFFSET
+        min_y = self.title_start_y + len(TITLE) + BASE_OFFSET
+
+        max_options_length = self.get_max_options_length()
+
+        middle_y = self.height // 2
+        y_offset = (1 + BASE_OFFSET + max_options_length) // 2
+
+        return max(min_y, middle_y - y_offset)
+
+    def get_max_options_length(self):
+        return max(map(lambda opts: len(opts), self.all_settings.values()))
 
     def get_settings_start_y(self):
         return self.game_name_y + BASE_OFFSET + 1
@@ -66,11 +74,11 @@ class GamesSettings(InterfaceManager):
 
     @property
     def current_option(self):
-        return
+        return list(self.options.keys())[self.curr_option_ind]
 
     @property
     def current_option_values(self):
-        return
+        return self.options[self.current_option]
 
     def get_arrows_xs(self):
         game_name_max_length = self.get_setting_name_max_length()
@@ -99,8 +107,10 @@ class GamesSettings(InterfaceManager):
                 self.window.timeout(0)
                 self.resize_menu_win_handler(key)
             elif key in KEYS['enter']:
+                self.handle_option_editing()
+            elif key == KEYS['space']:
                 self.switch_detail_mode()
-                self.switch_all_settings_selection()
+                self.show_settings()
             elif key in (KEYS['up_arrow'], KEYS['w']):
                 self.moving_controller('up')
             elif key in (KEYS['down_arrow'], KEYS['s']):
@@ -110,16 +120,31 @@ class GamesSettings(InterfaceManager):
             elif key in (KEYS['right_arrow'], KEYS['d']):
                 self.moving_controller('right')
 
+    def handle_option_editing(self):
+        if not self.detail_mode:
+            return
+
+        if self.current_option == 'username':
+            UsernameEditing(self).run()
+        else:
+            OptionChoosing(self).run()
+
+        self.handle_post_editing()
+
+    def handle_post_editing(self):
+        self.all_settings = get_all_settings()
+
+        self.window.clear()
+        self.draw_title()
+        self.show_settings()
+
     def switch_detail_mode(self):
         self.detail_mode = not self.detail_mode
 
-    def switch_selection_mode(self):
-        pass
-
     def moving_controller(self, direction):
-        # if self.detail_mode:
-        #     self.select_option(direction=direction)
-        #     return
+        if self.detail_mode:
+            self.select_option(direction=direction)
+            return
 
         if direction == 'left':
             self.update_current_game_index(-1)
@@ -128,10 +153,26 @@ class GamesSettings(InterfaceManager):
         else:
             return
 
-        # self.reset_game_settings()
-        # self.show_pagination_arrows()
-        # self.clear_achievement_details()
-        # self.achievements_action(show=True, update_coords=True)
+        self.reset_game_settings()
+
+    def reset_game_settings(self):
+        self.curr_option_ind = 0
+        self.pagination_offset = 0
+
+    def select_option(self, direction):
+        if direction in ('left', 'right'):
+            return
+
+        offset = 1 if direction == 'down' else -1
+        new_option_ind = self.curr_option_ind + offset
+
+        if new_option_ind < 0:
+            new_option_ind = len(self.options) - 1
+        elif new_option_ind >= len(self.options):
+            new_option_ind = 0
+
+        self.curr_option_ind = new_option_ind
+        self.show_settings()
 
     def update_current_game_index(self, direction):
         new_curr_game_index = self.curr_game_ind + direction
@@ -148,14 +189,17 @@ class GamesSettings(InterfaceManager):
     def show_settings(self):
         self.show_game_name_with_arrows()
         self.show_options()
-        # self.show_pagination_arrows()
-        # self.settings_action(show=True, update_coords=True)
 
     def show_options(self):
-        for y_offset, option in enumerate(self.options):
-            y = self.settings_start_y + y_offset
+        for row, option in enumerate(self.options):
+            y = self.settings_start_y + row
             x = (self.width // 2) - (len(option) // 2)
-            draw_message(y, x, self.window, self.prettify_option(option))
+
+            if self.detail_mode and row == self.curr_option_ind:
+                draw_message(y, x, self.window, self.prettify_option(option),
+                             DEFAULT_COLOR + REVERSE)
+            else:
+                draw_message(y, x, self.window, self.prettify_option(option))
 
     def clear_options_area(self):
         for y_offset, option in enumerate(self.options):
@@ -167,21 +211,10 @@ class GamesSettings(InterfaceManager):
 
     @staticmethod
     def prettify_option(option):
-        return ' '.join(map(lambda word: word.capitalize(), option.split('_')))
-
-    def show_pagination_arrows(self):
-        up_arrow = UPWARDS_ARROW
-        down_arrow = DOWNWARDS_ARROW
-
-        if not self.pagination_offset:
-            up_arrow = NO_ARROW
-        if self.pagination_offset >= self.max_pagination_offset:
-            down_arrow = NO_ARROW
-
-        draw_message(self.start_y, self.arrow_x, self.window, up_arrow)
-
-        down_arrow_y = self.height - BOTTOM_OFFSET
-        draw_message(down_arrow_y, self.arrow_x, self.window, down_arrow)
+        return ' '.join(map(
+            lambda word: word.capitalize(),
+            option.split('_')),
+        )
 
     def show_game_name_with_arrows(self):
         self.clear_game_name_line()
@@ -228,5 +261,8 @@ class GamesSettings(InterfaceManager):
             draw_message(y, x, self.window, line)
 
     def redraw_window(self):
+        self.window.erase()
         self.setup_vars()
+
+        self.draw_title()
         self.show_settings()

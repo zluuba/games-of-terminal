@@ -18,6 +18,8 @@ TOP_OFFSET = 2
 BOTTOM_OFFSET = 2
 SIDE_ARROW_OFFSET = 4
 
+MAX_USERNAME_LEN = 20
+
 USERNAME_EDITING_MSGS = (
     'Enter new username and press Enter.',
     'To cancel editing and go back, press Esc.',
@@ -41,3 +43,9 @@ USERNAME_VALID_MSGS = (
 
 USERNAME_ALLOWED_CHARS = ascii_letters + digits + punctuation
 USERNAME_COLOR_NAME = 'strong_pastel_purple_text_black_bg'
+
+
+OPTIONS_CHOOSING_MSGS = (
+    'Use the left and right arrows to scroll through the options.',
+    'Press Enter to apply the selected option.',
+)
