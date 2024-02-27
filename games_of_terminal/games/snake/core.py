@@ -13,7 +13,7 @@ from games_of_terminal.utils import (
 )
 
 from .achievements_manager import SnakeGameAchievementsManager
-from .constants import GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN
+from .constants import GAME_TIPS, DIRECTIONS
 
 from random import randint
 from time import time
@@ -22,36 +22,29 @@ from time import time
 class SnakeGame(GameEngine):
     @log
     def setup_game_stats(self):
-        # initial position of the snake:
-        # placed in the center of the game box, have 3 sections [y, x]
-        self.snake = [
-            [self.game_area.height // 2, self.game_area.width // 2 + 1],
-            [self.game_area.height // 2, self.game_area.width // 2],
-            [self.game_area.height // 2, self.game_area.width // 2 - 1]
-        ]
-
-        # initial direction of the snake's movement
+        self.snake = self.get_initial_snake()
+        self.food = self.get_food_coords()
         self.direction = KEYS['right_arrow']
-        self.food = None
+
+        game_settings = get_game_settings(self.game_name)
+        self.snake_skin = self.get_selected_skin(game_settings['snake_skins'])
+        self.food_skin = self.get_selected_skin(game_settings['food_skins'])
 
         self.start_time = time()
         self.achievement_manager = SnakeGameAchievementsManager(self)
 
-        game_settings = get_game_settings(self.game_name)
-        self.snake_skin = self.get_snake_skin(game_settings)
-        self.food_skin = self.get_food_skin(game_settings)
+    def get_initial_snake(self):
+        middle_y = self.game_area.height // 2
+        middle_x = self.game_area.width // 2
 
-    def get_snake_skin(self, game_settings):
-        for snake_skin in game_settings['snake_skins']:
-            if snake_skin['selected']:
-                return snake_skin['skin']
-        return SNAKE_SKIN
+        return [[middle_y, middle_x + 1],
+                [middle_y, middle_x],
+                [middle_y, middle_x - 1]]
 
-    def get_food_skin(self, game_settings):
-        for food_skin in game_settings['food_skins']:
-            if food_skin['selected']:
-                return food_skin['skin']
-        return FOOD_SKIN
+    def get_selected_skin(self, skins):
+        for skin in skins:
+            if skin['selected']:
+                return skin['skin']
 
     @log
     def setup_game_field(self):
@@ -75,7 +68,7 @@ class SnakeGame(GameEngine):
         while True:
             key = self.window.getch()
 
-            if key != -1:
+            if self.is_user_press_key(key):
                 self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
@@ -93,6 +86,10 @@ class SnakeGame(GameEngine):
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
                 self.achievement_manager.check()
                 self.stats.game_status = 'user_lose'
+
+    @staticmethod
+    def is_user_press_key(key):
+        return key != -1
 
     def draw_game_window(self):
         self.game_area.box.erase()
