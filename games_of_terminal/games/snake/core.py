@@ -1,13 +1,9 @@
 from games_of_terminal.constants import KEYS
-from games_of_terminal.database.database import get_game_stat_value
+from games_of_terminal.database.database import (
+    get_game_stat_value, get_game_settings,
+)
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.log import log
-from games_of_terminal.games.snake.constants import (
-    GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN,
-)
-from games_of_terminal.games.snake.achievements_manager import (
-    SnakeGameAchievementsManager,
-)
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -15,6 +11,9 @@ from games_of_terminal.utils import (
     update_best_score,
     draw_message,
 )
+
+from .achievements_manager import SnakeGameAchievementsManager
+from .constants import GAME_TIPS, DIRECTIONS, SNAKE_SKIN, FOOD_SKIN
 
 from random import randint
 from time import time
@@ -37,6 +36,22 @@ class SnakeGame(GameEngine):
 
         self.start_time = time()
         self.achievement_manager = SnakeGameAchievementsManager(self)
+
+        game_settings = get_game_settings(self.game_name)
+        self.snake_skin = self.get_snake_skin(game_settings)
+        self.food_skin = self.get_food_skin(game_settings)
+
+    def get_snake_skin(self, game_settings):
+        for snake_skin in game_settings['snake_skins']:
+            if snake_skin['selected']:
+                return snake_skin['skin']
+        return SNAKE_SKIN
+
+    def get_food_skin(self, game_settings):
+        for food_skin in game_settings['food_skins']:
+            if food_skin['selected']:
+                return food_skin['skin']
+        return FOOD_SKIN
 
     @log
     def setup_game_field(self):
@@ -84,11 +99,11 @@ class SnakeGame(GameEngine):
         self.game_area.show_borders()
 
         if self.food:
-            draw_message(*self.food, self.game_area.box, FOOD_SKIN)
+            draw_message(*self.food, self.game_area.box, self.food_skin)
 
         if self.snake:
             for y, x in self.snake:
-                draw_message(y, x, self.game_area.box, SNAKE_SKIN)
+                draw_message(y, x, self.game_area.box, self.snake_skin)
 
     def controller(self, key, pause_on=True):
         super().controller(key, pause_on)
@@ -125,7 +140,7 @@ class SnakeGame(GameEngine):
 
     def put_food_on_the_field(self):
         self.food = self.get_food_coords()
-        draw_message(*self.food, self.game_area.box, FOOD_SKIN)
+        draw_message(*self.food, self.game_area.box, self.food_skin)
 
     def change_direction(self, chosen_direction):
         opposite_direction = DIRECTIONS[self.direction]
@@ -155,7 +170,7 @@ class SnakeGame(GameEngine):
             snake_head = [snake_head[0] + 1, snake_head[1]]
 
         self.snake.insert(0, snake_head)
-        draw_message(*snake_head, self.game_area.box, SNAKE_SKIN)
+        draw_message(*snake_head, self.game_area.box, self.snake_skin)
 
         if snake_head == self.food:
             self.stats.score += 1
