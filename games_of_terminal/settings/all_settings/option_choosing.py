@@ -1,29 +1,38 @@
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.database.database import save_selected_option
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.utils import (
     draw_message, clear_field_line, get_color_by_name,
     draw_colorful_message,
 )
 from .constants import (
-    OPTIONS_CHOOSING_MSGS,
+    OPTIONS_CHOOSING_MSGS, OPTIONS_POST_MSG,
     LEFT_ARROW, RIGHT_ARROW, NO_ARROW,
 )
 
+from time import sleep
 
-class OptionChoosing:
-    def __init__(self, parent_class):
+
+class OptionChoosing(InterfaceManager):
+    def __init__(self, canvas, parent_class):
+        super().__init__(canvas, only_main_win=True)
+
         self.parent_class = parent_class
 
         self.option_name = parent_class.current_option
         self.option_values = parent_class.current_option_values
 
+        self.curr_option_ind = 0
+        self.setup_vars()
+
+    def setup_vars(self):
+        self.height, self.width = self.canvas.getmaxyx()
+
         self.text_start_y = self.get_text_start_y()
         self.options_start_y = self.get_options_start_y()
 
-        self.curr_option_ind = 0
-
     def get_text_start_y(self):
-        return ((self.parent_class.height // 2) -
+        return ((self.height // 2) -
                 ((len(OPTIONS_CHOOSING_MSGS) + BASE_OFFSET + 1) // 2))
 
     def get_options_start_y(self):
@@ -52,14 +61,20 @@ class OptionChoosing:
         self.draw_option_choosing_window()
 
         while True:
-            key = self.parent_class.window.getch()
-            self.parent_class.wait_for_keypress()
+            key = self.window.getch()
+            self.wait_for_keypress()
 
             if key == KEYS['escape']:
                 return
+            elif key == KEYS['resize']:
+                self.window.timeout(0)
+                self.resize_menu_win_handler(key)
             elif key in KEYS['enter']:
-                save_selected_option(self.parent_class.chosen_game_name,
-                                     self.option_name, self.current_option_name)
+                save_selected_option(
+                    self.parent_class.chosen_game_name,
+                    self.option_name, self.current_option_name
+                )
+                self.draw_post_editing_text()
                 return
             elif key in (KEYS['left_arrow'], KEYS['a']):
                 self.moving_controller('left')
@@ -79,7 +94,7 @@ class OptionChoosing:
         self.draw_arrows_around_option()
 
     def draw_option_choosing_window(self):
-        self.parent_class.window.clear()
+        self.window.clear()
         self.draw_option_name()
         self.draw_tips_text()
         self.draw_option_choosing_field()
@@ -89,18 +104,18 @@ class OptionChoosing:
         color = get_color_by_name('yellow_text_black_bg')
         prettify_name = self.parent_class.prettify_option(self.option_name)
         y = self.text_start_y - BASE_OFFSET
-        x = (self.parent_class.width // 2) - (len(self.option_name) // 2)
+        x = (self.width // 2) - (len(self.option_name) // 2)
 
-        draw_message(y, x, self.parent_class.window, prettify_name, color)
+        draw_message(y, x, self.window, prettify_name, color)
 
     def draw_tips_text(self):
         color = get_color_by_name('grey_text_black_bg')
 
         for row, message in enumerate(OPTIONS_CHOOSING_MSGS):
             y = self.text_start_y + row
-            x = (self.parent_class.width // 2) - (len(message) // 2)
+            x = (self.width // 2) - (len(message) // 2)
 
-            draw_message(y, x, self.parent_class.window, message, color)
+            draw_message(y, x, self.window, message, color)
 
     def draw_option_choosing_field(self):
         text = self.current_option_name
@@ -112,26 +127,26 @@ class OptionChoosing:
                 (self.current_option_name, color),
                 (' (selected)', DEFAULT_COLOR),
             )
-            draw_colorful_message(y, self.parent_class.width,
-                                  self.parent_class.window, text)
+            draw_colorful_message(y, self.width,
+                                  self.window, text)
         else:
-            x = max(1, (self.parent_class.width // 2) - (len(text) // 2))
+            x = max(1, (self.width // 2) - (len(text) // 2))
 
-            draw_message(y, x, self.parent_class.window, text, color)
+            draw_message(y, x, self.window, text, color)
 
     def clear_option_choosing_field(self):
         option_length = len(self.current_option_name)
         option_length += len(' (selected)') if self.is_current_option_selected else 0
 
         y = self.options_start_y
-        x = max(1, (self.parent_class.width // 2) - (option_length // 2))
+        x = max(1, (self.width // 2) - (option_length // 2))
 
-        clear_field_line(y, x, self.parent_class.window, option_length)
+        clear_field_line(y, x, self.window, option_length)
 
     def draw_arrows_around_option(self):
         max_len_name = self.get_option_max_name_length() + len(' (selected)')
 
-        left_arrow_x = ((self.parent_class.width // 2) -
+        left_arrow_x = ((self.width // 2) -
                         (max_len_name // 2) -
                         BASE_OFFSET)
         right_arrow_x = left_arrow_x + (BASE_OFFSET * 2) + max_len_name - 1
@@ -140,6 +155,19 @@ class OptionChoosing:
         right_arrow = NO_ARROW if self.is_curr_option_is_last else RIGHT_ARROW
 
         draw_message(self.options_start_y, left_arrow_x,
-                     self.parent_class.window, left_arrow)
+                     self.window, left_arrow)
         draw_message(self.options_start_y, right_arrow_x,
-                     self.parent_class.window, right_arrow)
+                     self.window, right_arrow)
+
+    def draw_post_editing_text(self):
+        self.window.clear()
+
+        y = self.height // 2
+        x = (self.width // 2) - (len(OPTIONS_POST_MSG) // 2)
+
+        draw_message(y, x, self.window, OPTIONS_POST_MSG)
+        sleep(2)
+
+    def redraw_window(self):
+        self.setup_vars()
+        self.draw_option_choosing_window()

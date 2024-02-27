@@ -31,14 +31,9 @@ USERNAME_INVALID_MSGS = (
 )
 
 USERNAME_VALID_MSGS = (
-    '<USERNAME>? Is that your real name? Lmao',
     'Changes have been applied.',
-    'Henceforth I name you <USERNAME>.',
-    'Hi, <USERNAME>. How you doin\'? ;)',
     'Interesting choice.',
-    'Username with Twitter vibes, nice work.',
-    'So, you really want to be called <USERNAME>? Okay..',
-    'Username <<USERNAME>> was successfully saved.',
+    'I\'ll remember that.',
 )
 
 USERNAME_ALLOWED_CHARS = ascii_letters + digits + punctuation
@@ -49,3 +44,5 @@ OPTIONS_CHOOSING_MSGS = (
     'Use the left and right arrows to scroll through the options.',
     'Press Enter to apply the selected option.',
 )
+
+OPTIONS_POST_MSG = 'Settings have been changed successfully.'

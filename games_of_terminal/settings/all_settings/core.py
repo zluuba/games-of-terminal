@@ -11,7 +11,7 @@ from .constants import (
 from .username_editing import UsernameEditing
 from .option_choosing import OptionChoosing
 
-from curses import A_REVERSE as REVERSE
+from curses import flushinp, A_REVERSE as REVERSE
 
 
 class GamesSettings(InterfaceManager):
@@ -27,6 +27,8 @@ class GamesSettings(InterfaceManager):
         self.setup_vars()
 
     def setup_vars(self):
+        self.height, self.width = self.canvas.getmaxyx()
+
         self.curr_game_ind = 0
         self.curr_option_ind = 0
         self.pagination_offset = 0
@@ -125,18 +127,17 @@ class GamesSettings(InterfaceManager):
             return
 
         if self.current_option == 'username':
-            UsernameEditing(self).run()
+            editing_window = UsernameEditing(self.canvas)
         else:
-            OptionChoosing(self).run()
+            editing_window = OptionChoosing(self.canvas, self)
 
+        editing_window.run()
         self.handle_post_editing()
 
     def handle_post_editing(self):
+        flushinp()
+        self.redraw_window()
         self.all_settings = get_all_settings()
-
-        self.window.clear()
-        self.draw_title()
-        self.show_settings()
 
     def switch_detail_mode(self):
         self.detail_mode = not self.detail_mode
