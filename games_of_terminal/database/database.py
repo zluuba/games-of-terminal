@@ -228,6 +228,24 @@ def unlock_achievement(game_name, achievement_name):
                             (current_date, game_name, achievement_name,))
 
 
+def get_game_settings(game_name):
+    game_settings = defaultdict(dict)
+
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_game_settings_query, (game_name,))
+        settings_data = conn.cursor.fetchall()
+
+    for settings in settings_data:
+        setting_name, setting_value = settings
+
+        if setting_value and (not setting_name == 'username'):
+            setting_value = literal_eval(setting_value)
+
+        game_settings[setting_name] = setting_value
+
+    return game_settings
+
+
 def save_selected_option(game_name, option_name, chosen_item):
     with Connection(autocommit=True) as conn:
         conn.cursor.execute(queries.get_option_query,

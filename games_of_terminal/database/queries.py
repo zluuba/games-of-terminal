@@ -141,6 +141,14 @@ JOIN game ON game_data.id_game = game.id_game
 WHERE game_data.data_type = 'settings'; 
 '''
 
+get_game_settings_query = '''
+SELECT game_data.name, 
+       game_data.value
+FROM game_data
+WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
+    AND data_type = 'settings';
+'''
+
 get_username_query = '''
 SELECT value FROM game_data
 WHERE id_game IN (SELECT id_game FROM game WHERE name = 'Global')
