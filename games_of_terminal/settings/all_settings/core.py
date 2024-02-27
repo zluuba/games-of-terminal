@@ -24,16 +24,16 @@ class GamesSettings(InterfaceManager):
         self.items = list(self.all_settings.keys())
         self.items_len = len(self.items)
 
-        self.setup_vars()
-
-    def setup_vars(self):
-        self.height, self.width = self.canvas.getmaxyx()
-
         self.curr_game_ind = 0
         self.curr_option_ind = 0
         self.pagination_offset = 0
 
         self.detail_mode = False
+
+        self.setup_vars()
+
+    def setup_vars(self):
+        self.height, self.width = self.canvas.getmaxyx()
 
         self.title_start_y = BASE_OFFSET
         self.game_name_y = self.get_game_name_y()
