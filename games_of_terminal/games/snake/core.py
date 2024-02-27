@@ -64,10 +64,10 @@ class SnakeGame(GameEngine):
             return obstacles
 
         while obstacles_count:
-            y = randint(self.game_area.top_border + 1,
-                        self.game_area.bottom_border - 1)
-            x = randint(self.game_area.left_border + 1,
-                        self.game_area.right_border - 1)
+            y = randint(self.game_area.top_border + 2,
+                        self.game_area.bottom_border - 2)
+            x = randint(self.game_area.left_border + 2,
+                        self.game_area.right_border - 2)
             obstacle = [y, x]
 
             if (obstacle in self.snake) or \
@@ -228,23 +228,26 @@ class SnakeGame(GameEngine):
         self.snake.insert(0, snake_head)
         draw_message(*snake_head, self.game_area.box, self.snake_skin)
 
+        obstacles = self.get_all_obstacles_coords()
+
         if snake_head == self.food:
-            self.food = None
-            self.stats.score += 1
-            self.put_food_on_field()
-            self.show_side_menu_tips(
-                game_state=self.tips,
-                game_tips=GAME_TIPS,
-            )
-            self.achievement_manager.check(set_pause=True)
-        elif snake_head in self.get_all_obstacles_coords():
+            self.handle_snake_eat_food()
+        elif snake_head in obstacles:
             self.stats.game_status = 'user_lose'
         else:
             snake_tail = self.snake.pop()
-            empty_space = ' '
-            draw_message(*snake_tail, self.game_area.box, empty_space)
+            draw_message(*snake_tail, self.game_area.box, ' ')
 
-        self.game_area.box.refresh()
+    def handle_snake_eat_food(self):
+        self.food = None
+        self.put_food_on_field()
+
+        self.stats.score += 1
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
+        self.achievement_manager.check(set_pause=True)
 
     @log
     def save_game_data(self):
