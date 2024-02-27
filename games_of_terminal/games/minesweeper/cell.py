@@ -74,11 +74,13 @@ class Cell:
             self.state['settings'].remove('cursor')
             self.set_background_color()
 
+    @property
     def bombs_around(self):
         return self.state['bombs_around']
 
-    def set_bombs_around_number(self, number):
-        self.state['bombs_around'] = number
+    @bombs_around.setter
+    def bombs_around(self, value):
+        self.state['bombs_around'] = value
 
     def get_background_color(self):
         return self.state['background_color']
@@ -99,7 +101,7 @@ class Cell:
         elif not self.is_open():
             color = self.colors['closed']
         else:
-            num_of_bombs = min(self.bombs_around(), 4)
+            num_of_bombs = min(self.bombs_around, 4)
             color = self.colors[num_of_bombs]
 
         self.state['background_color'] = color
@@ -116,7 +118,7 @@ class Cell:
         elif self.is_bomb() and self.is_open():
             text = 'boom!'
         elif self.is_open():
-            num_of_bombs = self.bombs_around()
+            num_of_bombs = self.bombs_around
 
             if num_of_bombs:
                 text = str(num_of_bombs)

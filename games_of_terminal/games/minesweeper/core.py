@@ -164,7 +164,7 @@ class MinesweeperGame(GameEngine):
                     near_cell = self.cells[near_cell_coordinates]
                     bombs += 1 if near_cell.is_bomb() else 0
 
-            cell.set_bombs_around_number(bombs)
+            cell.bombs_around = bombs
             cell.set_background_color()
 
     @log
@@ -183,7 +183,7 @@ class MinesweeperGame(GameEngine):
         empty_cells = []
 
         for cell in self.cells.values():
-            if not cell.is_bomb() and not cell.bombs_around():
+            if not cell.is_bomb() and not cell.bombs_around:
                 empty_cells.append(cell)
 
         return empty_cells
@@ -193,7 +193,7 @@ class MinesweeperGame(GameEngine):
         if cell.have_flag():
             return
 
-        if cell.is_empty() and not cell.bombs_around():
+        if cell.is_empty() and not cell.bombs_around:
             self.open_near_empty_cells(cell)
         if not cell.is_open():
             cell.show_cell()
@@ -249,7 +249,7 @@ class MinesweeperGame(GameEngine):
             near_cell.open_cell()
             near_cell.show_cell_text()
 
-            if near_cell.bombs_around() > 0:
+            if near_cell.bombs_around > 0:
                 continue
 
             self.open_near_empty_cells(near_cell)
