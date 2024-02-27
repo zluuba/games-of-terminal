@@ -3,7 +3,7 @@ from games_of_terminal.database.database import get_games_statistic
 
 
 class SnakeGameAchievementsManager(AchievementsManager):
-    def has_achievement_been_unlocked(self, achievement):
+    def has_achievement_been_unlocked(self, achievement, **kwargs):
         match achievement['name']:
             case 'Answer Seeker':
                 return self.check_score(42)
@@ -16,11 +16,11 @@ class SnakeGameAchievementsManager(AchievementsManager):
             case 'Good Soup':
                 return self.class_object.is_snake_eat_itself()
             case 'Fashionista':
-                return
+                return self.check_color_scheme_was_changed(**kwargs)
             case 'Mode Mood':
-                return
+                return self.check_game_mode_was_changed(**kwargs)
             case 'GOD':
-                return
+                return self.check_user_win()
 
     def check_score(self, required_quantity):
         return self.class_object.stats.score >= required_quantity
@@ -29,3 +29,18 @@ class SnakeGameAchievementsManager(AchievementsManager):
         statistic = get_games_statistic()
         total_games_count = statistic[self.class_object.game_name]['total_games']
         return total_games_count >= required_quantity
+
+    def check_user_win(self):
+        return self.class_object.stats.game_status == 'user_win'
+
+    @staticmethod
+    def check_color_scheme_was_changed(**kwargs):
+        if 'color_scheme_change' in kwargs:
+            return True
+        return False
+
+    @staticmethod
+    def check_game_mode_was_changed(**kwargs):
+        if 'game_mode_change' in kwargs:
+            return True
+        return False
