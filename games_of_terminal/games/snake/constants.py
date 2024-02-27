@@ -12,7 +12,3 @@ DIRECTIONS = {
     KEY_UP: KEY_DOWN,
     KEY_DOWN: KEY_UP,
 }
-
-SNAKE_SKIN = 'O'
-FOOD_SKIN = '×'
-SKINS = ['#', 'O', '×', '¤', '■', '█', '≡', '©']
