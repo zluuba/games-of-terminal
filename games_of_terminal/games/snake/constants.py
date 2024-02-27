@@ -13,5 +13,6 @@ DIRECTIONS = {
     KEY_DOWN: KEY_UP,
 }
 
-OBSTACLES_SKINS = ['۩', 'ଳ', 'ᚾ', '☢']
+# 'ᕱ' '⌂', '⎍'
+OBSTACLES_SKINS = ['۩', 'ᚾ', 'ᛅ', '⏏', '⋂']
 OBSTACLES_COLOR = 'purple_text_black_bg'
