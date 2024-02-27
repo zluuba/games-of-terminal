@@ -64,12 +64,14 @@ class Achievements(InterfaceManager):
         return start_x + ach_width + SIDE_ARROW_OFFSET
 
     def get_achievements_start_y(self):
-        ach_rows_count = self.showed_achievements_count // ACHIEVEMENTS_IN_ROW
-        visible_ach_height = ach_rows_count * self.ach_height
-        visible_ach_height += (BASE_OFFSET * (ach_rows_count - 1))
+        achievements_count = min(self.showed_achievements_count,
+                                 len(self.curr_achievements_list))
+        ach_rows_count = ceil(achievements_count / ACHIEVEMENTS_IN_ROW)
+        visible_ach_height = ((ach_rows_count * self.ach_height) +
+                              (BASE_OFFSET * (ach_rows_count - 1)))
         ach_win_height = (self.height - BOTTOM_OFFSET) - self.pag_up_arrow_y
 
-        y_offset = (ach_win_height - visible_ach_height) // 2
+        y_offset = (ach_win_height // 2) - (visible_ach_height // 2)
 
         return self.pag_up_arrow_y + max(0, y_offset)
 
