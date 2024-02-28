@@ -56,6 +56,7 @@ KEYS = {
     'a': ord('a'),
     'd': ord('d'),
     'q': ord('q'),
+    'x': ord('x'),
 }
 
 GAMES = [
@@ -96,7 +97,7 @@ MESSAGES = {
 
 COMMON_TIPS = {
     'Restart': 'R',
-    'Settings': 'S',
+    'Settings': 'X',
     'Quit': 'Esc',
 }
 
@@ -307,6 +308,16 @@ COLOR_MAPPING = {
     'purple_text_black_bg': {
         'pair_num': 41,
         'text_color': 177,
+        'bg_color': COLOR_BLACK,
+    },
+    'light_blue_text_black_bg': {
+        'pair_num': 42,
+        'text_color': 75,
+        'bg_color': COLOR_BLACK,
+    },
+    'dark_medium_blue_text_black_bg': {
+        'pair_num': 43,
+        'text_color': 26,
         'bg_color': COLOR_BLACK,
     },
 }
