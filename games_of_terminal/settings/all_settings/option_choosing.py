@@ -166,7 +166,7 @@ class OptionChoosing(InterfaceManager):
         x = (self.width // 2) - (len(OPTIONS_POST_MSG) // 2)
 
         draw_message(y, x, self.window, OPTIONS_POST_MSG)
-        sleep(2)
+        sleep(1)
 
     def redraw_window(self):
         self.setup_vars()

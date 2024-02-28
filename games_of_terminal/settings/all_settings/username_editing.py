@@ -110,7 +110,7 @@ class UsernameEditing(InterfaceManager):
 
             draw_message(y, x, self.window, message)
 
-        sleep(2)
+        sleep(1)
 
     def handle_char_adding(self, key):
         try:
