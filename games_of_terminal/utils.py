@@ -136,3 +136,9 @@ def update_total_time_count(game_name, start_time):
 
 def update_best_score(game_name, score):
     update_game_stat(game_name, 'best_score', score, save_mode=True)
+
+
+def get_current_color_scheme_name(color_schemes):
+    for scheme in color_schemes:
+        if scheme['selected']:
+            return scheme['name']

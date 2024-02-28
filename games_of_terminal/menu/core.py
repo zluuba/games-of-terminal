@@ -6,6 +6,7 @@ from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
     get_color_by_name, draw_message, hide_cursor,
+    get_current_color_scheme_name,
 )
 
 from .constants import (
@@ -41,7 +42,7 @@ class Menu(InterfaceManager):
 
         settings = get_game_settings('Global')
         color_schemes = settings['color_schemes']
-        self.color_scheme = self.get_current_color_scheme_name(color_schemes)
+        self.color_scheme = get_current_color_scheme_name(color_schemes)
 
         self.logo_start_y = self.get_logo_start_y()
         self.menu_start_y = self.get_menu_start_y()
@@ -56,12 +57,6 @@ class Menu(InterfaceManager):
 
         self.fire_free_area_begin_x = self.get_fire_free_area_begin_x()
         self.fire_free_area_end_x = self.get_fire_free_area_end_x()
-
-    @staticmethod
-    def get_current_color_scheme_name(color_schemes):
-        for scheme in color_schemes:
-            if scheme['selected']:
-                return scheme['name']
 
     def get_logo_start_y(self):
         return ((self.height // 2) -
