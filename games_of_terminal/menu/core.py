@@ -1,17 +1,21 @@
-from games_of_terminal.database.database import create_and_fill_db_tables
-from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
+from games_of_terminal.database.database import (
+    create_and_fill_db_tables, get_game_settings,
+)
+from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
-from games_of_terminal.menu.constants import (
+from games_of_terminal.utils import (
+    get_color_by_name, draw_message, hide_cursor,
+)
+
+from .constants import (
     TOP_SWORD_LEN, LOGO_MENU, LOGO_MENU_LEN,
-    BOTTOM_SWORD_LEN, MENU_MAX_LEN, ANIMATION_SPEED,
+    BOTTOM_SWORD_LEN, MENU_MAX_LEN, FIRE_ANIMATION_SPEED,
     TOP_SWORD, BOTTOM_SWORD, SWORD_COLORS,
     CREATOR_NAME, GOODBYE_MESSAGES,
     FIRE_CHARS, FIRE_COLORS, FIRE_ELEMENTS_COUNT,
     MENU_ITEMS, MENU_ITEMS_COUNT, FIRE_CHARS_LEN,
-)
-from games_of_terminal.utils import (
-    get_color_by_name, draw_message, hide_cursor,
+    AMOUNT_OF_FIRE_DIV, LOGO_OFFSET,
 )
 
 from curses import endwin, A_STANDOUT as REVERSE
@@ -35,27 +39,63 @@ class Menu(InterfaceManager):
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
 
-        self.logo_start_y = (self.height // 2) - ((LOGO_MENU_LEN + MENU_ITEMS_COUNT) // 2) - 3
-        self.menu_start_y = self.logo_start_y + LOGO_MENU_LEN + 3
+        settings = get_game_settings('Global')
+        color_schemes = settings['color_schemes']
+        self.color_scheme = self.get_current_color_scheme_name(color_schemes)
 
-        self.top_sword_y = self.logo_start_y - 1
-        self.top_sword_x = (self.width // 2) - (TOP_SWORD_LEN // 2)
+        self.logo_start_y = self.get_logo_start_y()
+        self.menu_start_y = self.get_menu_start_y()
 
-        self.bottom_sword_y = self.logo_start_y + LOGO_MENU_LEN
-        self.bottom_sword_x = (self.width // 2) - (BOTTOM_SWORD_LEN // 2)
+        # top sword coordinates
+        self.t_sword_y, self.t_sword_x = self.get_top_sword_coords()
+        # bottom sword coordinates
+        self.b_sword_y, self.b_sword_x = self.get_bottom_sword_coords()
 
         self.fire_area_size = self.width * self.height
-        self.fire_items = [0] * (self.fire_area_size + self.width + 1)
+        self.fire_items = self.get_fire_items()
 
-        end_offset = (BASE_OFFSET * 2) if (MENU_MAX_LEN % 2) else (BASE_OFFSET * 2 - 1)
-        self.fire_free_area_begin_x = (self.width // 2) - (MENU_MAX_LEN // 2) - BASE_OFFSET
-        self.fire_free_area_end_x = self.fire_free_area_begin_x + MENU_MAX_LEN + end_offset
+        self.fire_free_area_begin_x = self.get_fire_free_area_begin_x()
+        self.fire_free_area_end_x = self.get_fire_free_area_end_x()
 
-        self.fire_animation_speed = ANIMATION_SPEED['medium']
+    @staticmethod
+    def get_current_color_scheme_name(color_schemes):
+        for scheme in color_schemes:
+            if scheme['selected']:
+                return scheme['name']
 
-        # self.logo_fill = choice(list(LOGO_FILL.values()))
-        # self.default_logo_fill = LOGO_FILL['default']
-        # self.logo_fill = LOGO_FILL['default']
+    def get_logo_start_y(self):
+        return ((self.height // 2) -
+                ((LOGO_MENU_LEN + MENU_ITEMS_COUNT) // 2) -
+                LOGO_OFFSET)
+
+    def get_menu_start_y(self):
+        return self.logo_start_y + LOGO_MENU_LEN + LOGO_OFFSET
+
+    def get_top_sword_coords(self):
+        y = self.logo_start_y - 1
+        x = (self.width // 2) - (TOP_SWORD_LEN // 2)
+
+        return y, x
+
+    def get_bottom_sword_coords(self):
+        y = self.logo_start_y + LOGO_MENU_LEN
+        x = (self.width // 2) - (BOTTOM_SWORD_LEN // 2)
+
+        return y, x
+
+    def get_fire_items(self):
+        return [0] * (self.fire_area_size + self.width + 1)
+
+    def get_fire_free_area_begin_x(self):
+        return (self.width // 2) - (MENU_MAX_LEN // 2) - BASE_OFFSET
+
+    def get_fire_free_area_end_x(self):
+        end_offset = BASE_OFFSET * 2
+
+        if MENU_MAX_LEN % 2 != 0:
+            end_offset -= 1
+
+        return self.fire_free_area_begin_x + MENU_MAX_LEN + end_offset
 
     @log
     def run_menu_loop(self):
@@ -159,8 +199,8 @@ class Menu(InterfaceManager):
             x = (self.width // 2) - (len(line) // 2)
             draw_message(y, x, self.window, line)
 
-        self.draw_sword(TOP_SWORD, self.top_sword_y, self.top_sword_x)
-        self.draw_sword(BOTTOM_SWORD, self.bottom_sword_y, self.bottom_sword_x)
+        self.draw_sword(TOP_SWORD, self.t_sword_y, self.t_sword_x)
+        self.draw_sword(BOTTOM_SWORD, self.b_sword_y, self.b_sword_x)
 
     def draw_sword(self, sword, y, x):
         for name, part in sword:
@@ -183,7 +223,7 @@ class Menu(InterfaceManager):
         draw_message(begin_y, begin_x, self.window, goodbye_message)
 
     def set_window_redrawing_speed(self):
-        self.window.timeout(self.fire_animation_speed)
+        self.window.timeout(FIRE_ANIMATION_SPEED)
 
     def draw_fire_animation(self, animation=True, empty_middle=True):
         """
@@ -197,22 +237,17 @@ class Menu(InterfaceManager):
         if not animation:
             return
 
-        for i in range(self.width // 7):
-            # self.width // 7 - affects the amount of fire. should be dynamic
-            # AMOUNT_OF_FIRE_DIV ?
-            index = int((random() * self.width) + self.width * (self.height - 1))
+        for i in range(self.width // AMOUNT_OF_FIRE_DIV):
+            index = int((random() * self.width) +
+                        self.width * (self.height - 1))
             self.fire_items[index] = FIRE_ELEMENTS_COUNT
 
         for i in range(self.fire_area_size):
             self.fire_items[i] = int(
-                (self.fire_items[i] + self.fire_items[i + 1] + self.fire_items[i + self.width] +
-                 + self.fire_items[i + self.width + 1]) / 4
+                (self.fire_items[i] + self.fire_items[i + 1] +
+                 self.fire_items[i + self.width] +
+                 self.fire_items[i + self.width + 1]) / 4
             )
-            color_name = ('yellow' if self.fire_items[i] > 15 else ('red' if self.fire_items[i] > 9 else 'black'))
-            color = get_color_by_name(FIRE_COLORS[color_name])
-
-            fire_char_index = min(self.fire_items[i], FIRE_CHARS_LEN - 1)
-            char = FIRE_CHARS[fire_char_index]
 
             y = int(i / self.width)
             x = int(i % self.width)
@@ -220,10 +255,24 @@ class Menu(InterfaceManager):
             if i >= self.fire_area_size - 1:
                 continue
 
-            if empty_middle and (self.fire_free_area_begin_x <= x <= self.fire_free_area_end_x):
+            if empty_middle and self.is_x_in_empty_middle(x):
                 continue
 
+            fire_char_index = min(self.fire_items[i], FIRE_CHARS_LEN - 1)
+            char = FIRE_CHARS[fire_char_index]
+            color = self.get_color_for_fire_item(self.fire_items[i])
+
             self.window.addstr(y, x, char, color)
+
+    def is_x_in_empty_middle(self, x):
+        return self.fire_free_area_begin_x <= x <= self.fire_free_area_end_x
+
+    def get_color_for_fire_item(self, item):
+        color_scheme = FIRE_COLORS[self.color_scheme]
+        color_name = (color_scheme[15] if item > 15 else
+                      (color_scheme[9] if item > 9 else color_scheme[0]))
+        color = get_color_by_name(color_name)
+        return color
 
     @log
     def exit(self):

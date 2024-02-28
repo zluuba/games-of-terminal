@@ -35,6 +35,7 @@ LOGO_MENU = [
 ]
 
 LOGO_MENU_LEN = len(LOGO_MENU)
+LOGO_OFFSET = 3
 
 LOGO_FILL = {
     'default': '#',
@@ -71,20 +72,25 @@ SWORD_COLORS = {
 FIRE_CHARS = [" ", ".", ":", "*", "s", "S", "#", "$"]
 FIRE_CHARS_LEN = len(FIRE_CHARS)
 
-# then higher elements number, than higher flame you get
+# affects on the height of fire
 FIRE_ELEMENTS_COUNT = 85
 
+# affects on the amount of fire
+AMOUNT_OF_FIRE_DIV = 7
 FIRE_COLORS = {
-    'yellow': 'yellow_text_black_bg',
-    'red': 'red_text_black_bg',
-    'black': 'light_black_text_black_bg',
+    'Warm Home': {
+        15: 'yellow_text_black_bg',
+        9: 'red_text_black_bg',
+        0: 'light_black_text_black_bg',
+    },
+    'Cold Dungeon': {
+        15: 'light_blue_text_black_bg',
+        9: 'dark_medium_blue_text_black_bg',
+        0: 'light_black_text_black_bg',
+    },
 }
 
 # delay between fire redraw
-ANIMATION_SPEED = {
-    'fast': 100,
-    'medium': 150,
-    'slow': 200,
-}
+FIRE_ANIMATION_SPEED = 150
 
 CREATOR_NAME = 'by zluuba'
