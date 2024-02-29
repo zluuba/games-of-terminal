@@ -11,10 +11,11 @@ from games_of_terminal.utils import (
     update_best_score,
     draw_message,
     get_color_by_name,
+    get_current_color_scheme_name,
 )
 
 from .achievements_manager import SnakeGameAchievementsManager
-from .constants import GAME_TIPS, DIRECTIONS, OBSTACLES_SKINS, OBSTACLES_COLOR
+from .constants import GAME_TIPS, DIRECTIONS, OBSTACLES_SKINS, COLORS
 
 from random import choice, randint
 from time import time
@@ -27,15 +28,24 @@ class SnakeGame(GameEngine):
         self.food = []
         self.obstacles = []
 
-        self.obstacles_color = get_color_by_name(OBSTACLES_COLOR)
+        game_settings = get_game_settings(self.game_name)
+        color_scheme = get_current_color_scheme_name(
+            game_settings['color_schemes']
+        )
+        snake_color_name = COLORS[color_scheme]['snake']
+        food_color_name = COLORS[color_scheme]['food']
+        obstacles_color_name = COLORS[color_scheme]['obstacles']
+
+        self.snake_skin = self.get_selected_skin(game_settings['snake_skins'])
+        self.food_skin = self.get_selected_skin(game_settings['food_skins'])
+
+        self.snake_color = get_color_by_name(snake_color_name)
+        self.food_color = get_color_by_name(food_color_name)
+        self.obstacles_color = get_color_by_name(obstacles_color_name)
 
         self.snake = self.get_initial_snake()
         self.food = self.get_food_coords()
         self.direction = KEYS['right_arrow']
-
-        game_settings = get_game_settings(self.game_name)
-        self.snake_skin = self.get_selected_skin(game_settings['snake_skins'])
-        self.food_skin = self.get_selected_skin(game_settings['food_skins'])
 
         self.mode = self.get_selected_mode(game_settings['modes'])
         self.obstacles = self.get_obstacles()
@@ -51,10 +61,17 @@ class SnakeGame(GameEngine):
                 [middle_y, middle_x],
                 [middle_y, middle_x - 1]]
 
-    def get_selected_skin(self, skins):
+    @staticmethod
+    def get_selected_skin(skins):
         for skin in skins:
             if skin['selected']:
                 return skin['skin']
+
+    @staticmethod
+    def get_selected_mode(modes):
+        for mode in modes:
+            if mode['selected']:
+                return mode['name']
 
     def get_obstacles(self):
         obstacles = []
@@ -80,11 +97,6 @@ class SnakeGame(GameEngine):
             obstacles_count -= 1
 
         return obstacles
-
-    def get_selected_mode(self, modes):
-        for mode in modes:
-            if mode['selected']:
-                return mode['name']
 
     def get_all_obstacles_coords(self, obstacles=None):
         if obstacles is None:
@@ -182,13 +194,15 @@ class SnakeGame(GameEngine):
             return
 
         for y, x in self.snake:
-            draw_message(y, x, self.game_area.box, self.snake_skin)
+            draw_message(y, x, self.game_area.box,
+                         self.snake_skin, self.snake_color)
 
     def put_food_on_field(self):
         if not self.food:
             self.food = self.get_food_coords()
 
-        draw_message(*self.food, self.game_area.box, self.food_skin)
+        draw_message(*self.food, self.game_area.box,
+                     self.food_skin, self.food_color)
 
     def put_obstacles_on_field(self):
         if not self.obstacles:
@@ -226,7 +240,8 @@ class SnakeGame(GameEngine):
             snake_head = [snake_head[0] + 1, snake_head[1]]
 
         self.snake.insert(0, snake_head)
-        draw_message(*snake_head, self.game_area.box, self.snake_skin)
+        draw_message(*snake_head, self.game_area.box,
+                     self.snake_skin, self.snake_color)
 
         obstacles = self.get_all_obstacles_coords()
 
