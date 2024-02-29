@@ -125,11 +125,15 @@
     ],
     "color_schemes": [
       {
-        "name": "Snow",
+        "name": "Boring",
         "selected": true
       },
       {
-        "name": "Elegant",
+        "name": "Snow",
+        "selected": false
+      },
+      {
+        "name": "Desert",
         "selected": false
       }
     ]
@@ -141,11 +145,11 @@
         "selected": true
       },
       {
-        "name": "50 Shades of Gray",
+        "name": "90's",
         "selected": false
       },
       {
-        "name": "Aristocrat",
+        "name": "50 Shades of Gray",
         "selected": false
       }
     ]
@@ -153,11 +157,11 @@
   "Tic Tac Toe": {
     "color_schemes": [
       {
-        "name": "She/Her",
+        "name": "He/Him",
         "selected": true
       },
       {
-        "name": "He/Him",
+        "name": "She/Her",
         "selected": false
       },
       {
