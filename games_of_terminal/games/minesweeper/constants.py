@@ -51,7 +51,7 @@ COLORS = {
         4: 'black_text_dark_orange_bg',
         'bomb': 'black_text_peaceful_strong_purple_bg',
         'closed': 'white_text_black_bg',
-        'cursor': 'white_text_light_grey_bg',
+        'cursor': 'black_text_very_light_grey_brighter_v1_bg',
         'flag': 'black_text_peach_bg',
     },
     'Dragon Burn': {
