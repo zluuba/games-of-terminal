@@ -1,13 +1,18 @@
-from games_of_terminal.utils import get_color_by_name, draw_message
+from games_of_terminal.database.database import get_game_settings
+from games_of_terminal.utils import (
+    get_color_by_name, draw_message,
+    get_current_color_scheme_name,
+)
+
+from .constants import COLORS
 
 
 class Cell:
-    def __init__(self, field_box, coordinates):
+    def __init__(self, field_box, coordinates, game_name):
         self.field_box = field_box
         self.coordinates = coordinates
 
-        height, width = field_box.getmaxyx()
-        self.center_y, self.center_x = height // 2, width // 2
+        self.height, self.width = field_box.getmaxyx()
 
         self.state = {
             'status': 'closed',                 # open, closed
@@ -18,18 +23,10 @@ class Cell:
             'settings': [],                     # flag, cursor
         }
 
-        self.colors = {
-            0: get_color_by_name('white_text_pastel_blue_bg'),
-            1: get_color_by_name('white_text_light_blue_bg'),
-            2: get_color_by_name('white_text_medium_blue_bg'),
-            3: get_color_by_name('white_text_dark_medium_blue_bg'),
-            4: get_color_by_name('white_text_deep_blue_bg'),
-
-            'bomb': get_color_by_name('white_text_red_bg'),
-            'closed': get_color_by_name('white_text_black_bg'),
-            'cursor': get_color_by_name('white_text_light_grey_bg'),
-            'flag': get_color_by_name('white_text_deep_purple_bg'),
-        }
+        settings = get_game_settings(game_name)
+        color_schemes = settings['color_schemes']
+        color_scheme_name = get_current_color_scheme_name(color_schemes)
+        self.colors = COLORS[color_scheme_name]
 
     def is_open(self):
         return self.state['status'] == 'open'
@@ -93,17 +90,18 @@ class Cell:
 
     def set_background_color(self):
         if self.is_cursor_here() and not self.is_showed():
-            color = self.colors['cursor']
+            color_name = self.colors['cursor']
         elif self.have_flag() and not self.is_open():
-            color = self.colors['flag']
+            color_name = self.colors['flag']
         elif self.is_bomb() and self.is_open():
-            color = self.colors['bomb']
+            color_name = self.colors['bomb']
         elif not self.is_open():
-            color = self.colors['closed']
+            color_name = self.colors['closed']
         else:
             num_of_bombs = min(self.bombs_around, 4)
-            color = self.colors[num_of_bombs]
+            color_name = self.colors[num_of_bombs]
 
+        color = get_color_by_name(color_name)
         self.state['background_color'] = color
         self.update_cell_color()
 
@@ -112,7 +110,9 @@ class Cell:
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()
 
-    def show_cell_text(self, text=''):
+    def show_cell_text(self):
+        text = ''
+
         if self.have_flag():
             text = 'bomb?'
         elif self.is_bomb() and self.is_open():
@@ -123,8 +123,8 @@ class Cell:
             if num_of_bombs:
                 text = str(num_of_bombs)
 
-        y = self.center_y
-        x = self.center_x - (len(text) // 2)
+        y = self.height // 2
+        x = (self.width // 2) - (len(text) // 2)
 
         draw_message(y, x, self.field_box, text)
         self.set_background_color()

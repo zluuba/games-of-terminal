@@ -113,7 +113,7 @@ class MinesweeperGame(GameEngine):
 
     def create_cell(self, y, x):
         field_box = self.game_area.box.subwin(CELL_HEIGHT, CELL_WIDTH, y, x)
-        cell = Cell(field_box, (y, x))
+        cell = Cell(field_box, (y, x), self.game_name)
         cell.set_background_color()
         return cell
 
