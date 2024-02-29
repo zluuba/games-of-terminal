@@ -46,9 +46,9 @@
 34: bright green
 35: more green than blue, but brighter
 36: more blue than green, but brighter
-37: aqua
-38: aqua light blue
-39: medium blue
+37: medium aqua
+38: medium aqua light blue
+39: medium medium blue
 
 40: bright green
 41: dull green
@@ -176,10 +176,10 @@
 146: light pastel purple
 147: strong pastel purple
 
-148: bright lettuce color (green)
-149: light lettuce color (green)
-150: lettuce color (green)
-151: light pastel lettuce color (green)
+148: bright lettuce (green)
+149: light lettuce (green)
+150: lettuce (green)
+151: light pastel lettuce (green)
 152: pastel dirty aqua
 153: pastel dirty blue
 
@@ -269,8 +269,8 @@
 
 226: very bright light yellow
 227: very bright pastel light yellow
-228: very bright pastel light yellow (lighter)
-229: very bright pastel light yellow (almost white)
+228: very bright pastel light yellow v.1
+229: very bright pastel light yellow v.2
 230: very bright pastel white + little yellow
 231: very bright pastel while + little grey
 
