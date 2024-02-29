@@ -10,3 +10,6 @@ __pycache__
 # upcoming features files
 list_of_features.md
 games_of_terminal/lab/
+
+# unfinished features files
+colors.json
