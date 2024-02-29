@@ -59,15 +59,37 @@ FLIP_BLOCK = KEY_UP
 DROP_BLOCK = ord(' ')
 DOWN = KEY_DOWN
 
-BLOCK_COLORS = {
-    'free': 'white_text_light_black_bg',
-    'I-block': 'white_text_pastel_deep_blue_bg',
-    'J-block': 'white_text_medium_blue_bg',
-    'L-block': 'white_text_bright_light_orange_bg',
-    'O-block': 'white_text_pastel_yellow_bg',
-    'Z-block': 'white_text_peaceful_red_bg',
-    'T-block': 'white_text_strong_magenta_bg',
-    'S-block': 'white_text_green_bg',
+COLORS = {
+    'Rainbow': {
+        'free': 'white_text_light_black_bg',
+        'I-block': 'white_text_pastel_deep_blue_bg',
+        'J-block': 'white_text_medium_blue_bg',
+        'L-block': 'white_text_bright_light_orange_bg',
+        'O-block': 'white_text_pastel_yellow_bg',
+        'Z-block': 'white_text_peaceful_red_bg',
+        'T-block': 'white_text_strong_magenta_bg',
+        'S-block': 'white_text_green_bg',
+    },
+    '90\'s': {
+        'free': 'white_text_light_black_bg',
+        'I-block': 'black_text_light_pastel_lettuce_bg',
+        'J-block': 'white_text_pastel_blue_bg',
+        'L-block': 'black_text_very_bright_pastel_light_yellow_v2_bg',
+        'O-block': 'white_text_bright_light_pastel_orange_bg',
+        'Z-block': 'black_text_very_bright_light_pastel_pink_bg',
+        'T-block': 'black_text_pastel_light_peach_bg',
+        'S-block': 'black_text_light_pastel_purple_bg',
+    },
+    '50 Shades of Gray': {
+        'free': 'white_text_light_black_bg',
+        'I-block': 'white_text_light_grey_bg',
+        'J-block': 'black_text_very_light_grey_brighter_v1_bg',
+        'L-block': 'black_text_grey_white_brighter_v3_bg',
+        'O-block': 'black_text_white_bg',
+        'Z-block': 'white_text_grey_brighter_v1_bg',
+        'T-block': 'white_text_light_grey_brighter_v2_bg',
+        'S-block': 'white_text_medium_grey_bg',
+    },
 }
 
 # max height of blocks (4 - I-block) + borders (2)

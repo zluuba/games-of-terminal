@@ -198,7 +198,8 @@ class TetrisGame(GameEngine):
         block_shape_name = choice(list(BLOCKS))
         y, x = 1, self.board.width // 2
 
-        block = TetrisBlock(block_shape_name, y, x, self.board)
+        block = TetrisBlock(block_shape_name, y, x,
+                            self.board, self.game_name)
 
         # these lines place block in the center of board
         block.x -= (block.width * CELL_WIDTH) // 2
