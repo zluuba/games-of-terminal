@@ -385,4 +385,74 @@ COLOR_MAPPING = {
         'text_color': COLOR_WHITE,
         'bg_color': 237,
     },
+    'very_bright_dull_pastel_yellow_green_text_black_bg': {
+        'pair_num': 57,
+        'text_color': 193,
+        'bg_color': COLOR_BLACK,
+    },
+    'strong_pastel_blue_text_black_bg': {
+        'pair_num': 58,
+        'text_color': 111,
+        'bg_color': COLOR_BLACK,
+    },
+    'pastel_light_peach_text_black_bg': {
+        'pair_num': 59,
+        'text_color': 180,
+        'bg_color': COLOR_BLACK,
+    },
+    'very_bright_yellow_text_black_bg': {
+        'pair_num': 60,
+        'text_color': 220,
+        'bg_color': COLOR_BLACK,
+    },
+    'pastel_dirty_blue_text_black_bg': {
+        'pair_num': 61,
+        'text_color': 153,
+        'bg_color': COLOR_BLACK,
+    },
+    'white_text_black_bg': {
+        'pair_num': 62,
+        'text_color': COLOR_WHITE,
+        'bg_color': COLOR_BLACK,
+    },
+    'pastel_brown_red_text_black_bg': {
+        'pair_num': 63,
+        'text_color': 95,
+        'bg_color': COLOR_BLACK,
+    },
+    'black_text_white_bg': {
+        'pair_num': 64,
+        'text_color': COLOR_BLACK,
+        'bg_color': COLOR_WHITE,
+    },
+    'black_text_deep_green_bg': {
+        'pair_num': 65,
+        'text_color': COLOR_BLACK,
+        'bg_color': 22,
+    },
+    'black_text_very_bright_light_pastel_pink_bg': {
+        'pair_num': 66,
+        'text_color': COLOR_BLACK,
+        'bg_color': 217,
+    },
+    'black_text_very_bright_pastel_light_yellow_v2_bg': {
+        'pair_num': 67,
+        'text_color': COLOR_BLACK,
+        'bg_color': 229,
+    },
+    'black_text_aqua_light_blue_bg': {
+        'pair_num': 68,
+        'text_color': COLOR_BLACK,
+        'bg_color': 24,
+    },
+    'black_text_medium_aqua_light_blue_bg': {
+        'pair_num': 69,
+        'text_color': COLOR_BLACK,
+        'bg_color': 38,
+    },
+    'black_text_bright_white_bg': {
+        'pair_num': 70,
+        'text_color': COLOR_BLACK,
+        'bg_color': 255,
+    },
 }
