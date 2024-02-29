@@ -320,4 +320,69 @@ COLOR_MAPPING = {
         'text_color': 26,
         'bg_color': COLOR_BLACK,
     },
+    'black_text_dark_orange_bg': {
+        'pair_num': 44,
+        'text_color': COLOR_BLACK,
+        'bg_color': 130,
+    },
+    'black_text_pastel_light_peach_bg': {
+        'pair_num': 45,
+        'text_color': COLOR_BLACK,
+        'bg_color': 180,
+    },
+    'black_text_light_pastel_purple_bg': {
+        'pair_num': 46,
+        'text_color': COLOR_BLACK,
+        'bg_color': 146,
+    },
+    'black_text_light_pastel_lettuce_bg': {
+        'pair_num': 47,
+        'text_color': COLOR_BLACK,
+        'bg_color': 151,
+    },
+    'black_text_light_lettuce_bg': {
+        'pair_num': 48,
+        'text_color': COLOR_BLACK,
+        'bg_color': 149,
+    },
+    'black_text_peach_bg': {
+        'pair_num': 49,
+        'text_color': COLOR_BLACK,
+        'bg_color': 174,
+    },
+    'black_text_peaceful_strong_purple_bg': {
+        'pair_num': 50,
+        'text_color': COLOR_BLACK,
+        'bg_color': 129,
+    },
+    'white_text_light_grey_brighter_v2_bg': {
+        'pair_num': 51,
+        'text_color': COLOR_WHITE,
+        'bg_color': 247,
+    },
+    'white_text_grey_brighter_v1_bg': {
+        'pair_num': 52,
+        'text_color': COLOR_WHITE,
+        'bg_color': 243,
+    },
+    'white_text_medium_grey_brighter_v1_bg': {
+        'pair_num': 53,
+        'text_color': COLOR_WHITE,
+        'bg_color': 239,
+    },
+    'black_text_grey_white_brighter_v3_bg': {
+        'pair_num': 54,
+        'text_color': COLOR_BLACK,
+        'bg_color': 254,
+    },
+    'black_text_very_light_grey_brighter_v1_bg': {
+        'pair_num': 55,
+        'text_color': COLOR_BLACK,
+        'bg_color': 249,
+    },
+    'white_text_dark_grey_brighter_v2_bg': {
+        'pair_num': 56,
+        'text_color': COLOR_WHITE,
+        'bg_color': 237,
+    },
 }
