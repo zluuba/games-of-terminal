@@ -1,11 +1,16 @@
+from games_of_terminal.database.database import get_game_settings
 from games_of_terminal.games.cell import BaseCell
-from games_of_terminal.utils import get_color_by_name
+from games_of_terminal.utils import (
+    get_color_by_name, get_current_color_scheme_name,
+)
+
+from .constants import COLORS
 
 from time import sleep
 
 
 class TicTacToeCell(BaseCell):
-    def __init__(self, field_box, coordinates):
+    def __init__(self, field_box, coordinates, game_name):
         super().__init__(field_box, coordinates)
 
         self.state = {
@@ -14,12 +19,10 @@ class TicTacToeCell(BaseCell):
             'settings': [],             # cursor
         }
 
-        self.colors = {
-            'free': get_color_by_name('white_text_dark_grey_bg'),
-            'cursor': get_color_by_name('white_text_light_grey_bg'),
-            'user': get_color_by_name('black_text_deep_pink_bg'),
-            'computer': get_color_by_name('black_text_pastel_dirty_blue_bg'),
-        }
+        settings = get_game_settings(game_name)
+        color_schemes = settings['color_schemes']
+        color_scheme_name = get_current_color_scheme_name(color_schemes)
+        self.colors = COLORS[color_scheme_name]
 
     def is_free(self):
         return self.state['owner'] == 'free'
@@ -44,16 +47,18 @@ class TicTacToeCell(BaseCell):
         self.state['field_number'] = number
 
     def set_background_color(self):
-        color = self.colors[self.state['owner']]
+        color_name = self.colors[self.state['owner']]
 
         if self.is_cursor_here():
-            color = self.colors['cursor']
+            color_name = self.colors['cursor']
 
+        color = get_color_by_name(color_name)
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()
 
     def flash(self):
-        cell_color = self.colors[self.state['owner']]
+        cell_color_name = self.colors[self.state['owner']]
+        cell_color = get_color_by_name(cell_color_name)
 
         self.field_box.bkgd(' ', cell_color)
         self.field_box.refresh()

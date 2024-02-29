@@ -24,3 +24,24 @@ GAME_TIPS = {
     'Move': '← ↓ ↑ →',
     'Select cell': 'Enter',
 }
+
+COLORS = {
+    'She/Her': {
+        'free': 'white_text_dark_grey_bg',
+        'cursor': 'white_text_light_grey_bg',
+        'user': 'black_text_very_bright_light_pastel_pink_bg',
+        'computer': 'black_text_very_bright_pastel_light_yellow_v2_bg',
+    },
+    'He/Him': {
+        'free': 'white_text_dark_grey_bg',
+        'cursor': 'white_text_light_grey_bg',
+        'user': 'black_text_aqua_light_blue_bg',
+        'computer': 'black_text_medium_aqua_light_blue_bg',
+    },
+    'It/It': {
+        'free': 'white_text_dark_grey_bg',
+        'cursor': 'white_text_light_grey_bg',
+        'user': 'black_text_deep_green_bg',
+        'computer': 'white_text_deep_purple_bg',
+    },
+}

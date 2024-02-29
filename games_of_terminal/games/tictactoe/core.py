@@ -97,7 +97,7 @@ class TicTacToeGame(GameEngine):
 
     def create_cell(self, y, x, cell_height, cell_width, field_number):
         field_box = self.game_area.box.subwin(cell_height, cell_width, y, x)
-        cell = TicTacToeCell(field_box, (y, x))
+        cell = TicTacToeCell(field_box, (y, x), self.game_name)
         cell.field_number = field_number
         cell.set_background_color()
         return cell
