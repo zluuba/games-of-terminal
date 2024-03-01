@@ -51,6 +51,7 @@ class TicTacToeCell(BaseCell):
             color_name = self.colors['cursor']
 
         color = get_color_by_name(color_name)
+        self.field_box.erase()
         self.field_box.bkgd(' ', color)
         self.field_box.refresh()
 
