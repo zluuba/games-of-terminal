@@ -26,7 +26,25 @@ class MinesweeperGame(GameEngine):
         self.flags = 0
         self.bombs = 0
 
+        self.current_coordinates = self.get_begin_coordinates()
         self.achievement_manager = MinesweeperAchievementsManager(self)
+
+    def get_lines_and_columns_count(self):
+        lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
+        columns = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
+
+        return lines, columns
+
+    def get_begin_coordinates(self):
+        lines, columns = self.get_lines_and_columns_count()
+
+        y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2
+        x = (self.game_area.width - (columns * CELL_WIDTH)) // 2
+
+        y += self.game_area.begin_y
+        x += self.game_area.begin_x
+
+        return y, x
 
     @log
     def setup_game_field(self):
@@ -85,19 +103,12 @@ class MinesweeperGame(GameEngine):
 
     @log
     def draw_game_field(self, initial=False, change_color_scheme=False):
-        lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
-        cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
-
-        y = (self.game_area.height - (lines * CELL_HEIGHT)) // 2
-        x = begin_x = (self.game_area.width - (cols * CELL_WIDTH)) // 2
-
-        y += self.game_area.begin_y
-        x += self.game_area.begin_x
-
-        self.current_coordinates = (y, x)
+        lines, columns = self.get_lines_and_columns_count()
+        y, x = self.get_begin_coordinates()
+        begin_x = x
 
         for _ in range(lines):
-            for _ in range(cols):
+            for _ in range(columns):
                 if initial:
                     cell = self.create_cell(y, x)
                     self.cells[(y, x)] = cell
