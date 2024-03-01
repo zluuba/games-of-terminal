@@ -51,12 +51,12 @@ KEYS = {
     'pause': ord('p'),
     'space': ord(' '),
     'escape': 27,
+    'settings': ord('x'),
     'w': ord('w'),
     's': ord('s'),
     'a': ord('a'),
     'd': ord('d'),
     'q': ord('q'),
-    'x': ord('x'),
 }
 
 GAMES = [
