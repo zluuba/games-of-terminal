@@ -144,7 +144,7 @@ def get_current_color_scheme_name(color_schemes):
             return scheme['name']
 
 
-def is_current_color_scheme_is_default(color_schemes):
-    for scheme in color_schemes:
-        if scheme['selected']:
-            return 'default' not in scheme
+def is_current_setting_option_is_default(settings):
+    for option in settings:
+        if option['selected']:
+            return 'default' in option
