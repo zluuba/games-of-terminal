@@ -3,6 +3,7 @@ from games_of_terminal.constants import (
 )
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.games.game_stats import GameStats
+from games_of_terminal.settings.all_settings.core import GamesSettings
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
@@ -60,6 +61,8 @@ class GameEngine(InterfaceManager):
             self.pause()
         elif key == KEYS['restart']:
             self.stats.is_restart = True
+        elif key == KEYS['settings']:
+            self.open_game_settings()
 
     @log
     def pause(self):
@@ -75,6 +78,9 @@ class GameEngine(InterfaceManager):
                 if key == KEYS['escape']:
                     self.stats.is_exit = True
                     return
+                elif key == KEYS['settings']:
+                    self.open_game_settings()
+                    self.show_pause_message()
                 elif key == KEYS['pause']:
                     break
 
@@ -155,7 +161,24 @@ class GameEngine(InterfaceManager):
             if tips_type == 'state':
                 y += 1
 
+    def open_game_settings(self):
+        self.window.erase()
+        settings = GamesSettings(self.canvas, self.game_name,
+                                 in_game_mode=True)
+        settings.run()
+
+        self.redraw_game_window()
+
+    def show_all_areas_borders(self):
+        self.game_area.show_borders()
+        self.logo_area.show_borders()
+        self.tips_area.show_borders()
+        self.game_status_area.show_borders()
+
     def draw_game_window(self):
+        pass
+
+    def redraw_game_window(self):
         pass
 
     def setup_game_stats(self):
