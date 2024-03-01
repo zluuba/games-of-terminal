@@ -28,30 +28,38 @@ class SnakeGame(GameEngine):
         self.food = []
         self.obstacles = []
 
-        game_settings = get_game_settings(self.game_name)
-        color_scheme = get_current_color_scheme_name(
-            game_settings['color_schemes']
-        )
-        snake_color_name = COLORS[color_scheme]['snake']
-        food_color_name = COLORS[color_scheme]['food']
-        obstacles_color_name = COLORS[color_scheme]['obstacles']
-
-        self.snake_skin = self.get_selected_skin(game_settings['snake_skins'])
-        self.food_skin = self.get_selected_skin(game_settings['food_skins'])
-
-        self.snake_color = get_color_by_name(snake_color_name)
-        self.food_color = get_color_by_name(food_color_name)
-        self.obstacles_color = get_color_by_name(obstacles_color_name)
+        settings = get_game_settings(self.game_name)
+        self.setup_colors(settings)
+        self.setup_skins(settings)
+        self.setup_mode(settings)
 
         self.snake = self.get_initial_snake()
         self.food = self.get_food_coords()
         self.direction = KEYS['right_arrow']
 
-        self.mode = self.get_selected_mode(game_settings['modes'])
         self.obstacles = self.get_obstacles()
 
         self.start_time = time()
         self.achievement_manager = SnakeGameAchievementsManager(self)
+
+    def setup_colors(self, settings):
+        color_scheme = get_current_color_scheme_name(
+            settings['color_schemes']
+        )
+        snake_color_name = COLORS[color_scheme]['snake']
+        food_color_name = COLORS[color_scheme]['food']
+        obstacles_color_name = COLORS[color_scheme]['obstacles']
+
+        self.snake_color = get_color_by_name(snake_color_name)
+        self.food_color = get_color_by_name(food_color_name)
+        self.obstacles_color = get_color_by_name(obstacles_color_name)
+
+    def setup_skins(self, settings):
+        self.snake_skin = self.get_selected_skin(settings['snake_skins'])
+        self.food_skin = self.get_selected_skin(settings['food_skins'])
+
+    def setup_mode(self, settings):
+        self.mode = self.get_selected_mode(settings['modes'])
 
     def get_initial_snake(self):
         middle_y = self.game_area.height // 2
@@ -271,3 +279,16 @@ class SnakeGame(GameEngine):
 
         if self.stats.score > self.stats.best_score:
             update_best_score(self.game_name, self.stats.score)
+
+    def redraw_game_window(self):
+        settings = get_game_settings(self.game_name)
+        self.setup_colors(settings)
+        self.setup_skins(settings)
+        self.setup_mode(settings)
+
+        self.show_all_areas_borders()
+        self.setup_game_field()
+
+        self.put_snake_on_field()
+        self.put_food_on_field()
+        self.put_obstacles_on_field()
