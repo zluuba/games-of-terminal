@@ -139,7 +139,7 @@ class Achievements(InterfaceManager):
             elif key == KEYS['resize']:
                 self.window.timeout(0)
                 self.resize_menu_win_handler(key)
-            elif key in KEYS['enter']:
+            elif key == KEYS['space']:
                 self.switch_detail_mode()
                 self.switch_achieve_selection()
             elif key in (KEYS['up_arrow'], KEYS['w']):
