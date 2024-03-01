@@ -142,3 +142,9 @@ def get_current_color_scheme_name(color_schemes):
     for scheme in color_schemes:
         if scheme['selected']:
             return scheme['name']
+
+
+def is_current_color_scheme_is_default(color_schemes):
+    for scheme in color_schemes:
+        if scheme['selected']:
+            return 'default' not in scheme
