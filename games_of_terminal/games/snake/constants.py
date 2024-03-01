@@ -20,7 +20,7 @@ COLORS = {
     'Boring': {
         'snake': 'bright_white_text_black_bg',
         'food': 'very_bright_dull_pastel_yellow_green_text_black_bg',
-        'obstacles': 'strong_pastel_blue_text_black_bg',
+        'obstacles': 'strong_pastel_purple_text_black_bg',
     },
     'Snow': {
         'snake': 'white_text_black_color',
