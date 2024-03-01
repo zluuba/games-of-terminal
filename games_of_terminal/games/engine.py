@@ -1,6 +1,7 @@
 from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES, BASE_OFFSET,
 )
+from games_of_terminal.database.database import get_game_settings
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.settings.all_settings.core import GamesSettings
@@ -9,6 +10,7 @@ from games_of_terminal.log import log
 from games_of_terminal.utils import (
     get_side_menu_tips, draw_message,
     clear_field_line, get_color_by_name,
+    is_current_setting_option_is_default,
 )
 
 from curses import flash, flushinp, endwin, A_BLINK as BLINK
@@ -174,6 +176,12 @@ class GameEngine(InterfaceManager):
         self.logo_area.show_borders()
         self.tips_area.show_borders()
         self.game_status_area.show_borders()
+
+    def is_settings_option_was_change(self, option):
+        settings = get_game_settings(self.game_name)
+        color_schemes = settings[option]
+
+        return not is_current_setting_option_is_default(color_schemes)
 
     def draw_game_window(self):
         pass
