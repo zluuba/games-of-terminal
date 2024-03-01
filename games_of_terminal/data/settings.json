@@ -4,7 +4,8 @@
     "color_schemes": [
         {
           "name": "Warm Home",
-          "selected": true
+          "selected": true,
+          "default": true
         },
         {
           "name": "Cold Dungeon",
@@ -16,7 +17,8 @@
     "color_schemes": [
       {
         "name": "Blue Jeans",
-        "selected": true
+        "selected": true,
+        "default": true
       },
       {
         "name": "Sweet Summer Child",
@@ -32,7 +34,8 @@
     "modes": [
       {
         "name": "Casual",
-        "selected": true
+        "selected": true,
+        "default": true
       },
       {
         "name": "Obstacles",
@@ -43,7 +46,8 @@
         {
           "name": "Big O-some",
           "skin": "O",
-          "selected": true
+          "selected": true,
+          "default": true
         },
         {
           "name": "Jaily",
@@ -85,7 +89,8 @@
       {
         "name": "Treasure",
         "skin": "×",
-        "selected": true
+        "selected": true,
+        "default": true
       },
       {
         "name": "Worm",
@@ -126,7 +131,8 @@
     "color_schemes": [
       {
         "name": "Boring",
-        "selected": true
+        "selected": true,
+        "default": true
       },
       {
         "name": "Snow",
@@ -142,7 +148,8 @@
     "color_schemes": [
       {
         "name": "Rainbow",
-        "selected": true
+        "selected": true,
+        "default": true
       },
       {
         "name": "90's",
@@ -157,15 +164,16 @@
   "Tic Tac Toe": {
     "color_schemes": [
       {
-        "name": "He/Him",
-        "selected": true
+        "name": "Banana Split",
+        "selected": true,
+        "default": true
       },
       {
-        "name": "She/Her",
+        "name": "Blues",
         "selected": false
       },
       {
-        "name": "It/It",
+        "name": "Joker",
         "selected": false
       }
     ]
