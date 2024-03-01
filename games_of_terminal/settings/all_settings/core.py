@@ -15,10 +15,11 @@ from curses import flushinp, A_REVERSE as REVERSE
 
 
 class GamesSettings(InterfaceManager):
-    def __init__(self, canvas, name):
+    def __init__(self, canvas, name, in_game_mode=False):
         super().__init__(canvas, only_main_win=True)
 
         self.name = name
+        self.in_game_mode = in_game_mode
 
         self.all_settings = get_all_settings()
         self.items = list(self.all_settings.keys())
@@ -31,6 +32,15 @@ class GamesSettings(InterfaceManager):
         self.detail_mode = False
 
         self.setup_vars()
+
+        if in_game_mode:
+            self.curr_game_ind = self.get_curr_game_ind()
+            self.detail_mode = True
+
+    def get_curr_game_ind(self):
+        for index, game_name in enumerate(self.items):
+            if game_name == self.name:
+                return index
 
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
