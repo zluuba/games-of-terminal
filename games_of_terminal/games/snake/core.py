@@ -148,9 +148,11 @@ class SnakeGame(GameEngine):
 
             self.move_snake()
 
+            if self.is_user_win():
+                self.stats.game_status = 'user_win'
             if self.is_snake_eat_itself() or self.is_snake_touch_the_border():
-                self.achievement_manager.check()
                 self.stats.game_status = 'user_lose'
+                self.achievement_manager.check()
 
     @staticmethod
     def is_user_press_key(key):
@@ -272,6 +274,23 @@ class SnakeGame(GameEngine):
         )
         self.achievement_manager.check(set_pause=True)
 
+    def is_user_win(self):
+        top_y = self.game_area.top_border + 1
+        bottom_y = self.game_area.bottom_border - 1
+
+        left_x = self.game_area.left_border + 1
+        right_x = self.game_area.right_border - 1
+
+        for y in range(top_y, bottom_y + 1):
+            for x in range(left_x, right_x + 1):
+                coords = [y, x]
+
+                if ((coords not in self.snake) and
+                        (coords not in self.obstacles) and
+                        (coords not in self.food)):
+                    return False
+        return True
+
     @log
     def save_game_data(self):
         update_total_games_count(self.game_name, 1)
@@ -292,3 +311,8 @@ class SnakeGame(GameEngine):
         self.put_snake_on_field()
         self.put_food_on_field()
         self.put_obstacles_on_field()
+
+        if self.is_settings_option_was_change('color_schemes'):
+            self.achievement_manager.check(color_scheme_change=True)
+        if self.is_settings_option_was_change('modes'):
+            self.achievement_manager.check(game_mode_change=True)
