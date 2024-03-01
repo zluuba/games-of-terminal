@@ -250,3 +250,17 @@ class TetrisGame(GameEngine):
 
         if self.lines_removed:
             update_game_stat(self.game_name, stat_name, self.lines_removed)
+
+    def redraw_game_window(self):
+        self.show_all_areas_borders()
+        self.next_block_area.next_block_area.show_borders()
+
+        self.board.draw_board(self.block)
+        self.next_block_area.show(self.next_block)
+
+        self.draw_side_menu_logo()
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
+        self.show_game_status()

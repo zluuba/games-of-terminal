@@ -36,7 +36,9 @@ class TicTacToeGame(GameEngine):
         self.draw_side_menu_logo()
         self.show_side_menu_tips(game_tips=GAME_TIPS)
         self.show_game_status()
-        self.draw_game_field()
+
+        if initial:
+            self.draw_game_field()
 
     @log
     def start_new_game(self):
@@ -229,3 +231,11 @@ class TicTacToeGame(GameEngine):
             stat_name = 'total_ties'
 
         update_game_stat(self.game_name, stat_name, 1)
+
+    def redraw_game_window(self):
+        self.show_all_areas_borders()
+        self.setup_game_field(initial=False)
+
+        for cell in self.cells.values():
+            cell.set_color_scheme()
+            cell.set_background_color()

@@ -12,6 +12,7 @@ from time import sleep
 class TicTacToeCell(BaseCell):
     def __init__(self, field_box, coordinates, game_name):
         super().__init__(field_box, coordinates)
+        self.game_name = game_name
 
         self.state = {
             'owner': 'free',            # free, user, computer
@@ -19,10 +20,7 @@ class TicTacToeCell(BaseCell):
             'settings': [],             # cursor
         }
 
-        settings = get_game_settings(game_name)
-        color_schemes = settings['color_schemes']
-        color_scheme_name = get_current_color_scheme_name(color_schemes)
-        self.colors = COLORS[color_scheme_name]
+        self.set_color_scheme()
 
     def is_free(self):
         return self.state['owner'] == 'free'
@@ -65,3 +63,9 @@ class TicTacToeCell(BaseCell):
 
         sleep(0.2)
         self.set_background_color()
+
+    def set_color_scheme(self):
+        settings = get_game_settings(self.game_name)
+        color_schemes = settings['color_schemes']
+        color_scheme_name = get_current_color_scheme_name(color_schemes)
+        self.colors = COLORS[color_scheme_name]

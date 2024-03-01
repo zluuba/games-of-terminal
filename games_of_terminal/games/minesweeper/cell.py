@@ -11,6 +11,7 @@ class Cell:
     def __init__(self, field_box, coordinates, game_name):
         self.field_box = field_box
         self.coordinates = coordinates
+        self.game_name = game_name
 
         self.height, self.width = field_box.getmaxyx()
 
@@ -23,10 +24,7 @@ class Cell:
             'settings': [],                     # flag, cursor
         }
 
-        settings = get_game_settings(game_name)
-        color_schemes = settings['color_schemes']
-        color_scheme_name = get_current_color_scheme_name(color_schemes)
-        self.colors = COLORS[color_scheme_name]
+        self.set_color_scheme()
 
     def is_open(self):
         return self.state['status'] == 'open'
@@ -131,3 +129,9 @@ class Cell:
 
     def clear_cell(self):
         self.field_box.erase()
+
+    def set_color_scheme(self):
+        settings = get_game_settings(self.game_name)
+        color_schemes = settings['color_schemes']
+        color_scheme_name = get_current_color_scheme_name(color_schemes)
+        self.colors = COLORS[color_scheme_name]

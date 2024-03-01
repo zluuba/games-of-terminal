@@ -84,7 +84,7 @@ class MinesweeperGame(GameEngine):
         return {'flags': self.flags}
 
     @log
-    def draw_game_field(self, initial=False):
+    def draw_game_field(self, initial=False, change_color_scheme=False):
         lines = (self.game_area.height - BASE_OFFSET) // CELL_HEIGHT
         cols = (self.game_area.width - BASE_OFFSET) // CELL_WIDTH
 
@@ -102,6 +102,9 @@ class MinesweeperGame(GameEngine):
                     cell = self.create_cell(y, x)
                     self.cells[(y, x)] = cell
                 else:
+                    if change_color_scheme:
+                        self.cells[(y, x)].set_color_scheme()
+
                     self.cells[(y, x)].clear_cell()
                     self.cells[(y, x)].update_cell_color()
                     self.cells[(y, x)].show_cell_text()
@@ -296,3 +299,18 @@ class MinesweeperGame(GameEngine):
 
     def draw_game_window(self):
         self.draw_game_field()
+
+    def redraw_game_window(self):
+        self.show_all_areas_borders()
+
+        self.show_game_status()
+        self.draw_side_menu_logo()
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
+        self.show_game_status()
+
+        self.current_cell.unselect()
+        self.draw_game_field(change_color_scheme=True)
+        self.current_cell.select()
