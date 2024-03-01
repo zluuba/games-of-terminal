@@ -37,12 +37,8 @@ class SnakeGameAchievementsManager(AchievementsManager):
 
     @staticmethod
     def check_color_scheme_was_changed(**kwargs):
-        if 'color_scheme_change' in kwargs:
-            return True
-        return False
+        return 'color_scheme_change' in kwargs
 
     @staticmethod
     def check_game_mode_was_changed(**kwargs):
-        if 'game_mode_change' in kwargs:
-            return True
-        return False
+        return 'game_mode_change' in kwargs
