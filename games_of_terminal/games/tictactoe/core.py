@@ -1,17 +1,19 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.games.tictactoe.cell import TicTacToeCell
-from games_of_terminal.games.tictactoe.constants import (
-    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
-    BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
-    CELL_RATIO_COEFF,
-)
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
     update_total_games_count,
+)
+
+from .achievements_manager import TicTacToeAchievementsManager
+from .cell import TicTacToeCell
+from .constants import (
+    CELLS_IN_ROW, DIRECTIONS, WINNING_PATTERNS,
+    BEST_MOVE_PATTERNS_BY_OWNERS, GAME_TIPS,
+    CELL_RATIO_COEFF,
 )
 
 from random import choice
@@ -29,6 +31,7 @@ class TicTacToeGame(GameEngine):
         self.computer_moves = []
 
         self.start_time = time()
+        self.achievement_manager = TicTacToeAchievementsManager(self)
 
     @log
     def setup_game_field(self, initial=True):
@@ -54,6 +57,7 @@ class TicTacToeGame(GameEngine):
                 return
             if self.is_game_over():
                 self.save_game_data()
+                self.achievement_manager.check()
                 self.ask_for_restart()
                 return
 
@@ -235,6 +239,9 @@ class TicTacToeGame(GameEngine):
     def redraw_game_window(self):
         self.show_all_areas_borders()
         self.setup_game_field(initial=False)
+
+        if self.is_settings_option_was_change('color_schemes'):
+            self.achievement_manager.check(color_scheme_change=True)
 
         for cell in self.cells.values():
             cell.set_color_scheme()

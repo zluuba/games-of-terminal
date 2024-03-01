@@ -33,6 +33,4 @@ class TicTacToeAchievementsManager(AchievementsManager):
 
     @staticmethod
     def check_color_scheme_was_changed(**kwargs):
-        if 'color_scheme_change' in kwargs:
-            return True
-        return False
+        return 'color_scheme_change' in kwargs
