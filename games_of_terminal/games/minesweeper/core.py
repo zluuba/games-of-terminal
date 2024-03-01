@@ -1,5 +1,7 @@
 from games_of_terminal.constants import KEYS, BASE_OFFSET
-from games_of_terminal.database.database import update_game_stat
+from games_of_terminal.database.database import (
+    update_game_stat, get_game_settings,
+)
 from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.minesweeper.achievements_manager import (
     MinesweeperAchievementsManager,
@@ -11,6 +13,8 @@ from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
     update_total_games_count,
+    get_current_color_scheme_name,
+    is_current_color_scheme_is_default,
 )
 
 from random import choice, uniform
@@ -224,6 +228,7 @@ class MinesweeperGame(GameEngine):
         if self.current_cell.is_open():
             return
         if not self.flags and not self.current_cell.have_flag():
+            self.achievement_manager.check(extra_flag=True)
             return
 
         if self.current_cell.have_flag():
@@ -325,3 +330,12 @@ class MinesweeperGame(GameEngine):
         self.current_cell.unselect()
         self.draw_game_field(change_color_scheme=True)
         self.current_cell.select()
+
+        self.check_color_scheme_changing()
+
+    def check_color_scheme_changing(self):
+        settings = get_game_settings(self.game_name)
+        color_schemes = settings['color_schemes']
+
+        if is_current_color_scheme_is_default(color_schemes):
+            self.achievement_manager.check(color_scheme_change=True)

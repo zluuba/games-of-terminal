@@ -28,12 +28,12 @@ class MinesweeperAchievementsManager(AchievementsManager):
     def check_first_win(self):
         statistic = get_games_statistic()
         wins_count = statistic[self.class_object.game_name]['total_wins']
-        return wins_count == 1
+        return wins_count >= 1
 
     def check_first_death(self):
         statistic = get_games_statistic()
         losses_count = statistic[self.class_object.game_name]['total_losses']
-        return losses_count == 1
+        return losses_count >= 1
 
     def is_there_six_plus_bombs_around_one_cell(self):
         if self.class_object.stats.game_status != 'user_win':
@@ -44,14 +44,10 @@ class MinesweeperAchievementsManager(AchievementsManager):
                 return True
         return False
 
-    def check_extra_place_flag_attempt(self, **kwargs):
-        if (('flag' in kwargs) and
-                (self.class_object.flags == self.class_object.bombs)):
-            return True
-        return False
+    @staticmethod
+    def check_extra_place_flag_attempt(**kwargs):
+        return 'extra_flag' in kwargs
 
     @staticmethod
     def check_color_scheme_was_changed(**kwargs):
-        if 'color_scheme_change' in kwargs:
-            return True
-        return False
+        return 'color_scheme_change' in kwargs
