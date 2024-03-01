@@ -5,6 +5,8 @@ from games_of_terminal.database.database import get_games_statistic
 class SnakeGameAchievementsManager(AchievementsManager):
     def has_achievement_been_unlocked(self, achievement, **kwargs):
         match achievement['name']:
+            case 'Normal Size Snake':
+                return self.check_score(15)
             case 'Answer Seeker':
                 return self.check_score(42)
             case 'Are You Okay?':

@@ -73,6 +73,10 @@
     "name": "Snake",
     "achievements": [
       {
+        "name": "Normal Size Snake",
+        "description": "Reach 15 points in one game"
+      },
+      {
         "name": "Answer Seeker",
         "description": "Reach 42 points in one game"
       },
