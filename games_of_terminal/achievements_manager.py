@@ -17,8 +17,15 @@ from time import sleep
 
 
 class AchievementsManager:
-    def __init__(self, class_object):
+    def __init__(self, class_object, in_game=True):
         self.class_object = class_object
+
+        if in_game:
+            self.window = self.class_object.game_area
+            self.box = self.class_object.game_area.box
+        else:
+            self.window = self.class_object
+            self.box = self.class_object.window
 
         self.achievements = self.get_locked_achievements()
         self.global_achievements = self.get_global_achievements()
@@ -31,6 +38,10 @@ class AchievementsManager:
 
     def get_locked_achievements(self):
         all_achievements = get_all_achievements()
+
+        if not hasattr(self.class_object, 'game_name'):
+            return []
+
         game_achievements = all_achievements[self.class_object.game_name]
 
         return [achievement for achievement in game_achievements
@@ -45,8 +56,8 @@ class AchievementsManager:
                 if achievement['status'] == 'locked']
 
     def get_begin_coordinates(self, height, width):
-        y = (self.class_object.game_area.height // 2) - (height // 2)
-        x = (self.class_object.game_area.width // 2) - (width // 2)
+        y = (self.window.height // 2) - (height // 2)
+        x = (self.window.width // 2) - (width // 2)
 
         return y, x
 
@@ -66,7 +77,7 @@ class AchievementsManager:
             if self.has_achievement_been_unlocked(achievement, **kwargs):
                 self.unlock_achievement(achievement, set_pause)
 
-        self.check_global_achievements(set_pause)
+        self.check_global_achievements(set_pause, **kwargs)
 
     def unlock_achievement(self, achievement, set_pause, game_name=None):
         if game_name is None:
@@ -95,26 +106,22 @@ class AchievementsManager:
     def draw_background(self, height, width, y, x):
         for col in range(height):
             for row in range(width):
-                draw_message(y + col, x + row,
-                             self.class_object.game_area.box,
-                             ' ', self.bg_color)
+                draw_message(y + col, x + row, self.box, ' ', self.bg_color)
 
     def draw_achievement_unlocked_text(self):
-        y = (self.class_object.game_area.height // 2) - 1
-        x = ((self.class_object.game_area.width // 2) -
-             (len(ACH_TEXT) // 2))
+        y = (self.window.height // 2) - 1
+        x = (self.window.width // 2) - (len(ACH_TEXT) // 2)
 
-        draw_message(y, x, self.class_object.game_area.box,
-                     ACH_TEXT, self.ach_text_color)
+        draw_message(y, x, self.box, ACH_TEXT, self.ach_text_color)
 
     def draw_achievement_name(self, achievement):
         achievement_name = achievement['name']
 
-        y = (self.class_object.game_area.height // 2)
-        x = ((self.class_object.game_area.width // 2) -
+        y = (self.window.height // 2)
+        x = ((self.window.width // 2) -
              (len(achievement_name) // 2))
 
-        draw_message(y, x, self.class_object.game_area.box,
+        draw_message(y, x, self.box,
                      achievement_name, self.ach_name_color)
 
     def draw_frame_animation_chunk(self, y, x, top_coords,
@@ -123,11 +130,9 @@ class AchievementsManager:
         bottom_y, bottom_x = bottom_coords
 
         draw_message(y + top_y, x + top_x,
-                     self.class_object.game_area.box,
-                     char, self.frame_color)
+                     self.box, char, self.frame_color)
         draw_message(y + bottom_y, x + bottom_x,
-                     self.class_object.game_area.box,
-                     char, self.frame_color)
+                     self.box, char, self.frame_color)
 
     def draw_frame_animation(self, height, width, y, x):
         for char in (':', ' '):
@@ -152,7 +157,9 @@ class AchievementsManager:
 
     def check_global_achievements(self, set_pause=False, **kwargs):
         for achievement in self.global_achievements:
-            if self.global_achievements_manager.has_achievement_been_unlocked(achievement, **kwargs):
+            if self.global_achievements_manager.has_achievement_been_unlocked(
+                    achievement, **kwargs,
+            ):
                 self.unlock_achievement(achievement, set_pause, 'Global')
 
     def has_achievement_been_unlocked(self, achievement, **kwargs):
