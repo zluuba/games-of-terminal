@@ -11,6 +11,8 @@ class SnakeGameAchievementsManager(AchievementsManager):
                 return self.check_score(42)
             case 'Are You Okay?':
                 return self.check_score(101)
+            case 'Wait.. What?':
+                return self.check_score(321)
             case 'Ten Out of Ten':
                 return self.check_total_games_count(10)
             case 'The Grass Must Be Touched':
