@@ -5,6 +5,9 @@ from games_of_terminal.constants import (
 from games_of_terminal.database.database import (
     get_all_achievements, unlock_achievement,
 )
+from games_of_terminal.games.achievements_manager import (
+    GlobalAchievementsManager,
+)
 from games_of_terminal.utils import (
     draw_message, get_color_by_name,
 )
@@ -16,7 +19,10 @@ from time import sleep
 class AchievementsManager:
     def __init__(self, class_object):
         self.class_object = class_object
+
         self.achievements = self.get_locked_achievements()
+        self.global_achievements = self.get_global_achievements()
+        self.global_achievements_manager = GlobalAchievementsManager()
 
         self.bg_color = get_color_by_name(ACH_BG_COLOR_NAME)
         self.frame_color = get_color_by_name(ACH_FRAME_COLOR_NAME) + A_BOLD
@@ -28,6 +34,14 @@ class AchievementsManager:
         game_achievements = all_achievements[self.class_object.game_name]
 
         return [achievement for achievement in game_achievements
+                if achievement['status'] == 'locked']
+
+    @staticmethod
+    def get_global_achievements():
+        all_achievements = get_all_achievements()
+        global_achievements = all_achievements['Global']
+
+        return [achievement for achievement in global_achievements
                 if achievement['status'] == 'locked']
 
     def get_begin_coordinates(self, height, width):
@@ -52,8 +66,13 @@ class AchievementsManager:
             if self.has_achievement_been_unlocked(achievement, **kwargs):
                 self.unlock_achievement(achievement, set_pause)
 
-    def unlock_achievement(self, achievement, set_pause):
-        unlock_achievement(self.class_object.game_name, achievement['name'])
+        self.check_global_achievements(set_pause)
+
+    def unlock_achievement(self, achievement, set_pause, game_name=None):
+        if game_name is None:
+            game_name = self.class_object.game_name
+
+        unlock_achievement(game_name, achievement['name'])
         self.notify_user(achievement, set_pause)
         self.achievements = self.get_locked_achievements()
 
@@ -130,6 +149,11 @@ class AchievementsManager:
                     bottom_coords[0] += 1
                 else:
                     bottom_coords[1] += 1
+
+    def check_global_achievements(self, set_pause=False, **kwargs):
+        for achievement in self.global_achievements:
+            if self.global_achievements_manager.has_achievement_been_unlocked(achievement, **kwargs):
+                self.unlock_achievement(achievement, set_pause, 'Global')
 
     def has_achievement_been_unlocked(self, achievement, **kwargs):
         pass
