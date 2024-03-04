@@ -1,6 +1,9 @@
 from games_of_terminal.constants import KEYS, BASE_OFFSET, DEFAULT_COLOR
 from games_of_terminal.database.database import get_username, save_username
 from games_of_terminal.interface_manager import InterfaceManager
+from games_of_terminal.achievements_manager import (
+    AchievementsManager,
+)
 from games_of_terminal.settings.all_settings.constants import (
     USERNAME_EDITING_MSGS, USERNAME_ALLOWED_CHARS,
     USERNAME_VALID_MSGS, USERNAME_INVALID_MSGS,
@@ -24,6 +27,8 @@ class UsernameEditing(InterfaceManager):
         self.current_username = get_username()
         self.new_username = ''
         self.setup_vars()
+
+        self.achievement_manager = AchievementsManager(self, in_game=False)
 
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
@@ -77,6 +82,9 @@ class UsernameEditing(InterfaceManager):
         hide_cursor()
         self.save_changes()
         self.draw_post_editing_text()
+
+        self.window.clear()
+        self.achievement_manager.check(username_change=True)
 
     def validate_new_username(self):
         username = self.new_username.strip()
@@ -187,3 +195,7 @@ class UsernameEditing(InterfaceManager):
     def redraw_window(self):
         self.setup_vars()
         self.draw_username_editing_window()
+
+    def draw_game_window(self):
+        self.redraw_window()
+        hide_cursor()
