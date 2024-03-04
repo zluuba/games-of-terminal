@@ -50,6 +50,11 @@
           "default": true
         },
         {
+          "name": "Small O-some",
+          "skin": "੦",
+          "selected": false
+        },
+        {
           "name": "Jaily",
           "skin": "#",
           "selected": false
@@ -147,7 +152,7 @@
   "Tetris": {
     "color_schemes": [
       {
-        "name": "Rainbow",
+        "name": "Dispersion",
         "selected": true,
         "default": true
       },
