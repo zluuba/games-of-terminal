@@ -2,21 +2,23 @@ from games_of_terminal.database.database import (
     get_game_stat_value, update_game_stat,
 )
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.games.tetris.block import TetrisBlock
-from games_of_terminal.games.tetris.game_board import TetrisBoard
-from games_of_terminal.games.tetris.next_block import NextBlockArea
-from games_of_terminal.games.tetris.constants import (
-    CELL_WIDTH, CELL_HEIGHT, BLOCKS,
-    DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
-    DOWN, SCORES, LEVELS, GAME_TIPS,
-    LEVEL_SPEED_DIFF, FALLING_DIRECTION,
-)
 from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
     update_total_games_count,
     update_best_score,
+)
+
+from .achievements_manager import TetrisAchievementsManager
+from .block import TetrisBlock
+from .game_board import TetrisBoard
+from .next_block import NextBlockArea
+from .constants import (
+    CELL_WIDTH, CELL_HEIGHT, BLOCKS,
+    DIRECTIONS, FLIP_BLOCK, DROP_BLOCK,
+    DOWN, SCORES, LEVELS, GAME_TIPS,
+    LEVEL_SPEED_DIFF, FALLING_DIRECTION,
 )
 
 from time import time
@@ -33,6 +35,7 @@ class TetrisGame(GameEngine):
         self.level = 1
         self.time_interval = 1
         self.start_time = self.time = time()
+        self.achievement_manager = TetrisAchievementsManager(self)
 
         self.lines_removed = 0
 
@@ -68,9 +71,11 @@ class TetrisGame(GameEngine):
 
             if self.stats.is_exit or self.stats.is_restart:
                 self.save_game_data()
+                self.achievement_manager.check()
                 return
             if self.is_game_over():
                 self.save_game_data()
+                self.achievement_manager.check()
                 self.ask_for_restart()
                 return
 
@@ -79,6 +84,7 @@ class TetrisGame(GameEngine):
             if self.is_block_on_floor():
                 self.move_block_before_land()
                 self.land_current_block()
+
             if not self.block:
                 self.create_block()
 
@@ -142,6 +148,12 @@ class TetrisGame(GameEngine):
             game_tips=GAME_TIPS,
         )
         self.board.draw_board()
+
+        if lines_count >= 4:
+            self.achievement_manager.check(set_pause=True,
+                                           four_lines_removing=True)
+        else:
+            self.achievement_manager.check(set_pause=True)
 
     @log
     def increase_level(self):
@@ -251,7 +263,8 @@ class TetrisGame(GameEngine):
         if self.lines_removed:
             update_game_stat(self.game_name, stat_name, self.lines_removed)
 
-    def redraw_game_window(self):
+    def draw_game_window(self):
+        self.window.erase()
         self.show_all_areas_borders()
         self.next_block_area.next_block_area.show_borders()
 
