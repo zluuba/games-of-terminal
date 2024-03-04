@@ -236,7 +236,7 @@ class TicTacToeGame(GameEngine):
 
         update_game_stat(self.game_name, stat_name, 1)
 
-    def redraw_game_window(self):
+    def draw_game_window(self):
         self.show_all_areas_borders()
         self.setup_game_field(initial=False)
 

@@ -169,7 +169,7 @@ class GameEngine(InterfaceManager):
                                  in_game_mode=True)
         settings.run()
 
-        self.redraw_game_window()
+        self.draw_game_window()
 
     def show_all_areas_borders(self):
         self.game_area.show_borders()
@@ -184,9 +184,6 @@ class GameEngine(InterfaceManager):
         return not is_current_setting_option_is_default(color_schemes)
 
     def draw_game_window(self):
-        pass
-
-    def redraw_game_window(self):
         pass
 
     def setup_game_stats(self):

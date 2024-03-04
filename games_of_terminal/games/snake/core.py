@@ -119,14 +119,14 @@ class SnakeGame(GameEngine):
         self.window.timeout(150)
 
         self.set_best_score()
+        self.game_area.box.erase()
+        self.game_area.show_borders()
+
+        self.put_snake_on_field()
+        self.put_food_on_field()
+        self.put_obstacles_on_field()
 
         self.draw_game_window()
-        self.draw_side_menu_logo()
-        self.show_game_status()
-        self.show_side_menu_tips(
-            game_state=self.tips,
-            game_tips=GAME_TIPS,
-        )
 
     @log
     def start_new_game(self):
@@ -158,13 +158,13 @@ class SnakeGame(GameEngine):
     def is_user_press_key(key):
         return key != -1
 
-    def draw_game_window(self):
-        self.game_area.box.erase()
-        self.game_area.show_borders()
-
-        self.put_snake_on_field()
-        self.put_food_on_field()
-        self.put_obstacles_on_field()
+    # def draw_game_window(self):
+    #     self.game_area.box.erase()
+    #     self.game_area.show_borders()
+    #
+    #     self.put_snake_on_field()
+    #     self.put_food_on_field()
+    #     self.put_obstacles_on_field()
 
     def controller(self, key, pause_on=True):
         super().controller(key, pause_on)
@@ -299,14 +299,22 @@ class SnakeGame(GameEngine):
         if self.stats.score > self.stats.best_score:
             update_best_score(self.game_name, self.stats.score)
 
-    def redraw_game_window(self):
+    def draw_game_window(self):
+        self.window.erase()
+
         settings = get_game_settings(self.game_name)
         self.setup_colors(settings)
         self.setup_skins(settings)
         self.setup_mode(settings)
 
         self.show_all_areas_borders()
-        self.setup_game_field()
+
+        self.draw_side_menu_logo()
+        self.show_game_status()
+        self.show_side_menu_tips(
+            game_state=self.tips,
+            game_tips=GAME_TIPS,
+        )
 
         self.put_snake_on_field()
         self.put_food_on_field()

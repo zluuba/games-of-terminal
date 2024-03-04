@@ -310,9 +310,6 @@ class MinesweeperGame(GameEngine):
         update_game_stat(self.game_name, 'bombs_defused', bombs_defused)
 
     def draw_game_window(self):
-        self.draw_game_field()
-
-    def redraw_game_window(self):
         self.show_all_areas_borders()
 
         self.show_game_status()
