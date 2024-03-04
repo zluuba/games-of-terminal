@@ -312,7 +312,7 @@ class SnakeGame(GameEngine):
         self.put_food_on_field()
         self.put_obstacles_on_field()
 
-        if self.is_settings_option_was_change('color_schemes'):
-            self.achievement_manager.check(color_scheme_change=True)
+        if self.is_settings_option_was_change('snake_skins'):
+            self.achievement_manager.check(snake_color_scheme_change=True)
         if self.is_settings_option_was_change('modes'):
             self.achievement_manager.check(game_mode_change=True)

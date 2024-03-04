@@ -18,7 +18,7 @@ class SnakeGameAchievementsManager(AchievementsManager):
             case 'Good Soup':
                 return self.class_object.is_snake_eat_itself()
             case 'Fashionista':
-                return self.check_color_scheme_was_changed(**kwargs)
+                return self.check_snake_color_scheme_was_changed(**kwargs)
             case 'Mode Mood':
                 return self.check_game_mode_was_changed(**kwargs)
             case 'GOD':
@@ -36,8 +36,8 @@ class SnakeGameAchievementsManager(AchievementsManager):
         return self.class_object.stats.game_status == 'user_win'
 
     @staticmethod
-    def check_color_scheme_was_changed(**kwargs):
-        return 'color_scheme_change' in kwargs
+    def check_snake_color_scheme_was_changed(**kwargs):
+        return 'snake_color_scheme_change' in kwargs
 
     @staticmethod
     def check_game_mode_was_changed(**kwargs):
