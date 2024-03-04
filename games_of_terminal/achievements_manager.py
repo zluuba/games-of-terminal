@@ -84,8 +84,9 @@ class AchievementsManager:
             game_name = self.class_object.game_name
 
         unlock_achievement(game_name, achievement['name'])
-        self.notify_user(achievement, set_pause)
         self.achievements = self.get_locked_achievements()
+
+        self.notify_user(achievement, set_pause)
 
     def notify_user(self, achievement, set_pause):
         self.draw_achievement_animation(achievement)
