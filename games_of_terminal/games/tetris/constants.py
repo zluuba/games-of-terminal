@@ -60,7 +60,7 @@ DROP_BLOCK = ord(' ')
 DOWN = KEY_DOWN
 
 COLORS = {
-    'Rainbow': {
+    'Dispersion': {
         'free': 'white_text_light_black_bg',
         'I-block': 'white_text_pastel_deep_blue_bg',
         'J-block': 'white_text_medium_blue_bg',
