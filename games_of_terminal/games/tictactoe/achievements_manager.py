@@ -7,12 +7,13 @@ class TicTacToeAchievementsManager(AchievementsManager):
         match achievement['name']:
             case 'Can a Robot Write a Symphony?':
                 return self.check_losses_count(50)
-            case 'Fifty Flavors of Victory':
+            case 'Good Boy!':
                 return self.check_wins_count(50)
             case 'Really..?':
                 return self.check_total_games_count(20)
             case 'Ah Shit, Here We Go Again':
-                return self.check_total_games_count(100)
+                return (self.check_total_games_count(100)
+                        and self.is_game_not_over())
             case 'You Scare Me':
                 return self.check_color_scheme_was_changed(**kwargs)
 
@@ -30,6 +31,9 @@ class TicTacToeAchievementsManager(AchievementsManager):
         statistic = get_games_statistic()
         total_games_count = statistic[self.class_object.game_name]['total_games']
         return total_games_count >= required_quantity
+
+    def is_game_not_over(self):
+        return self.class_object.stats.game_status == 'game_active'
 
     @staticmethod
     def check_color_scheme_was_changed(**kwargs):

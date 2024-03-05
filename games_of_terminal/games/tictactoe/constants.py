@@ -5,8 +5,10 @@ CELLS_IN_ROW = 3
 CELL_RATIO_COEFF = 2.5
 
 DIRECTIONS = {
-    KEY_RIGHT: (0, 1), KEY_LEFT: (0, -1),
-    KEY_UP: (-1, 0), KEY_DOWN: (1, 0),
+    KEY_RIGHT: (0, 1), ord('d'): (0, 1),
+    KEY_LEFT: (0, -1), ord('a'): (0, -1),
+    KEY_UP: (-1, 0), ord('w'): (-1, 0),
+    KEY_DOWN: (1, 0), ord('s'): (1, 0),
 }
 
 WINNING_PATTERNS = (
@@ -21,7 +23,7 @@ BEST_MOVE_PATTERNS_BY_OWNERS = (
 )
 
 GAME_TIPS = {
-    'Move': '← ↓ ↑ →',
+    'Move': '← ↓ ↑ → (wasd)',
     'Select cell': 'Enter',
 }
 

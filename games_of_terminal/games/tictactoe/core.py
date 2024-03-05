@@ -46,6 +46,7 @@ class TicTacToeGame(GameEngine):
     @log
     def start_new_game(self):
         self.current_cell.select()
+        self.achievement_manager.check()
 
         while True:
             key = self.window.getch()
@@ -65,7 +66,8 @@ class TicTacToeGame(GameEngine):
         super().controller(key, pause_on)
 
         if key in DIRECTIONS:
-            self.slide_field(key)
+            offsets = DIRECTIONS[key]
+            self.slide_field(*offsets)
         elif key in KEYS['enter']:
             if self.current_cell.is_free():
                 self.user_move()
@@ -135,9 +137,8 @@ class TicTacToeGame(GameEngine):
             x = begin_x
 
     @log
-    def slide_field(self, key):
+    def slide_field(self, base_y_offset, base_x_offset):
         y, x = self.current_coordinates
-        base_y_offset, base_x_offset = DIRECTIONS[key]
 
         y_offset = base_y_offset * self.cell_height
         x_offset = base_x_offset * self.cell_width
