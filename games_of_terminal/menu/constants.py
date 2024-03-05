@@ -10,7 +10,7 @@ MENU_ITEMS = {
     1: {'name': 'Minesweeper', 'class': MinesweeperGame, 'type': 'game'},
     2: {'name': 'Tic Tac Toe', 'class': TicTacToeGame, 'type': 'game'},
     3: {'name': 'Snake', 'class': SnakeGame, 'type': 'game'},
-    4: {'name': 'Settings', 'class': Settings, 'type': 'game'},
+    4: {'name': 'Settings', 'class': Settings, 'type': 'other'},
 }
 
 MENU_ITEMS_COUNT = len(MENU_ITEMS)

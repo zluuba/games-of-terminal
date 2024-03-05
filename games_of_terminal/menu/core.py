@@ -168,8 +168,10 @@ class Menu(InterfaceManager):
 
         for row, menu_item in enumerate(MENU_ITEMS.values()):
             menu_item_name = menu_item['name']
+            menu_item_type = menu_item['type']
 
-            begin_y += 1 if menu_item_name == 'Settings' else 0
+            begin_y += 1 if menu_item_type != 'game' else 0
+
             y = begin_y + row
             x = (self.width // 2) - (len(menu_item_name) // 2)
 

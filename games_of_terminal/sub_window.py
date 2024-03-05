@@ -17,7 +17,7 @@ class SubWindow:
             self.show_borders()
 
     def __repr__(self):
-        return f'<SubWindow>'
+        return f'<{self.__class__.__name__}>'
 
     def set_border_coordinates(self):
         self.top_border = self.begin_y - 1

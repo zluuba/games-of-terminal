@@ -1,10 +1,14 @@
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.log import log
-from games_of_terminal.settings.constants import TITLE, ITEMS, ITEMS_LEN
-
 from games_of_terminal.utils import (
     draw_message, hide_cursor, get_color_by_name,
+)
+
+from .constants import (
+    TITLE, TITLE_OFFSET, ITEMS,
+    NOISE_CHARS, NOISE_CHARS_LEN,
+    NOISE_ANIMATION_DIV, NOISE_COLOR_NAME,
 )
 
 from curses import A_STANDOUT as REVERSE
@@ -17,20 +21,32 @@ class Settings(InterfaceManager):
         super().__init__(canvas, only_main_win=True)
 
         self.name = name
+
+        self.items_len = len(ITEMS)
         self.current_row = 0
+
         self.setup_vars()
 
     @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
 
-        self.title_start_y = (self.height // 2) - ((len(TITLE) + len(ITEMS)) // 2) - 3
-        self.items_start_y = self.title_start_y + len(TITLE) + 3
+        self.title_start_y = self.get_title_start_y()
+        self.items_start_y = self.get_items_start_y()
 
-        self.noise_chars = ['.', '-', '-', '_', '_', '|', '|']
-        self.noise_chars_len = len(self.noise_chars)
-        self.noise_color = get_color_by_name('grey_text_black_bg')
-        self.chars_per_line = self.width // 4
+        self.chars_per_line = self.get_chars_per_line()
+        self.noise_color = get_color_by_name(NOISE_COLOR_NAME)
+
+    def get_title_start_y(self):
+        return ((self.height // 2) -
+                ((len(TITLE) + self.items_len) // 2) -
+                TITLE_OFFSET)
+
+    def get_items_start_y(self):
+        return self.title_start_y + len(TITLE) + TITLE_OFFSET
+
+    def get_chars_per_line(self):
+        return self.width // NOISE_ANIMATION_DIV
 
     @log
     def run(self):
@@ -112,8 +128,8 @@ class Settings(InterfaceManager):
         new_current_row = self.current_row + direction
 
         if new_current_row < 0:
-            self.current_row = ITEMS_LEN - 1
-        elif new_current_row >= ITEMS_LEN:
+            self.current_row = self.items_len - 1
+        elif new_current_row >= self.items_len:
             self.current_row = 0
         else:
             self.current_row = new_current_row
@@ -121,9 +137,9 @@ class Settings(InterfaceManager):
     def draw_noise_animation(self):
         self.window.clear()
 
-        curr_char_num = self.noise_chars_len
+        curr_char_num = NOISE_CHARS_LEN
         start = self.height - 1
-        end = self.height - 1 - self.noise_chars_len
+        end = self.height - 1 - NOISE_CHARS_LEN
 
         for _ in range(start, end, -1):
             for _ in range(self.chars_per_line):
@@ -133,7 +149,7 @@ class Settings(InterfaceManager):
                 if not (1 < x < self.width - 1) or curr_char_num <= 0:
                     continue
 
-                char = choice(self.noise_chars[:curr_char_num])
+                char = choice(NOISE_CHARS[:curr_char_num])
                 self.window.addstr(y, x, char, self.noise_color)
 
             curr_char_num -= 1

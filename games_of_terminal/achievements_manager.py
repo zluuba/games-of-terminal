@@ -12,7 +12,7 @@ from games_of_terminal.utils import (
     draw_message, get_color_by_name,
 )
 
-from curses import A_BOLD
+from curses import A_BOLD as BOLD
 from time import sleep
 
 
@@ -32,9 +32,9 @@ class AchievementsManager:
         self.global_achievements_manager = GlobalAchievementsManager()
 
         self.bg_color = get_color_by_name(ACH_BG_COLOR_NAME)
-        self.frame_color = get_color_by_name(ACH_FRAME_COLOR_NAME) + A_BOLD
-        self.ach_name_color = get_color_by_name(ACH_NAME_COLOR_NAME) + A_BOLD
-        self.ach_text_color = DEFAULT_COLOR + A_BOLD
+        self.frame_color = get_color_by_name(ACH_FRAME_COLOR_NAME) + BOLD
+        self.ach_name_color = get_color_by_name(ACH_NAME_COLOR_NAME) + BOLD
+        self.ach_text_color = DEFAULT_COLOR + BOLD
 
     def get_locked_achievements(self):
         all_achievements = get_all_achievements()
@@ -73,11 +73,20 @@ class AchievementsManager:
         return height, width
 
     def check(self, set_pause=False, **kwargs):
+        self.check_local_achievements(set_pause, **kwargs)
+        self.check_global_achievements(set_pause, **kwargs)
+
+    def check_local_achievements(self, set_pause=False, **kwargs):
         for achievement in self.achievements:
             if self.has_achievement_been_unlocked(achievement, **kwargs):
                 self.unlock_achievement(achievement, set_pause)
 
-        self.check_global_achievements(set_pause, **kwargs)
+    def check_global_achievements(self, set_pause=False, **kwargs):
+        for achievement in self.global_achievements:
+            if self.global_achievements_manager.has_achievement_been_unlocked(
+                    achievement, **kwargs,
+            ):
+                self.unlock_achievement(achievement, set_pause, 'Global')
 
     def unlock_achievement(self, achievement, set_pause, game_name=None):
         if game_name is None:
@@ -155,13 +164,6 @@ class AchievementsManager:
                     bottom_coords[0] += 1
                 else:
                     bottom_coords[1] += 1
-
-    def check_global_achievements(self, set_pause=False, **kwargs):
-        for achievement in self.global_achievements:
-            if self.global_achievements_manager.has_achievement_been_unlocked(
-                    achievement, **kwargs,
-            ):
-                self.unlock_achievement(achievement, set_pause, 'Global')
 
     def has_achievement_been_unlocked(self, achievement, **kwargs):
         pass

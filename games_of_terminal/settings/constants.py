@@ -19,14 +19,11 @@ ITEMS = {
     4: {'name': 'Confess All', 'class': ConfessAll, 'status': 'in_development'},
 }
 
-ITEMS_LEN = len(ITEMS)
+NOISE_CHARS = ['.', '-', '-', '_', '_', '|', '|']
+NOISE_CHARS_LEN = len(NOISE_CHARS)
+NOISE_COLOR_NAME = 'grey_text_black_bg'
 
-CONFESS_TEXT = """
-Congratulations! You've almost confessed everything. 
-Don't worry, we won't judge. 
-On a serious note, you can send your game statistics to me, the developer, which 
-makes me happy because I want to know that some pure soul is playing the games I've 
-created so diligently.
-And I'll give you something special for your secrets!
-"""
-# + buttons "Send Data" and "Do Not Send Data"
+# the lower the number, the more noise there will be
+NOISE_ANIMATION_DIV = 3
+
+TITLE_OFFSET = 3

@@ -186,7 +186,7 @@ class MinesweeperGame(GameEngine):
         empty_cells = self.get_empty_cells()
 
         if not empty_cells:
-            self.stats.is_restart = True
+            self.setup_game_field()
             return
 
         first_empty_cell = choice(empty_cells)
@@ -287,10 +287,10 @@ class MinesweeperGame(GameEngine):
 
     @log
     def save_game_data(self, is_game_over=True):
-        update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)
 
         if is_game_over:
+            update_total_games_count(self.game_name, 1)
             self.update_bombs_defused_count()
             self.update_end_game_status_stat()
 
