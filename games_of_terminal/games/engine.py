@@ -105,7 +105,7 @@ class GameEngine(InterfaceManager):
     def ask_for_restart(self):
         flash()
         self.show_game_status()
-        sleep(1)
+        sleep(0.5)
 
         message = f" {MESSAGES['play_again']} "
 
