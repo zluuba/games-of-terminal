@@ -47,9 +47,9 @@ got-games
 
 Upon launching, you'll encounter the menu.  
 Navigate through the options using the ↓ and ↑ arrows (or WS keys).  
-Press Enter to initiate the selected game.
-To exit any window (menu, game, or settings), press Esc.
-To enter **Detail mode** in the Achievements or All Settings sections, press the Spacebar.
+Press Enter to initiate the selected game.  
+To exit any window (menu, game, or settings), press Esc.  
+To enter **Detail mode** in the Achievements or All Settings sections, press the Spacebar.  
 
 **See demos [here](https://github.com/zluuba/games-of-terminal#demos).**
 
@@ -66,7 +66,7 @@ GOT has many advantages, this is the full list of them:
 4. **Autosave**: no matter if you overlook your game and simply exit, the game automatically saves your current progress 
    and asks the next time you want to continue an unfinished game (in development). 
    And, of course, GOT has pause and restart functions.
-5. **God Mode**: You can add **your own game** to GOT. Yes.  
+5. **God Mode**: You can add **your own game** to GOT. Yes. 
    Read [this documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/creating-your-own-game.md) and have fun!
 6. **Adaptability**: GOT adjusts to the user and automatically resizes the window when the user changes the size of the 
    terminal window. Regardless of whether you are in the menu, settings, or playing the game, 
@@ -77,8 +77,7 @@ GOT has many advantages, this is the full list of them:
    elements (as in TicTacToe).
 8. **Versatility**: whether you have a new MacBook or an old Asus (or a new Asus and an old MacBook), 
    GOT doesn't strain the processor (maybe just a little), ensuring you the ability to play various games. 
-   I tested it on my affordable 2014 Asus, and it works perfectly. 
-   P.S. Yes, console apps can make the heart of your device stop beating too.
+   I tested it on my affordable 2014 Asus, and it works perfectly.
 9. **Testing**: I utilized the Curses library to interact with the terminal, and as Curses operates at a low level, 
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
@@ -116,10 +115,10 @@ to create an issue.
 
 ### Upcoming Features
 I have a lot of ideas (and bugs), so [here is a list](https://github.com/zluuba/games-of-terminal/tree/main/docs/upcoming-features.md) of them.
-
-
-Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
-or share your ideas!
+  
+  
+**Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
+or share your ideas!**
 
 ## Demos
 
