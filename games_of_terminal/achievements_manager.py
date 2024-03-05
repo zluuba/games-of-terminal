@@ -27,14 +27,18 @@ class AchievementsManager:
             self.window = self.class_object
             self.box = self.class_object.window
 
-        self.achievements = self.get_locked_achievements()
-        self.global_achievements = self.get_global_achievements()
+        self.set_all_achievements()
         self.global_achievements_manager = GlobalAchievementsManager()
 
         self.bg_color = get_color_by_name(ACH_BG_COLOR_NAME)
         self.frame_color = get_color_by_name(ACH_FRAME_COLOR_NAME) + BOLD
         self.ach_name_color = get_color_by_name(ACH_NAME_COLOR_NAME) + BOLD
         self.ach_text_color = DEFAULT_COLOR + BOLD
+
+    def set_all_achievements(self):
+        self.achievements_to_unlock = []
+        self.achievements = self.get_locked_achievements()
+        self.global_achievements = self.get_global_achievements()
 
     def get_locked_achievements(self):
         all_achievements = get_all_achievements()
@@ -73,38 +77,44 @@ class AchievementsManager:
         return height, width
 
     def check(self, set_pause=False, **kwargs):
-        self.check_local_achievements(set_pause, **kwargs)
-        self.check_global_achievements(set_pause, **kwargs)
+        self.check_local_achievements(**kwargs)
+        self.check_global_achievements(**kwargs)
 
-    def check_local_achievements(self, set_pause=False, **kwargs):
+        if not self.achievements_to_unlock:
+            return
+
+        self.unlock_achievements()
+        self.handle_post_unlocking(set_pause)
+
+    def check_local_achievements(self, **kwargs):
         for achievement in self.achievements:
             if self.has_achievement_been_unlocked(achievement, **kwargs):
-                self.unlock_achievement(achievement, set_pause)
+                self.achievements_to_unlock.append(
+                    (achievement, self.class_object.game_name)
+                )
 
-    def check_global_achievements(self, set_pause=False, **kwargs):
+    def check_global_achievements(self, **kwargs):
         for achievement in self.global_achievements:
             if self.global_achievements_manager.has_achievement_been_unlocked(
                     achievement, **kwargs,
             ):
-                self.unlock_achievement(achievement, set_pause, 'Global')
+                self.achievements_to_unlock.append(
+                    (achievement, 'Global')
+                )
 
-    def unlock_achievement(self, achievement, set_pause, game_name=None):
-        if game_name is None:
-            game_name = self.class_object.game_name
+    def unlock_achievements(self):
+        for achievement, game_name in self.achievements_to_unlock:
+            unlock_achievement(game_name, achievement['name'])
+            self.draw_achievement_unlocking_animation(achievement)
 
-        unlock_achievement(game_name, achievement['name'])
-        self.achievements = self.get_locked_achievements()
-
-        self.notify_user(achievement, set_pause)
-
-    def notify_user(self, achievement, set_pause):
-        self.draw_achievement_animation(achievement)
+    def handle_post_unlocking(self, set_pause):
+        self.set_all_achievements()
         self.class_object.draw_game_window()
 
         if set_pause:
             self.class_object.pause()
 
-    def draw_achievement_animation(self, achievement):
+    def draw_achievement_unlocking_animation(self, achievement):
         height, width = self.get_frame_height_and_width(achievement)
         y, x = self.get_begin_coordinates(height, width)
 
