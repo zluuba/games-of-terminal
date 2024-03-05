@@ -3,7 +3,7 @@
 Snake, and TicTacToe come to life. With customization, achievements, and flexibility, 
 GOT offers a diverse and enjoyable gaming experience in your favourite environment - **console**. 
 
-![got-intro-gif](https://github.com/zluuba/games-of-terminal/assets/87614163/6b16e819-a32e-480d-be36-52b97e92ba7e)
+![got-intro-gif2](https://github.com/zluuba/games-of-terminal/assets/87614163/856b2489-3aa3-4008-ba49-90c0b6cb2ebe)
 
 
 ## Requirements
