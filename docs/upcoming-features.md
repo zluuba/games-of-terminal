@@ -1,5 +1,5 @@
 # Upcoming Features
-Here are some features I'm planning to implement in future releases.
+Here are some features I plan to implement in future releases, along with a list of bugs to fix.
 
 
 ## Upcoming Games:
@@ -24,12 +24,8 @@ Here are some features I'm planning to implement in future releases.
     - feature: add a slight delay after line removal (and highlight the line)
     - feature: add +5,000 points if the user clears the board and the score > 0
 
-## Refactoring & Bug Fixing
-- bug: time spent in pause is counted in the statistics
-
-- Tetris game:
-    - bug: blocks move after pause without keeping interval
-
-- Snake game:
-    - bug: obstacles can appear in front of the snake and cause an undeserved loss
-    - bug: snake vertical speed should be half the horizontal speed, but it is currently equal
+## Bugs
+- time spent in pause is counted in the statistics
+- blocks move after pause without keeping interval (Tetris game)
+- obstacles can appear in front of the snake and cause an undeserved loss (Snake game)
+- snake vertical speed should be half the horizontal speed, but it is currently equal (Snake game)
