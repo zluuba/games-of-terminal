@@ -10,7 +10,7 @@ A: You should keep your keyboard with an English layout while using GOT. I descr
 A: There will be more in the future, here's the [list of upcoming feature games](https://github.com/zluuba/games-of-terminal/tree/main/docs/upcoming-features.md). 
 
 **Q: Why does this little console app use so much CPU sometimes?**  
-A: Because it's written in Python. Feel free to rewrite it in Rust. Or maybe I'm just not good enough at optimization yet. 
+A: Because it's written in Python, feel free to rewrite it in Rust. Or maybe I'm just not good enough at optimization yet. 
 I think the answer is somewhere in between.
 
 **Q: Why was GOT written in Python?**  
