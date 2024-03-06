@@ -113,9 +113,6 @@ class InterfaceManager:
         self._set_window_sizes()
         self._setup()
 
-    def redraw_window(self):
-        pass
-
     def draw_side_menu_logo(self, begin_y=6, begin_x=2):
         for y, line in enumerate(LOGO, start=1):
             draw_message(y, begin_x, self.logo_area.box, line)
@@ -125,9 +122,9 @@ class InterfaceManager:
 
     @log
     def _set_window_sizes(self, height=None, width=None):
-        if not height:
+        if height is None:
             height = self.height
-        if not width:
+        if width is None:
             width = self.width
 
         begin_x = begin_y = 0
@@ -172,3 +169,6 @@ class InterfaceManager:
                         self.logo_box_sizes['lines'] - 1),
             'begin_x': width - side_menu_width,
         }
+
+    def redraw_window(self):
+        pass
