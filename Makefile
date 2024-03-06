@@ -13,3 +13,6 @@ reinstall:
 
 lint:
 	poetry run flake8 games_of_terminal
+
+uninstall:
+	python3 -m pip uninstall --user dist/*.whl
