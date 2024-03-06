@@ -1,4 +1,4 @@
-from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
+from games_of_terminal.constants import KEYS
 
 
 GAME_TIPS = {
@@ -7,13 +7,13 @@ GAME_TIPS = {
 }
 
 DIRECTIONS = {
-    KEY_RIGHT: KEY_LEFT,
-    KEY_LEFT: KEY_RIGHT,
-    KEY_UP: KEY_DOWN,
-    KEY_DOWN: KEY_UP,
+    KEYS['right_arrow']: KEYS['left_arrow'],
+    KEYS['left_arrow']: KEYS['right_arrow'],
+    KEYS['up_arrow']: KEYS['down_arrow'],
+    KEYS['down_arrow']: KEYS['up_arrow'],
 }
 
-# 'ᕱ' '⌂', '⎍'
+# Additional skins: 'ᕱ' '⌂', '⎍'
 OBSTACLES_SKINS = ['۩', 'ᚾ', 'ᛅ', '⏏', '⋂']
 
 COLORS = {

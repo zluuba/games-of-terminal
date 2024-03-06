@@ -37,17 +37,6 @@ LOGO_MENU = [
 LOGO_MENU_LEN = len(LOGO_MENU)
 LOGO_OFFSET = 3
 
-LOGO_FILL = {
-    'default': '#',
-    'skull': '☠',
-    'two_asterisks': '⁑',
-    'balloons': '✤',
-    'heart': '♡',
-    'dots': '░',
-    'big_o': 'O',
-    'line': '|',
-}
-
 TOP_SWORD = (
     ('blade', '<:::::::::::::::::::::'),
     ('hilt', '}]xxxx)o'),
@@ -74,9 +63,12 @@ FIRE_CHARS_LEN = len(FIRE_CHARS)
 
 # affects on the height of fire
 FIRE_ELEMENTS_COUNT = 85
-
 # affects on the amount of fire
 AMOUNT_OF_FIRE_DIV = 7
+
+# delay between fire redraw
+FIRE_ANIMATION_SPEED = 150
+
 FIRE_COLORS = {
     'Warm Home': {
         15: 'yellow_text_black_bg',
@@ -89,8 +81,5 @@ FIRE_COLORS = {
         0: 'light_black_text_black_bg',
     },
 }
-
-# delay between fire redraw
-FIRE_ANIMATION_SPEED = 150
 
 CREATOR_NAME = 'by zluuba'

@@ -1,4 +1,4 @@
-from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
+from games_of_terminal.constants import KEYS
 
 
 # standard Tetris field size: 20 x 10
@@ -8,6 +8,47 @@ FIELD_WIDTH = 10
 # little square size
 CELL_WIDTH = 2
 CELL_HEIGHT = 1
+
+FALLING_DIRECTION = 'down'
+DIRECTIONS = {
+    KEYS['left_arrow']: 'left',
+    KEYS['right_arrow']: 'right',
+    KEYS['down_arrow']: 'down',
+}
+
+OFFSETS = {
+    'left': (0, -1),
+    'right': (0, 1),
+    'down': (1, 0),
+}
+
+FLIP_BLOCK = KEYS['up_arrow']
+DROP_BLOCK = ord(' ')
+DOWN = KEYS['down_arrow']
+
+# max height of blocks (4 - I-block) + borders (2)
+NEXT_BLOCK_AREA_HEIGHT = 6
+NEXT_BLOCK_TEXT = 'next block'
+
+# rows: points you get if remove this num of rows in one move
+SCORES = {
+    0: 0,
+    1: 100,
+    2: 300,
+    3: 1_000,
+    4: 2_400,
+}
+
+# level: points you need to gain to move up this level
+LEVELS = {
+    1: 0,
+    2: 2_000,
+    3: 5_000,
+    4: 10_000,
+    5: 20_000,
+}
+
+LEVEL_SPEED_DIFF = 0.2
 
 BLOCKS = {
     'I-block': [
@@ -41,23 +82,12 @@ BLOCKS = {
     ],
 }
 
-DIRECTIONS = {
-    KEY_LEFT: 'left',
-    KEY_RIGHT: 'right',
-    KEY_DOWN: 'down',
+GAME_TIPS = {
+    'Move': '← ↓ →',
+    'Flip': '↑',
+    'Drop': 'Space',
+    'Pause': 'P',
 }
-
-FALLING_DIRECTION = 'down'
-
-OFFSETS = {
-    'left': (0, -1),
-    'right': (0, 1),
-    'down': (1, 0),
-}
-
-FLIP_BLOCK = KEY_UP
-DROP_BLOCK = ord(' ')
-DOWN = KEY_DOWN
 
 COLORS = {
     'Dispersion': {
@@ -90,36 +120,4 @@ COLORS = {
         'T-block': 'white_text_light_grey_brighter_v2_bg',
         'S-block': 'white_text_medium_grey_bg',
     },
-}
-
-# max height of blocks (4 - I-block) + borders (2)
-NEXT_BLOCK_AREA_HEIGHT = 6
-NEXT_BLOCK_TEXT = 'next block'
-
-# rows: points you get if remove this num of rows in one move
-SCORES = {
-    0: 0,
-    1: 100,          # 1 row, 'single'
-    2: 300,          # 2 rows, 'double'
-    3: 1_000,         # 3 rows, 'triple'
-    4: 2_400,         # 4 rows, 'four!'
-    # 'combo': 100,    # remove lines 2+ times straight
-}
-
-# level: points you need to gain to move up this level
-LEVELS = {
-    1: 0,
-    2: 2_000,
-    3: 5_000,
-    4: 10_000,
-    5: 20_000,
-}
-
-LEVEL_SPEED_DIFF = 0.2
-
-GAME_TIPS = {
-    'Move': '← ↓ →',
-    'Flip': '↑',
-    'Drop': 'Space',
-    'Pause': 'P',
 }

@@ -1,14 +1,14 @@
-from curses import KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN
+from games_of_terminal.constants import KEYS
 
 
 CELLS_IN_ROW = 3
 CELL_RATIO_COEFF = 2.5
 
 DIRECTIONS = {
-    KEY_RIGHT: (0, 1), ord('d'): (0, 1),
-    KEY_LEFT: (0, -1), ord('a'): (0, -1),
-    KEY_UP: (-1, 0), ord('w'): (-1, 0),
-    KEY_DOWN: (1, 0), ord('s'): (1, 0),
+    KEYS['up_arrow']: (-1, 0), KEYS['w']: (-1, 0),
+    KEYS['left_arrow']: (0, -1), KEYS['a']: (0, -1),
+    KEYS['down_arrow']: (1, 0), KEYS['s']: (1, 0),
+    KEYS['right_arrow']: (0, 1), KEYS['d']: (0, 1),
 }
 
 WINNING_PATTERNS = (
