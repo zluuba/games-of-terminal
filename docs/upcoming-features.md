@@ -10,6 +10,7 @@ Here are some features I plan to implement in future releases, along with a list
 - Wordle
 
 ## Upcoming Features:
+- Switch DB logic from raw SQL to SQLAlchemy
 - Confess All in Settings
 - Custom color schemes
 - Progress saving and 'do you want to continue prev game?' for unfinished games
