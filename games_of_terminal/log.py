@@ -10,12 +10,8 @@ BASE_DIR = Path(__file__).parent
 LOG_FILENAME = 'got_logs.log'
 
 
-def get_full_path(base_dir, filename):
-    return str(path.join(base_dir, filename))
-
-
 def get_logger(name='GOT'):
-    filename = get_full_path(BASE_DIR, LOG_FILENAME)
+    filename = str(path.join(BASE_DIR, LOG_FILENAME))
     output_format = '%(asctime)s : %(levelname)s : %(message)s'
     date_format = '%Y-%m-%d, %H:%M:%S'
 

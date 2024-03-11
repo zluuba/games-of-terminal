@@ -102,6 +102,8 @@ COMMON_TIPS = {
     'Quit': 'Esc',
 }
 
+DEFAULT_STUB_MSG = 'In development.'
+
 TERM_RED_COLOR = '\033[91m'
 TERM_DEFAULT_COLOR = '\033[39m'
 

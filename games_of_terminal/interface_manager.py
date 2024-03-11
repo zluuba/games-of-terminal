@@ -3,7 +3,6 @@ from games_of_terminal.constants import (
     BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
     DEFAULT_COLOR, MESSAGES,
 )
-from games_of_terminal.log import log
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
     draw_message,
@@ -15,7 +14,6 @@ from time import sleep
 
 
 class InterfaceManager:
-    @log
     def __init__(self, canvas, only_main_win=False):
         self.canvas = canvas
         self.only_main_win = only_main_win
@@ -24,7 +22,6 @@ class InterfaceManager:
     def __repr__(self):
         return f'<{self.__class__.__name__}>'
 
-    @log
     def _setup(self):
         self.height, self.width = self.canvas.getmaxyx()
         too_small_window_handler(self.height, self.width)
@@ -36,14 +33,12 @@ class InterfaceManager:
         if not self.only_main_win:
             self._init_game_sub_windows()
 
-    @log
     def _init_main_window(self):
         window_sizes = self.window_box_sizes.values()
         self.window = newwin(*window_sizes)
         self.window.nodelay(True)
         self.window.keypad(True)
 
-    @log
     def _init_game_sub_windows(self):
         self.game_area = SubWindow(
             self.window, *self.game_box_sizes.values()
@@ -64,12 +59,10 @@ class InterfaceManager:
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
-    @log
     def handle_post_running_actions(self):
         flushinp()
         self.redraw_window()
 
-    @log
     def resize_menu_win_handler(self, key):
         message = MESSAGES['win_resize_menu']
 
@@ -89,7 +82,6 @@ class InterfaceManager:
 
         self.redraw_window()
 
-    @log
     def resize_game_win_handler(self, key):
         messages = MESSAGES['win_resize_game']
 
@@ -120,7 +112,6 @@ class InterfaceManager:
         y, x = begin_y, (self.logo_area.width - len(APP_NAME)) // 2
         draw_message(y, x, self.logo_area.box, APP_NAME)
 
-    @log
     def _set_window_sizes(self, height=None, width=None):
         if height is None:
             height = self.height
