@@ -12,10 +12,18 @@ reinstall:
 	python3 -m pip install --force-reinstal --user dist/*.whl
 
 lint:
-	poetry run flake8 games_of_terminal
+	poetry run flake8 games_of_terminal --exclude database_new.py,models.py,games_of_terminal/lab/
 
 test:
 	poetry run pytest
 
-uninstall:
-	python3 -m pip uninstall --user dist/*.whl
+typing:
+	mypy games_of_terminal
+
+check:
+	make test
+	make lint
+	make typing
+
+package-uninstall:
+	python3 -m pip uninstall dist/*.whl
