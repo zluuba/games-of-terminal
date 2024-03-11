@@ -139,7 +139,8 @@ class UsernameEditing(InterfaceManager):
     def show_too_many_characters_msg(self):
         hide_cursor()
         color = get_color_by_name('strong_red_text_black_bg')
-        message = f'Username can contain {MAX_USERNAME_LEN} characters maximum.'
+        message = (f'Username can contain {MAX_USERNAME_LEN} '
+                   f'characters maximum.')
         y = self.too_many_characters_msg_y
         x = (self.width // 2) - (len(message) // 2)
 

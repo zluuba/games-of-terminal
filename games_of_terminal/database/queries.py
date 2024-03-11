@@ -45,13 +45,13 @@ TABLES = {
 
 get_all_tables_query = '''
 SELECT name
-FROM sqlite_master 
+FROM sqlite_master
 WHERE type='table';
 '''
 
 get_game_id_by_game_name_query = '''
 SELECT id_game
-FROM game 
+FROM game
 WHERE name = ?;
 '''
 
@@ -73,7 +73,7 @@ VALUES ((SELECT id_game FROM game WHERE name = ?), ?, ?, ?);
 '''
 
 get_game_data_query = '''
-SELECT name, 
+SELECT name,
        value
 FROM game_data
 WHERE id_game = ? AND data_type = ?;
@@ -83,8 +83,8 @@ get_game_stat_query = '''
 SELECT game_data.value
 FROM game_data
 JOIN game ON game_data.id_game = game.id_game
-WHERE game.name = ? 
-    AND game_data.data_type = ? 
+WHERE game.name = ?
+    AND game_data.data_type = ?
     AND game_data.name = ?;
 '''
 
@@ -105,12 +105,12 @@ WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)
 '''
 
 get_all_statistics_query = '''
-SELECT game.name as game_name, 
-       game_data.name, 
+SELECT game.name as game_name,
+       game_data.name,
        game_data.value
 FROM game_data
 JOIN game ON game_data.id_game = game.id_game
-WHERE game_data.data_type = 'statistics'; 
+WHERE game_data.data_type = 'statistics';
 '''
 
 add_achievement_query = '''
@@ -123,26 +123,26 @@ VALUES ((SELECT id_game FROM game WHERE name = ?), ?, ?);
 '''
 
 get_all_achievements_query = '''
-SELECT game.name as game_name, 
-       achievement.name, 
-       achievement.description, 
-       achievement.status, 
+SELECT game.name as game_name,
+       achievement.name,
+       achievement.description,
+       achievement.status,
        achievement.date_received
 FROM achievement
 JOIN game ON achievement.id_game = game.id_game;
 '''
 
 get_all_settings_query = '''
-SELECT game.name as game_name, 
-       game_data.name, 
+SELECT game.name as game_name,
+       game_data.name,
        game_data.value
 FROM game_data
 JOIN game ON game_data.id_game = game.id_game
-WHERE game_data.data_type = 'settings'; 
+WHERE game_data.data_type = 'settings';
 '''
 
 get_game_settings_query = '''
-SELECT game_data.name, 
+SELECT game_data.name,
        game_data.value
 FROM game_data
 WHERE id_game IN (SELECT id_game FROM game WHERE name = ?)

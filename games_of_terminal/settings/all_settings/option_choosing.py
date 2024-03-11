@@ -136,7 +136,9 @@ class OptionChoosing(InterfaceManager):
 
     def clear_option_choosing_field(self):
         option_length = len(self.current_option_name)
-        option_length += len(' (selected)') if self.is_current_option_selected else 0
+
+        if self.is_current_option_selected:
+            option_length += len(' (selected)')
 
         y = self.options_start_y
         x = max(1, (self.width // 2) - (option_length // 2))

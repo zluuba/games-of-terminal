@@ -102,6 +102,9 @@ COMMON_TIPS = {
     'Quit': 'Esc',
 }
 
+TERM_RED_COLOR = '\033[91m'
+TERM_DEFAULT_COLOR = '\033[39m'
+
 # based on curses initial color pair (0: white text, black bg)
 DEFAULT_COLOR = 0
 

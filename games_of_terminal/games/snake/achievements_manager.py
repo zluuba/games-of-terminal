@@ -31,7 +31,8 @@ class SnakeGameAchievementsManager(AchievementsManager):
 
     def check_total_games_count(self, required_quantity):
         statistic = get_games_statistic()
-        total_games_count = statistic[self.class_object.game_name]['total_games']
+        game_statistic = statistic[self.class_object.game_name]
+        total_games_count = game_statistic['total_games']
         return total_games_count >= required_quantity
 
     def check_user_win(self):

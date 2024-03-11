@@ -32,7 +32,8 @@ class TetrisBoard:
         window_width = self.width + BASE_OFFSET
 
         self.begin_y = parent_window.begin_y
-        self.begin_x = ((parent_window.begin_x + parent_window.width) // 2) - (window_width // 2)
+        self.begin_x = (((parent_window.begin_x + parent_window.width) // 2) -
+                        (window_width // 2))
 
         return SubWindow(parent_window.box, self.height, window_width,
                          self.begin_y, self.begin_x, show_borders=False)
@@ -96,7 +97,8 @@ class TetrisBoard:
 
     def get_complete_line(self, complete_line=0):
         for y in range(self.height - 2, 1, -1):
-            occupied_cells = [x for x in range(1, self.width + 1) if (y, x) in self.landed_blocks.keys()]
+            occupied_cells = [x for x in range(1, self.width + 1)
+                              if (y, x) in self.landed_blocks.keys()]
 
             if len(occupied_cells) == (self.width // CELL_WIDTH):
                 complete_line = y

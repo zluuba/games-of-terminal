@@ -293,8 +293,10 @@ class SnakeGame(GameEngine):
 
     @log
     def save_game_data(self):
-        update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)
+
+        if self.is_game_over():
+            update_total_games_count(self.game_name, 1)
 
         if self.stats.score > self.stats.best_score:
             update_best_score(self.game_name, self.stats.score)

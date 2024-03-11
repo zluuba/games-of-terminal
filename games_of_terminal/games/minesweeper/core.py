@@ -4,7 +4,10 @@ from games_of_terminal.games.engine import GameEngine
 from games_of_terminal.games.minesweeper.achievements_manager import (
     MinesweeperAchievementsManager,
 )
-from games_of_terminal.games.minesweeper.constants import *
+from games_of_terminal.games.minesweeper.constants import (
+    CELL_HEIGHT, CELL_WIDTH, CELL_OFFSETS,
+    GAME_TIPS, DIRECTIONS,
+)
 from games_of_terminal.games.minesweeper.cell import Cell
 from games_of_terminal.log import log
 from games_of_terminal.utils import (

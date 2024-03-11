@@ -1,9 +1,11 @@
 from games_of_terminal.constants import (
     COLOR_MAPPING, COMMON_TIPS, DEFAULT_COLOR,
     MIN_WIN_HEIGHT, MIN_WIN_WIDTH,
+    TERM_RED_COLOR, TERM_DEFAULT_COLOR,
 )
 from games_of_terminal.database.database import (
     update_game_stat,
+    # get_game_settings,
 )
 
 from curses import (
@@ -17,6 +19,9 @@ from random import choice
 from re import match
 from sys import exit
 from time import time, sleep
+
+# from ast import literal_eval
+# from collections import defaultdict
 
 
 def init_curses_colors():
@@ -83,16 +88,13 @@ def handle_accidentally_key_pressing():
 
 
 def too_small_window_handler(height, width):
-    red_color = '\033[91m'
-    default_color = '\033[39m'
-
-    error_message = f'ERROR: Window is too small.\n'
+    error_message = 'ERROR: Window is too small.\n'
     req_msg = f'Minimum height: {MIN_WIN_HEIGHT}, width: {MIN_WIN_WIDTH}.\n'
     curr_msg = f'Current height: {height}, width: {width}.'
 
     if (height < MIN_WIN_HEIGHT) or (width < MIN_WIN_WIDTH):
-        exit(red_color + error_message +
-             default_color + req_msg + curr_msg)
+        exit(TERM_RED_COLOR + error_message +
+             TERM_DEFAULT_COLOR + req_msg + curr_msg)
 
 
 def get_side_menu_tips(game_state, game_tips):
@@ -148,3 +150,18 @@ def is_current_setting_option_is_default(settings):
     for option in settings:
         if option['selected']:
             return 'default' in option
+
+
+# def get_prettified_game_settings(game_name):
+#     game_settings_db_data = get_game_settings(game_name)
+#     game_settings = defaultdict(dict)
+#
+#     for settings in game_settings_db_data:
+#         setting_name, setting_value = settings
+#
+#         if setting_value and (not setting_name == 'username'):
+#             setting_value = literal_eval(setting_value)
+#
+#         game_settings[setting_name] = setting_value
+#
+#     return game_settings
