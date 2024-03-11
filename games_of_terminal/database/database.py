@@ -2,7 +2,6 @@ from games_of_terminal.database import queries
 from games_of_terminal.constants import ITEMS
 from games_of_terminal.log import log
 from games_of_terminal.database.constants import (
-    STATISTICS_DATATYPE, SETTINGS_DATATYPE,
     DB_FILENAME, ACHIEVEMENTS_FILE,
     GAME_STATS_FILE, SETTINGS_FILE,
 )
@@ -50,11 +49,9 @@ class Connection:
 
 @log
 def check_tables_exist():
-    query = queries.get_all_tables_query
-
-    with Connection() as c:
-        c.cursor.execute(query)
-        existing_tables = c.cursor.fetchall()
+    with Connection() as conn:
+        conn.cursor.execute(queries.get_all_tables_query)
+        existing_tables = conn.cursor.fetchall()
 
     return len(existing_tables) == len(queries.TABLES)
 
@@ -80,8 +77,8 @@ def fill_game_table(conn):
 
 
 def fill_full_game_data_table(conn):
-    fill_game_data_table(conn, STATISTICS_DATATYPE, GAME_STATS_FILE_PATH)
-    fill_game_data_table(conn, SETTINGS_DATATYPE, SETTINGS_FILE_PATH)
+    fill_game_data_table(conn, 'statistics', GAME_STATS_FILE_PATH)
+    fill_game_data_table(conn, 'settings', SETTINGS_FILE_PATH)
 
 
 def fill_game_data_table(conn, data_type, file_path):
