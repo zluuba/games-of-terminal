@@ -13,13 +13,13 @@ jobs:
           make install
       - name: Run linter
         run: |
-#          pip install flake8
+          pip install flake8
           make lint
       - name: Run pytest
         run: |
-#          pip install pytest
+          pip install pytest
           make test
       - name: Run mypy
         run: |
-#          pip install mypy
+          pip install mypy
           make typing
