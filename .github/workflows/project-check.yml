@@ -14,15 +14,6 @@ jobs:
         run: |
           pip install poetry
           make install
-      - name: Run linter
+      - name: Run linter, tests, typing checker
         run: |
-          pip install flake8
-          make lint
-      - name: Run pytest
-        run: |
-          pip install pytest
-          make test
-      - name: Run mypy
-        run: |
-          pip install mypy
-          make typing
+          make check
