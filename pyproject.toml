@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "terminal-games"
+name = "games-of-terminal"
 version = "0.1.0"
-description = "Games for terminal: Tetris, Minesweeper, Snake and Tic-tac-toe"
+description = "Mini games for console environment with statistics, achievements and flexibility."
 license = "MIT"
 authors = ["Luybov Nikitina <zluyba.nikitina@gmail.com>"]
 readme = "README.md"
@@ -25,9 +25,9 @@ flake8 = "^6.0.0"
 pytest = "^8.1.1"
 mypy = "^1.9.0"
 
+[tool.mypy]
+exclude = ['database_new.py', 'models.py', 'games_of_terminal/lab/']
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.mypy]
-exclude = ['database_new.py', 'models.py', 'games_of_terminal/lab/']
