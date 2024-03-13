@@ -64,7 +64,7 @@ class InterfaceManager:
         self.redraw_window()
 
     def resize_menu_win_handler(self, key):
-        message = MESSAGES['win_resize_menu']
+        message = MESSAGES['win_resize']
 
         while key == KEYS['resize']:
             self.window.clear()
@@ -83,7 +83,7 @@ class InterfaceManager:
         self.redraw_window()
 
     def resize_game_win_handler(self, key):
-        messages = MESSAGES['win_resize_game']
+        messages = MESSAGES['win_resize'], MESSAGES['win_resize_game']
 
         while key == KEYS['resize']:
             self.window.clear()

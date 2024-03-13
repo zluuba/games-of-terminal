@@ -89,11 +89,8 @@ MESSAGES = {
     'best_score': 'Best score: ',
     'new_best_score': 'New best score!',
     'play_again': 'Press Space to play again',
-    'win_resize_menu': 'Resizing..',
-    'win_resize_game': [
-        'Resizing..',
-        'Current game will be RESTARTED.',
-    ],
+    'win_resize': 'Resizing..',
+    'win_resize_game': 'Current game will be RESTARTED.',
 }
 
 COMMON_TIPS = {
