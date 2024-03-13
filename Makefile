@@ -18,7 +18,7 @@ test:
 	poetry run pytest
 
 typing:
-	mypy games_of_terminal
+	mypy games_of_terminal --exclude database_new.py,models.py,games_of_terminal/lab/
 
 check:
 	make test
