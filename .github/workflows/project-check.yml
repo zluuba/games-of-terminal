@@ -1,0 +1,25 @@
+name: project-check
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          make install
+      - name: Run linter
+        run: |
+#          pip install flake8
+          make lint
+      - name: Run pytest
+        run: |
+#          pip install pytest
+          make test
+      - name: Run mypy
+        run: |
+#          pip install mypy
+          make typing
