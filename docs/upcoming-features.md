@@ -10,14 +10,15 @@ Here are some features I plan to implement in future releases, along with a list
 - Wordle
 
 ## Upcoming Features:
+- Main Menu rebuilding
+- Easter egg in Main Menu ("Burnout Mode" - hide the menu, leaving only the fire)
 - Switch DB logic from raw SQL to SQLAlchemy
 - Confess All in Settings
 - Custom color schemes
 - Progress saving and 'do you want to continue prev game?' for unfinished games
 - Ability to hide side menu
-- Easter egg in Main Menu ("Burnout Mode" - hide the menu, leaving only the fire)
-- Main Menu rebuilding
 - Ability to add own game control keys
+- More tests
 - Sounds
 
 - Tetris features:
