@@ -3,9 +3,8 @@ from games_of_terminal.menu.core import Menu
 from games_of_terminal.utils import init_curses_colors
 
 from curses import (wrapper as curses_wrapper,
-                    error as curses_error,
-                    endwin)
-from sys import exit, stderr
+                    error as curses_error)
+from sys import exit
 
 
 @curses_wrapper
@@ -13,13 +12,11 @@ def main(canvas):
     try:
         init_curses_colors()
         menu = Menu(canvas)
-        menu.run()
-
+        menu.run_menu_loop()
+        exit(0)
     except (curses_error, Exception) as error:
         message = ERROR_MSG + '\n' + TERM_RED_COLOR + f'Error: {error}'
-        stderr.write(message)
-        endwin()
-        exit(1)
+        exit(message)
 
 
 if __name__ == '__main__':
