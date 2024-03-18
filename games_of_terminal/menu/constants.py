@@ -5,13 +5,15 @@ from games_of_terminal.games.tetris.core import TetrisGame
 from games_of_terminal.settings.core import Settings
 
 
-MENU_ITEMS = {
-    0: {'name': 'Tetris', 'class': TetrisGame, 'type': 'game'},
-    1: {'name': 'Minesweeper', 'class': MinesweeperGame, 'type': 'game'},
-    2: {'name': 'Tic Tac Toe', 'class': TicTacToeGame, 'type': 'game'},
-    3: {'name': 'Snake', 'class': SnakeGame, 'type': 'game'},
-    4: {'name': 'Settings', 'class': Settings, 'type': 'other'},
-}
+MENU_ITEMS = [
+    {'name': 'Tetris', 'class': TetrisGame, 'type': 'game'},
+    {'name': 'Minesweeper', 'class': MinesweeperGame, 'type': 'game'},
+    {'name': 'Tic Tac Toe', 'class': TicTacToeGame, 'type': 'game'},
+    {'name': 'Snake', 'class': SnakeGame, 'type': 'game'},
+
+    # ------ Settings should come last ------
+    {'name': 'Settings', 'class': Settings, 'type': 'settings'},
+]
 
 MENU_ITEMS_COUNT = len(MENU_ITEMS)
 

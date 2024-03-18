@@ -39,6 +39,7 @@ class Menu(InterfaceManager):
     @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
+        # self.munu_items = self.get_menu_items()
 
         settings = get_game_settings('Global')
         color_schemes = settings['color_schemes']
@@ -57,6 +58,9 @@ class Menu(InterfaceManager):
 
         self.fire_free_area_begin_x = self.get_fire_free_area_begin_x()
         self.fire_free_area_end_x = self.get_fire_free_area_end_x()
+
+    # def get_menu_items(self):
+    #     return MENU_ITEMS
 
     def get_logo_start_y(self):
         return ((self.height // 2) -
@@ -144,9 +148,8 @@ class Menu(InterfaceManager):
 
         return new_current_row
 
-    @staticmethod
-    def get_current_row_by_destination(destination):
-        for row, menu_item in MENU_ITEMS.items():
+    def get_current_row_by_destination(self, destination):
+        for row, menu_item in enumerate(MENU_ITEMS):
             if menu_item['name'] == destination:
                 return row
 
@@ -166,7 +169,7 @@ class Menu(InterfaceManager):
     def show_menu_items_list(self):
         begin_y = self.menu_start_y
 
-        for row, menu_item in enumerate(MENU_ITEMS.values()):
+        for row, menu_item in enumerate(MENU_ITEMS):
             menu_item_name = menu_item['name']
             menu_item_type = menu_item['type']
 
