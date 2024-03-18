@@ -59,6 +59,10 @@ class InterfaceManager:
     def wait_for_keypress(self):
         self.window.timeout(-1)
 
+    @staticmethod
+    def is_user_press_key(key):
+        return key != -1
+
     def handle_post_running_actions(self):
         flushinp()
         self.redraw_window()
