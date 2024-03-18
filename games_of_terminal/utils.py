@@ -14,13 +14,11 @@ from curses import (
     init_pair,
     curs_set,
     flushinp,
-    window as curses_window,
 )
 from random import choice
 from re import match
 from sys import exit
 from time import time, sleep
-from typing import Optional, DefaultDict
 
 from ast import literal_eval
 from collections import defaultdict
@@ -37,7 +35,7 @@ def init_curses_colors():
         init_pair(pair_num, text_color, bg_color)
 
 
-def get_color_by_name(color_name: str) -> int:
+def get_color_by_name(color_name):
     if color_name not in COLOR_MAPPING:
         return 0
 
@@ -46,11 +44,11 @@ def get_color_by_name(color_name: str) -> int:
     return color_pair(color_pair_number)
 
 
-def get_random_colored_background() -> str:
+def get_random_colored_background():
     re_pattern = r'.+(?=(?<!black_bg)(?<!grey_bg))$'
     colored_bg_names = list(filter(
         lambda color_name: match(re_pattern, color_name),
-        list(COLOR_MAPPING)
+        list(COLOR_MAPPING),
     ))
 
     random_color_name = choice(colored_bg_names)
@@ -65,15 +63,12 @@ def show_cursor():
     curs_set(2)
 
 
-def draw_message(y: int, x: int, field: curses_window,
-                 message: str, color: int = DEFAULT_COLOR) -> None:
+def draw_message(y, x, field, message, color=DEFAULT_COLOR):
     field.addstr(y, x, message, color)
     field.refresh()
 
 
-def draw_colorful_message(y: int, win_width: int, field: curses_window,
-                          message_with_colors: list | tuple) -> None:
-
+def draw_colorful_message(y, win_width, field, message_with_colors):
     message_len = sum(map(lambda pair: len(pair[0]), message_with_colors))
     x = (win_width // 2) - (message_len // 2)
 
@@ -82,18 +77,17 @@ def draw_colorful_message(y: int, win_width: int, field: curses_window,
         x += len(message)
 
 
-def clear_field_line(begin_y: int, begin_x: int,
-                     field: curses_window, width: int) -> None:
+def clear_field_line(begin_y, begin_x, field, width):
     empty_line = ' ' * width
     draw_message(begin_y, begin_x, field, empty_line)
 
 
-def handle_accidentally_key_pressing() -> None:
+def handle_accidentally_key_pressing():
     sleep(0.3)
     flushinp()
 
 
-def too_small_window_handler(height: int, width: int) -> None:
+def too_small_window_handler(height, width):
     error_message = 'ERROR: Window is too small.\n'
     req_msg = f'Minimum height: {MIN_WIN_HEIGHT}, width: {MIN_WIN_WIDTH}.\n'
     curr_msg = f'Current height: {height}, width: {width}.'
@@ -103,7 +97,7 @@ def too_small_window_handler(height: int, width: int) -> None:
              TERM_DEFAULT_COLOR + req_msg + curr_msg)
 
 
-def get_side_menu_tips(game_state: dict, game_tips: dict) -> list[dict]:
+def get_side_menu_tips(game_state, game_tips):
     return [
         {
             'name': 'state',
@@ -123,12 +117,7 @@ def get_side_menu_tips(game_state: dict, game_tips: dict) -> list[dict]:
     ]
 
 
-def show_placeholder_stub(height: int, width: int,
-                          window: curses_window,
-                          message: Optional[str] = None) -> None:
-    if message is None:
-        message = DEFAULT_STUB_MSG
-
+def show_placeholder_stub(height, width, window, message=DEFAULT_STUB_MSG):
     y = height // 2
     x = (width // 2) - (len(message) // 2)
 
@@ -136,37 +125,37 @@ def show_placeholder_stub(height: int, width: int,
     draw_message(y, x, window, message, DEFAULT_COLOR)
 
 
-def update_total_games_count(game_name: str, value: int | str) -> None:
+def update_total_games_count(game_name, value):
     update_game_stat(game_name, 'total_games', value)
 
 
-def update_total_time_count(game_name: str, start_time: int | float) -> None:
+def update_total_time_count(game_name, start_time):
     end_time = time()
     time_in_game = int(end_time - start_time)
     update_game_stat(game_name, 'total_time', time_in_game)
 
 
-def update_best_score(game_name: str, score: int) -> None:
+def update_best_score(game_name, score):
     update_game_stat(game_name, 'best_score', score, save_mode=True)
 
 
-def get_current_color_scheme_name(color_schemes: list[dict]) -> str:
+def get_current_color_scheme_name(color_schemes):
     for scheme in color_schemes:
         if scheme['selected']:
             return scheme['name']
     return ''
 
 
-def is_current_setting_option_is_default(settings: list[dict]) -> bool:
+def is_current_setting_option_is_default(settings):
     for option in settings:
         if option['selected']:
             return 'default' in option
     return False
 
 
-def get_prettified_game_settings(game_name: str) -> DefaultDict:
+def get_prettified_game_settings(game_name):
     game_settings_db_data = get_game_settings(game_name)
-    game_settings: DefaultDict = defaultdict(dict)
+    game_settings = defaultdict(dict)
 
     for settings in game_settings_db_data:
         setting_name, setting_value = settings

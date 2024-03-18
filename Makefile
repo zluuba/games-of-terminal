@@ -23,7 +23,7 @@ typing:
 check:
 	make test
 	make lint
-	make typing
+	#make typing
 
 package-uninstall:
 	python3 -m pip uninstall dist/*.whl

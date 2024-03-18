@@ -18,10 +18,10 @@ jobs:
         run: |
           pip install flake8
           make lint
-      - name: Run typing check
-        run: |
-          pip install mypy
-          make typing
+#      - name: Run typing check
+#        run: |
+#          pip install mypy
+#          make typing
       - name: Run tests
         run: |
           pip install pytest

@@ -1,12 +1,6 @@
-from curses import window as curses_window
-from typing import Optional
-
-
 class SubWindow:
-    def __init__(self, parent_window: curses_window,
-                 height: int, width: int,
-                 begin_y: int, begin_x: int,
-                 show_borders: Optional[bool] = True) -> None:
+    def __init__(self, parent_window, height, width,
+                 begin_y, begin_x, show_borders=True):
 
         self.height = height
         self.width = width
@@ -22,7 +16,7 @@ class SubWindow:
         if show_borders:
             self.show_borders()
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<{self.__class__.__name__}>'
 
     def set_border_coordinates(self):
