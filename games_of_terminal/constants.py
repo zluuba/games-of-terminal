@@ -104,6 +104,8 @@ DEFAULT_STUB_MSG = 'In development.'
 TERM_RED_COLOR = '\033[91m'
 TERM_DEFAULT_COLOR = '\033[39m'
 
+ERROR_MSG = 'That shouldn\'t have happened, but it is what it is.'
+
 # based on curses initial color pair (0: white text, black bg)
 DEFAULT_COLOR = 0
 

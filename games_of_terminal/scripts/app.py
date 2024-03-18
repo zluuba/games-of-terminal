@@ -1,4 +1,4 @@
-from games_of_terminal.constants import TERM_RED_COLOR
+from games_of_terminal.constants import TERM_RED_COLOR, ERROR_MSG
 from games_of_terminal.menu.core import Menu
 from games_of_terminal.utils import init_curses_colors
 
@@ -13,11 +13,10 @@ def main(canvas):
     try:
         init_curses_colors()
         menu = Menu(canvas)
-        menu.run_menu_loop()
+        menu.run()
 
     except (curses_error, Exception) as error:
-        message = ('That shouldn\'t have happened, but it is what it is.\n' +
-                   TERM_RED_COLOR + f'Curses Error: {error}')
+        message = ERROR_MSG + '\n' + TERM_RED_COLOR + f'Error: {error}'
         stderr.write(message)
         endwin()
         exit(1)
