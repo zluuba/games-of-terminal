@@ -1,7 +1,9 @@
 from games_of_terminal.constants import (
     MESSAGES, KEYS, GAME_STATUSES, BASE_OFFSET,
 )
-from games_of_terminal.database.database import get_game_settings
+from games_of_terminal.database.database import (
+    get_game_settings, get_game_stat_value,
+)
 from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.settings.all_settings.core import GamesSettings
@@ -182,6 +184,10 @@ class GameEngine(InterfaceManager):
         color_schemes = settings[option]
 
         return not is_current_setting_option_is_default(color_schemes)
+
+    def set_best_score(self):
+        data = get_game_stat_value(self.game_name, 'best_score')
+        self.stats.best_score = int(data)
 
     def draw_game_window(self):
         pass
