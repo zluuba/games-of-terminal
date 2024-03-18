@@ -58,7 +58,6 @@ class MinesweeperGame(GameEngine):
         self.set_bombs_around_counter()
         self.open_first_empty_cell()
 
-        self.show_game_status()
         self.draw_side_menu_logo()
         self.show_side_menu_tips(
             game_state=self.tips,
@@ -313,19 +312,18 @@ class MinesweeperGame(GameEngine):
         update_game_stat(self.game_name, 'bombs_defused', bombs_defused)
 
     def draw_game_window(self):
-        self.show_all_areas_borders()
-
-        self.show_game_status()
-        self.draw_side_menu_logo()
+        self.draw_basic_window_view()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,
         )
-        self.show_game_status()
 
         self.current_cell.unselect()
         self.draw_game_field(change_color_scheme=True)
         self.current_cell.select()
 
+        self.check_achievements()
+
+    def check_achievements(self):
         if self.is_settings_option_was_change('color_schemes'):
             self.achievement_manager.check(color_scheme_change=True)

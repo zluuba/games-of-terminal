@@ -36,9 +36,8 @@ class TicTacToeGame(GameEngine):
     @log
     def setup_game_field(self, initial=True):
         hide_cursor()
-        self.draw_side_menu_logo()
+        self.draw_basic_window_view()
         self.show_side_menu_tips(game_tips=GAME_TIPS)
-        self.show_game_status()
 
         if initial:
             self.draw_game_field()
@@ -241,9 +240,12 @@ class TicTacToeGame(GameEngine):
         self.show_all_areas_borders()
         self.setup_game_field(initial=False)
 
-        if self.is_settings_option_was_change('color_schemes'):
-            self.achievement_manager.check(color_scheme_change=True)
+        self.check_achievements()
 
         for cell in self.cells.values():
             cell.set_color_scheme()
             cell.set_background_color()
+
+    def check_achievements(self):
+        if self.is_settings_option_was_change('color_schemes'):
+            self.achievement_manager.check(color_scheme_change=True)

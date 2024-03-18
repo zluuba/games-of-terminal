@@ -179,6 +179,14 @@ class GameEngine(InterfaceManager):
         self.tips_area.show_borders()
         self.game_status_area.show_borders()
 
+    def draw_basic_window_view(self, basic_tips=False):
+        self.show_all_areas_borders()
+        self.draw_side_menu_logo()
+        self.show_game_status()
+
+        if basic_tips:
+            self.show_side_menu_tips()
+
     def is_settings_option_was_change(self, option):
         settings = get_game_settings(self.game_name)
         color_schemes = settings[option]

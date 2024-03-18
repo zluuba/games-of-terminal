@@ -278,10 +278,8 @@ class SnakeGame(GameEngine):
 
     def draw_game_window(self):
         self.window.erase()
-        self.show_all_areas_borders()
 
-        self.draw_side_menu_logo()
-        self.show_game_status()
+        self.draw_basic_window_view()
         self.show_side_menu_tips(
             game_state=self.tips,
             game_tips=GAME_TIPS,
@@ -292,6 +290,9 @@ class SnakeGame(GameEngine):
         self.put_food_on_field()
         self.put_obstacles_on_field()
 
+        self.check_achievements()
+
+    def check_achievements(self):
         if self.is_settings_option_was_change('snake_skins'):
             self.achievement_manager.check(snake_color_scheme_change=True)
         if self.is_settings_option_was_change('modes'):
