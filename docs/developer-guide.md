@@ -131,6 +131,4 @@ Here's how the achievement manager works in the example of the Snake game:
 File './games_of_terminal/log.py' contains Logger.
 
 
-## -----------------
-
-## **Guide is in progress.**
+## **Guide is in progress..**
