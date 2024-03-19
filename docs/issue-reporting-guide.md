@@ -1,8 +1,7 @@
 # How To Create an Issue
 
 If you encounter any issues, discover a bug while using GOT, or have any ideas to improve, 
-please help me enhance the project by reporting it.  
-Follow these steps:
+please help me enhance the project by reporting it. Follow these steps:
 
 1. **Check Existing Issues:** Before creating a new issue, check if a similar one already exists 
    in the [Issues](https://github.com/zluuba/games-of-terminal/issues) section.

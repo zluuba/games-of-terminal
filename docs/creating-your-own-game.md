@@ -1,7 +1,9 @@
-# How to Implement Your Own Game in GOT
+# Implement Your Own Game in Games Of Terminal
+
 If you have an idea for a game and you want to implement it, this guide is for you.  
 I'll show you how to do it with an example of a 'Connect 4' game.
 
+## How to Implement Your Own Game
 
 1. Create a game package in 'games_of_terminal/games/' and base modules: 'core.py' and 'constants.py'. New structure:
     - 'games_of_terminal/games/connect_four/' <br/>
@@ -52,7 +54,8 @@ I'll show you how to do it with an example of a 'Connect 4' game.
 
 7. Done. Now you only need refactoring and manual testing (don't forget about pauses, window size changing, and so on, test it all!).
 
-<br/>
+
+##
 
 Implementing your game into GOT can seem easy, but sometimes it feels hard. And it's okay.  
 Sorry for the messy codebase in some areas, I tried to do my best, but GOT still needs a lot of refactoring.  
