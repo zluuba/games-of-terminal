@@ -1,7 +1,6 @@
 from games_of_terminal.constants import (
-    LOGO, APP_NAME, KEYS,
+    LOGO, KEYS, DEFAULT_COLOR, MESSAGES,
     BASE_OFFSET, DEFAULT_YX_OFFSET, STATUS_BOX_HEIGHT,
-    DEFAULT_COLOR, MESSAGES,
 )
 from games_of_terminal.sub_window import SubWindow
 from games_of_terminal.utils import (
@@ -108,13 +107,6 @@ class InterfaceManager:
         sleep(0.5)
         self._set_window_sizes()
         self._setup()
-
-    def draw_side_menu_logo(self, begin_y=6, begin_x=2):
-        for y, line in enumerate(LOGO, start=1):
-            draw_message(y, begin_x, self.logo_area.box, line)
-
-        y, x = begin_y, (self.logo_area.width - len(APP_NAME)) // 2
-        draw_message(y, x, self.logo_area.box, APP_NAME)
 
     def _set_window_sizes(self, height=None, width=None):
         if height is None:

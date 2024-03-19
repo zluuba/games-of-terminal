@@ -1,5 +1,6 @@
 from games_of_terminal.constants import (
-    MESSAGES, KEYS, GAME_STATUSES, BASE_OFFSET,
+    MESSAGES, KEYS, GAME_STATUSES,
+    BASE_OFFSET, APP_NAME, LOGO,
 )
 from games_of_terminal.database.database import (
     get_game_settings, get_game_stat_value,
@@ -186,6 +187,13 @@ class GameEngine(InterfaceManager):
 
         if basic_tips:
             self.show_side_menu_tips()
+
+    def draw_side_menu_logo(self, begin_y=6, begin_x=2):
+        for y, line in enumerate(LOGO, start=1):
+            draw_message(y, begin_x, self.logo_area.box, line)
+
+        y, x = begin_y, (self.logo_area.width - len(APP_NAME)) // 2
+        draw_message(y, x, self.logo_area.box, APP_NAME)
 
     def is_settings_option_was_change(self, option):
         settings = get_game_settings(self.game_name)
