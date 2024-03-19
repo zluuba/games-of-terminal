@@ -24,7 +24,7 @@ class SnakeGameAchievementsManager(AchievementsManager):
             case 'Mode Mood':
                 return self.check_game_mode_was_changed(**kwargs)
             case 'GOD':
-                return self.check_user_win()
+                return self.check_user_win() or self.check_score(666)
 
     def check_score(self, required_quantity):
         return self.class_object.stats.score >= required_quantity

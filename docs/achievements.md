@@ -15,7 +15,7 @@ If you're up for a challenge, choose an achievement and try to earn it for some 
 - **Good Soup**: eat yourself.
 - **Fashionista**: change snake skin.
 - **Mode Mood**: change game mode.
-- **GOD**: win the game.
+- **GOD**: win the game or reach 666 points in one game.
 
 
 ## Minesweeper Game
