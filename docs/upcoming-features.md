@@ -31,3 +31,4 @@ Here are some features I plan to implement in future releases, along with a list
 - blocks move after pause without keeping interval (Tetris game)
 - obstacles can appear in front of the snake and cause an undeserved loss (Snake game)
 - snake vertical speed should be half the horizontal speed, but it is currently equal (Snake game)
+- 'check' function in main Achievement Manager - unnecessary **kwargs arguments, get rid of it.
