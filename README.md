@@ -123,11 +123,12 @@ I have a lot of ideas (and bugs), so [here is a list](https://github.com/zluuba/
 **Feel free to [suggest additional features](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
 or share your ideas!**
 
-## Demos
 
-Demonstrations of the GOT interface and how to play the games.
+## Demo
+Games Of Terminal interaction demo (sped-up).
 
-*add GIFs or videos*
+https://github.com/zluuba/games-of-terminal/assets/87614163/a661f605-de07-4941-bf93-bbcd4dfe3fa6
+
 
 
 ##
