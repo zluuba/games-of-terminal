@@ -1,5 +1,8 @@
 # Technical Details of GOT
-Here are some details for understanding the codebase and project structure.
+This app doesn't have a lot of dependencies. For now, it's just pure Python with built-in libraries and development 
+dependencies like Flake8 and Pytest. This minimalistic approach is part of the style guide, making GOT a more 
+independent (and strong) app.  
+Below, you can find some details for understanding the codebase and project structure.
 
 ## Project Structure
 I've tried to separate all main parts, so this is the abstract structure of the whole app:
@@ -19,7 +22,11 @@ I've tried to separate all main parts, so this is the abstract structure of the 
         |__ Games Statistics
         |__ Reset All Data
         |__ Share Data
-    |__ Static Data (achievements, settings, game stats in .json format)
+    |__ Static Data (.json format)
+        |__ Achievements
+        |__ Settings
+        |__ Games Statistics
+        |__ ...
     |__ Database
     |__ Interface Manager (file)
     |__ Achievements Manager (file)
