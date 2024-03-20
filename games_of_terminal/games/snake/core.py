@@ -10,6 +10,7 @@ from games_of_terminal.utils import (
     draw_message,
     get_color_by_name,
     get_current_color_scheme_name,
+    is_user_press_key,
 )
 
 from .achievements_manager import SnakeGameAchievementsManager
@@ -127,7 +128,7 @@ class SnakeGame(GameEngine):
         while True:
             key = self.window.getch()
 
-            if self.is_user_press_key(key):
+            if is_user_press_key(key):
                 self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:

@@ -63,6 +63,10 @@ def show_cursor():
     curs_set(2)
 
 
+def is_user_press_key(key):
+    return key != -1
+
+
 def draw_message(y, x, field, message, color=DEFAULT_COLOR):
     field.addstr(y, x, message, color)
     field.refresh()
