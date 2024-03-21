@@ -82,7 +82,7 @@ GOT has many advantages, this is the full list of them:
    GOT doesn't strain the processor (maybe just a little), ensuring you the ability to play various games. 
    I tested it on different VMs (MacOS and Ubuntu), and it works perfectly. P.S. I tried testing it on Windows, 
    but it consistently crashes during installation in my virtual machine app, so I've concluded that PC gaming already 
-   offers enough games. If GOT doesn't work on Windows (and I'm sure it works perfectly too), I don't mind.
+   offers enough games, so if GOT doesn't work on Windows (and I'm sure it works perfectly too), I don't mind.
 9. **Testing**: I utilized the Curses library to interact with the terminal, and as Curses operates at a low level, 
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
