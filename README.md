@@ -97,7 +97,7 @@ In this section, you'll find information about documentation, instructions for i
 into GOT, details on how to contribute to the project, and bug reporting.
 
 ### Project Documentation
-To delve into the technical details and explore documentation, head over to [Documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/developer-guide.md).
+For technical details and project documentation, visit [Documentation](https://github.com/zluuba/games-of-terminal/tree/main/docs/developer-guide.md).
 
 ### Implementing Your Own Game
 If you enjoy GOT, Python, and would like to create your own game with the GOT interface, 
