@@ -20,7 +20,7 @@ Make sure you have the following installed:
 ## Installation
 
 Open a terminal window.
-Clone this repository or download it with pip:
+Clone this repository (with [Git](https://git-scm.com/downloads)) or download it with [Pip](https://pip.pypa.io/en/stable/installation/):
 ```bash
 git clone https://github.com/zluuba/games-of-terminal.git
 ```
@@ -48,11 +48,13 @@ To start the games, use the following command:
 got-games
 ```
 
-Upon launching, you'll encounter the menu.  
-Navigate through the options using the ↓ and ↑ arrows (or WS keys).  
-Press Enter to initiate the selected game.  
-To exit any window (menu, game, or settings), press Esc.  
-To enter **Detail mode** in the Achievements or All Settings sections, press the Spacebar.  
+Upon launching, you'll encounter the menu. Here are some useful keys:
+- Navigate through the options using the **↓ and ↑ arrows** (or WS keys).  
+- Press **Enter** to initiate the selected item.  
+- To exit any window (menu, game, or settings), press **Esc**.  
+- To enter *Detail mode* in the Achievements or All Settings sections, press the **Spacebar**.  
+
+Important note: to ensure the app functions correctly, you need to **keep your keyboard set to the English layout**.
 
 **See demos [here](https://github.com/zluuba/games-of-terminal#demos).**
 
