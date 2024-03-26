@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 
-NAME = 'Games Of Terminal'
+NAME = 'games-of-terminal'
 DESCRIPTION = 'Classic games collection for Console'
 URL = 'https://github.com/zluuba/games-of-terminal'
 EMAIL = 'zluyba.nikitina@gmail.com'
@@ -25,7 +25,16 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(),
-    entry_points={'console_scripts': ['got-games=games_of_terminal.scripts.app:main']},
+    data_files=[
+        ('games_of_terminal', [
+            'games_of_terminal/data/achievements.json',
+            'games_of_terminal/data/game_statistics.json',
+            'games_of_terminal/data/settings.json',
+        ]),
+    ],
+    entry_points={
+        'console_scripts': ['got-games=games_of_terminal.scripts.app:main'],
+    },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
