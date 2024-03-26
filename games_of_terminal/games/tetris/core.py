@@ -6,6 +6,7 @@ from games_of_terminal.utils import (
     update_total_time_count,
     update_total_games_count,
     update_best_score,
+    is_user_press_key,
 )
 
 from .achievements_manager import TetrisAchievementsManager
@@ -64,7 +65,7 @@ class TetrisGame(GameEngine):
         while True:
             key = self.window.getch()
 
-            if key != -1:
+            if is_user_press_key(key):
                 self.controller(key)
 
             if self.stats.is_exit or self.stats.is_restart:
@@ -159,7 +160,7 @@ class TetrisGame(GameEngine):
             self.time_interval -= LEVEL_SPEED_DIFF
 
     def move_block_before_land(self):
-        """ Give the ability move block if it touches the floor """
+        """ Give the ability move block if it touches the floor"""
 
         current_time = time()
 
