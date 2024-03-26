@@ -9,12 +9,11 @@ GOT offers a diverse and enjoyable gaming experience in your favourite environme
  ![got-intro](https://github.com/zluuba/games-of-terminal/assets/87614163/58c985bd-38f8-4d6c-a4a0-73e1713df497)
 *GIF with Games Of Terminal interaction demo (sped-up)*
 
+
 ## Requirements
-
-Make sure you have the following installed:
-
-- [Python](https://www.python.org/), version 3.11 or higher. You can download it [here](https://www.python.org/downloads/).
-- [Poetry](https://python-poetry.org/), version 1.2.0 or higher. Install it by following the instructions [here](https://python-poetry.org/docs/#installation).
+This package has no dependencies, it was intentionally designed this way. 
+So, you only need to have [Python](https://www.python.org/) installed (version 3.11 or higher). 
+You can download it [here](https://www.python.org/downloads/).
 
 
 ## Installation
@@ -28,16 +27,10 @@ git clone https://github.com/zluuba/games-of-terminal.git
 pip install --user git+https://github.com/zluuba/games-of-terminal.git
 ```
 
-Navigate to the downloaded directory and install dependencies:
+Navigate to the downloaded directory and install package:
 ```bash
 cd games-of-terminal
 make install
-```
-
-Install GOT package:
-```bash
-make build
-make package-install
 ```
 
 
