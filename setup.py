@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 NAME = 'Games Of Terminal'
@@ -8,7 +8,7 @@ DESCRIPTION = 'Classic games collection for Console'
 URL = 'https://github.com/zluuba/games-of-terminal'
 EMAIL = 'zluyba.nikitina@gmail.com'
 AUTHOR = 'Luybov Nikitina'
-REQUIRES_PYTHON = '>=3.11'
+REQUIRES_PYTHON = '>=3.10'
 VERSION = '0.1.0'
 
 REQUIRED = []
@@ -24,8 +24,8 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    py_modules=['games_of_terminal'],
-    entry_points={'got-games': ['games_of_terminal.scripts.app:main']},
+    packages=find_packages(),
+    entry_points={'console_scripts': ['got-games=games_of_terminal.scripts.app:main']},
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
