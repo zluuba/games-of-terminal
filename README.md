@@ -11,14 +11,14 @@ GOT offers a diverse and enjoyable gaming experience in your favourite environme
 
 
 ## Requirements
-This package has no dependencies, it was intentionally designed this way. 
+This package has no dependencies, it was intentionally designed this way.  
 So, you only need to have [Python](https://www.python.org/) installed (version 3.11 or higher). 
 You can download it [here](https://www.python.org/downloads/).
 
 
 ## Installation
 
-Open a terminal window.
+Open a terminal window.  
 Clone this repository (with [Git](https://git-scm.com/downloads)) or download it with [Pip](https://pip.pypa.io/en/stable/installation/):
 ```bash
 git clone https://github.com/zluuba/games-of-terminal.git
