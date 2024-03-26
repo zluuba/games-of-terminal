@@ -1,8 +1,8 @@
 install:
-	python3 -m pip install --user dist/*.whl
+	python3 -m pip install .
 
 reinstall:
-	python3 -m pip install --force-reinstal --user dist/*.whl
+	python3 -m pip install --force-reinstal .
 
 uninstall:
-	python3 -m pip uninstall dist/*.whl
+	python3 -m pip uninstall games-of-terminal
