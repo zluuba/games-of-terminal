@@ -1,7 +1,6 @@
 # Technical Details of GOT
-This app doesn't have a lot of dependencies. For now, it's just pure Python with built-in libraries and development 
-dependencies like Flake8 and Pytest. This minimalistic approach is part of the style guide, making GOT a more 
-independent (and strong) app.  
+This app doesn't have any dependencies. For now, it's just pure Python and raw SQL.  
+This minimalistic approach is part of the style guide, making GOT a more independent (and strong) app.  
 Below, you can find some details for understanding the codebase and project structure.
 
 ## Project Structure
@@ -20,8 +19,7 @@ I've tried to separate all main parts, so this is the abstract structure of the 
         |__ Achievements
         |__ Games Settings
         |__ Games Statistics
-        |__ Reset All Data
-        |__ Share Data
+        |__ ...
     |__ Static Data (.json format)
         |__ Achievements
         |__ Settings
