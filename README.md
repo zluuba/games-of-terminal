@@ -1,6 +1,6 @@
 # Games Of Terminal
 
-[![Linter Check](https://github.com/zluuba/games-of-terminal/actions/workflows/linter-check.yml/badge.svg)](https://github.com/zluuba/games-of-terminal/actions/workflows/linter-check.yml)
+[![linter-check](https://github.com/zluuba/games-of-terminal/actions/workflows/linter-check.yml/badge.svg)](https://github.com/zluuba/games-of-terminal/actions/workflows/linter-check.yml)
 
 **Games Of Terminal** (or GOT) is a console-based gaming platform where classic games like Minesweeper, Tetris, 
 Snake, and TicTacToe come to life. With customization, achievements, and flexibility, 
