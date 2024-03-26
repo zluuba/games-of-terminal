@@ -4,12 +4,11 @@
 
 # local dev files
 .env
+.venv/
 dist/
 __pycache__
 
 # upcoming features files
+colors.json
 list_of_features.md
 games_of_terminal/lab/
-
-# unfinished features files
-colors.json
