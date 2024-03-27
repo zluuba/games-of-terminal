@@ -6,15 +6,11 @@ from games_of_terminal.utils import init_curses_colors
 
 from curses import (wrapper as curses_wrapper,
                     error as curses_error)
-from sys import exit, platform
-from subprocess import run as run_bash_cmd
+from sys import exit
 
 
 @curses_wrapper
 def main(canvas):
-    if platform == 'linux':
-        run_bash_cmd('TERM=xterm-256color', shell=True)
-
     try:
         init_curses_colors()
         menu = Menu(canvas)
@@ -25,7 +21,6 @@ def main(canvas):
                    TERM_RED_COLOR + f'{error.__class__}: {error}' +
                    TERM_DEFAULT_COLOR)
         exit(message)
-        # raise error
 
 
 if __name__ == '__main__':
