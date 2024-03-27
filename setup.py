@@ -4,49 +4,48 @@ from setuptools import setup, find_packages
 
 
 NAME = 'games-of-terminal'
-DESCRIPTION = 'Classic games collection for Console'
-URL = 'https://github.com/zluuba/games-of-terminal'
-EMAIL = 'zluyba.nikitina@gmail.com'
-AUTHOR = 'Luybov Nikitina'
-REQUIRES_PYTHON = '>=3.10'
 VERSION = '0.1.0'
+DESCRIPTION = 'Classic games collection for Console'
+LICENCE = 'MIT'
+URL = 'https://github.com/zluuba/games-of-terminal'
+AUTHOR = 'Luybov Nikitina'
+AUTHOR_EMAIL = 'zluyba.nikitina@gmail.com'
+PYTHON_REQUIRES = '>=3.10'
 
-REQUIRED = []
-EXTRAS = {}
+DATA_FILES = [
+    ('games_of_terminal', [
+        'games_of_terminal/data/achievements.json',
+        'games_of_terminal/data/game_statistics.json',
+        'games_of_terminal/data/settings.json',
+    ]),
+]
+ENTRY_POINTS = {
+    'console_scripts': ['got-games=games_of_terminal.scripts.app:main'],
+}
+CLASSIFIERS = [
+    'Topic :: Games/Entertainment',
+    'Topic :: Terminals',
+    'Environment :: Console',
+    'Natural Language :: English',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+    'License :: OSI Approved :: MIT License',
+]
 
 
 setup(
     name=NAME,
     version=VERSION,
     description=DESCRIPTION,
-    long_description_content_type='text/markdown',
-    author=AUTHOR,
-    author_email=EMAIL,
-    python_requires=REQUIRES_PYTHON,
+    license=LICENCE,
     url=URL,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
     packages=find_packages(),
-    data_files=[
-        ('games_of_terminal', [
-            'games_of_terminal/data/achievements.json',
-            'games_of_terminal/data/game_statistics.json',
-            'games_of_terminal/data/settings.json',
-        ]),
-    ],
-    entry_points={
-        'console_scripts': ['got-games=games_of_terminal.scripts.app:main'],
-    },
-    install_requires=REQUIRED,
-    extras_require=EXTRAS,
     include_package_data=True,
-    license='MIT',
-    classifiers=[
-        'Topic :: Games/Entertainment',
-        'Topic :: Terminals',
-        'Environment :: Console',
-        'Natural Language :: English',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.11',
-        'License :: OSI Approved :: MIT License',
-    ],
+    data_files=DATA_FILES,
+    entry_points=ENTRY_POINTS,
+    python_requires=PYTHON_REQUIRES,
+    classifiers=CLASSIFIERS,
 )
