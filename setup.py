@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from setuptools import setup, find_packages
 
 
@@ -10,7 +8,7 @@ LICENCE = 'MIT'
 URL = 'https://github.com/zluuba/games-of-terminal'
 AUTHOR = 'Luybov Nikitina'
 AUTHOR_EMAIL = 'zluyba.nikitina@gmail.com'
-PYTHON_REQUIRES = '>=3.10'
+PYTHON_REQUIRES = '>=3.11'
 
 DATA_FILES = [
     ('games_of_terminal', [
