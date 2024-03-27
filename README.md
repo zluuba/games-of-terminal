@@ -5,7 +5,7 @@
 **Games Of Terminal** (or GOT) is a console-based gaming platform where classic games like Minesweeper, Tetris, 
 Snake, and TicTacToe come to life. With customization, achievements, and flexibility, 
 GOT offers a diverse and enjoyable gaming experience in your favourite environment - **console**.  
-You can run GOT on macOS and Linux (even on Ubuntu Server!).
+You can run GOT on macOS and Linux (even on Ubuntu Server, huh).
 
  ![got-intro](https://github.com/zluuba/games-of-terminal/assets/87614163/58c985bd-38f8-4d6c-a4a0-73e1713df497)
 *GIF with Games Of Terminal interaction demo (sped-up)*
@@ -34,13 +34,18 @@ cd games-of-terminal
 make install
 ```
 
+### Additional
+
 If you try it on Ubuntu Server or another non-GUI platform, you need to ensure that your terminal supports all the colors that GOT uses. 
 If it doesn't, you may face this error: "**ValueError: color number is greater than COLORS-1**" while running GOT.
 To solve this problem, you need to add the $TERM variable to your environment using this command:
 ```bash
 TERM=xterm-256color
 ```
-
+P.S. even so, if you use a non-GUI system, the app may process colors incorrectly and hide some items 
+(actually just showing them with base colors - white text & black background). 
+In the next version, I plan to solve this problem and create special universal color schemes for every game.
+  
 If you experience any other errors, please create an [issue](https://github.com/zluuba/games-of-terminal/tree/main/docs/issue-reporting-guide.md) 
 with a detailed error description and your OS name and version.
 
@@ -87,9 +92,9 @@ GOT has many advantages, this is the full list of them:
    elements (as in TicTacToe).
 8. **Versatility**: whether you have a new MacBook or an old Asus (or a new Asus and an old MacBook), 
    GOT doesn't strain the processor (maybe just a little), ensuring you the ability to play various games. 
-   I tested it on different VMs (MacOS and Ubuntu), and it works perfectly. P.S. I tried testing it on Windows, 
-   but it consistently crashes during installation in my virtual machine app, so I've concluded that PC gaming already 
-   offers enough games, so if GOT doesn't work on Windows (and I'm sure it works perfectly too), I don't mind.
+   I tested it on macOS, Ubuntu-22, and Ubuntu Server, and it works perfectly. P.S. I tried testing it on Windows, 
+   but Windows is a special platform and I just concluded that PC gaming already offers enough games, so if GOT 
+   doesn't work on Windows, I don't mind.
 9. **Testing**: I utilized the Curses library to interact with the terminal, and as Curses operates at a low level, 
    simulating or mocking it in a controlled testing environment proves challenging. Consequently, GOT has tests for 
    non-terminal logic, and manual testing has played a significant role. If you encounter any issues or shortcomings, 
