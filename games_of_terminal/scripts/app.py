@@ -5,15 +5,14 @@ from games_of_terminal.menu.core import Menu
 from games_of_terminal.utils import init_curses_colors
 
 from curses import (wrapper as curses_wrapper,
-                    error as curses_error,
-                    has_colors, COLORS)
-from sys import exit
+                    error as curses_error)
+from sys import exit, platform
 from subprocess import run as run_bash_cmd
 
 
 @curses_wrapper
 def main(canvas):
-    if not has_colors():
+    if platform == 'linux':
         run_bash_cmd('TERM=xterm-256color', shell=True)
 
     try:
@@ -22,7 +21,7 @@ def main(canvas):
         menu.run_menu_loop()
         exit(0)
     except (curses_error, Exception) as error:
-        message = (ERROR_MSG + '\n' + 
+        message = (ERROR_MSG + '\n' +
                    TERM_RED_COLOR + f'{error.__class__}: {error}' +
                    TERM_DEFAULT_COLOR)
         exit(message)
