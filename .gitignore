@@ -6,6 +6,7 @@
 .env
 .venv/
 dist/
+tests/
 __pycache__
 
 # upcoming features files
