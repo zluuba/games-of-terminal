@@ -8,6 +8,8 @@ Here are some features I plan to implement in future releases, along with a list
 - Sea Battle
 - Sudoku
 - Wordle
+- Crossy Road
+- Doom
 
 ## Upcoming Features:
 - Main Menu rebuilding: add pagination for games
