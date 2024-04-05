@@ -66,7 +66,7 @@ Upon launching, you'll encounter the menu. Here are some useful keys:
 **Important note**: to ensure the app functions correctly, you need to **keep your keyboard set to the English layout**.
 
 
-**See demos [here](https://github.com/zluuba/games-of-terminal#demo).**
+**See demos [here](https://github.com/zluuba/games-of-terminal?tab=readme-ov-file#demo).**
 
 
 ## Project Features
