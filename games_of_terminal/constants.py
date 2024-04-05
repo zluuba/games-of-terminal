@@ -37,7 +37,7 @@ STATUS_BOX_HEIGHT = 3
 ACH_TEXT = 'ACHIEVEMENT UNLOCKED'
 ACH_FRAME_COLOR_NAME = 'purple_text_black_bg'
 ACH_NAME_COLOR_NAME = 'bright_white_text_black_bg'
-ACH_BG_COLOR_NAME = 'bright_light_pastel_orange_text_black_bg'
+ACH_BG_COLOR_NAME = 'white_text_black_bg'
 
 KEYS = {
     'up_arrow': KEY_UP,
