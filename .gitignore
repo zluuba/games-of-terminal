@@ -6,8 +6,10 @@
 .env
 .venv/
 dist/
+build/
 tests/
 __pycache__
+*.egg-info
 
 # upcoming features files
 colors.json
