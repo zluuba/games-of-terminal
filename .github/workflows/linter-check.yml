@@ -13,4 +13,4 @@ jobs:
       - name: Run linter
         run: |
           pip install flake8
-          flake8 games_of_terminal --exclude database_new.py,models.py,games_of_terminal/lab/
+          flake8 games_of_terminal
