@@ -3,7 +3,6 @@ from games_of_terminal.database.database import (
     create_and_fill_db_tables, get_game_settings,
 )
 from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     get_color_by_name, draw_message, hide_cursor,
     get_current_color_scheme_name,
@@ -27,7 +26,6 @@ from sys import exit
 
 
 class Menu(InterfaceManager):
-    @log
     def __init__(self, canvas):
         super().__init__(canvas, only_main_win=True)
 
@@ -36,10 +34,8 @@ class Menu(InterfaceManager):
 
         self.setup_vars()
 
-    @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
-        # self.munu_items = self.get_menu_items()
 
         settings = get_game_settings('Global')
         color_schemes = settings['color_schemes']
@@ -58,9 +54,6 @@ class Menu(InterfaceManager):
 
         self.fire_free_area_begin_x = self.get_fire_free_area_begin_x()
         self.fire_free_area_end_x = self.get_fire_free_area_end_x()
-
-    # def get_menu_items(self):
-    #     return MENU_ITEMS
 
     def get_logo_start_y(self):
         return ((self.height // 2) -
@@ -96,7 +89,6 @@ class Menu(InterfaceManager):
 
         return self.fire_free_area_begin_x + MENU_MAX_LEN + end_offset
 
-    @log
     def run_menu_loop(self):
         self.initialize_menu()
 
@@ -119,19 +111,16 @@ class Menu(InterfaceManager):
             self.update_menu_display()
             self.window.refresh()
 
-    @log
     def redraw_window(self):
         self.setup_vars()
         self.initialize_menu()
 
-    @log
     def initialize_menu(self):
         hide_cursor()
         self.window.clear()
         self.set_window_redrawing_speed()
         self.draw_menu()
 
-    @log
     def move_menu_selection(self, direction=0, destination=None):
         if direction:
             self.current_row = self.get_current_row_by_direction(direction)
@@ -158,7 +147,6 @@ class Menu(InterfaceManager):
         self.draw_fire_animation()
         self.show_menu_items_list()
 
-    @log
     def draw_menu(self):
         # draw static parts
         self.draw_logo_with_swords()
@@ -183,7 +171,6 @@ class Menu(InterfaceManager):
 
             draw_message(y, x, self.window, menu_item_name, color)
 
-    @log
     def run_selected_menu_item(self):
         chosen_menu_item = MENU_ITEMS[self.current_row]
         menu_item_name = chosen_menu_item['name']
@@ -274,7 +261,6 @@ class Menu(InterfaceManager):
         color = get_color_by_name(color_name)
         return color
 
-    @log
     def exit(self):
         self.window.clear()
         self.draw_goodbye_message()

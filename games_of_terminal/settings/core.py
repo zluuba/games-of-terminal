@@ -1,6 +1,5 @@
 from games_of_terminal.constants import KEYS, DEFAULT_COLOR
 from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     draw_message, hide_cursor, get_color_by_name,
 )
@@ -16,18 +15,17 @@ from random import randint, choice
 
 
 class Settings(InterfaceManager):
-    @log
     def __init__(self, canvas, name):
         super().__init__(canvas, only_main_win=True)
 
         self.name = name
 
-        self.items_len = len(ITEMS)
         self.current_row = 0
+        self.items_len = len(ITEMS)
+        self.noise_color = get_color_by_name(NOISE_COLOR_NAME)
 
         self.setup_vars()
 
-    @log
     def setup_vars(self):
         self.height, self.width = self.canvas.getmaxyx()
 
@@ -35,7 +33,6 @@ class Settings(InterfaceManager):
         self.items_start_y = self.get_items_start_y()
 
         self.chars_per_line = self.get_chars_per_line()
-        self.noise_color = get_color_by_name(NOISE_COLOR_NAME)
 
     def get_title_start_y(self):
         return ((self.height // 2) -
@@ -48,7 +45,6 @@ class Settings(InterfaceManager):
     def get_chars_per_line(self):
         return self.width // NOISE_ANIMATION_DIV
 
-    @log
     def run(self):
         self.initialize_settings()
 
@@ -71,12 +67,10 @@ class Settings(InterfaceManager):
             self.update_settings_display()
             self.window.refresh()
 
-    @log
     def redraw_window(self):
         self.setup_vars()
         self.initialize_settings()
 
-    @log
     def open_selected_settings(self):
         chosen_settings = ITEMS[self.current_row]
         settings_name = chosen_settings['name']
@@ -87,7 +81,6 @@ class Settings(InterfaceManager):
 
         self.handle_post_running_actions()
 
-    @log
     def initialize_settings(self):
         hide_cursor()
         self.window.clear()

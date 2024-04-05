@@ -1,7 +1,6 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import get_game_settings
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -21,7 +20,6 @@ from time import time
 
 
 class SnakeGame(GameEngine):
-    @log
     def setup_game_stats(self):
         self.snake = []
         self.food = []
@@ -114,7 +112,6 @@ class SnakeGame(GameEngine):
 
         return list(map(lambda obs: obs[0], obstacles))
 
-    @log
     def setup_game_field(self):
         hide_cursor()
         self.window.nodelay(1)
@@ -123,7 +120,6 @@ class SnakeGame(GameEngine):
         self.set_best_score()
         self.draw_game_window()
 
-    @log
     def start_new_game(self):
         while True:
             key = self.window.getch()
@@ -267,7 +263,6 @@ class SnakeGame(GameEngine):
 
         return field_len == occupied_len
 
-    @log
     def save_game_data(self):
         update_total_time_count(self.game_name, self.start_time)
 

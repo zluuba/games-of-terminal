@@ -9,7 +9,6 @@ from games_of_terminal.interface_manager import InterfaceManager
 from games_of_terminal.games.game_stats import GameStats
 from games_of_terminal.settings.all_settings.core import GamesSettings
 from games_of_terminal.sub_window import SubWindow
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     get_side_menu_tips, draw_message,
     clear_field_line, get_color_by_name,
@@ -21,14 +20,12 @@ from time import sleep
 
 
 class GameEngine(InterfaceManager):
-    @log
     def __init__(self, canvas, game_name):
         super().__init__(canvas)
 
         self.game_name = game_name
         self.stats = GameStats()
 
-    @log
     def run(self):
         while True:
             self.setup_game_stats()
@@ -41,11 +38,9 @@ class GameEngine(InterfaceManager):
             self.reset_game_stats()
             self.reset_game_area()
 
-    @log
     def reset_game_stats(self):
         self.stats = GameStats()
 
-    @log
     def reset_game_area(self):
         self.game_area.box.erase()
         self.game_area = SubWindow(self.window, *self.game_box_sizes.values())
@@ -69,7 +64,6 @@ class GameEngine(InterfaceManager):
         elif key == KEYS['settings']:
             self.open_game_settings()
 
-    @log
     def pause(self):
         self.stats.is_pause = not self.stats.is_pause
 
@@ -109,7 +103,6 @@ class GameEngine(InterfaceManager):
 
         draw_message(y, x, self.game_area.box, message, color)
 
-    @log
     def ask_for_restart(self):
         flash()
         self.show_game_status()

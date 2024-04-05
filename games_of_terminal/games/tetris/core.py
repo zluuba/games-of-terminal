@@ -1,6 +1,5 @@
 from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -25,7 +24,6 @@ from random import choice
 
 
 class TetrisGame(GameEngine):
-    @log
     def setup_game_stats(self):
         self.block = None
         self.next_block = None
@@ -38,7 +36,6 @@ class TetrisGame(GameEngine):
 
         self.lines_removed = 0
 
-    @log
     def setup_game_field(self):
         hide_cursor()
         self.window.nodelay(1)
@@ -58,7 +55,6 @@ class TetrisGame(GameEngine):
 
         self.time = time()
 
-    @log
     def start_new_game(self):
         self.create_block()
 
@@ -149,7 +145,6 @@ class TetrisGame(GameEngine):
         else:
             self.achievement_manager.check(set_pause=True)
 
-    @log
     def increase_level(self):
         if self.level == max(LEVELS):
             return
@@ -241,7 +236,6 @@ class TetrisGame(GameEngine):
                         return True
         return False
 
-    @log
     def save_game_data(self):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)

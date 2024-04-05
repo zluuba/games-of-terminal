@@ -1,7 +1,6 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import update_game_stat
 from games_of_terminal.games.engine import GameEngine
-from games_of_terminal.log import log
 from games_of_terminal.utils import (
     hide_cursor,
     update_total_time_count,
@@ -21,7 +20,6 @@ from time import sleep, time
 
 
 class TicTacToeGame(GameEngine):
-    @log
     def setup_game_stats(self):
         self.cells = {}
         self.current_coordinates = (0, 0)
@@ -33,7 +31,6 @@ class TicTacToeGame(GameEngine):
         self.start_time = time()
         self.achievement_manager = TicTacToeAchievementsManager(self)
 
-    @log
     def setup_game_field(self, initial=True):
         hide_cursor()
         self.draw_basic_window_view()
@@ -42,7 +39,6 @@ class TicTacToeGame(GameEngine):
         if initial:
             self.draw_game_field()
 
-    @log
     def start_new_game(self):
         self.current_cell.select()
         self.achievement_manager.check()
@@ -109,7 +105,6 @@ class TicTacToeGame(GameEngine):
         cell.set_background_color()
         return cell
 
-    @log
     def draw_game_field(self):
         y = (self.game_area.height - (CELLS_IN_ROW * self.cell_height)) // 2
         x = (self.game_area.width - (CELLS_IN_ROW * self.cell_width)) // 2
@@ -135,7 +130,6 @@ class TicTacToeGame(GameEngine):
             y += self.cell_height
             x = begin_x
 
-    @log
     def slide_field(self, base_y_offset, base_x_offset):
         y, x = self.current_coordinates
 
@@ -150,13 +144,11 @@ class TicTacToeGame(GameEngine):
             self.current_coordinates = new_coordinates
             self.current_cell.select()
 
-    @log
     def user_move(self):
         self.current_cell.owner = 'user'
         self.user_moves.append(self.current_cell.field_number)
         self.update_game_status()
 
-    @log
     def computer_move(self):
         if self.stats.game_status != 'game_active':
             return
@@ -209,7 +201,6 @@ class TicTacToeGame(GameEngine):
                 return False
         return True
 
-    @log
     def update_game_status(self):
         if self.is_player_win('user'):
             self.stats.game_status = 'user_win'
@@ -218,7 +209,6 @@ class TicTacToeGame(GameEngine):
         elif self.is_all_cells_occupied():
             self.stats.game_status = 'tie'
 
-    @log
     def save_game_data(self, is_game_over=True):
         update_total_games_count(self.game_name, 1)
         update_total_time_count(self.game_name, self.start_time)

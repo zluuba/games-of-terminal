@@ -1,7 +1,6 @@
 from games_of_terminal.constants import KEYS
 from games_of_terminal.database.database import get_all_achievements
 from games_of_terminal.interface_manager import InterfaceManager
-from games_of_terminal.log import log
 from games_of_terminal.settings.achievements.achievement import Achievement
 from games_of_terminal.settings.achievements.constants import (
     TITLE, BASE_OFFSET, TOP_OFFSET,
@@ -20,7 +19,6 @@ from math import ceil
 
 
 class Achievements(InterfaceManager):
-    @log
     def __init__(self, canvas, name):
         super().__init__(canvas, only_main_win=True)
 
@@ -125,7 +123,6 @@ class Achievements(InterfaceManager):
     def chosen_game_name(self):
         return self.achievement_items[self.curr_game_ind]
 
-    @log
     def run(self):
         self.draw_title()
         self.show_achievements()
@@ -286,7 +283,6 @@ class Achievements(InterfaceManager):
         self.achievements_action(show=True, update_coords=True)
         self.show_pagination_arrows()
 
-    @log(with_runtime=True)
     def achievements_action(self, show=False, update_coords=False):
         self.clear_achievements_body()
 

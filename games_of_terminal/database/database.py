@@ -1,6 +1,5 @@
 from games_of_terminal.database import queries
 from games_of_terminal.constants import ITEMS
-from games_of_terminal.log import log
 from games_of_terminal.database.constants import (
     DB_FILENAME, ACHIEVEMENTS_FILE,
     GAME_STATS_FILE, SETTINGS_FILE,
@@ -15,16 +14,17 @@ from pathlib import Path
 from sqlite3 import connect
 
 
-def get_full_path(base_dir, filename):
+BASE_DIR = Path(__file__).parents[1]
+
+
+def get_full_path(filename, base_dir=BASE_DIR):
     return str(path.join(base_dir, filename))
 
 
-BASE_DIR = Path(__file__).parents[1]
-
-DB_FILE_PATH = get_full_path(BASE_DIR, DB_FILENAME)
-ACHIEVEMENTS_FILE_PATH = get_full_path(BASE_DIR, ACHIEVEMENTS_FILE)
-GAME_STATS_FILE_PATH = get_full_path(BASE_DIR, GAME_STATS_FILE)
-SETTINGS_FILE_PATH = get_full_path(BASE_DIR, SETTINGS_FILE)
+DB_FILE_PATH = get_full_path(DB_FILENAME)
+ACHIEVEMENTS_FILE_PATH = get_full_path(ACHIEVEMENTS_FILE)
+GAME_STATS_FILE_PATH = get_full_path(GAME_STATS_FILE)
+SETTINGS_FILE_PATH = get_full_path(SETTINGS_FILE)
 
 
 class Connection:
@@ -47,7 +47,6 @@ class Connection:
         self.conn.close()
 
 
-@log
 def check_tables_exist():
     with Connection() as conn:
         conn.cursor.execute(queries.get_all_tables_query)
@@ -56,7 +55,6 @@ def check_tables_exist():
     return len(existing_tables) == len(queries.TABLES)
 
 
-@log
 def create_and_fill_db_tables():
     if check_tables_exist():
         return
@@ -106,7 +104,6 @@ def fill_achievement_table(conn):
             )
 
 
-@log
 def get_game_stat_value(game_name, stat_name, data_type='statistics'):
     with Connection() as conn:
         conn.cursor.execute(
@@ -117,7 +114,6 @@ def get_game_stat_value(game_name, stat_name, data_type='statistics'):
     return value
 
 
-@log
 def update_game_stat(game_name, stat_name, value,
                      data_type='statistics',
                      save_mode=False):
