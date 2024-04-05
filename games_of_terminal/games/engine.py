@@ -80,14 +80,19 @@ class GameEngine(InterfaceManager):
                 key = self.window.getch()
                 self.wait_for_keypress()
 
-                if key == KEYS['escape']:
+                if key == KEYS['pause']:
+                    break
+                elif key == KEYS['escape']:
                     self.stats.is_exit = True
                     return
                 elif key == KEYS['settings']:
                     self.open_game_settings()
                     self.show_pause_message()
-                elif key == KEYS['pause']:
-                    break
+                elif key == KEYS['resize']:
+                    self.window.timeout(0)
+                    self.resize_game_win_handler(key)
+                    self.stats.is_restart = True
+                    return
 
             self.stats.is_pause = not self.stats.is_pause
             self.draw_game_window()
