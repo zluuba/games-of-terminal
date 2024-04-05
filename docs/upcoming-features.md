@@ -13,6 +13,7 @@ Here are some features I plan to implement in future releases, along with a list
 
 ## Upcoming Features:
 - Main Menu rebuilding: add pagination for games
+- Logger rebuilding & adding it to the GOT
 - Easter egg in Main Menu ("Burnout Mode" - hide the menu, leaving only the fire)
 - Switch DB logic from raw SQL to SQLAlchemy
 - Confess All in Settings
