@@ -7,7 +7,7 @@ Here are some features I plan to implement in future releases, along with a list
 - 2048 Game
 - Sea Battle
 - Sudoku
-- Wordle
+- Flappy Bird
 - Crossy Road
 - Doom
 
