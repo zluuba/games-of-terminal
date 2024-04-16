@@ -139,10 +139,15 @@ or share your ideas!**
 
 
 ## Demo
-Games Of Terminal interaction demo (sped-up).
+Games Of Terminal interaction demo (sped-up)
 
 https://github.com/zluuba/games-of-terminal/assets/87614163/a661f605-de07-4941-bf93-bbcd4dfe3fa6
 
+
+## Promo
+Games Of Terminal promotion video
+
+[![GOT Promo](https://img.youtube.com/vi/PG6mLEZHEZU/0.jpg)](https://youtu.be/PG6mLEZHEZU)
 
 
 ##
