@@ -5,7 +5,8 @@
 **Games Of Terminal** (or GOT) is a console-based gaming platform where classic games like Minesweeper, Tetris, 
 Snake, and TicTacToe come to life. With customization, achievements, and flexibility, 
 GOT offers a diverse and enjoyable gaming experience in your favourite environment - **console**.  
-You can run GOT on macOS and Linux (even on Ubuntu Server, huh).
+You can run GOT on macOS and Linux (even on Ubuntu Server, huh).  
+Here's the promo video, [click to watch.](https://youtu.be/PG6mLEZHEZU)
 
  ![got-intro](https://github.com/zluuba/games-of-terminal/assets/87614163/58c985bd-38f8-4d6c-a4a0-73e1713df497)
 *GIF with Games Of Terminal interaction demo (sped-up)*
@@ -142,12 +143,6 @@ or share your ideas!**
 Games Of Terminal interaction demo (sped-up)
 
 https://github.com/zluuba/games-of-terminal/assets/87614163/a661f605-de07-4941-bf93-bbcd4dfe3fa6
-
-
-## Promo
-Games Of Terminal promotion video
-
-[![GOT Promo](https://img.youtube.com/vi/PG6mLEZHEZU/0.jpg)](https://youtu.be/PG6mLEZHEZU)
 
 
 ##
