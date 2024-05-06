@@ -24,6 +24,7 @@ CLASSIFIERS = [
     'Topic :: Games/Entertainment',
     'Topic :: Terminals',
     'Environment :: Console',
+    'Environment :: Console :: Curses',
     'Natural Language :: English',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
