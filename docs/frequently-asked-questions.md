@@ -4,9 +4,8 @@
 A: This issue is console-specific. If you have both even-length and odd-length words, they cannot be centered in that environment.
 
 **Q: Why don't the keys work correctly? Sometimes, when I press 'w' in the menu or game, nothing happens, but the arrows work.**  
-A: You should keep your keyboard with an English layout while using GOT. Keyboards are different, languages are different, 
-there's no good and clear way to solve this problem. But in the future, I'm planning to implement the ability to 
-add your own game control keys, which should solve this problem.
+A: You should keep your keyboard with an English layout while using GOT. Keyboards and languages vary, but one common 
+thing unites the users - English. Therefore, only the English keyboard layout is supported.
 
 **Q: Why are there only 4 games?**  
 A: There will be more in the future, here's the [list of upcoming feature games](https://github.com/zluuba/games-of-terminal/tree/main/docs/upcoming-features.md). 
